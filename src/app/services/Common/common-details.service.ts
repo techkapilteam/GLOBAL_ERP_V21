@@ -1,0 +1,41 @@
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { CommonService } from '../common.service';
+import { catchError, Observable, throwError } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CompanyDetailsService {
+
+ 
+
+  constructor(private http: HttpClient, private _CommonService: CommonService) { }
+
+  // GetCompanyData(): Observable<any> {
+   
+     
+  //     let params = new HttpParams().set('LocalSchema', this._CommonService.getschemaname());
+  //     return this._CommonService.getAPI('/Common/GetcompanyNameandaddressDetails', params, 'YES') .pipe(
+  //       catchError((e:any) => {
+  //         this._CommonService.showErrorMessage(e);
+  //         return throwError(() => e);
+  //       })
+  //     );
+  // }
+  GetCompanyData(): Observable<any> {  
+      let params = new HttpParams().set('GlobalSchema', 'global').set('CompanyCode', 'KAKATIYA').set('BranchCode', 'KLC01');
+      return this._CommonService.getAPI('/Common/GetcompanyNameandaddressDetails', params, 'YES') .pipe(
+        catchError((e:any) => {
+          this._CommonService.showErrorMessage(e);
+          return throwError(() => e);
+        })
+      );
+  }
+
+  SaveTextData(data:any){
+    debugger;
+    return this._CommonService.postAPI("/Common/SaveTextData",data);
+  }
+}

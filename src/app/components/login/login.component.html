@@ -1,0 +1,130 @@
+<div class="login-page">
+  <div class="login-layout">
+
+    <div class="left-panel">
+      <!-- unchanged logo / illustration / footer -->
+    </div>
+
+    <div class="right-panel">
+      <div class="login-card">
+        <h2 class="card-title">Welcome Back</h2>
+        <p  class="card-subtitle">Sign in to your account</p>
+
+        <!-- Step indicator ──────────────────────────────── -->
+        <div class="steps">
+          <div class="step-wrap">
+            <div class="step-bubble"
+                 [class.active]="step() === 1"
+                 [class.done]="step() > 1">
+              @if (step() <= 1) { 1 }
+              @else           { <i class="pi pi-check"></i> }
+            </div>
+            <div class="step-label">Details</div>
+          </div>
+          <div class="step-line" [class.done]="step() > 1"></div>
+          <div class="step-wrap">
+            <div class="step-bubble"
+                 [class.active]="step() === 2"
+                 [class.inactive]="step() < 2">2</div>
+            <div class="step-label">Login</div>
+          </div>
+        </div>
+        <hr class="divider"/>
+
+        <!-- Step 1 ──────────────────────────────────────── -->
+        @if (step() === 1) {
+
+          <div class="field">
+            <label>Company Name</label>
+            <p-select
+              [options]="companyOptions()"
+              [ngModel]="selectedCompanyId()"
+              (ngModelChange)="selectedCompanyId.set($event); onCompanyChange()"
+              optionLabel="label" optionValue="value"
+              placeholder="— Select Company —"
+              appendTo="body"
+              [style]="{'width':'100%'}"/>
+          </div>
+
+          <div class="field">
+            <label>Branch Name</label>
+            <p-select
+              [options]="branchOptions()"
+              [ngModel]="selectedBranchCode()"
+              (ngModelChange)="selectedBranchCode.set($event)"
+              optionLabel="label" optionValue="value"
+              placeholder="— Select Branch —"
+              [disabled]="!branchOptions().length"
+              appendTo="body"
+              [style]="{'width':'100%'}"/>
+            @if (noBranches()) {
+              <small class="hint">No branches found for this company.</small>
+            }
+          </div>
+
+          @if (errorMessage()) {
+            <small class="error-msg">
+              <i class="pi pi-exclamation-circle"></i> {{ errorMessage() }}
+            </small>
+          }
+
+          <p-button label="Next" icon="pi pi-arrow-right" iconPos="right"
+                    [loading]="loading()" styleClass="w-100 mt-2"
+                    (onClick)="onStep1Next()"/>
+        }
+
+        <!-- Step 2 ──────────────────────────────────────── -->
+        @if (step() === 2) {
+
+          <div class="badge-row">
+            <span class="badge badge-blue">
+              <i class="pi pi-building"></i> {{ selectedCompanyCode() }}
+            </span>
+            <span class="badge badge-green">
+              <i class="pi pi-map-marker"></i> {{ selectedBranchCode() }}
+            </span>
+          </div>
+
+          <div class="field">
+            <label>Username</label>
+            <input pInputText type="text"
+                   [ngModel]="username()"
+                   (ngModelChange)="username.set($event)"
+                   placeholder="Enter your username"
+                   class="w-100"
+                   (keyup.enter)="onLogin()"/>
+          </div>
+
+          <div class="field">
+            <label>Password</label>
+            <p-password
+              [ngModel]="password()"
+              (ngModelChange)="password.set($event)"
+              placeholder="Enter your password"
+              [feedback]="false" [toggleMask]="true"
+              styleClass="w-100" inputStyleClass="w-100"
+              (keyup.enter)="onLogin()"/>
+          </div>
+
+          @if (errorMessage()) {
+            <small class="error-msg">
+              <i class="pi pi-exclamation-circle"></i> {{ errorMessage() }}
+            </small>
+          }
+
+          <div class="step-actions">
+            <a href="javascript:void(0)" (click)="goBack()" class="btn-back">
+              <i class="pi pi-arrow-left"></i> Back
+            </a>
+            <p-button label="Login" icon="pi pi-sign-in" iconPos="right"
+                      [loading]="loading()"
+                      (onClick)="onLogin()"/>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-toast position="bottom-right"/>
