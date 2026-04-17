@@ -1,154 +1,365 @@
-<div class="app-container"
-  style="display:flex; flex-direction:column; height:100vh; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+<div class="app-root" [attr.data-theme]="activeTheme">
+  <div
+    class="global-overlay"
+    *ngIf="showMegaMenu || showAvatarMenu || showRecentForms"
+    (click)="closeAllPanels()">
+  </div>
 
-  <!-- Top Navbar -->
-  <nav class="top-navbar" style="background:#1a2847; color:#fff; display:flex; align-items:center;
-    padding:0 16px; height:52px; width:100%; z-index:200; box-shadow:0 2px 8px rgba(0,0,0,0.3); flex-shrink:0;">
-
-    <div class="navbar-left" style="display:flex; align-items:center; gap:10px; min-width:200px;">
-      <button class="hamburger-btn" (click)="toggleSidebar()"
-        style="background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; padding:4px 8px; border-radius:4px; line-height:1;"
-        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
-        onmouseout="this.style.background='transparent'">
-        <span class="hamburger-icon">☰</span>
+  <nav class="top-navbar">
+    <div class="nav-left">
+      <button
+        class="hamburger"
+        (click)="toggleSidebar()"
+        [class.open]="!sidebarCollapsed"
+        aria-label="Toggle sidebar">
+        <i class="pi pi-bars"></i>
       </button>
-      <h2 class="app-title"
-        style="margin:0; font-size:19px; font-weight:700; color:#fff; white-space:nowrap; letter-spacing:0.3px;">
-        Accounting &amp; Inventory
-      </h2>
+
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="pi pi-objects-column"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">ERP Suite</span>
+          <span class="brand-tagline">Enterprise Workspace</span>
+        </div>
+      </div>
     </div>
 
-    <div class="navbar-modules" style="display:flex; align-items:center; gap:6px; flex:2; overflow-x:auto;">
-      <button *ngFor="let module of modules" class="module-btn"
+    <div class="nav-modules" role="tablist">
+      <button
+        *ngFor="let module of modules"
+        class="module-tab"
         [class.active]="selectedModule?.id === module.id"
         (click)="selectModule(module)"
-        [style.background]="selectedModule?.id === module.id ? 'rgba(46,109,164,0.85)' : 'transparent'"
-        [style.color]="selectedModule?.id === module.id ? '#fff' : '#b0bec5'"
-        [style.box-shadow]="selectedModule?.id === module.id ? 'inset 0 -3px 0 #4fc3f7' : 'none'"
-        style="display:flex; align-items:center; gap:5px; padding:0 13px 5px 13px; height:52px; border:none;
-               cursor:pointer; font-size:12px; font-weight:700; letter-spacing:0.4px; white-space:nowrap;
-               text-transform:uppercase; transition:all 0.2s;"
-        onmouseover="this.style.background='rgba(46,109,164,0.5)'; this.style.color='#fff'"
-        onmouseout="this.style.background='transparent';">
-        <span class="module-icon" style="font-size:14px;">{{ module.icon }}</span>
-        <span class="module-name" style="font-size:14px;">{{ module.name }}</span>
+        role="tab"
+        [attr.aria-selected]="selectedModule?.id === module.id">
+        <i class="tab-icon" [class]="getModuleIcon(module.name)"></i>
+        <span class="tab-label">{{ module.name }}</span>
       </button>
     </div>
 
-    <div class="navbar-right" style="display:flex; align-items:center; gap:8px; margin-left:16px;">
-     <span class="username"
-  style="display:flex; align-items:center; gap:7px; font-size:15px; color:#ffffff; font-weight:600;">
-  <i class="fa fa-user" style="font-size:17px;"></i>
-  Welcome, {{ username }}
-</span>
-      <button class="logout-btn" (click)="logout()"
-        style="background:transparent; border:1px solid #ef5350; color:#ef5350; padding:7px 14px;
-               border-radius:4px; cursor:pointer; font-size:14px; font-weight:700; transition:all 0.2s;"
-        onmouseover="this.style.background='#ef5350'; this.style.color='#fff'"
-        onmouseout="this.style.background='transparent'; this.style.color='#ef5350'">
-        Logout
-      </button>
+    <div class="nav-right">
+      <div class="nav-action-group">
+        <button
+          class="nav-icon-btn"
+          [class.active]="showRecentForms"
+          (click)="showRecentForms = !showRecentForms; showMegaMenu = false; showAvatarMenu = false"
+          title="Recent Forms">
+          <i class="pi pi-history"></i>
+          <span class="badge" *ngIf="recentForms.length > 0">{{ recentForms.length }}</span>
+        </button>
+
+        <div class="dropdown-panel recent-panel" *ngIf="showRecentForms" (click)="$event.stopPropagation()">
+          <div class="dp-header">
+            <span class="dp-title">
+              <i class="pi pi-history"></i>
+              Recent Forms
+            </span>
+
+            <button class="dp-clear-btn" (click)="clearRecent()" *ngIf="recentForms.length > 0">
+              Clear all
+            </button>
+          </div>
+
+          <div class="dp-body">
+            <div class="empty-notice" *ngIf="recentForms.length === 0">
+              <i class="pi pi-clock"></i>
+              <span>No forms opened yet</span>
+            </div>
+
+            <button
+              *ngFor="let form of recentForms"
+              class="recent-item"
+              (click)="navigateRecent(form)">
+              <div class="ri-icon">
+                <i [class]="form.icon"></i>
+              </div>
+
+              <div class="ri-body">
+                <span class="ri-name">{{ form.name }}</span>
+                <span class="ri-meta">{{ form.moduleName }} · {{ form.subModuleName }}</span>
+              </div>
+
+              <span class="ri-time">{{ getRecentTimeLabel(form.time) }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-action-group">
+        <button
+          class="quick-menu-btn"
+          [class.active]="showMegaMenu"
+          (click)="showMegaMenu = !showMegaMenu; showRecentForms = false; showAvatarMenu = false">
+          <i class="pi pi-th-large"></i>
+          <span class="qm-label">Quick Menu</span>
+          <i class="pi qm-chevron" [ngClass]="showMegaMenu ? 'pi-angle-up' : 'pi-angle-down'"></i>
+        </button>
+
+        <div class="mega-menu" *ngIf="showMegaMenu" (click)="$event.stopPropagation()">
+          <div class="mm-header">
+            <div class="mm-search-wrap">
+              <i class="pi pi-search"></i>
+
+              <input
+                [(ngModel)]="megaMenuSearch"
+                class="mm-search"
+                placeholder="Search all menus, screens..."
+                autofocus />
+
+              <button *ngIf="megaMenuSearch" class="mm-clear" (click)="megaMenuSearch = ''">
+                <i class="pi pi-times-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mm-body">
+            <div *ngIf="filteredMegaModules.length === 0" class="mm-empty">
+              No results for "{{ megaMenuSearch }}"
+            </div>
+
+            <div *ngFor="let mod of filteredMegaModules" class="mm-module-col">
+              <div class="mm-module-header">
+                <i class="mm-mod-icon" [class]="getModuleIcon(mod.name)"></i>
+                <span class="mm-mod-name">{{ mod.name }}</span>
+              </div>
+
+              <ng-container *ngFor="let sub of mod.subModules">
+                <div class="mm-sub-label">
+                  <i [class]="getSubModuleIcon(sub.name)"></i>
+                  <span>{{ sub.name }}</span>
+                </div>
+
+                <button
+                  *ngFor="let screen of sub.screens"
+                  class="mm-screen-item"
+                  (click)="navigateFromMega(mod, sub, screen)">
+                  <i [class]="getScreenIcon(screen.name)"></i>
+                  <span>{{ screen.name }}</span>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-action-group">
+        <button
+          class="avatar-btn"
+          [class.active]="showAvatarMenu"
+          (click)="showAvatarMenu = !showAvatarMenu; showMegaMenu = false; showRecentForms = false"
+          [attr.aria-label]="'User menu for ' + username">
+          <div class="avatar-ring">
+            <div class="avatar-circle">{{ username.charAt(0).toUpperCase() }}</div>
+          </div>
+          <i class="pi av-chevron" [ngClass]="showAvatarMenu ? 'pi-angle-up' : 'pi-angle-down'"></i>
+        </button>
+
+        <div class="dropdown-panel avatar-panel" *ngIf="showAvatarMenu" (click)="$event.stopPropagation()">
+          <div class="ap-user-header">
+            <div class="ap-avatar-lg">{{ username.charAt(0).toUpperCase() }}</div>
+
+            <div class="ap-user-info">
+              <div class="ap-title">Profile Settings</div>
+              <div class="ap-username">{{ username }}</div>
+              <div class="ap-role">Administrator</div>
+            </div>
+          </div>
+
+          <div class="ap-section">
+            <button class="ap-menu-item">
+              <i class="pi pi-user"></i>
+              <span>My Profile</span>
+            </button>
+
+            <button class="ap-menu-item">
+              <i class="pi pi-cog"></i>
+              <span>Settings</span>
+            </button>
+          </div>
+
+          <div class="ap-section ap-theme-section">
+            <div class="ap-section-label">Appearance Theme</div>
+
+            <div class="theme-grid">
+              <button
+                *ngFor="let theme of themes"
+                class="theme-swatch"
+                [class.active]="activeTheme === theme.id"
+                (click)="setTheme(theme.id)"
+                [title]="theme.name"
+                [style.background]="'linear-gradient(135deg, ' + theme.colors[0] + ' 0%, ' + theme.colors[1] + ' 100%)'">
+                <i *ngIf="activeTheme === theme.id" class="pi pi-check swatch-check"></i>
+              </button>
+            </div>
+
+            <div class="theme-name-row">
+              <span class="current-theme-name">{{ getActiveThemeName() }} Theme</span>
+            </div>
+          </div>
+
+          <div class="ap-section">
+            <button class="ap-menu-item ap-danger" (click)="logout()">
+              <i class="pi pi-sign-out"></i>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- Main Content Area -->
-  <div class="main-content" style="display:flex; flex:1; overflow:hidden; position:relative;">
-
-    <!-- Left Sidebar -->
-    <aside class="sidebar"
-      [style.width]="sidebarCollapsed ? '0px' : '72px'"
-      style="background:#0b4093; border-right:1px solid #0d3580; display:flex; flex-direction:column;
-             transition:width 0.25s ease; overflow:hidden; flex-shrink:0; z-index:100; position:relative;">
-
-      <!-- Close button -->
-      <div *ngIf="!sidebarCollapsed"
-        style="display:flex; align-items:center; justify-content:center; padding:6px 0; border-bottom:1px solid #0d3580;">
-        <button (click)="toggleSidebar()"
-          style="background:transparent; border:none; color:#fff; font-size:16px; cursor:pointer;
-                 width:36px; height:28px; display:flex; align-items:center; justify-content:center;">✕</button>
-      </div>
-
-      <!-- SubModule icon badges -->
-      <div *ngIf="selectedModule && !sidebarCollapsed" style="flex:1; overflow-y:auto; padding:4px 0;">
-        <div *ngFor="let subModule of selectedModule.subModules"
-          (click)="toggleSubModule(subModule)"
-          [style.background]="selectedSubModule?.id === subModule.id ? '#162246' : 'transparent'"
-          [style.border-left]="selectedSubModule?.id === subModule.id ? '3px solid #4fc3f7' : '3px solid transparent'"
-          [attr.data-selected]="selectedSubModule?.id === subModule.id ? 'true' : 'false'"
-          style="display:flex; flex-direction:column; align-items:center; justify-content:center;
-                 padding:12px 4px; cursor:pointer; gap:5px; transition:all 0.2s;"
-          onmouseover="this.style.background='#162246'"
-          onmouseout="this.style.background=this.getAttribute('data-selected')==='true' ? '#162246' : 'transparent'">
-
-          <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.15);
-                      display:flex; align-items:center; justify-content:center; font-size:12px;
-                      font-weight:800; color:#fff; letter-spacing:0.5px;">
-            {{ ((subModule.name.split(' ')[0] | slice:0:1) + (subModule.name.split(' ')[1] ?
-              (subModule.name.split(' ')[1] | slice:0:1) : (subModule.name | slice:1:2))) | uppercase }}
+  <div class="main-area">
+    <aside class="sidebar" [class.collapsed]="sidebarCollapsed" aria-label="Sub-module navigation">
+      <div class="sb-items" *ngIf="!sidebarCollapsed && selectedModule">
+        <button
+          *ngFor="let sub of selectedModule.subModules"
+          class="sb-item"
+          [class.active]="selectedSubModule?.id === sub.id"
+          (click)="toggleSubModule(sub)"
+          [attr.title]="sub.name">
+          <div class="sb-avatar">
+            <i [class]="getSubModuleIcon(sub.name)"></i>
           </div>
-
-          <span style="font-size:11px; color:#c8d8f0; text-align:center; line-height:1.3;
-                       width:64px; padding:0 2px; word-break:break-word;">
-            {{ subModule.name }}
-          </span>
-        </div>
+          <span class="sb-label">{{ sub.name }}</span>
+          <i class="pi pi-angle-right sb-arrow" *ngIf="isSubModuleExpanded(sub.id)"></i>
+        </button>
       </div>
+
+      <button
+        *ngIf="!sidebarCollapsed"
+        class="sb-collapse-btn"
+        (click)="toggleSidebar()"
+        title="Collapse sidebar">
+        <i class="pi pi-times"></i>
+      </button>
     </aside>
 
-    <!-- RIGHT FLYOUT PANEL -->
-    <div *ngIf="selectedSubModule && !sidebarCollapsed && isSubModuleExpanded(selectedSubModule.id)"
-      style="width:190px; background:#f4f8fd; border-right:1px solid #c5d8ef; display:flex;
-             flex-direction:column; flex-shrink:0; box-shadow:2px 0 6px rgba(0,0,0,0.08);
-             z-index:99; overflow:hidden; transition:width 0.2s ease;">
+    <div
+      class="flyout"
+      [class.open]="selectedSubModule && !sidebarCollapsed && isSubModuleExpanded(selectedSubModule.id)"
+      *ngIf="selectedSubModule">
 
-      <div style="background:#0b4093; padding:9px 12px; display:flex; align-items:center; gap:8px; flex-shrink:0;">
-        <span style="font-size:13px; color:#fff;">{{ selectedSubModule.icon }}</span>
-        <span style="font-size:12px; font-weight:800; color:#fff; white-space:nowrap;
-                     overflow:hidden; text-overflow:ellipsis;">{{ selectedSubModule.name }}</span>
+      <div class="fp-header">
+        <div class="fp-head-left">
+          <span class="fp-icon">
+            <i [class]="getSubModuleIcon(selectedSubModule.name)"></i>
+          </span>
+
+          <div class="fp-title-wrap">
+            <span class="fp-title">{{ selectedSubModule.name }}</span>
+            <span class="fp-subtitle">{{ filteredFlyoutScreens.length }} items</span>
+          </div>
+        </div>
+
+        <div class="fp-actions">
+          <button
+            class="fp-action-btn"
+            [class.active]="showFlyoutSearch"
+            (click)="toggleFlyoutSearch()"
+            title="Search flyout items">
+            <i class="pi" [ngClass]="showFlyoutSearch ? 'pi-times-circle' : 'pi-search'"></i>
+          </button>
+
+          <button
+            class="fp-action-btn danger"
+            (click)="closeFlyout()"
+            title="Close flyout">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
       </div>
 
-      <div style="flex:1; overflow-y:auto; padding:4px 0;">
-        <div *ngFor="let screen of selectedSubModule.screens"
-          (click)="selectScreen(screen); $event.stopPropagation()"
-          [style.background]="selectedScreen?.id === screen.id ? '#c8e1ff' : 'transparent'"
-          [style.border-left]="selectedScreen?.id === screen.id ? '3px solid #0b4093' : '3px solid transparent'"
-          [attr.data-selected]="selectedScreen?.id === screen.id ? 'true' : 'false'"
-          style="display:flex; align-items:center; gap:7px; padding:8px 12px; cursor:pointer;
-                 font-size:12px; transition:background 0.12s;"
-          onmouseover="this.style.background='#dbeeff'"
-          onmouseout="this.style.background=this.getAttribute('data-selected')==='true' ? '#c8e1ff' : 'transparent'">
-          <span style="width:4px; height:4px; border-radius:50%; background:#0b4093;
-                       flex-shrink:0; display:inline-block;"></span>
-          <span [style.color]="selectedScreen?.id === screen.id ? '#0b4093' : '#111827'"
-            [style.font-weight]="selectedScreen?.id === screen.id ? '700' : '500'"
-            style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px;">
-            {{ screen.name }}
-          </span>
+      <div class="fp-search-row" [class.open]="showFlyoutSearch">
+        <div class="fp-search-wrap">
+          <i class="pi pi-search"></i>
+
+          <input
+            [(ngModel)]="flyoutSearchQuery"
+            class="fp-search-input"
+            placeholder="Search flyout items..." />
+
+          <button *ngIf="flyoutSearchQuery" class="fp-clear-btn" (click)="flyoutSearchQuery = ''">
+            <i class="pi pi-times-circle"></i>
+          </button>
         </div>
+      </div>
+
+      <div class="fp-items">
+        <ng-container *ngIf="filteredFlyoutScreens.length > 0; else noFlyoutResult">
+          <button
+            *ngFor="let screen of filteredFlyoutScreens"
+            class="fp-item"
+            [class.active]="selectedScreen?.id === screen.id"
+            (click)="selectScreen(screen); $event.stopPropagation()">
+            <span class="fp-screen-icon">
+              <i [class]="getScreenIcon(screen.name)"></i>
+            </span>
+
+            <span class="fp-name">{{ screen.name }}</span>
+
+            <i class="pi pi-check fp-check" *ngIf="selectedScreen?.id === screen.id"></i>
+          </button>
+        </ng-container>
+
+        <ng-template #noFlyoutResult>
+          <div class="fp-empty">
+            <i class="pi pi-search"></i>
+            <span>No flyout items found</span>
+          </div>
+        </ng-template>
       </div>
     </div>
 
-    <!-- Main View Area -->
-    <main class="content-area" style="flex:1; overflow:auto; background:#f0f4f8;">
+    <main class="content-area" role="main">
+      <nav class="breadcrumb-bar" *ngIf="selectedScreen" aria-label="Breadcrumb">
+        <div class="bc-inner">
+          <button class="bc-item bc-link" (click)="selectModule(selectedModule!)">
+            <i [class]="getModuleIcon(selectedModule?.name)"></i>
+            <span>{{ selectedModule?.name }}</span>
+          </button>
 
-      <div *ngIf="selectedScreen"
-  style="background:#fff; padding:12px 18px; font-size:16px; font-weight:700; 
-         color:#162246; border-bottom:1px solid #dce6f0; flex-shrink:0; 
-         margin-bottom:10px;">
-  <span style="color:#888; cursor:pointer;" (click)="selectModule(selectedModule!)">
-    {{ selectedModule?.name }}
-  </span>
-  <span style="color:#aaa; margin:0 8px;">/</span>
-  <span style="color:#888; cursor:pointer;" (click)="toggleSubModule(selectedSubModule!)">
-    {{ selectedSubModule?.name }}
-  </span>
-  <span style="color:#aaa; margin:0 8px;">/</span>
+          <i class="pi pi-angle-right bc-sep"></i>
 
+          <button class="bc-item bc-link" (click)="toggleSubModule(selectedSubModule!)">
+            <i [class]="getSubModuleIcon(selectedSubModule?.name)"></i>
+            <span>{{ selectedSubModule?.name }}</span>
+          </button>
 
-  <span style="color:#0b4093;">{{ selectedScreen.name }}</span>
-</div>
-      <router-outlet></router-outlet>
+          <i class="pi pi-angle-right bc-sep"></i>
+
+          <span class="bc-item bc-current">
+            <i [class]="getScreenIcon(selectedScreen?.name)"></i>
+            <span>{{ selectedScreen?.name }}</span>
+          </span>
+        </div>
+      </nav>
+
+      <div class="content-body" [class.with-breadcrumb]="selectedScreen">
+        <div class="welcome-state" *ngIf="!selectedScreen">
+          <div class="ws-content">
+            <div class="ws-icon">
+              <i class="pi pi-th-large"></i>
+            </div>
+
+            <h2 class="ws-title">Choose a workspace</h2>
+            <p class="ws-sub">Select a module, submenu, and screen to continue.</p>
+
+            <div class="ws-module-chips">
+              <button
+                *ngFor="let module of modules"
+                class="ws-chip"
+                (click)="selectModule(module)">
+                <i [class]="getModuleIcon(module.name)"></i>
+                <span>{{ module.name }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <router-outlet></router-outlet>
+      </div>
     </main>
-
   </div>
 </div>
