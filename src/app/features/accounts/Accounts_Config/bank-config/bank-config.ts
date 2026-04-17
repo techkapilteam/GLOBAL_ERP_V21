@@ -96,8 +96,8 @@ interface BankMasterFormShape {
     ButtonModule,
     RouterModule,
   ],
-  templateUrl: './bank-config.component.html',
-  styleUrls: ['./bank-config.component.css'],
+  templateUrl: './bank-config.html',
+  styleUrls: ['./bank-config.css'],
 })
 export class BankConfigComponent implements OnInit {
 
@@ -150,7 +150,15 @@ export class BankConfigComponent implements OnInit {
   todate                  = false;
   submitted               = false;
   cardno                  = false;
-  accountno               = false;
+  accountnoFlag           = false;
+
+  get f(): any {
+    return this.bankmasterform?.controls ?? {};
+  }
+
+  accountno(): boolean {
+    return this.accountnoFlag;
+  }
 
   readonly accountTypes = [
     { value: 'SAVING', label: 'Saving' },
@@ -176,7 +184,7 @@ export class BankConfigComponent implements OnInit {
   };
 
   // ── Typed FormGroup ──────────────────────────────────────────────────────────
-  bankmasterform!: FormGroup<BankMasterFormShape>;
+  bankmasterform!: FormGroup<any>;
 
   // ── effect: populate AddressComponent once it mounts in edit mode ─────────
   constructor() {
@@ -250,7 +258,7 @@ export class BankConfigComponent implements OnInit {
       isformanbank:           [false],
       isforemanpaymentbank:   [false],
       isintrestpaymentbank:   [false],
-    } as any) as FormGroup<BankMasterFormShape>;
+    } as any);
 
     this.bankmasterform.controls['pBankdate'].setValue(this.date as any);
     this.bankmasterform.controls['pOpeningBalanceType'].setValue('D');
@@ -808,7 +816,7 @@ export class BankConfigComponent implements OnInit {
   clear(): void {
     this.disable.set(false);
     this.cardno      = false;
-    this.accountno   = false;
+    this.accountnoFlag = false;
     this.buttonName.set('Save');
     this.buttonType.set('new');
     this._accountingMasterSvc.newformstatus('new');

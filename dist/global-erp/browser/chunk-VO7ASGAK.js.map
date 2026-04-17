@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Transactions/general-receipt/general-receipt.ts", "src/app/features/accounts/Accounts_Transactions/general-receipt/general-receipt.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-general-receipt\",\r\n  imports: [],\r\n  templateUrl: \"./general-receipt.html\",\r\n  styleUrl: \"./general-receipt.css\",\r\n})\r\nexport class GeneralReceipt {}\r\n", "<p>general-receipt works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,iBAAP,MAAO,gBAAc;;qCAAd,iBAAc;EAAA;yEAAd,iBAAc,WAAA,CAAA,CAAA,qBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,wBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR3B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,wBAAA;AAAsB,MAAA,0BAAA;;;;;sEDQZ,gBAAc,CAAA;UAN1B;uBACW,uBAAqB,SACtB,CAAA,GAAE,UAAA,oCAAA,CAAA;;;;6EAIA,gBAAc,EAAA,WAAA,kBAAA,UAAA,sFAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

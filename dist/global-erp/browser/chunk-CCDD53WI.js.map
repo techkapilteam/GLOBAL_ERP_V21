@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Transactions/general-receipt-cancel/general-receipt-cancel.ts", "src/app/features/accounts/Accounts_Transactions/general-receipt-cancel/general-receipt-cancel.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-general-receipt-cancel\",\r\n  imports: [],\r\n  templateUrl: \"./general-receipt-cancel.html\",\r\n  styleUrl: \"./general-receipt-cancel.css\",\r\n})\r\nexport class GeneralReceiptCancel {}\r\n", "<p>general-receipt-cancel works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,uBAAP,MAAO,sBAAoB;;qCAApB,uBAAoB;EAAA;yEAApB,uBAAoB,WAAA,CAAA,CAAA,4BAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,8BAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRjC,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,+BAAA;AAA6B,MAAA,0BAAA;;;;;sEDQnB,sBAAoB,CAAA;UANhC;uBACW,8BAA4B,SAC7B,CAAA,GAAE,UAAA,2CAAA,CAAA;;;;6EAIA,sBAAoB,EAAA,WAAA,wBAAA,UAAA,oGAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

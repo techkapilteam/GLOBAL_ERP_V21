@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Config/bank-config-view/bank-config-view.ts", "src/app/features/accounts/Accounts_Config/bank-config-view/bank-config-view.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-bank-config-view\",\r\n  imports: [],\r\n  templateUrl: \"./bank-config-view.html\",\r\n  styleUrl: \"./bank-config-view.css\",\r\n})\r\nexport class BankConfigView {}\r\n", "<p>bank-config-view works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,iBAAP,MAAO,gBAAc;;qCAAd,iBAAc;EAAA;yEAAd,iBAAc,WAAA,CAAA,CAAA,sBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,wBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR3B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,yBAAA;AAAuB,MAAA,0BAAA;;;;;sEDQb,gBAAc,CAAA;UAN1B;uBACW,wBAAsB,SACvB,CAAA,GAAE,UAAA,qCAAA,CAAA;;;;6EAIA,gBAAc,EAAA,WAAA,kBAAA,UAAA,kFAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

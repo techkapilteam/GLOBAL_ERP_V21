@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Transactions/cheques-onhand/cheques-onhand.ts", "src/app/features/accounts/Accounts_Transactions/cheques-onhand/cheques-onhand.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-cheques-onhand\",\r\n  imports: [],\r\n  templateUrl: \"./cheques-onhand.html\",\r\n  styleUrl: \"./cheques-onhand.css\",\r\n})\r\nexport class ChequesOnhand {}\r\n", "<p>cheques-onhand works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,gBAAP,MAAO,eAAa;;qCAAb,gBAAa;EAAA;yEAAb,gBAAa,WAAA,CAAA,CAAA,oBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,uBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR1B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,uBAAA;AAAqB,MAAA,0BAAA;;;;;sEDQX,eAAa,CAAA;UANzB;uBACW,sBAAoB,SACrB,CAAA,GAAE,UAAA,mCAAA,CAAA;;;;6EAIA,eAAa,EAAA,WAAA,iBAAA,UAAA,oFAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

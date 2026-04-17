@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Reports/trial-balance/trial-balance.ts", "src/app/features/accounts/Accounts_Reports/trial-balance/trial-balance.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-trial-balance\",\r\n  imports: [],\r\n  templateUrl: \"./trial-balance.html\",\r\n  styleUrl: \"./trial-balance.css\",\r\n})\r\nexport class TrialBalance {}\r\n", "<p>trial-balance works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,eAAP,MAAO,cAAY;;qCAAZ,eAAY;EAAA;yEAAZ,eAAY,WAAA,CAAA,CAAA,mBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,sBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRzB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,sBAAA;AAAoB,MAAA,0BAAA;;;;;sEDQV,cAAY,CAAA;UANxB;uBACW,qBAAmB,SACpB,CAAA,GAAE,UAAA,kCAAA,CAAA;;;;6EAIA,cAAY,EAAA,WAAA,gBAAA,UAAA,6EAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

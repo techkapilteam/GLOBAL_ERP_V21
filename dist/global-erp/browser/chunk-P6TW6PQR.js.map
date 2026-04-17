@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Reports/brs/brs.ts", "src/app/features/accounts/Accounts_Reports/brs/brs.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-brs\",\r\n  imports: [],\r\n  templateUrl: \"./brs.html\",\r\n  styleUrl: \"./brs.css\",\r\n})\r\nexport class Brs {}\r\n", "<p>brs works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,MAAP,MAAO,KAAG;;qCAAH,MAAG;EAAA;yEAAH,MAAG,WAAA,CAAA,CAAA,SAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,aAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRhB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,YAAA;AAAU,MAAA,0BAAA;;;;;sEDQA,KAAG,CAAA;UANf;uBACW,WAAS,SACV,CAAA,GAAE,UAAA,wBAAA,CAAA;;;;6EAIA,KAAG,EAAA,WAAA,OAAA,UAAA,yDAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}
