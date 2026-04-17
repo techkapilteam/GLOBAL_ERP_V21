@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { MainLayoutComponent } from './components/main-layout/main-layout.component/main-layout.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component/dashboard.component';
-
-import { authGuard, guestGuard } from './guards/auth.guard';
+import { LoginComponent } from './shared/login/login.component';
+import { authGuard, guestGuard } from './core/guards/auth.guard';
+import { MainLayoutComponent } from './shared/main-layout/main-layout.component/main-layout.component';
+import { DashboardComponent } from './shared/dashboard/dashboard.component/dashboard.component';
 
 export const routes: Routes = [
   {
@@ -19,6 +18,10 @@ export const routes: Routes = [
       {
         path: '',
         component: DashboardComponent
+      },
+      {
+        path: 'accounts',
+        loadChildren: () => import('./features/accounts/accounts_routs').then(m => m.accountsRoutes)
       }
     ]
   },
