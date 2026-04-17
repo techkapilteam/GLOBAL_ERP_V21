@@ -65,9 +65,5 @@
         }
       }
     }
-  },
-  "defaultProject": "global-erp",
-  "cli": {
-    "analytics": false
   }
 }
