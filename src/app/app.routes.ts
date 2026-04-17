@@ -18,6 +18,10 @@ export const routes: Routes = [
       {
         path: '',
         component: DashboardComponent
+      },
+      {
+        path: 'accounts',
+        loadChildren: () => import('./features/accounts/accounts_routs').then(m => m.accountsRoutes)
       }
     ]
   },

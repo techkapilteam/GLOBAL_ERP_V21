@@ -316,22 +316,22 @@
       <nav class="breadcrumb-bar" *ngIf="selectedScreen" aria-label="Breadcrumb">
         <div class="bc-inner">
           <button class="bc-item bc-link" (click)="selectModule(selectedModule!)">
-            <i [class]="getModuleIcon(selectedModule?.name)"></i>
-            <span>{{ selectedModule?.name }}</span>
+            <i [class]="getModuleIcon(selectedModule!.name)"></i>
+            <span>{{ selectedModule!.name }}</span>
           </button>
 
           <i class="pi pi-angle-right bc-sep"></i>
 
           <button class="bc-item bc-link" (click)="toggleSubModule(selectedSubModule!)">
-            <i [class]="getSubModuleIcon(selectedSubModule?.name)"></i>
-            <span>{{ selectedSubModule?.name }}</span>
+            <i [class]="getSubModuleIcon(selectedSubModule!.name)"></i>
+            <span>{{ selectedSubModule!.name }}</span>
           </button>
 
           <i class="pi pi-angle-right bc-sep"></i>
 
           <span class="bc-item bc-current">
-            <i [class]="getScreenIcon(selectedScreen?.name)"></i>
-            <span>{{ selectedScreen?.name }}</span>
+            <i [class]="getScreenIcon(selectedScreen!.name)"></i>
+            <span>{{ selectedScreen!.name }}</span>
           </span>
         </div>
       </nav>
