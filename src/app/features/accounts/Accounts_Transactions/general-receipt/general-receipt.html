@@ -1,77 +1,85 @@
 <div class="screen-container">
-    <div class="screen-card card shadow-sm p-4">
+  <div class="screen-card card shadow-sm p-4">
 
-        <div class="screen-header mb-4">
-            <h2 class="screen-title">General Receipt View</h2>
-        </div>
-
-        <div class="row mb-4 align-items-center">
-            <div class="col-md-12 d-flex align-items-center gap-3">
-
-                <a
-                routerLink="/dashboard/accounts/accounts-transactions/general-receipt-new"
-                class="btn btn-primary btn-new">
-                + New
-                </a>
-
-                <div class="col-md-6 search-wrapper">
-                    <input type="text" class="form-control search-input" placeholder="Search..."
-                        (input)="filterDatatable($event)" />
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <div class="table-wrapper">
-
-                    <p-table [value]="filteredGridView()" [paginator]="true" [rows]="pageCriteria.pageSize"
-                        [totalRecords]="filteredGridView().length" [showCurrentPageReport]="true"
-                        [rowsPerPageOptions]="[5, 10, 20, 50]" (onPage)="pageCriteria.pageSize = $event.rows"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                        responsiveLayout="scroll" [loading]="loading()"
-                        styleClass="p-datatable-sm p-datatable-gridlines custom-table" paginatorPosition="bottom">
-
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th class="col-actions text-center">Actions</th>
-                                <th class="col-date">Receipt Date</th>
-                                <th class="col-number text-center">Receipt No.</th>
-                                <th class="col-payment">Payment Details</th>
-                                <th class="col-amount text-end">Received Amount</th>
-                                <th class="col-narration">Narration</th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-row>
-                            <tr>
-                                <td class="text-center">
-                                    <i class="fa fa-eye action-icon" (click)="viewRow(row)" title="View Receipt">
-                                    </i>
-                                </td>
-                                <td>{{ row.receipt_date || '--' }}</td>
-                                <td class="text-center">{{ row.receipt_number || '--' }}</td>
-                                <td>{{ getPaymentDetails(row) }}</td>
-                                <td class="text-end">
-                                    {{ currencySymbol() }} {{ row.totalreceivedamount ?? 0 | number:'1.2-2' }}
-                                </td>
-                                <td class="col-narration">{{ row.narration || '-- NA --' }}</td>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td colspan="6" class="text-center empty-message">
-                                    No records found
-                                </td>
-                            </tr>
-                        </ng-template>
-
-                    </p-table>
-                </div>
-            </div>
-        </div>
-
+    <!-- Header -->
+    <div class="screen-header mb-4">
+      <h2 class="screen-title">General Receipt View</h2>
     </div>
+
+    <!-- Toolbar -->
+    <div class="row mb-4 align-items-center">
+      <div class="col-md-12 d-flex align-items-center gap-3">
+        <a routerLink="/dashboard/accounts/accounts-transactions/general-receipt-new"
+          class="btn btn-primary btn-new">
+          + New
+        </a>
+        <div class="col-md-6 search-wrapper">
+          <input type="text" class="form-control search-input" placeholder="Search..."
+            (input)="filterDatatable($event)" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="row">
+      <div class="col-12">
+        <div class="table-wrapper">
+          <p-table
+            [value]="filteredGridView()"
+            [paginator]="true"
+            [rows]="pageSize"
+            [totalRecords]="filteredGridView().length"
+            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5, 10, 20, 50]"
+            (onPage)="pageSize = $event.rows"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            responsiveLayout="scroll"
+            [loading]="loading()"
+            styleClass="p-datatable-sm p-datatable-gridlines custom-table"
+            paginatorPosition="bottom">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="col-actions text-center">Actions</th>
+                <th class="col-date">Receipt Date</th>
+                <th class="col-number text-center">Receipt No.</th>
+                <th class="col-payment">Payment Details</th>
+                <th class="col-amount text-end">Received Amount</th>
+                <th class="col-narration">Narration</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td class="text-center">
+                  <i class="fa fa-eye action-icon" (click)="viewRow(row)" title="View Receipt"></i>
+                </td>
+                <td>{{ row.receipt_date || '--' }}</td>
+                <td class="text-center">{{ row.receipt_number || '--' }}</td>
+                <td>{{ getPaymentDetails(row) }}</td>
+                <td class="text-end">
+                  {{ currencySymbol() }} {{ row.totalreceivedamount ?? 0 | number:'1.2-2' }}
+                </td>
+                <td class="col-narration">{{ row.narration || '-- NA --' }}</td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6" class="text-center empty-message">
+                  @if (loading()) {
+                    Loading records...
+                  } @else {
+                    No records found
+                  }
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

@@ -61,6 +61,12 @@ export const accountsRoutes: Routes = [
             .then(m => m.JournalVoucherView)
       },
       {
+        path: 'journal-voucher',
+        loadComponent: () =>
+          import('./Accounts_Transactions/journal-voucher/journal-voucher')
+            .then(m => m.JournalVoucher)
+      },
+      {
         path: 'cheques-onhand',
         loadComponent: () =>
           import('./Accounts_Transactions/cheques-onhand/cheques-onhand')
