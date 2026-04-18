@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Reports/jv-list/jv-list.ts", "src/app/features/accounts/Accounts_Reports/jv-list/jv-list.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-jv-list\",\r\n  imports: [],\r\n  templateUrl: \"./jv-list.html\",\r\n  styleUrl: \"./jv-list.css\",\r\n})\r\nexport class JvList {}\r\n", "<p>jv-list works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,SAAP,MAAO,QAAM;;qCAAN,SAAM;EAAA;yEAAN,SAAM,WAAA,CAAA,CAAA,aAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,gBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRnB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,gBAAA;AAAc,MAAA,0BAAA;;;;;sEDQJ,QAAM,CAAA;UANlB;uBACW,eAAa,SACd,CAAA,GAAE,UAAA,4BAAA,CAAA;;;;6EAIA,QAAM,EAAA,WAAA,UAAA,UAAA,iEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

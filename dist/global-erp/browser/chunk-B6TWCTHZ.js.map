@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Reports/account-summary/account-summary.ts", "src/app/features/accounts/Accounts_Reports/account-summary/account-summary.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-account-summary\",\r\n  imports: [],\r\n  templateUrl: \"./account-summary.html\",\r\n  styleUrl: \"./account-summary.css\",\r\n})\r\nexport class AccountSummary {}\r\n", "<p>account-summary works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,iBAAP,MAAO,gBAAc;;qCAAd,iBAAc;EAAA;yEAAd,iBAAc,WAAA,CAAA,CAAA,qBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,wBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR3B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,wBAAA;AAAsB,MAAA,0BAAA;;;;;sEDQZ,gBAAc,CAAA;UAN1B;uBACW,uBAAqB,SACtB,CAAA,GAAE,UAAA,oCAAA,CAAA;;;;6EAIA,gBAAc,EAAA,WAAA,kBAAA,UAAA,iFAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

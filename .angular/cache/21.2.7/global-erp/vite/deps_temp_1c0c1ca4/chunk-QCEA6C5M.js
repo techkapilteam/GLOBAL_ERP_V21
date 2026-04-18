@@ -1,8 +1,8 @@
 import {
   X,
-  k2 as k,
+  k,
   p
-} from "./chunk-UQJJPLSK.js";
+} from "./chunk-B4APTUDW.js";
 import {
   CommonModule
 } from "./chunk-KIYIFQXW.js";
@@ -948,4 +948,4 @@ export {
   TranslationKeys,
   TreeDragDropService
 };
-//# sourceMappingURL=chunk-I7EN3LMA.js.map
+//# sourceMappingURL=chunk-QOS5FLNF.js.map

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Reports/re-print/re-print.ts", "src/app/features/accounts/Accounts_Reports/re-print/re-print.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-re-print\",\r\n  imports: [],\r\n  templateUrl: \"./re-print.html\",\r\n  styleUrl: \"./re-print.css\",\r\n})\r\nexport class RePrint {}\r\n", "<p>re-print works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,UAAP,MAAO,SAAO;;qCAAP,UAAO;EAAA;yEAAP,UAAO,WAAA,CAAA,CAAA,cAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,iBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRpB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,iBAAA;AAAe,MAAA,0BAAA;;;;;sEDQL,SAAO,CAAA;UANnB;uBACW,gBAAc,SACf,CAAA,GAAE,UAAA,6BAAA,CAAA;;;;6EAIA,SAAO,EAAA,WAAA,WAAA,UAAA,mEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

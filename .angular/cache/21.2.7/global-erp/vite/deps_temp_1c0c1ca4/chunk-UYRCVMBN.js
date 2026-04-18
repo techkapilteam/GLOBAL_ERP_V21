@@ -2,11 +2,11 @@ import {
   BaseComponent,
   BaseStyle,
   PARENT_INSTANCE
-} from "./chunk-MD6FCTBN.js";
+} from "./chunk-376O7JDS.js";
 import {
   Bind,
   BindModule
-} from "./chunk-3BFHMKFF.js";
+} from "./chunk-XME5LGLO.js";
 import {
   P,
   Qt,
@@ -15,7 +15,7 @@ import {
   qt,
   te,
   w
-} from "./chunk-UQJJPLSK.js";
+} from "./chunk-B4APTUDW.js";
 import {
   CommonModule
 } from "./chunk-KIYIFQXW.js";
@@ -1824,6 +1824,11 @@ var ObjectUtils = class _ObjectUtils {
     return typeof value === "string" && (empty || value !== "");
   }
 };
+var lastId = 0;
+function UniqueComponentId(prefix = "pn_id_") {
+  lastId++;
+  return `${prefix}${lastId}`;
+}
 function ZIndexUtils() {
   let zIndexes = [];
   const generateZIndex = (key, baseZIndex) => {
@@ -1866,6 +1871,7 @@ export {
   MotionDirective,
   MotionModule,
   ObjectUtils,
+  UniqueComponentId,
   zindexutils
 };
-//# sourceMappingURL=chunk-J7ZZYJOB.js.map
+//# sourceMappingURL=chunk-ZARRZPV3.js.map

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Reports/bank-entries/bank-entries.ts", "src/app/features/accounts/Accounts_Reports/bank-entries/bank-entries.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-bank-entries\",\r\n  imports: [],\r\n  templateUrl: \"./bank-entries.html\",\r\n  styleUrl: \"./bank-entries.css\",\r\n})\r\nexport class BankEntries {}\r\n", "<p>bank-entries works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,cAAP,MAAO,aAAW;;qCAAX,cAAW;EAAA;yEAAX,cAAW,WAAA,CAAA,CAAA,kBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,qBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRxB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,qBAAA;AAAmB,MAAA,0BAAA;;;;;sEDQT,aAAW,CAAA;UANvB;uBACW,oBAAkB,SACnB,CAAA,GAAE,UAAA,iCAAA,CAAA;;;;6EAIA,aAAW,EAAA,WAAA,eAAA,UAAA,2EAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

@@ -1,9 +1,9 @@
 import {
   FilterMatchMode
-} from "./chunk-I7EN3LMA.js";
+} from "./chunk-QOS5FLNF.js";
 import {
   A,
-  C2 as C,
+  C,
   F,
   G,
   Y,
@@ -20,8 +20,8 @@ import {
   s2,
   s3,
   w2 as w,
-  z2 as z
-} from "./chunk-UQJJPLSK.js";
+  z
+} from "./chunk-B4APTUDW.js";
 import {
   isPlatformServer
 } from "./chunk-KIYIFQXW.js";
@@ -77,7 +77,7 @@ var v = (e, t) => {
   if (e != null && F2) for (var s4 of F2(e)) t.indexOf(s4) < 0 && be.call(e, s4) && (r[s4] = e[s4]);
   return r;
 };
-var at = s();
+var at = s2();
 var N = at;
 var k = /{([^}]*)}/g;
 var ne = /(\d+\s+[\+\-\*\/]\s+\d+)/g;
@@ -108,7 +108,7 @@ function Y2(e, t = "", r = "", s4 = [], i2) {
     if (G(a2, k)) {
       let n = a2.replaceAll(k, (l2) => {
         let c2 = l2.replace(/{|}/g, "").split(".").filter((m2) => !s4.some((d) => G(m2, d)));
-        return `var(${ae(r, re(c2.join("-")))}${s2(i2) ? `, ${i2}` : ""})`;
+        return `var(${ae(r, re(c2.join("-")))}${s(i2) ? `, ${i2}` : ""})`;
       });
       return G(n.replace(ie, "0"), ne) ? `calc(${n})` : n;
     }
@@ -217,8 +217,8 @@ var b = { regex: { rules: { class: { pattern: /^\.([a-zA-Z][\w-]*)$/, resolve(e)
 }, getCommon({ name: e = "", theme: t = {}, params: r, set: s4, defaults: i2 }) {
   var R, T, j, O, M, z2, V;
   let { preset: a2, options: n } = t, l2, o, c2, m2, d, u, g2;
-  if (s2(a2) && n.transform !== "strict") {
-    let { primitive: L, semantic: te, extend: re2 } = a2, f2 = te || {}, { colorScheme: K } = f2, A2 = v(f2, ["colorScheme"]), x = re2 || {}, { colorScheme: X } = x, G2 = v(x, ["colorScheme"]), p = K || {}, { dark: U } = p, B = v(p, ["dark"]), y = X || {}, { dark: I } = y, H2 = v(y, ["dark"]), W = s2(L) ? this._toVariables({ primitive: L }, n) : {}, q2 = s2(A2) ? this._toVariables({ semantic: A2 }, n) : {}, Z = s2(B) ? this._toVariables({ light: B }, n) : {}, pe = s2(U) ? this._toVariables({ dark: U }, n) : {}, fe = s2(G2) ? this._toVariables({ semantic: G2 }, n) : {}, ye = s2(H2) ? this._toVariables({ light: H2 }, n) : {}, Se = s2(I) ? this._toVariables({ dark: I }, n) : {}, [Me, ze] = [(R = W.declarations) != null ? R : "", W.tokens], [Ke, Xe] = [(T = q2.declarations) != null ? T : "", q2.tokens || []], [Ge, Ue] = [(j = Z.declarations) != null ? j : "", Z.tokens || []], [Be, Ie] = [(O = pe.declarations) != null ? O : "", pe.tokens || []], [He, We] = [(M = fe.declarations) != null ? M : "", fe.tokens || []], [qe, Ze] = [(z2 = ye.declarations) != null ? z2 : "", ye.tokens || []], [Fe, Je] = [(V = Se.declarations) != null ? V : "", Se.tokens || []];
+  if (s(a2) && n.transform !== "strict") {
+    let { primitive: L, semantic: te, extend: re2 } = a2, f2 = te || {}, { colorScheme: K } = f2, A2 = v(f2, ["colorScheme"]), x = re2 || {}, { colorScheme: X } = x, G2 = v(x, ["colorScheme"]), p = K || {}, { dark: U } = p, B = v(p, ["dark"]), y = X || {}, { dark: I } = y, H2 = v(y, ["dark"]), W = s(L) ? this._toVariables({ primitive: L }, n) : {}, q2 = s(A2) ? this._toVariables({ semantic: A2 }, n) : {}, Z = s(B) ? this._toVariables({ light: B }, n) : {}, pe = s(U) ? this._toVariables({ dark: U }, n) : {}, fe = s(G2) ? this._toVariables({ semantic: G2 }, n) : {}, ye = s(H2) ? this._toVariables({ light: H2 }, n) : {}, Se = s(I) ? this._toVariables({ dark: I }, n) : {}, [Me, ze] = [(R = W.declarations) != null ? R : "", W.tokens], [Ke, Xe] = [(T = q2.declarations) != null ? T : "", q2.tokens || []], [Ge, Ue] = [(j = Z.declarations) != null ? j : "", Z.tokens || []], [Be, Ie] = [(O = pe.declarations) != null ? O : "", pe.tokens || []], [He, We] = [(M = fe.declarations) != null ? M : "", fe.tokens || []], [qe, Ze] = [(z2 = ye.declarations) != null ? z2 : "", ye.tokens || []], [Fe, Je] = [(V = Se.declarations) != null ? V : "", Se.tokens || []];
     l2 = this.transformCSS(e, Me, "light", "variable", n, s4, i2), o = ze;
     let Qe = this.transformCSS(e, `${Ke}${Ge}`, "light", "variable", n, s4, i2), Ye = this.transformCSS(e, `${Be}`, "dark", "variable", n, s4, i2);
     c2 = `${Qe}${Ye}`, m2 = [.../* @__PURE__ */ new Set([...Xe, ...Ue, ...Ie])];
@@ -229,8 +229,8 @@ var b = { regex: { rules: { class: { pattern: /^\.([a-zA-Z][\w-]*)$/, resolve(e)
 }, getPreset({ name: e = "", preset: t = {}, options: r, params: s4, set: i2, defaults: a2, selector: n }) {
   var f2, x, p;
   let l2, o, c2;
-  if (s2(t) && r.transform !== "strict") {
-    let y = e.replace("-directive", ""), m2 = t, { colorScheme: R, extend: T, css: j } = m2, O = v(m2, ["colorScheme", "extend", "css"]), d = T || {}, { colorScheme: M } = d, z2 = v(d, ["colorScheme"]), u = R || {}, { dark: V } = u, L = v(u, ["dark"]), g2 = M || {}, { dark: te } = g2, re2 = v(g2, ["dark"]), K = s2(O) ? this._toVariables({ [y]: h(h({}, O), z2) }, r) : {}, A2 = s2(L) ? this._toVariables({ [y]: h(h({}, L), re2) }, r) : {}, X = s2(V) ? this._toVariables({ [y]: h(h({}, V), te) }, r) : {}, [G2, U] = [(f2 = K.declarations) != null ? f2 : "", K.tokens || []], [B, I] = [(x = A2.declarations) != null ? x : "", A2.tokens || []], [H2, W] = [(p = X.declarations) != null ? p : "", X.tokens || []], q2 = this.transformCSS(y, `${G2}${B}`, "light", "variable", r, i2, a2, n), Z = this.transformCSS(y, H2, "dark", "variable", r, i2, a2, n);
+  if (s(t) && r.transform !== "strict") {
+    let y = e.replace("-directive", ""), m2 = t, { colorScheme: R, extend: T, css: j } = m2, O = v(m2, ["colorScheme", "extend", "css"]), d = T || {}, { colorScheme: M } = d, z2 = v(d, ["colorScheme"]), u = R || {}, { dark: V } = u, L = v(u, ["dark"]), g2 = M || {}, { dark: te } = g2, re2 = v(g2, ["dark"]), K = s(O) ? this._toVariables({ [y]: h(h({}, O), z2) }, r) : {}, A2 = s(L) ? this._toVariables({ [y]: h(h({}, L), re2) }, r) : {}, X = s(V) ? this._toVariables({ [y]: h(h({}, V), te) }, r) : {}, [G2, U] = [(f2 = K.declarations) != null ? f2 : "", K.tokens || []], [B, I] = [(x = A2.declarations) != null ? x : "", A2.tokens || []], [H2, W] = [(p = X.declarations) != null ? p : "", X.tokens || []], q2 = this.transformCSS(y, `${G2}${B}`, "light", "variable", r, i2, a2, n), Z = this.transformCSS(y, H2, "dark", "variable", r, i2, a2, n);
     l2 = `${q2}${Z}`, o = [.../* @__PURE__ */ new Set([...U, ...I, ...W])], c2 = m(j, { dt: E });
   }
   return { css: l2, tokens: o, style: c2 };
@@ -301,17 +301,17 @@ var b = { regex: { rules: { class: { pattern: /^\.([a-zA-Z][\w-]*)$/, resolve(e)
     return o[m2] = d, o;
   }, void 0);
 }, getSelectorRule(e, t, r, s4) {
-  return r === "class" || r === "attr" ? C2(s2(t) ? `${e}${t},${e} ${t}` : e, s4) : C2(e, C2(t != null ? t : ":root,:host", s4));
+  return r === "class" || r === "attr" ? C2(s(t) ? `${e}${t},${e} ${t}` : e, s4) : C2(e, C2(t != null ? t : ":root,:host", s4));
 }, transformCSS(e, t, r, s4, i2 = {}, a2, n, l2) {
-  if (s2(t)) {
+  if (s(t)) {
     let { cssLayer: o } = i2;
     if (s4 !== "style") {
       let c2 = this.getColorSchemeOption(i2, n);
-      t = r === "dark" ? c2.reduce((m2, { type: d, selector: u }) => (s2(u) && (m2 += u.includes("[CSS]") ? u.replace("[CSS]", t) : this.getSelectorRule(u, l2, d, t)), m2), "") : C2(l2 != null ? l2 : ":root,:host", t);
+      t = r === "dark" ? c2.reduce((m2, { type: d, selector: u }) => (s(u) && (m2 += u.includes("[CSS]") ? u.replace("[CSS]", t) : this.getSelectorRule(u, l2, d, t)), m2), "") : C2(l2 != null ? l2 : ":root,:host", t);
     }
     if (o) {
       let c2 = { name: "primeui", order: "primeui" };
-      i(o) && (c2.name = m(o.name, { name: e, type: s4 })), s2(c2.name) && (t = C2(`@layer ${c2.name}`, t), a2 == null || a2.layerNames(c2.name));
+      i(o) && (c2.name = m(o.name, { name: e, type: s4 })), s(c2.name) && (t = C2(`@layer ${c2.name}`, t), a2 == null || a2.layerNames(c2.name));
     }
     return t;
   }
@@ -1254,7 +1254,7 @@ var BaseComponent = class _BaseComponent {
   }
   _loadGlobalStyles() {
     const globalCSS = this._useGlobalPT(this._getOptionValue, "global.css", this.$params);
-    s2(globalCSS) && this.baseStyle.load(globalCSS, __spreadValues({
+    s(globalCSS) && this.baseStyle.load(globalCSS, __spreadValues({
       name: "global"
     }, this.$styleOptions));
   }
@@ -1357,7 +1357,7 @@ var BaseComponent = class _BaseComponent {
   }
   _getPTDatasets(key = "") {
     const datasetPrefix = "data-pc-";
-    const isExtended = key === "root" && s2(this.$pt()?.["data-pc-section"]);
+    const isExtended = key === "root" && s(this.$pt()?.["data-pc-section"]);
     return key !== "transition" && __spreadProps(__spreadValues({}, key === "root" && __spreadProps(__spreadValues({
       [`${datasetPrefix}name`]: g(isExtended ? this.$pt()?.["data-pc-section"] : this.$name)
     }, isExtended && {
@@ -1499,4 +1499,4 @@ export {
   PARENT_INSTANCE,
   BaseComponent
 };
-//# sourceMappingURL=chunk-MD6FCTBN.js.map
+//# sourceMappingURL=chunk-376O7JDS.js.map

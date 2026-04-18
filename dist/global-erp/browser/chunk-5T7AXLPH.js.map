@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Transactions/petty-cash-view/petty-cash-view.ts", "src/app/features/accounts/Accounts_Transactions/petty-cash-view/petty-cash-view.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-petty-cash-view\",\r\n  imports: [],\r\n  templateUrl: \"./petty-cash-view.html\",\r\n  styleUrl: \"./petty-cash-view.css\",\r\n})\r\nexport class PettyCashView {}\r\n", "<p>petty-cash-view works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,gBAAP,MAAO,eAAa;;qCAAb,gBAAa;EAAA;yEAAb,gBAAa,WAAA,CAAA,CAAA,qBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,uBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR1B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,wBAAA;AAAsB,MAAA,0BAAA;;;;;sEDQZ,eAAa,CAAA;UANzB;uBACW,uBAAqB,SACtB,CAAA,GAAE,UAAA,oCAAA,CAAA;;;;6EAIA,eAAa,EAAA,WAAA,iBAAA,UAAA,sFAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

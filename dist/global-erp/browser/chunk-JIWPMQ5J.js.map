@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Transactions/tds-jv/tds-jv.ts", "src/app/features/accounts/Accounts_Transactions/tds-jv/tds-jv.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-tds-jv\",\r\n  imports: [],\r\n  templateUrl: \"./tds-jv.html\",\r\n  styleUrl: \"./tds-jv.css\",\r\n})\r\nexport class TdsJv {}\r\n", "<p>tds-jv works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,QAAP,MAAO,OAAK;;qCAAL,QAAK;EAAA;yEAAL,QAAK,WAAA,CAAA,CAAA,YAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,eAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRlB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,eAAA;AAAa,MAAA,0BAAA;;;;;sEDQH,OAAK,CAAA;UANjB;uBACW,cAAY,SACb,CAAA,GAAE,UAAA,2BAAA,CAAA;;;;6EAIA,OAAK,EAAA,WAAA,SAAA,UAAA,oEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}

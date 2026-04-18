@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Config/cheque-managementnew/cheque-managementnew.ts", "src/app/features/accounts/Accounts_Config/cheque-managementnew/cheque-managementnew.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-cheque-managementnew\",\r\n  imports: [],\r\n  templateUrl: \"./cheque-managementnew.html\",\r\n  styleUrl: \"./cheque-managementnew.css\",\r\n})\r\nexport class ChequeManagementnew {}\r\n", "<p>cheque-managementnew works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,sBAAP,MAAO,qBAAmB;;qCAAnB,sBAAmB;EAAA;yEAAnB,sBAAmB,WAAA,CAAA,CAAA,0BAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,6BAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRhC,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,6BAAA;AAA2B,MAAA,0BAAA;;;;;sEDQjB,qBAAmB,CAAA;UAN/B;uBACW,4BAA0B,SAC3B,CAAA,GAAE,UAAA,yCAAA,CAAA;;;;6EAIA,qBAAmB,EAAA,WAAA,uBAAA,UAAA,0FAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}
