@@ -1,1 +1,200 @@
-<p>general-receipt-cancel works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- HEADER -->
+    <div class="screen-header">
+      <h2 class="screen-title">General Receipt Cancel</h2>
+    </div>
+
+    <div class="screen-content">
+      <form [formGroup]="GeneralReceiptCancelForm">
+
+        <!-- Search Receipt Section -->
+        <div class="section-card">
+          <p class="section-label">Search Receipt</p>
+          <div class="row align-items-end">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="field-label">
+                  Receipt No <span class="required">*</span>
+                </label>
+                <ng-select
+                  [items]="receiptdata()"
+                  bindLabel="receiptnumber"
+                  bindValue="receiptid"
+                  formControlName="receiptid"
+                  [searchable]="true"
+                  [clearable]="true"
+                  appendTo="body"
+                  (change)="getreceiptdata($event)">
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <button type="button" (click)="Show()" class="btn-primary-action btn-full">
+                Show
+              </button>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="field-label">Date</label>
+                <input
+                  class="form-control input-readonly"
+                  type="text"
+                  formControlName="ppaymentdate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig"
+                  readonly
+                  (click)="$event.stopPropagation(); $event.preventDefault()"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Receipt Details Section -->
+        @if (show()) {
+          <div class="section-card">
+            <p class="section-label">Receipt Details</p>
+
+            <!-- Received From & Receipt Date -->
+            <div class="receipt-meta">
+              <div class="meta-item">
+                <span class="meta-key">Received From :</span>
+                <span class="meta-value">{{ receivedfrom() }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-key">Receipt Date :</span>
+                <span class="meta-value">{{ receiptdate() | date:'dd-MMM-yyyy' }}</span>
+              </div>
+            </div>
+
+            <!-- Details Table -->
+            <p-table
+              [value]="lstdetails()"
+              [rows]="pageCriteria().pageSize"
+              [totalRecords]="pageCriteria().totalrows"
+              (onPage)="onPrimePageChange($event)"
+              styleClass="p-datatable-gridlines p-datatable-sm"
+              [scrollable]="true"
+              scrollHeight="400px">
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="table-header table-header-sno">S.No</th>
+                  <th class="table-header">Particulars</th>
+                  <th class="table-header table-header-amount">Amount</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                <tr>
+                  <td class="table-cell">
+                    {{ pageCriteria().offset * pageCriteria().pageSize + rowIndex + 1 }}
+                  </td>
+                  <td class="table-cell">{{ rowData.pAccountname }}</td>
+                  <td class="table-cell table-cell-amount">
+                    {{ currencysymbol() }} {{ rowData.pLedgeramount | number:'1.2-2' }}
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="table-empty">No payment details found</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- Summary Row -->
+            <div class="summary-row">
+              <div class="col-md-5 summary-item">
+                <span class="meta-key">Narration :</span>
+                <span class="narration-value">{{ narration() }}</span>
+              </div>
+              <div class="col-md-4 summary-item">
+                <span class="meta-key">Mode of Payment :</span>
+                <span class="meta-value">{{ pmodofPayment() }}</span>
+              </div>
+              <div class="col-md-3 summary-item">
+                <span class="meta-key">Done By :</span>
+                <span class="meta-value">{{ doneby() }}</span>
+              </div>
+            </div>
+
+            <div class="total-amount-row">
+              <span class="total-label">Total Amount :</span>
+              <span class="total-value">{{ currencysymbol() }} {{ showtotalamount() | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <!-- Cancellation Details Section -->
+          <div class="section-card">
+            <p class="section-label">Cancellation Details</p>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="field-label">
+                    Cancellation Reason <span class="required">*</span>
+                  </label>
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    formControlName="cancellationreason"
+                    placeholder="Enter cancellation reason..."
+                    required>
+                  </textarea>
+                  @if (GeneralReceiptCancelForm.get('cancellationreason')?.touched &&
+                       !GeneralReceiptCancelForm.get('cancellationreason')?.value?.trim()) {
+                    <div class="field-error">Cancellation reason is required</div>
+                  }
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="field-label">
+                    Cancelled By <span class="required">*</span>
+                  </label>
+                  <ng-select
+                    [items]="(authorizedbylist$ | async) ?? []"
+                    bindLabel="subintroducedname"
+                    bindValue="subintroducedid"
+                    formControlName="autorizedcontactid"
+                    [typeahead]="contactSearchevent"
+                    placeholder="Select">
+                  </ng-select>
+                  @if (GeneralReceiptCancelForm.get('autorizedcontactid')?.touched &&
+                       !GeneralReceiptCancelForm.get('autorizedcontactid')?.value) {
+                    <div class="field-error">Cancelled By is required</div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Footer Action Buttons -->
+        <div class="footer-actions">
+          <button type="button" (click)="Cancel()" class="btn-secondary-action">
+            ✖ Cancel
+          </button>
+          <button
+            type="button"
+            (click)="Save()"
+            [disabled]="disablesavebutton() || isLoading()"
+            class="btn-primary-action">
+            @if (isLoading()) {
+              <i class="fa fa-spin fa-spinner"></i>
+            }
+            {{ buttonType() === 'Save' ? '✔ Save' : 'Processing...' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

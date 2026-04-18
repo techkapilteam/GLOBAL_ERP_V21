@@ -1,113 +1,161 @@
-import { Component, computed, OnInit, signal, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DecimalPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+
+
+
+export interface Receipt {
+  receipt_date: string;
+  receipt_number: string;
+  modeof_receipt: string;
+  ptypeofpayment: string;
+  pChequenumber: string;
+  totalreceivedamount: number;
+  narration: string;
+}
+
 
 @Component({
   selector: 'app-general-receipt',
   standalone: true,
-  imports: [RouterModule, ButtonModule, TableModule, DecimalPipe],
+  imports: [CommonModule, RouterModule, ButtonModule, TableModule, TooltipModule, DecimalPipe],
   templateUrl: './general-receipt.html',
   styleUrl: './general-receipt.css',
 })
+
 export class GeneralReceipt implements OnInit {
 
-  // ── DI via inject() ────────────────────────────────────────────────────────
-  private readonly _commonService = inject(CommonService);
-  private readonly _accountingTransactionsService = inject(AccountsTransactions);
-  private readonly _router = inject(Router);
-  private readonly _destroyRef = inject(DestroyRef);
+  private cs = inject(CommonService);
+  private service = inject(AccountsTransactions);
+  private router = inject(Router);
 
-  // ── Signals ────────────────────────────────────────────────────────────────
-  private readonly _allGridView = signal<any[]>([]);
-  private readonly _searchTerm = signal<string>('');
+  // ── State ────────────────────────────────────────────────────────────────
+  allData = signal<Receipt[]>([]);
+  searchText = signal<string>('');
+  loading = signal<boolean>(false);
+  pageSize = signal<number>(10);
 
-  readonly loading = signal(false);
-  readonly currencySymbol = signal('₹');
+  readonly currencySymbol = this.cs.currencysymbol || '₹';
 
-  // ── Computed ───────────────────────────────────────────────────────────────
-  readonly filteredGridView = computed(() => {
-    const term = this._searchTerm().toLowerCase().trim();
-    const data = this._allGridView();
-    if (!term) return data;
-    return data.filter(d =>
-      (d.receipt_date?.toLowerCase() ?? '').includes(term) ||
-      (d.receipt_number?.toString().toLowerCase() ?? '').includes(term) ||
-      (d.modeof_receipt?.toLowerCase() ?? '').includes(term) ||
-      (d.narration?.toLowerCase() ?? '').includes(term) ||
-      (d.ptypeofpayment?.toLowerCase() ?? '').includes(term)
+  readonly rowsPerPageOptions = [5, 10, 20, 50];
+
+  // ── Derived ──────────────────────────────────────────────────────────────
+  filteredData = computed(() => {
+    const text = this.searchText().toLowerCase().trim();
+    if (!text) return this.allData();
+    return this.allData().filter(d =>
+      d.receipt_date.toLowerCase().includes(text) ||
+      d.receipt_number.toLowerCase().includes(text) ||
+      d.modeof_receipt.toLowerCase().includes(text) ||
+      d.narration.toLowerCase().includes(text) ||
+      d.ptypeofpayment.toLowerCase().includes(text)
     );
   });
 
-  // ── Pagination ─────────────────────────────────────────────────────────────
-  pageSize = 10;
-
-  // ── Lifecycle ──────────────────────────────────────────────────────────────
+  // ── Lifecycle ────────────────────────────────────────────────────────────
   ngOnInit(): void {
-    this.currencySymbol.set(this._commonService.currencysymbol || '₹');
     this.loadData();
   }
 
-  // ── Data ───────────────────────────────────────────────────────────────────
+  // ── Data ─────────────────────────────────────────────────────────────────
   loadData(): void {
     this.loading.set(true);
-    this._accountingTransactionsService.GetGeneralReceiptsData(
-      this._commonService.getschemaname(),
-      this._commonService.getbranchname(),
+    this.service.GetGeneralReceiptsData(
+      this.cs.getschemaname(),
+      this.cs.getbranchname(),
       'taxes',
-      this._commonService.getCompanyCode(),
-      this._commonService.getBranchCode()
-    ).pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe({
-        next: (data: any[]) => {
-          this.loading.set(false);
-          if (!data || data.length === 0) { this._resetGrid(); return; }
-          this._allGridView.set(data.map(item => ({
-            ...item,
-            preceiptdate: this._commonService.getFormatDateGlobal(item.preceiptdate) || '--',
-            pmodofreceipt: item.pmodofreceipt || '--',
-            ptypeofpayment: item.ptypeofpayment || '',
-            pChequenumber: item.pChequenumber || '',
-            ptotalreceivedamount: item.ptotalreceivedamount ?? 0,
-            pnarration: item.pnarration || '',
-          })));
-        },
-        error: (err) => {
-          this.loading.set(false);
-          this._resetGrid();
-          this._commonService.showErrorMessage(err);
-        },
-      });
+      this.cs.getCompanyCode(),
+      this.cs.getBranchCode()
+    ).subscribe({
+      next: (data: any[]) => {
+        this.loading.set(false);
+        if (!data?.length) { this.allData.set([]); return; }
+
+        const mapped: Receipt[] = data.map(item => ({
+          receipt_date: this.cs.getFormatDateGlobal(
+            item.preceiptdate ?? item.preceipt_date ?? item.receipt_date
+          ) || '--',
+          receipt_number:
+            item.preceiptnumber ?? item.preceipt_number ?? item.receipt_number ?? '--',
+          modeof_receipt:
+            item.pmodofreceipt ?? item.modeof_receipt ?? item.mode ?? '--',
+          ptypeofpayment:
+            item.ptypeofpayment ?? item.typeofpayment ?? '',
+          pChequenumber:
+            item.pChequenumber ?? item.pchequenumber ?? item.chequenumber ?? '',
+          totalreceivedamount:
+            item.ptotalreceivedamount ?? item.totalreceivedamount ?? 0,
+          narration:
+            item.pnarration ?? item.narration ?? ''
+        }));
+
+        this.allData.set(mapped);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        this.allData.set([]);
+        this.cs.showErrorMessage(err);
+      }
+    });
   }
 
-  filterDatatable(event: Event): void {
-    this._searchTerm.set((event.target as HTMLInputElement).value ?? '');
+  // ── UI Handlers ──────────────────────────────────────────────────────────
+  onSearch(event: Event): void {
+    this.searchText.set((event.target as HTMLInputElement).value);
   }
 
-  viewRow(row: any): void {
-    if (!row?.receipt_number) { console.error('Invalid row data'); return; }
+  onPageChange(event: { rows: number }): void {
+    this.pageSize.set(event.rows);
+  }
+
+  viewRow(row: Receipt): void {
+    if (!row?.receipt_number) return;
     const receipt = btoa(`${row.receipt_number},General Receipt`);
-    window.open(
-      this._router.serializeUrl(this._router.createUrlTree(['/GeneralReceiptReport', receipt])),
-      '_blank'
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/GeneralReceiptReport', receipt])
     );
+    window.open(url, '_blank');
   }
 
-  getPaymentDetails(row: any): string {
-    let mode = row.modeof_receipt === 'C' ? 'Cash' : row.modeof_receipt === 'B' ? 'Bank' : (row.modeof_receipt || '--');
-    if (row.ptypeofpayment) {
-      mode += ` (${row.ptypeofpayment}`;
-      if (row.pChequenumber) mode += ` - ${row.pChequenumber}`;
-      mode += ')';
+  // ── Display Helpers ──────────────────────────────────────────────────────
+  getPaymentLabel(row: Receipt): string {
+    const mode = (row.modeof_receipt || '').toUpperCase().trim();
+
+    if (mode === 'C' || mode === 'CASH') return 'CASH';
+
+    if (mode === 'B' || mode === 'BANK') {
+      const type = (row.ptypeofpayment || '').toUpperCase().trim();
+      const codeMap: Record<string, string> = {
+        'CHEQUE': 'CH', 'CH': 'CH',
+        'ONLINE': 'O', 'O': 'O',
+        'DEBIT CARD': 'DC', 'DEBITCARD': 'DC', 'DC': 'DC',
+        'CREDIT CARD': 'CC', 'CREDITCARD': 'CC', 'CC': 'CC',
+      };
+      const code = codeMap[type] ?? type;
+      let result = code ? `BANK(${code})` : 'BANK';
+      if (row.pChequenumber) result += ` - ${row.pChequenumber}`;
+      return result;
     }
-    return mode;
+
+    return row.modeof_receipt || '--';
   }
 
-  private _resetGrid(): void {
-    this._allGridView.set([]);
+  getPaymentChipClass(row: Receipt): string {
+    const mode = (row.modeof_receipt || '').toUpperCase();
+    if (mode === 'C' || mode === 'CASH') return 'chip chip--cash';
+    if (mode === 'B' || mode === 'BANK') return 'chip chip--bank';
+    return 'chip chip--default';
+  }
+
+  getPaymentIcon(row: Receipt): string {
+    const mode = (row.modeof_receipt || '').toUpperCase();
+    if (mode === 'C' || mode === 'CASH') return 'pi pi-wallet';
+    if (mode === 'B' || mode === 'BANK') return 'pi pi-credit-card';
+    return 'pi pi-circle';
   }
 }

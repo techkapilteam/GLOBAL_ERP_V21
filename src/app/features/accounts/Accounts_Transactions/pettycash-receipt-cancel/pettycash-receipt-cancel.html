@@ -1,1 +1,210 @@
-<p>pettycash-receipt-cancel works!</p>
+<div class="page-wrapper">
+    <div class="screen-card">
+
+        <!-- HEADER -->
+        <div class="screen-header">
+            <div class="header-accent"></div>
+            <h2 class="header-title">Petty Cash Receipt Cancel</h2>
+        </div>
+
+        <div class="screen-content">
+            <form [formGroup]="PettyCashCancel" autocomplete="off">
+
+                <!-- Search Receipt Section -->
+                <div class="section-card">
+                    <p class="section-title">Search Receipt</p>
+                    <div class="row align-items-end">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="field-label">
+                                    Receipt No. <span class="required-star">*</span>
+                                </label>
+                                <ng-select [items]="receiptdata()" bindLabel="payment_number"
+                                    bindValue="tbl_trans_pettycash_voucher_id" formControlName="receiptid"
+                                    [searchable]="true" [clearable]="true" (change)="getreceiptdata($event)">
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" (click)="showdata()" class="btn-show">
+                                <span class="btn-icon">⊕</span> Show
+                            </button>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="field-label">
+                                    Date <span class="required-star">*</span>
+                                </label>
+                                <input class="form-control" type="text" bsDatepicker [bsConfig]="pDobConfig"
+                                    formControlName="ppaymentdate" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Receipt Details Section -->
+                @if (show()) {
+                <div class="section-card">
+                    <p class="section-title">Receipt Details</p>
+
+                    <!-- Info Row -->
+                    <div class="info-row">
+                        <div class="info-left">
+                            <div class="info-item">
+                                <span class="info-label">Credit To :</span>
+                                <span class="info-value">{{ creditto() }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Received From :</span>
+                                <span class="info-value">{{ receivedfrom() }}</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Receipt Date :</span>
+                            <span class="info-value">{{ receiptdate() | date:'dd-MMM-yyyy' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Details Table -->
+                    <p-table [value]="lstdetails()" [paginator]="true" [rows]="pageCriteria().pageSize"
+                        [totalRecords]="pageCriteria().totalrows" (onPage)="onPrimePageChange($event)"
+                        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" scrollHeight="400px">
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="table-header-cell table-sno">S.No</th>
+                                <th class="table-header-cell">Particulars</th>
+                                <th class="table-header-cell table-amount">Amount</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                            <tr class="table-body-row">
+                                <td class="table-cell">
+                                    {{ pageCriteria().offset * pageCriteria().pageSize + rowIndex + 1 }}
+                                </td>
+                                <td class="table-cell">{{ rowData.pAccountname }}</td>
+                                <td class="table-cell table-cell-right">
+                                    {{ currencysymbol }} {{ rowData.pLedgeramount | number:'1.2-2' }}
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="3" class="table-empty">No payment details found</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                    <!-- Total Amount -->
+                    <div class="total-row">
+                        <span class="total-label">Total Amount :</span>
+                        <span class="total-value">
+                            {{ currencysymbol }} {{ showtotalamount() | number:'1.2-2' }}
+                        </span>
+                    </div>
+
+                    <!-- Summary Row -->
+                    <div class="summary-row">
+                        <div class="summary-item summary-narration">
+                            <span class="info-label">Narration :</span>
+                            <span class="info-value narration-text">{{ narration() }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="info-label">Mode of Transaction :</span>
+                            <span class="info-value">{{ pmodofPayment() }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="info-label">Done By :</span>
+                            <span class="info-value">{{ doneby() }}</span>
+                        </div>
+                    </div>
+                </div>
+                }
+
+                <!-- Cancellation Details Section -->
+                @if (show()) {
+                <div class="section-card">
+                    <p class="section-title">Cancellation Details</p>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="field-label">
+                                    Reason <span class="required-star">*</span>
+                                </label>
+                                <textarea class="form-control textarea-control"
+                                    [class.is-invalid]="pettycashValidation()['cancellationreason']" rows="3"
+                                    formControlName="cancellationreason" maxlength="250"
+                                    placeholder="Enter cancellation reason...">
+                  </textarea>
+                                @if (pettycashValidation()['cancellationreason']) {
+                                <div class="invalid-feedback">{{ pettycashValidation()['cancellationreason'] }}</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="field-label">
+                                    Authorised By <span class="required-star">*</span>
+                                </label>
+                                <ng-select [items]="(authorizedbylist$ | async) ?? []" bindLabel="subintroducedname"
+                                    bindValue="subintroducedid" formControlName="autorizedcontactid"
+                                    [typeahead]="contactSearchevent" [multiple]="false" [searchable]="true"
+                                    [clearable]="true" (change)="subIntroducedGridRowSelect($event)"
+                                    placeholder="Select"
+                                    [class.is-invalid]="pettycashValidation()['autorizedcontactid']">
+
+                                    <ng-template ng-header-tmp>
+                                        <div class="ng-select-header-row">
+                                            <span class="col-3 ng-select-header-col">Code</span>
+                                            <span class="col-3 ng-select-header-col">Contact Name</span>
+                                            <span class="col-3 ng-select-header-col text-center">Mobile No.</span>
+                                            <span class="col-3 ng-select-header-col">Email Id</span>
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="ng-select-option-row">
+                                            <span class="col-3 ng-select-option-col">{{ item.subintroducedcode }}</span>
+                                            <span class="col-3 ng-select-option-col">{{ item.subintroducedname }}</span>
+                                            <span class="col-3 ng-select-option-col text-center">{{
+                                                item.subintroducedmobilenumber }}</span>
+                                            <span class="col-3 ng-select-option-col">{{ item.subintroducedemailid
+                                                }}</span>
+                                        </div>
+                                    </ng-template>
+
+                                </ng-select>
+                                @if (pettycashValidation()['autorizedcontactid']) {
+                                <div class="invalid-feedback">{{ pettycashValidation()['autorizedcontactid'] }}</div>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                }
+
+                <!-- Footer Action Buttons -->
+                <div class="footer-actions">
+                    <button type="button" (click)="clear()" class="btn-cancel">
+                        ✖ Cancel
+                    </button>
+                    <button type="button" (click)="Save()" [disabled]="disablesavebutton()" class="btn-save"
+                        [class.btn-loading]="disablesavebutton()">
+                        <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
+                        {{ ButtonType() }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
