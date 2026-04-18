@@ -1343,6 +1343,25 @@ export class AccountsTransactions {
             .set('subcategoryId', subcategoryId).set('GlobalSchema',GlobalSchema).set('companyCode',companyCode).set('branchCode',branchCode);
         return this._CommonService.getAPI('/Accounts/SubscriberJVCheckbalance', params, 'YES');
     }
+    
+
+
+    //hrms employee details service
+     GetTDSJVCalendarYearMonth(CalendarId: any, GlobalSchema: any): Observable<any> {
+
+    const params = new HttpParams().set('CalendarId', CalendarId).set('GlobalSchema', GlobalSchema);
+
+    return this._CommonService.getAPI('/Accounts/GetTDSJVCalendarYearMonth', params, 'YES');
+
+  }
+
+   GetCalendarYear(GlobalSchema: any): Observable<any> {
+
+    const params = new HttpParams().set('GlobalSchema', GlobalSchema);
+
+    return this._CommonService.getAPI('/Accounts/GetCalendarYear', params, 'YES');
+
+  }
 }
 
 

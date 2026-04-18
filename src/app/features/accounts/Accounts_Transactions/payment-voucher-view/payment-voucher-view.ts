@@ -175,9 +175,11 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
     this.isgstapplicableChange();
     this.istdsapplicableChange();
 
-    this.paymentVoucherForm
-      .get('ppaymentsslistcontrols.ppaymentdate')
-      ?.setValue(new Date());
+    // this.paymentVoucherForm
+    //   .get('ppaymentsslistcontrols.ppaymentdate')
+    //   ?.setValue(new Date());
+
+      this.paymentVoucherForm.get('ppaymentdate')?.setValue(new Date());
 
     this.getLoadData();
     this.blurEventAllControls(this.paymentVoucherForm);
