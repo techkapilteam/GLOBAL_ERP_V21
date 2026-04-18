@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/accounts/Accounts_Reports/brs-statements/brs-statements.ts", "src/app/features/accounts/Accounts_Reports/brs-statements/brs-statements.html"],
-  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-brs-statements\",\r\n  imports: [],\r\n  templateUrl: \"./brs-statements.html\",\r\n  styleUrl: \"./brs-statements.css\",\r\n})\r\nexport class BrsStatements {}\r\n", "<p>brs-statements works!</p>\r\n"],
-  "mappings": ";;;;;;;;;;;;AAQM,IAAO,gBAAP,MAAO,eAAa;;qCAAb,gBAAa;EAAA;yEAAb,gBAAa,WAAA,CAAA,CAAA,oBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,uBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR1B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,uBAAA;AAAqB,MAAA,0BAAA;;;;;sEDQX,eAAa,CAAA;UANzB;uBACW,sBAAoB,SACrB,CAAA,GAAE,UAAA,mCAAA,CAAA;;;;6EAIA,eAAa,EAAA,WAAA,iBAAA,UAAA,+EAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
-  "names": []
-}
