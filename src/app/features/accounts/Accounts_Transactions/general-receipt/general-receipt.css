@@ -33,18 +33,29 @@
   padding: 6px 18px;
 }
 
-/* ── Search ───────────────────────────────────────────────────────────────── */
+/* ---------- Search ---------- */
 .search-wrapper {
-  text-align: end;
+  position: relative;
+  width: 450px;
+  margin-left: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #6c757d;
 }
 
 .search-input {
-  font-size: 13px;
-  border: 1.5px solid #cdd8f0;
+  width: 100%;
+  padding-left: 32px;
+  font-size: 14px;
+  border: 1.5px solid #293142;
   border-radius: 7px;
-  color: #162246;
+  height: 38px;
 }
-
 /* ── Table Wrapper ────────────────────────────────────────────────────────── */
 .table-wrapper {
   border: 1px solid #dce8fd;
