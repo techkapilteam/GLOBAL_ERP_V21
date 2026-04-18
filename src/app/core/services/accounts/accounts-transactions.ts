@@ -1328,6 +1328,21 @@ export class AccountsTransactions {
   }
 }
 
+
+
+
+
+//subscriber jv service
+
+
+
+    GetdebitchitCheckbalance(BranchSchema:any,accountheadId:any, subcategory:any,subcategoryId:any,GlobalSchema:any,companyCode:any,branchCode:any) {
+        const params = new HttpParams().set('BranchSchema', BranchSchema)
+            .set('accountheadId', accountheadId)
+            .set('subcategory', subcategory)
+            .set('subcategoryId', subcategoryId).set('GlobalSchema',GlobalSchema).set('companyCode',companyCode).set('branchCode',branchCode);
+        return this._CommonService.getAPI('/Accounts/SubscriberJVCheckbalance', params, 'YES');
+    }
 }
 
 
