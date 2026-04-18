@@ -10,18 +10,20 @@
       <button
         class="hamburger"
         (click)="toggleSidebar()"
-        [class.open]="!sidebarCollapsed"
-        aria-label="Toggle sidebar">
-        <i class="pi pi-bars"></i>
+        [attr.aria-label]="sidebarCollapsed ? 'Open sidebar' : 'Close sidebar'">
+        <i class="pi" [ngClass]="sidebarCollapsed ? 'pi-bars' : 'pi-times'"></i>
       </button>
 
       <div class="brand">
         <div class="brand-logo">
-          <i class="pi pi-objects-column"></i>
+          <i class="pi pi-globe"></i>
         </div>
+
         <div class="brand-text">
-          <span class="brand-name">ERP Suite</span>
-          <span class="brand-tagline">Enterprise Workspace</span>
+          <span class="brand-name">OneSphere</span>
+         
+        
+        
         </div>
       </div>
     </div>
@@ -180,22 +182,30 @@
           </div>
 
           <div class="ap-section ap-theme-section">
-            <div class="ap-section-label">Appearance Theme</div>
+            <button class="theme-dropdown-trigger" (click)="toggleThemeDropdown()">
+              <span class="theme-trigger-left">
+                <i class="pi pi-palette"></i>
+                <span>Themes</span>
+              </span>
 
-            <div class="theme-grid">
-              <button
-                *ngFor="let theme of themes"
-                class="theme-swatch"
-                [class.active]="activeTheme === theme.id"
-                (click)="setTheme(theme.id)"
-                [title]="theme.name"
-                [style.background]="'linear-gradient(135deg, ' + theme.colors[0] + ' 0%, ' + theme.colors[1] + ' 100%)'">
-                <i *ngIf="activeTheme === theme.id" class="pi pi-check swatch-check"></i>
-              </button>
-            </div>
+              <span class="theme-trigger-right">
+                <span>{{ getActiveThemeName() }}</span>
+                <i class="pi" [ngClass]="showThemeDropdown ? 'pi-angle-up' : 'pi-angle-down'"></i>
+              </span>
+            </button>
 
-            <div class="theme-name-row">
-              <span class="current-theme-name">{{ getActiveThemeName() }} Theme</span>
+            <div class="theme-dropdown-panel" *ngIf="showThemeDropdown">
+              <div class="theme-grid">
+                <button
+                  *ngFor="let theme of themes"
+                  class="theme-swatch"
+                  [class.active]="activeTheme === theme.id"
+                  (click)="setTheme(theme.id)"
+                  [title]="theme.name"
+                  [style.background]="'linear-gradient(135deg, ' + theme.colors[0] + ' 0%, ' + theme.colors[1] + ' 100%)'">
+                  <i *ngIf="activeTheme === theme.id" class="pi pi-check swatch-check"></i>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -223,17 +233,9 @@
             <i [class]="getSubModuleIcon(sub.name)"></i>
           </div>
           <span class="sb-label">{{ sub.name }}</span>
-          <i class="pi pi-angle-right sb-arrow" *ngIf="isSubModuleExpanded(sub.id)"></i>
+          <span class="sb-arrow" *ngIf="isSubModuleExpanded(sub.id)">›</span>
         </button>
       </div>
-
-      <button
-        *ngIf="!sidebarCollapsed"
-        class="sb-collapse-btn"
-        (click)="toggleSidebar()"
-        title="Collapse sidebar">
-        <i class="pi pi-times"></i>
-      </button>
     </aside>
 
     <div
@@ -258,7 +260,7 @@
             class="fp-action-btn"
             [class.active]="showFlyoutSearch"
             (click)="toggleFlyoutSearch()"
-            title="Search flyout items">
+            [attr.title]="showFlyoutSearch ? 'Close search' : 'Search items'">
             <i class="pi" [ngClass]="showFlyoutSearch ? 'pi-times-circle' : 'pi-search'"></i>
           </button>
 
@@ -287,28 +289,24 @@
       </div>
 
       <div class="fp-items">
-        <ng-container *ngIf="filteredFlyoutScreens.length > 0; else noFlyoutResult">
-          <button
-            *ngFor="let screen of filteredFlyoutScreens"
-            class="fp-item"
-            [class.active]="selectedScreen?.id === screen.id"
-            (click)="selectScreen(screen); $event.stopPropagation()">
-            <span class="fp-screen-icon">
-              <i [class]="getScreenIcon(screen.name)"></i>
-            </span>
+        <button
+          *ngFor="let screen of filteredFlyoutScreens"
+          class="fp-item"
+          [class.active]="selectedScreen?.id === screen.id"
+          (click)="selectScreen(screen); $event.stopPropagation()">
+          <span class="fp-screen-icon">
+            <i [class]="getScreenIcon(screen.name)"></i>
+          </span>
 
-            <span class="fp-name">{{ screen.name }}</span>
+          <span class="fp-name">{{ screen.name }}</span>
 
-            <i class="pi pi-check fp-check" *ngIf="selectedScreen?.id === screen.id"></i>
-          </button>
-        </ng-container>
+          <i class="pi pi-check fp-check" *ngIf="selectedScreen?.id === screen.id"></i>
+        </button>
 
-        <ng-template #noFlyoutResult>
-          <div class="fp-empty">
-            <i class="pi pi-search"></i>
-            <span>No flyout items found</span>
-          </div>
-        </ng-template>
+        <div class="fp-empty" *ngIf="filteredFlyoutScreens.length === 0">
+          <i class="pi pi-search"></i>
+          <span>No flyout items found</span>
+        </div>
       </div>
     </div>
 
@@ -316,8 +314,8 @@
       <nav class="breadcrumb-bar" *ngIf="selectedScreen" aria-label="Breadcrumb">
         <div class="bc-inner">
           <button class="bc-item bc-link" (click)="selectModule(selectedModule!)">
-            <i [class]="getModuleIcon(selectedModule!.name)"></i>
-            <span>{{ selectedModule!.name }}</span>
+            <i [class]="getModuleIcon(selectedModule?.name)"></i>
+            <span>{{ selectedModule?.name }}</span>
           </button>
 
           <i class="pi pi-angle-right bc-sep"></i>

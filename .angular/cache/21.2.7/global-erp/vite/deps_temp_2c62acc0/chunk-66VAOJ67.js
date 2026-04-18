@@ -19,13 +19,13 @@ import {
   PARENT_INSTANCE
 } from "./chunk-MD6FCTBN.js";
 import {
+  Bind
+} from "./chunk-3BFHMKFF.js";
+import {
   OverlayService,
   PrimeTemplate,
   SharedModule
 } from "./chunk-I7EN3LMA.js";
-import {
-  Bind
-} from "./chunk-3BFHMKFF.js";
 import {
   D,
   I,
@@ -1678,4 +1678,4 @@ export {
   BaseInput,
   Overlay
 };
-//# sourceMappingURL=chunk-LXYNJACJ.js.map
+//# sourceMappingURL=chunk-66VAOJ67.js.map
