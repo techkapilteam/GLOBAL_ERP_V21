@@ -1,19 +1,13 @@
 import {
-<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-MCSDJD7W.js
-========
   withHttpTransferCache
-} from "./chunk-LUUEPIT6.js";
+} from "./chunk-5FDOTGAN.js";
 import {
->>>>>>>> c6aabac33725eaa026916597fc571687faa664fe:.angular/cache/21.2.7/global-erp/vite/deps/chunk-EIMLBVQW.js
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
-} from "./chunk-VVWZPSE3.js";
-import {
-  withHttpTransferCache
-} from "./chunk-7KWNKBHI.js";
+} from "./chunk-MSTD2NB6.js";
 import {
   getDOM
-} from "./chunk-2ZLIURSV.js";
+} from "./chunk-H5MLEGF3.js";
 import {
   ApplicationRef,
   Console,
@@ -662,12 +656,4 @@ export {
   provideClientHydration,
   VERSION
 };
-<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-XQMSRFEH.js
-//# sourceMappingURL=chunk-XQMSRFEH.js.map
-=======
-<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-MCSDJD7W.js
-//# sourceMappingURL=chunk-MCSDJD7W.js.map
-========
-//# sourceMappingURL=chunk-EIMLBVQW.js.map
->>>>>>>> c6aabac33725eaa026916597fc571687faa664fe:.angular/cache/21.2.7/global-erp/vite/deps/chunk-EIMLBVQW.js
->>>>>>> 6638379d4ec447aa798491f525eb31ef62074e62:.angular/cache/21.2.7/global-erp/vite/deps/chunk-EIMLBVQW.js
+//# sourceMappingURL=chunk-4L46GH43.js.map
