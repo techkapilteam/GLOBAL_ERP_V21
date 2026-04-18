@@ -43,6 +43,12 @@ export const accountsRoutes: Routes = [
             .then(m => m.GeneralReceipt)
       },
       {
+        path: 'general-receipt-new',
+        loadComponent: () =>
+          import('./Accounts_Transactions/general-receipt-new/general-receipt-new')
+            .then(m => m.GeneralReceiptNew)
+      },
+      {
         path: 'payment-voucher',
         loadComponent: () =>
           import('./Accounts_Transactions/payment-voucher/payment-voucher')
