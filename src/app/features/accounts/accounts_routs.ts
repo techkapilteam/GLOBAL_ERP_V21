@@ -55,6 +55,12 @@ export const accountsRoutes: Routes = [
             .then(m => m.PaymentVoucher)
       },
       {
+        path: 'payment-voucher-view',
+        loadComponent: () =>
+          import('./Accounts_Transactions/payment-voucher-view/payment-voucher-view')
+            .then(m => m.PaymentVoucherView)
+      },
+      {
         path: 'journal-voucher-view',
         loadComponent: () =>
           import('./Accounts_Transactions/journal-voucher-view/journal-voucher-view')

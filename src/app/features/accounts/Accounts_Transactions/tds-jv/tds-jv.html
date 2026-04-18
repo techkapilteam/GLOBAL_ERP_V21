@@ -1,1 +1,123 @@
-<p>tds-jv works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <div class="screen-header">
+      <h2>TDS Journal Voucher</h2>
+    </div>
+
+    <form [formGroup]="tdsForm" class="form-box">
+
+      <div class="row">
+
+        <div class="col">
+          <label>Debit Ledger *</label>
+          <ng-select
+            [items]="tdsLedgerList"
+            bindLabel="pledgername"
+            bindValue="pledgername"
+            formControlName="debitLedger">
+          </ng-select>
+        </div>
+
+        <div class="col">
+          <label>Credit Ledger *</label>
+          <ng-select
+            [items]="ledgerList"
+            bindLabel="pledgername"
+            bindValue="pledgername"
+            formControlName="creditLedger">
+          </ng-select>
+        </div>
+
+        <div class="col">
+          <label>Date *</label>
+          <input type="text" formControlName="date" bsDatepicker class="form-control"/>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <label>Year *</label>
+          <ng-select
+            [items]="years"
+            bindLabel="periodType"
+            bindValue="calendarPeriodId"
+            formControlName="year">
+          </ng-select>
+        </div>
+
+        <div class="col">
+          <label>Month *</label>
+          <ng-select
+            [items]="months"
+            bindLabel="calendarMonth"
+            bindValue="calendarPeriodDetailsId"
+            formControlName="month">
+          </ng-select>
+        </div>
+
+        <div class="col btn-col">
+          <button type="button" class="btn-primary" (click)="loadData()" >
+            {{ loading() ? 'Processing...' : 'Show' }}
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+
+    <!-- EMPTY -->
+    @if (isEmpty()) {
+      <div class="empty-box">
+        No Records to Display
+      </div>
+    }
+
+    <!-- TABLE -->
+    @if (showTable()) {
+
+      <div class="table-box">
+
+        <div class="table-header">
+          <h6>TDS/GST JV's</h6>
+          <button type="button" (click)="export()">Export</button>
+        </div>
+
+        <p-table [value]="grid()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th></th>
+              <th>Particulars</th>
+              <th>Debit</th>
+              <th>Credit</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="row"></p-tableCheckbox>
+              </td>
+              <td>{{ row.particulars }}</td>
+              <td>{{ row.debit_amount }}</td>
+              <td>{{ row.credit_amount }}</td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+
+        <textarea formControlName="narration" placeholder="Enter narration"></textarea>
+
+        <div class="actions">
+          <button type="button" class="btn-secondary" (click)="clear()">Clear</button>
+          <button type="button" class="btn-primary" (click)="save()">Save</button>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</div>
