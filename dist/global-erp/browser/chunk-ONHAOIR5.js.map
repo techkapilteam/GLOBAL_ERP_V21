@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Transactions/fund-transfer-out/fund-transfer-out.ts", "src/app/features/accounts/Accounts_Transactions/fund-transfer-out/fund-transfer-out.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-fund-transfer-out\",\r\n  imports: [],\r\n  templateUrl: \"./fund-transfer-out.html\",\r\n  styleUrl: \"./fund-transfer-out.css\",\r\n})\r\nexport class FundTransferOut {}\r\n", "<p>fund-transfer-out works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,kBAAP,MAAO,iBAAe;;qCAAf,kBAAe;EAAA;yEAAf,kBAAe,WAAA,CAAA,CAAA,uBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,yBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR5B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,0BAAA;AAAwB,MAAA,0BAAA;;;;;sEDQd,iBAAe,CAAA;UAN3B;uBACW,yBAAuB,SACxB,CAAA,GAAE,UAAA,sCAAA,CAAA;;;;6EAIA,iBAAe,EAAA,WAAA,mBAAA,UAAA,0FAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

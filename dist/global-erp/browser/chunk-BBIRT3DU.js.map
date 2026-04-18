@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Reports/gst-report/gst-report.ts", "src/app/features/accounts/Accounts_Reports/gst-report/gst-report.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-gst-report\",\r\n  imports: [],\r\n  templateUrl: \"./gst-report.html\",\r\n  styleUrl: \"./gst-report.css\",\r\n})\r\nexport class GstReport {}\r\n", "<p>gst-report works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,YAAP,MAAO,WAAS;;qCAAT,YAAS;EAAA;yEAAT,YAAS,WAAA,CAAA,CAAA,gBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,mBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRtB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,mBAAA;AAAiB,MAAA,0BAAA;;;;;sEDQP,WAAS,CAAA;UANrB;uBACW,kBAAgB,SACjB,CAAA,GAAE,UAAA,+BAAA,CAAA;;;;6EAIA,WAAS,EAAA,WAAA,aAAA,UAAA,uEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

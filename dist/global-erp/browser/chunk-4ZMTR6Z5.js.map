@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Reports/schedule-tb/schedule-tb.ts", "src/app/features/accounts/Accounts_Reports/schedule-tb/schedule-tb.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-schedule-tb\",\r\n  imports: [],\r\n  templateUrl: \"./schedule-tb.html\",\r\n  styleUrl: \"./schedule-tb.css\",\r\n})\r\nexport class ScheduleTb {}\r\n", "<p>schedule-tb works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,aAAP,MAAO,YAAU;;qCAAV,aAAU;EAAA;yEAAV,aAAU,WAAA,CAAA,CAAA,iBAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,oBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRvB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,oBAAA;AAAkB,MAAA,0BAAA;;;;;sEDQR,YAAU,CAAA;UANtB;uBACW,mBAAiB,SAClB,CAAA,GAAE,UAAA,gCAAA,CAAA;;;;6EAIA,YAAU,EAAA,WAAA,cAAA,UAAA,yEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

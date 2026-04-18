@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Transactions/journal-voucher-view/journal-voucher-view.ts", "src/app/features/accounts/Accounts_Transactions/journal-voucher-view/journal-voucher-view.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-journal-voucher-view\",\r\n  imports: [],\r\n  templateUrl: \"./journal-voucher-view.html\",\r\n  styleUrl: \"./journal-voucher-view.css\",\r\n})\r\nexport class JournalVoucherView {}\r\n", "<p>journal-voucher-view works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,qBAAP,MAAO,oBAAkB;;qCAAlB,qBAAkB;EAAA;yEAAlB,qBAAkB,WAAA,CAAA,CAAA,0BAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,4BAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACR/B,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,6BAAA;AAA2B,MAAA,0BAAA;;;;;sEDQjB,oBAAkB,CAAA;UAN9B;uBACW,4BAA0B,SAC3B,CAAA,GAAE,UAAA,yCAAA,CAAA;;;;6EAIA,oBAAkB,EAAA,WAAA,sBAAA,UAAA,gGAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

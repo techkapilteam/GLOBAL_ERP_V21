@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/accounts/Accounts_Reports/cash-book/cash-book.ts", "src/app/features/accounts/Accounts_Reports/cash-book/cash-book.html"],
+  "sourcesContent": ["import { Component } from \"@angular/core\";\r\n\r\n@Component({\r\n  selector: \"app-cash-book\",\r\n  imports: [],\r\n  templateUrl: \"./cash-book.html\",\r\n  styleUrl: \"./cash-book.css\",\r\n})\r\nexport class CashBook {}\r\n", "<p>cash-book works!</p>\r\n"],
+  "mappings": ";;;;;;;;;;;;AAQM,IAAO,WAAP,MAAO,UAAQ;;qCAAR,WAAQ;EAAA;yEAAR,WAAQ,WAAA,CAAA,CAAA,eAAA,CAAA,GAAA,OAAA,GAAA,MAAA,GAAA,UAAA,SAAA,kBAAA,IAAA,KAAA;AAAA,QAAA,KAAA,GAAA;ACRrB,MAAA,4BAAA,GAAA,GAAA;AAAG,MAAA,iBAAA,GAAA,kBAAA;AAAgB,MAAA,0BAAA;;;;;sEDQN,UAAQ,CAAA;UANpB;uBACW,iBAAe,SAChB,CAAA,GAAE,UAAA,8BAAA,CAAA;;;;6EAIA,UAAQ,EAAA,WAAA,YAAA,UAAA,qEAAA,YAAA,EAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}
