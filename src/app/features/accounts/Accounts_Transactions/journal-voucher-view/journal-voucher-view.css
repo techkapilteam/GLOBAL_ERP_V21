@@ -1,0 +1,137 @@
+/* ============================================================
+   Journal Voucher View — Component Styles
+   Angular + PrimeNG (v20 / v21)
+   ============================================================ */
+
+/* ---------- Layout ---------- */
+.screen-header {
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 3px solid #0d6efd;
+}
+
+.screen-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #070707;
+}
+
+.screen-body {
+  padding: 20px 24px;
+}
+
+/* ---------- Toolbar ---------- */
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.btn-new {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 18px;
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-new:hover {
+  background: #0b5ed7;
+  border-color: #0b5ed7;
+  color: #fff;
+}
+
+/* ---------- Search ---------- */
+.search-wrapper {
+  position: relative;
+  width: 450px;
+  margin-left: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 32px;
+  font-size: 14px;
+  border: 1.5px solid #293142;
+  border-radius: 7px;
+  height: 38px;
+}
+
+/* ---------- Table Card ---------- */
+.table-card {
+  border: 1px solid #dce8fd;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.07);
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ---------- Table Header Cells ---------- */
+.th-base {
+  background: #0b4093 !important;
+  color: #fff !important;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-right: 1px solid #2e4278 !important;
+  white-space: nowrap;
+}
+
+.th-sortable {
+  cursor: pointer;
+  text-align: center;
+}
+
+.th-right {
+  text-align: right !important;
+}
+
+.sort-icon {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+/* ---------- Column Widths ---------- */
+.col-actions  { width: 100px;  text-align: center; }
+.col-date     { width: 150px;  text-align: center; }
+.col-jvno     { width: 200px;  text-align: center; }
+.col-amount   { width: 200px;  text-align: right;  }
+.col-narration{ width: 500px; }
+
+/* ---------- Table Body Cells ---------- */
+.td-base {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.td-text  { color: #162246; }
+.td-center{ text-align: center; }
+.td-right { text-align: right !important; }
+
+.td-empty {
+  text-align: center;
+  padding: 30px;
+  color: #8fa0c4;
+  font-size: 13px;
+}
+
+/* ---------- View Button ---------- */
+.btn-view {
+  color: #0d6efd;
+}

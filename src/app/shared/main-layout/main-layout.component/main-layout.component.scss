@@ -1,7 +1,7 @@
 :root,
 [data-theme='sky'] {
   --page-bg: #f6faff;
-  --shell-bg: #fbfdff;
+  --shell-bg: #fcfdff;
   --topbar-bg: linear-gradient(90deg, #dce9ff 0%, #edf4ff 46%, #f9fbff 100%);
   --topbar-border: rgba(133, 171, 235, 0.28);
 
@@ -13,14 +13,17 @@
   --sidebar-hover: rgba(77, 143, 255, 0.08);
   --sidebar-active: linear-gradient(180deg, #67a8ff 0%, #4d8fff 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.92);
-  --panel-soft: #f6faff;
+  --panel-bg: rgba(255, 255, 255, 0.95);
+  --panel-soft: #f7fbff;
   --panel-border: #dbe8f9;
 
   --primary: #4d8fff;
   --primary-dark: #326fe1;
   --primary-soft: #eef5ff;
   --accent: #7fb3ff;
+
+  --workspace-surface: #fcfdff;
+  --workspace-card: rgba(255, 255, 255, 0.97);
 
   --text-strong: #111827;
   --text-main: #1f2937;
@@ -49,7 +52,7 @@
   --sidebar-hover: rgba(122, 174, 255, 0.09);
   --sidebar-active: linear-gradient(180deg, #96c0ff 0%, #6ea6ff 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.94);
+  --panel-bg: rgba(255, 255, 255, 0.96);
   --panel-soft: #f8fbff;
   --panel-border: #dde9f7;
 
@@ -57,6 +60,9 @@
   --primary-dark: #5185e8;
   --primary-soft: #f0f6ff;
   --accent: #b8d7ff;
+
+  --workspace-surface: #fcfdff;
+  --workspace-card: rgba(255, 255, 255, 0.97);
 
   --text-strong: #101827;
   --text-main: #1f2937;
@@ -85,7 +91,7 @@
   --sidebar-hover: rgba(81, 117, 255, 0.08);
   --sidebar-active: linear-gradient(180deg, #6f8cff 0%, #5175ff 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.94);
+  --panel-bg: rgba(255, 255, 255, 0.96);
   --panel-soft: #f7f9ff;
   --panel-border: #dfe5fb;
 
@@ -93,6 +99,9 @@
   --primary-dark: #3c5de1;
   --primary-soft: #eef2ff;
   --accent: #7c98ff;
+
+  --workspace-surface: #fbfcff;
+  --workspace-card: rgba(255, 255, 255, 0.97);
 
   --text-strong: #111827;
   --text-main: #1f2937;
@@ -121,7 +130,7 @@
   --sidebar-hover: rgba(79, 184, 168, 0.08);
   --sidebar-active: linear-gradient(180deg, #76d5c7 0%, #4fb8a8 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.94);
+  --panel-bg: rgba(255, 255, 255, 0.96);
   --panel-soft: #f6fcfb;
   --panel-border: #dcefe9;
 
@@ -129,6 +138,9 @@
   --primary-dark: #359887;
   --primary-soft: #edf9f6;
   --accent: #76d5c7;
+
+  --workspace-surface: #fbfefd;
+  --workspace-card: rgba(255, 255, 255, 0.97);
 
   --text-strong: #102018;
   --text-main: #24312b;
@@ -157,7 +169,7 @@
   --sidebar-hover: rgba(125, 143, 179, 0.08);
   --sidebar-active: linear-gradient(180deg, #aab8d6 0%, #7d8fb3 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.95);
+  --panel-bg: rgba(255, 255, 255, 0.97);
   --panel-soft: #f8fafc;
   --panel-border: #e2e8f0;
 
@@ -165,6 +177,9 @@
   --primary-dark: #62738f;
   --primary-soft: #f1f5f9;
   --accent: #aab8d6;
+
+  --workspace-surface: #fcfdff;
+  --workspace-card: rgba(255, 255, 255, 0.98);
 
   --text-strong: #111827;
   --text-main: #1f2937;
@@ -193,7 +208,7 @@
   --sidebar-hover: rgba(201, 162, 39, 0.08);
   --sidebar-active: linear-gradient(180deg, #e7c458 0%, #c9a227 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.95);
+  --panel-bg: rgba(255, 255, 255, 0.97);
   --panel-soft: #fffaf0;
   --panel-border: #efe1b6;
 
@@ -201,6 +216,9 @@
   --primary-dark: #a78112;
   --primary-soft: #fff7df;
   --accent: #f0cf6a;
+
+  --workspace-surface: #fffdfa;
+  --workspace-card: rgba(255, 255, 255, 0.98);
 
   --text-strong: #2b2110;
   --text-main: #4b3a19;
@@ -229,7 +247,7 @@
   --sidebar-hover: rgba(168, 95, 58, 0.08);
   --sidebar-active: linear-gradient(180deg, #d48c61 0%, #a85f3a 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.95);
+  --panel-bg: rgba(255, 255, 255, 0.97);
   --panel-soft: #fff7f2;
   --panel-border: #edd7cb;
 
@@ -237,6 +255,9 @@
   --primary-dark: #844626;
   --primary-soft: #fff0e8;
   --accent: #d9996b;
+
+  --workspace-surface: #fffdfa;
+  --workspace-card: rgba(255, 255, 255, 0.98);
 
   --text-strong: #2b1b13;
   --text-main: #4f3428;
@@ -265,7 +286,7 @@
   --sidebar-hover: rgba(226, 106, 165, 0.08);
   --sidebar-active: linear-gradient(180deg, #f29dbe 0%, #e26aa5 100%);
 
-  --panel-bg: rgba(255, 255, 255, 0.95);
+  --panel-bg: rgba(255, 255, 255, 0.97);
   --panel-soft: #fff7fb;
   --panel-border: #efd7e4;
 
@@ -273,6 +294,9 @@
   --primary-dark: #bf4a83;
   --primary-soft: #fff0f6;
   --accent: #f7a9c4;
+
+  --workspace-surface: #fffdfd;
+  --workspace-card: rgba(255, 255, 255, 0.98);
 
   --text-strong: #2e1824;
   --text-main: #4c2c3b;
@@ -285,6 +309,19 @@
   --scroll-track: #f8e5ee;
   --scroll-thumb: #efb7cf;
   --scroll-thumb-hover: #e58fb5;
+}
+
+:root,
+:root[data-theme] {
+  --clr-p1: var(--primary-dark);
+  --clr-p2: var(--primary);
+  --clr-p3: var(--accent);
+  --clr-accent-lt: var(--primary-soft);
+  --fp-border: var(--panel-border);
+  --fp-active-bg: var(--primary-soft);
+  --bc-link: var(--primary-dark);
+  --bc-active: var(--primary);
+  --nav-pill: var(--primary);
 }
 
 .app-root {
@@ -417,8 +454,8 @@ input {
 }
 
 .module-tab {
-     min-width: 134px;
-    height: 42px;
+  min-width: 138px;
+  height: 44px;
   padding: 0 14px;
   border: 1px solid var(--panel-border);
   border-radius: 18px;
@@ -1034,6 +1071,7 @@ input {
     background: var(--sidebar-active);
     box-shadow: var(--shadow-md);
 
+
     .sb-avatar,
     .sb-label,
     .sb-arrow {
@@ -1057,8 +1095,8 @@ input {
 
 .sb-label {
   max-width: 80px;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1.15;
   text-align: center;
   color: var(--text-strong);
@@ -1111,8 +1149,8 @@ input {
 }
 
 .fp-icon {
-  width: 40px;
-  height: 40px;
+     min-width: 40px;
+    min-height: 40px;
   border-radius: 14px;
   background: var(--module-active-bg);
   color: #fff;
@@ -1210,25 +1248,26 @@ input {
 }
 
 .fp-items {
-  padding: 0 12px 12px;
+  padding: 0 8px 12px;
   overflow-y: auto;
   height: calc(100% - 72px);
 }
 
 .fp-item {
   width: 100%;
-  min-height: 42px;
-  padding: 0 10px;
-  margin-bottom: 6px;
+  min-height: 36px;
+  padding: 0 8px;
+  margin-bottom: 4px;
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: 10px;
   background: transparent;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-align: left;
   cursor: pointer;
   transition: 0.18s ease;
+  font-size: 14px;
 
   &:hover {
     background: var(--primary-soft);
@@ -1258,14 +1297,14 @@ input {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .fp-name {
   flex: 1;
   min-width: 0;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1.1;
   color: var(--text-strong);
   white-space: nowrap;
@@ -1295,23 +1334,24 @@ input {
 .content-area {
   flex: 1;
   overflow: auto;
-  background: var(--shell-bg);
+  background: var(--workspace-surface);
 }
 
 .breadcrumb-bar {
-  padding: 16px 20px 0;
+  padding: 14px 18px 0;
+  background: var(--workspace-surface);
 }
 
 .bc-inner {
-  min-height: 48px;
-  padding: 0 18px;
-  border: 1px solid var(--panel-border);
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--panel-border) 88%, #ffffff 12%);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.96);
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
   flex-wrap: wrap;
 }
 
@@ -1346,40 +1386,48 @@ input {
 }
 
 .content-body {
-  padding: 18px;
-  min-height: calc(100% - 64px);
+  // padding: 16px 18px 18px;
+  min-height: calc(100% - 60px);
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0) 32%),
+    var(--workspace-surface);
 
   &.with-breadcrumb {
-    padding-top: 14px;
+    padding-top: 12px;
   }
 }
 
 .welcome-state {
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 158px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .ws-content {
-  max-width: 520px;
+  max-width: 560px;
   text-align: center;
+  padding: 28px 24px;
+  border: 1px solid color-mix(in srgb, var(--panel-border) 82%, #ffffff 18%);
+  border-radius: 24px;
+  background: var(--workspace-card);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
 }
 
 .ws-icon {
-  width: 74px;
-  height: 74px;
+  width: 72px;
+  height: 72px;
   margin: 0 auto 18px;
-  border-radius: 24px;
-  background: var(--module-active-bg);
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--primary) 18%, transparent);
 
   i {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
   }
 }
 
@@ -1391,7 +1439,7 @@ input {
 }
 
 .ws-sub {
-  margin: 0 0 24px;
+  margin: 0 0 22px;
   font-size: 14px;
   font-weight: 400;
   color: var(--text-soft);
@@ -1409,7 +1457,7 @@ input {
   padding: 0 16px;
   border: 1px solid var(--panel-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--text-main);
   display: inline-flex;
   align-items: center;
@@ -1420,6 +1468,107 @@ input {
   i {
     color: var(--primary-dark);
   }
+}
+
+:host ::ng-deep .content-area .erp-card,
+:host ::ng-deep .content-area .card,
+:host ::ng-deep .content-area .page-card,
+:host ::ng-deep .content-area .stat-card,
+:host ::ng-deep .content-area .stats-card,
+:host ::ng-deep .content-area .summary-card {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid var(--panel-border) !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04) !important;
+}
+
+:host ::ng-deep .content-area .erp-card .card-header,
+:host ::ng-deep .content-area .erp-table thead,
+:host ::ng-deep .content-area .gr-table .p-datatable-thead > tr > th,
+:host ::ng-deep .content-area .table-header,
+:host ::ng-deep .content-area .widget-header,
+:host ::ng-deep .content-area .section-header {
+  background: linear-gradient(135deg, var(--accent), var(--accent));
+  color: #fff !important;
+}
+
+:host ::ng-deep .content-area .erp-table-toolbar,
+:host ::ng-deep .content-area .tbl-toolbar-flush,
+:host ::ng-deep .content-area .erp-pagination,
+:host ::ng-deep .content-area .filter-bar,
+:host ::ng-deep .content-area .filters-bar,
+:host ::ng-deep .content-area .stats-wrap,
+:host ::ng-deep .content-area .stats-grid {
+  
+  border-color: var(--panel-border) !important;
+  padding: 10px;;
+}
+
+:host ::ng-deep .content-area .erp-btn.btn-primary,
+:host ::ng-deep .content-area .p-button,
+:host ::ng-deep .content-area .new-receipt-btn,
+:host ::ng-deep .content-area .primary-action-btn,
+:host ::ng-deep .content-area .btn-primary {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+:host ::ng-deep .content-area .erp-btn.btn-secondary,
+:host ::ng-deep .content-area .erp-btn.btn-outline,
+:host ::ng-deep .content-area .secondary-action-btn,
+:host ::ng-deep .content-area .btn-secondary,
+:host ::ng-deep .content-area .btn-outline,
+:host ::ng-deep .content-area .p-button-outlined {
+  background: var(--panel-soft) !important;
+  border-color: var(--panel-border) !important;
+  color: var(--primary-dark) !important;
+}
+
+:host ::ng-deep .content-area .page-title,
+:host ::ng-deep .content-area .section-title,
+:host ::ng-deep .content-area .card-title,
+:host ::ng-deep .content-area .widget-title,
+:host ::ng-deep .content-area h1,
+:host ::ng-deep .content-area h2,
+:host ::ng-deep .content-area h3 {
+  color: var(--primary-dark) !important;
+}
+
+:host ::ng-deep .content-area .erp-badge.badge-primary,
+:host ::ng-deep .content-area .stat-chip,
+:host ::ng-deep .content-area .summary-chip,
+:host ::ng-deep .content-area .info-chip {
+  background: var(--primary-soft) !important;
+  color: var(--primary-dark) !important;
+  border-color: var(--panel-border) !important;
+}
+
+:host ::ng-deep .content-area .erp-input,
+:host ::ng-deep .content-area .erp-select,
+:host ::ng-deep .content-area .erp-textarea,
+:host ::ng-deep .content-area .p-inputtext,
+:host ::ng-deep .content-area input,
+:host ::ng-deep .content-area select,
+:host ::ng-deep .content-area textarea {
+  border-color: var(--panel-border);
+}
+
+:host ::ng-deep .content-area .erp-input:focus,
+:host ::ng-deep .content-area .erp-select:focus,
+:host ::ng-deep .content-area .erp-textarea:focus,
+:host ::ng-deep .content-area .p-inputtext:focus,
+:host ::ng-deep .content-area input:focus,
+:host ::ng-deep .content-area select:focus,
+:host ::ng-deep .content-area textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent) !important;
+}
+
+:host ::ng-deep .content-area .erp-breadcrumb,
+:host ::ng-deep .content-body .erp-breadcrumb,
+:host ::ng-deep .module-page .erp-breadcrumb {
+  display: none !important;
 }
 
 ::-webkit-scrollbar {
