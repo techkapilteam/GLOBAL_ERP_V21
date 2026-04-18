@@ -83,7 +83,7 @@ export class NavigationService {
                 { id: 'pettycash-receipt-cancel', name: 'Petty Cash Receipt Cancel', route: '/dashboard/accounts/accounts-transactions/pettycash-receipt-cancel' },
                 // { id: 'cash-onhand', name: 'Cash On Hand', route: '/dashboard/accounts/accounts-transactions/cash-onhand' },
                 { id: 'tds-jv', name: 'TDS Journal Voucher', route: '/dashboard/accounts/accounts-transactions/tds-jv' },
-                { id: 'funds-transfer-out', name: 'Funds Transfer Out', route: '/dashboard/accounts/accounts-transactions/funds-transfer-out' },
+               // { id: 'funds-transfer-out', name: 'Funds Transfer Out', route: '/dashboard/accounts/accounts-transactions/funds-transfer-out' },
                 //{ id: 'pendingfundtransfer', name: 'Pending Funds Transfer ', route: '/dashboard/accounts/accounts-transactions/pendingfundtransfer' },
                 // { id: 'online-settlement', name: 'Online Settlement', route: '/dashboard/accounts/accounts-transactions/online-settlement' },
                 // { id: 'online-receipts', name: 'Online Receipts', route: '/dashboard/accounts/accounts-transactions/online-receipts' },

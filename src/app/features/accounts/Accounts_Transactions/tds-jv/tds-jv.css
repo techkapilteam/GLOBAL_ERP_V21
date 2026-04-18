@@ -1,0 +1,191 @@
+/* ── Screen wrapper ──────────────────────────────────────────────────────── */
+
+
+.screen-card {
+  border: 1px solid #dce8fd;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(22, 34, 70, 0.1) !important;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-bottom: 3px solid #0d6efd;
+  border-radius: 10px 10px 0 0;
+  /* pull header flush with card padding */
+  margin: -24px -24px 24px -24px;
+}
+
+.screen-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #070707;
+}
+
+/* ── Form / Table panel ──────────────────────────────────────────────────── */
+.form-panel {
+  border: 1px solid #dce8fd !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.07);
+}
+
+/* ── Field labels ────────────────────────────────────────────────────────── */
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #162246;
+}
+
+/* ── Text inputs, selects & textarea ──────────────────────────────────────── */
+.field-input,
+.form-select.field-input {
+  font-size: 13px;
+  border: 1.5px solid #cdd8f0;
+  border-radius: 7px;
+  color: #162246;
+  height: 38px;
+  padding: 6px 10px;
+  background-color: #fff;
+  appearance: auto;
+}
+
+.narration-area {
+  resize: none;
+}
+
+/* ── Show button alignment ───────────────────────────────────────────────── */
+.show-btn-wrapper {
+  margin-top: 28px;
+}
+
+.btn-show {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 18px;
+}
+
+/* ── Empty state banner ──────────────────────────────────────────────────── */
+.empty-state-box {
+  text-align: center;
+  padding: 20px;
+  color: #8fa0c4;
+  font-size: 13px;
+  border: 1px solid #dce8fd;
+  border-radius: 10px;
+  background: #f8faff;
+}
+
+/* ── Table heading ───────────────────────────────────────────────────────── */
+.table-heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: #162246;
+}
+
+/* ── Export icon ─────────────────────────────────────────────────────────── */
+.export-icon {
+  cursor: pointer;
+}
+
+/* ── PrimeNG table — header ──────────────────────────────────────────────── */
+.tbl-header {
+  background: #2e86c1 !important;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-right: 1px solid #2e4278 !important;
+  white-space: nowrap;
+}
+
+.tbl-col-checkbox {
+  width: 50px;
+}
+
+.tbl-col-amount {
+  width: 150px;
+}
+
+/* ── PrimeNG table — body cells ──────────────────────────────────────────── */
+.tbl-cell {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #162246;
+}
+
+.tbl-cell-center {
+  text-align: center;
+}
+
+/* ── Alignment helpers ───────────────────────────────────────────────────── */
+.tbl-right {
+  text-align: right;
+}
+
+/* ── PrimeNG table — footer ──────────────────────────────────────────────── */
+.tbl-footer-row {
+  background: #eef4ff;
+}
+
+.tbl-footer-label {
+  font-weight: 700;
+  font-size: 13px;
+  color: #162246;
+  padding: 8px 12px;
+}
+
+.tbl-footer-amount {
+  font-weight: 700;
+  font-size: 13px;
+  color: #0d6efd;
+  padding: 8px 12px;
+}
+
+/* ── PrimeNG table — empty message ──────────────────────────────────────── */
+.tbl-empty-msg {
+  text-align: center;
+  padding: 30px;
+  color: #8fa0c4;
+  font-size: 13px;
+}
+
+/* ── Character counter ───────────────────────────────────────────────────── */
+.char-count-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.char-count-normal {
+  color: #8fa0c4;
+  font-weight: 500;
+}
+
+.char-limit-reached {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+/* ── Action buttons row ──────────────────────────────────────────────────── */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 18px;
+}
