@@ -1,27 +1,13 @@
 <div class="screen-container">
-  <div class="tds-jv__card">
+  <div class="screen-card card shadow-sm p-4">
 
-    <!-- ── Page Header ───────────────────────────────────────── -->
-    <div class="tds-jv__header">
-      <h2>TDS Journal Voucher</h2>
+    <!-- ── Header ── -->
+    <div class="screen-header mb-4">
+      <h2 class="screen-title">TDS Journal Voucher</h2>
     </div>
 
-    <!-- ── Month Toggle ──────────────────────────────────────── -->
-    <div class="tds-jv__month-toggle">
-      <button type="button"
-              [class]="currentMonthBtnClass"
-              (click)="setCurrentMonth()">
-        Current Month
-      </button>
-      <button type="button"
-              [class]="previousMonthBtnClass"
-              (click)="setPreviousMonth()">
-        Previous Month
-      </button>
-    </div>
-
-    <!-- ── Filter Form ────────────────────────────────────────── -->
-    <div class="tds-jv__form-section">
+    <!-- ── Form Section ── -->
+    <div class="form-panel border rounded p-3 bg-white mb-4">
       <form autocomplete="off" [formGroup]="tdsJvDetailsForm">
 
         <!-- Row 1: Debit Ledger | Credit Ledger | Date -->
@@ -30,38 +16,31 @@
           <!-- Debit Ledger -->
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label class="tds-jv__label"
-                     id="DebitLedger"
-                     title="Debit Ledger"
-                     for="DebitLedger">
+              <label for="DebitLedger" class="field-label">
                 Debit Ledger <span class="text-danger">*</span>
               </label>
-              <ng-select
+              <select
                 id="DebitLedger"
-                title="Debit Ledger"
-                [items]="tdsledgeraccountslist()"
+                class="form-select field-input"
                 formControlName="DebitLedger"
-                bindLabel="pledgername"
-                bindValue="pledgername"
-                [multiple]="false"
-                placeholder="Select Debit Ledger"
-                [searchable]="true"
-                [clearable]="true"
-                dropdownPosition="bottom"
-                [clearOnBackspace]="true"
-                appendTo="body"
-                (change)="onJvTypeChange($event)"
+                (change)="click_jvtype($event)"
+                (blur)="tdsJvDetailsForm.controls['DebitLedger'].markAsTouched()"
                 [ngClass]="{
                   'is-invalid':
                     tdsJvDetailsForm.controls['DebitLedger'].invalid &&
-                    (tdsJvDetailsForm.controls['DebitLedger'].dirty ||
-                     tdsJvDetailsForm.controls['DebitLedger'].touched)
+                    tdsJvDetailsForm.controls['DebitLedger'].touched &&
+                    !tdsJvDetailsForm.controls['DebitLedger'].value
                 }">
-              </ng-select>
-              <div class="invalid-feedback">
-                <span *ngIf="tdsJvDetailsForm.controls['DebitLedger'].errors?.['required']">
-                  Debit Ledger is required
-                </span>
+                <option value="" disabled selected hidden>Select Debit Ledger</option>
+                <option *ngFor="let item of tdsledgeraccountslist" [value]="item.pledgername">
+                  {{ item.pledgername }}
+                </option>
+              </select>
+              <div class="invalid-feedback"
+                *ngIf="tdsJvDetailsForm.controls['DebitLedger'].invalid &&
+                       tdsJvDetailsForm.controls['DebitLedger'].touched &&
+                       !tdsJvDetailsForm.controls['DebitLedger'].value">
+                Debit Ledger is required
               </div>
             </div>
           </div>
@@ -69,37 +48,31 @@
           <!-- Credit Ledger -->
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label class="tds-jv__label"
-                     id="CreditLedger"
-                     title="Credit Ledger"
-                     for="CreditLedger">
+              <label for="CreditLedger" class="field-label">
                 Credit Ledger <span class="text-danger">*</span>
               </label>
-              <ng-select
+              <select
                 id="CreditLedger"
-                title="Credit Ledger"
-                [items]="ledgeraccountslist()"
+                class="form-select field-input"
                 formControlName="CreditLedger"
-                bindLabel="pledgername"
-                bindValue="pledgername"
-                [multiple]="false"
-                placeholder="Select Credit Ledger"
-                [searchable]="true"
-                [clearable]="true"
-                dropdownPosition="bottom"
-                [clearOnBackspace]="true"
-                appendTo="body"
+                (change)="creditLedger_change($event)"
+                (blur)="tdsJvDetailsForm.controls['CreditLedger'].markAsTouched()"
                 [ngClass]="{
                   'is-invalid':
                     tdsJvDetailsForm.controls['CreditLedger'].invalid &&
-                    (tdsJvDetailsForm.controls['CreditLedger'].dirty ||
-                     tdsJvDetailsForm.controls['CreditLedger'].touched)
+                    tdsJvDetailsForm.controls['CreditLedger'].touched &&
+                    !tdsJvDetailsForm.controls['CreditLedger'].value
                 }">
-              </ng-select>
-              <div class="invalid-feedback">
-                <span *ngIf="tdsJvDetailsForm.controls['CreditLedger'].errors?.['required']">
-                  Credit Ledger is required
-                </span>
+                <option value="" disabled selected hidden>Select Credit Ledger</option>
+                <option *ngFor="let item of ledgeraccountslist" [value]="item.pledgername">
+                  {{ item.pledgername }}
+                </option>
+              </select>
+              <div class="invalid-feedback"
+                *ngIf="tdsJvDetailsForm.controls['CreditLedger'].invalid &&
+                       tdsJvDetailsForm.controls['CreditLedger'].touched &&
+                       !tdsJvDetailsForm.controls['CreditLedger'].value">
+                Credit Ledger is required
               </div>
             </div>
           </div>
@@ -107,284 +80,271 @@
           <!-- Date -->
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label class="tds-jv__label" for="preceiptdate">
+              <label class="field-label">
                 Date <span class="text-danger">*</span>
               </label>
-              <fieldset [disabled]="disableTransactionDate">
                 <input
                   type="text"
-                  id="preceiptdate"
-                  class="form-control tds-jv__input"
+                  class="form-control field-input"
                   formControlName="preceiptdate"
                   placeholder="Select Date"
-                  [bsConfig]="dpConfig"
+                  [bsConfig]="dpConfig1"
                   #dp="bsDatepicker"
                   bsDatepicker
-                  placement="bottom">
-              </fieldset>
+                  [disabled]="disabletransactiondate"
+                  placement="bottom" />
             </div>
           </div>
 
-        </div><!-- /Row 1 -->
+        </div>
 
         <!-- Row 2: Year | Month | Show Button -->
         <div class="row">
 
-          <!-- Calendar Year -->
+          <!-- Year -->
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label class="tds-jv__label"
-                     id="pPeriodType"
-                     title="Calendar Year"
-                     for="pPeriodType">
+              <label for="pPeriodType" class="field-label">
                 Year <span class="text-danger">*</span>
               </label>
-              <ng-select
+              <select
                 id="pPeriodType"
-                title="Calendar Year"
-                [items]="calendarYearData()"
+                class="form-select field-input"
                 formControlName="pPeriodType"
-                bindLabel="periodType"
-                bindValue="calendarPeriodId"
-                [multiple]="false"
-                placeholder="Select Year"
-                [searchable]="true"
-                [clearable]="true"
-                dropdownPosition="top"
-                [clearOnBackspace]="true"
-                appendTo="body"
-                (change)="onCalendarYearChange($event)"
+                (change)="CalendarYear_change_native($event)"
+                (blur)="tdsJvDetailsForm.controls['pPeriodType'].markAsTouched()"
                 [ngClass]="{
                   'is-invalid':
                     tdsJvDetailsForm.controls['pPeriodType'].invalid &&
-                    (tdsJvDetailsForm.controls['pPeriodType'].dirty ||
-                     tdsJvDetailsForm.controls['pPeriodType'].touched)
+                    tdsJvDetailsForm.controls['pPeriodType'].touched &&
+                    !tdsJvDetailsForm.controls['pPeriodType'].value
                 }">
-              </ng-select>
-              <div class="invalid-feedback">
-                <span *ngIf="tdsJvDetailsForm.controls['pPeriodType'].errors?.['required']">
-                  Year is required
-                </span>
+                <option value="" disabled selected hidden>Select Year</option>
+                <option *ngFor="let item of calendarYearData" [value]="item.calendarPeriodId">
+                  {{ item.periodType }}
+                </option>
+              </select>
+              <div class="invalid-feedback"
+                *ngIf="tdsJvDetailsForm.controls['pPeriodType'].invalid &&
+                       tdsJvDetailsForm.controls['pPeriodType'].touched &&
+                       !tdsJvDetailsForm.controls['pPeriodType'].value">
+                Year is required
               </div>
             </div>
           </div>
 
-          <!-- Calendar Month -->
+          <!-- Month -->
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label class="tds-jv__label"
-                     id="pCalendarMonth"
-                     title="Calendar Month"
-                     for="pCalendarMonth">
+              <label for="pCalendarMonth" class="field-label">
                 Month <span class="text-danger">*</span>
               </label>
-              <ng-select
+              <select
                 id="pCalendarMonth"
-                title="Calendar Month"
-                [items]="calendarMonthData()"
+                class="form-select field-input"
                 formControlName="pCalendarMonth"
-                bindLabel="calendarMonth"
-                bindValue="calendarPeriodDetailsId"
-                [multiple]="false"
-                placeholder="Select Month"
-                [searchable]="true"
-                [clearable]="true"
-                dropdownPosition="top"
-                [clearOnBackspace]="true"
-                appendTo="body"
-                (change)="onCalendarMonthChange($event)"
+                (change)="CalendarYearMOnth_change_native($event)"
+                (blur)="tdsJvDetailsForm.controls['pCalendarMonth'].markAsTouched()"
                 [ngClass]="{
                   'is-invalid':
                     tdsJvDetailsForm.controls['pCalendarMonth'].invalid &&
-                    (tdsJvDetailsForm.controls['pCalendarMonth'].dirty ||
-                     tdsJvDetailsForm.controls['pCalendarMonth'].touched)
+                    tdsJvDetailsForm.controls['pCalendarMonth'].touched &&
+                    !tdsJvDetailsForm.controls['pCalendarMonth'].value
                 }">
-              </ng-select>
-              <div class="invalid-feedback">
-                <span *ngIf="tdsJvDetailsForm.controls['pCalendarMonth'].errors?.['required']">
-                  Month is required
-                </span>
+                <option value="" disabled selected hidden>Select Month</option>
+                <option *ngFor="let item of calendarMonthData" [value]="item.calendarPeriodDetailsId">
+                  {{ item.calendarMonth }}
+                </option>
+              </select>
+              <div class="invalid-feedback"
+                *ngIf="tdsJvDetailsForm.controls['pCalendarMonth'].invalid &&
+                       tdsJvDetailsForm.controls['pCalendarMonth'].touched &&
+                       !tdsJvDetailsForm.controls['pCalendarMonth'].value">
+                Month is required
               </div>
             </div>
           </div>
 
           <!-- Show Button -->
           <div class="col-md-2">
-            <div class="form-group mb-3">
+            <div class="form-group mb-3 show-btn-wrapper">
               <button
                 type="button"
-                class="btn btn-primary tds-jv__btn-show"
-                (click)="loadTdsJvDetails()"
-                [disabled]="isShowProcessing()">
-                <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isShowProcessing() }"></i>
-                {{ showButtonLabel() }}
+                class="btn btn-primary btn-show"
+                (click)="gettdsjvdetails()"
+                [disabled]="disablesavebutton1">
+                <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton1 }"></i>
+                {{ savebutton1 }}
               </button>
             </div>
           </div>
 
-        </div><!-- /Row 2 -->
+        </div>
 
       </form>
-    </div><!-- /Form Section -->
+    </div>
 
-    <!-- ── Empty State ──────────────────────────────────────────── -->
-    @if (isDataEmpty()) {
-      <div class="tds-jv__empty-state">
-        <i class="fa fa-info-circle"></i>
-        No Records to Display
+    <!-- ── No Records Message ── -->
+    <div *ngIf="dataisempty" class="empty-state-box mb-3">
+      <i class="fa fa-info-circle me-1"></i>
+      No Records to Display
+    </div>
+
+    <!-- ── Table + Narration Section ── -->
+    <div
+      *ngIf="showhidetable"
+      class="form-panel border rounded p-3 bg-white mb-4">
+
+      <!-- Table Heading + Export -->
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h6 class="table-heading mb-0">TDS/GST JV's</h6>
+        <a class="export-icon" (click)="export()" title="Export to Excel">
+          <img src="assets/images/icon-excel.svg" title="Excel" width="18px" />
+        </a>
       </div>
-    }
 
-    <!-- ── Table + Narration Section ─────────────────────────────── -->
-    @if (isTableVisible()) {
-      <div class="tds-jv__table-section">
+      <!-- PrimeNG Table -->
+      <p-table
+        [value]="tdsJvDetailsGrid"
+        [paginator]="true"
+        [rows]="pageCriteria.pageSize"
+        [first]="pageCriteria.offset"
+        [responsiveLayout]="'scroll'"
+        [scrollable]="true"
+        scrollHeight="400px"
+        selectionMode="multiple"
+        [(selection)]="selected1"
+        (selectionChange)="onSelect($event)"
+        [showCurrentPageReport]="true"
+        styleClass="p-datatable-sm p-datatable-gridlines">
 
-        <!-- Toolbar -->
-        <div class="tds-jv__table-toolbar">
-          <h6 class="tds-jv__table-title">TDS/GST JV's</h6>
-          <a class="tds-jv__export-icon"
-             (click)="export()"
-             title="Export to Excel">
-            <img src="assets/images/icon-excel.svg" title="Excel" alt="Export to Excel">
-          </a>
-        </div>
+        <!-- Header -->
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="tbl-header tbl-col-checkbox">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="tbl-header">Particulars</th>
+            <th class="tbl-header tbl-col-amount tbl-right">Debit Amount</th>
+            <th class="tbl-header tbl-col-amount tbl-right">Credit Amount</th>
+          </tr>
+        </ng-template>
 
-        <!-- PrimeNG Table -->
-        <p-table
-          class="tds-jv__table"
-          [value]="tdsJvDetailsGrid()"
-          [paginator]="true"
-          [rows]="pageCriteria.pageSize"
-          [first]="pageCriteria.offset"
-          [responsiveLayout]="'scroll'"
-          [scrollable]="true"
-          scrollHeight="400px"
-          selectionMode="multiple"
-          [(selection)]="selected1"
-          (selectionChange)="onSelectionChange($event)"
-          [showCurrentPageReport]="true"
-          styleClass="p-datatable-sm p-datatable-gridlines">
+        <!-- Body -->
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td class="tbl-cell tbl-cell-center">
+              <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+            </td>
+            <td class="tbl-cell">{{ rowData.particulars }}</td>
+            <td class="tbl-cell tbl-right">
+              <span *ngIf="rowData.debit_amount > 0">
+                {{ currencysymbol }} {{ rowData.debit_amount.toFixed(2) }}
+              </span>
+            </td>
+            <td class="tbl-cell tbl-right">
+              <span *ngIf="rowData.credit_amount > 0">
+                {{ currencysymbol }} {{ rowData.credit_amount.toFixed(2) }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
 
-          <!-- Header -->
-          <ng-template pTemplate="header">
-            <tr>
-              <th class="col-checkbox">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th>Particulars</th>
-              <th class="col-amount">Debit Amount</th>
-              <th class="col-amount">Credit Amount</th>
-            </tr>
-          </ng-template>
+        <!-- Footer Totals -->
+        <ng-template pTemplate="footer">
+          <tr class="tbl-footer-row">
+            <td colspan="2" class="tbl-footer-label tbl-right">Totals:</td>
+            <td class="tbl-footer-amount tbl-right">
+              {{ currencysymbol }} {{ totaldebitamount.toFixed(2) }}
+            </td>
+            <td class="tbl-footer-amount tbl-right">
+              {{ currencysymbol }} {{ totalcreditamount.toFixed(2) }}
+            </td>
+          </tr>
+        </ng-template>
 
-          <!-- Body -->
-          <ng-template pTemplate="body" let-rowData>
-            <tr>
-              <td class="col-checkbox">
-                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
-              </td>
-              <td>{{ rowData.particulars }}</td>
-              <td class="text-right">
-                @if (rowData.debit_amount > 0) {
-                  {{ currencySymbol }} {{ rowData.debit_amount.toFixed(2) }}
-                }
-              </td>
-              <td class="text-right">
-                @if (rowData.credit_amount > 0) {
-                  {{ currencySymbol }} {{ rowData.credit_amount.toFixed(2) }}
-                }
-              </td>
-            </tr>
-          </ng-template>
+        <!-- Empty Message -->
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="tbl-empty-msg">
+              <i class="fa fa-info-circle me-1"></i>
+              No records to display.
+            </td>
+          </tr>
+        </ng-template>
 
-          <!-- Footer Totals -->
-          <ng-template pTemplate="footer">
-            <tr>
-              <td colspan="2" class="text-right">Totals:</td>
-              <td class="text-right totals-amount">
-                {{ currencySymbol }} {{ totalDebitAmount().toFixed(2) }}
-              </td>
-              <td class="text-right totals-amount">
-                {{ currencySymbol }} {{ totalCreditAmount().toFixed(2) }}
-              </td>
-            </tr>
-          </ng-template>
+      </p-table>
 
-          <!-- Empty Message -->
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="4">
-                <div class="tds-jv__empty-table-msg">
-                  <i class="fa fa-info-circle"></i>
-                  No records to display.
-                </div>
-              </td>
-            </tr>
-          </ng-template>
+      <!-- ── Narration ── -->
+      <div class="form-group mt-4" [formGroup]="tdsJvDetailsForm">
+        <label for="pnarration" class="field-label d-block mb-1">
+          Narration <span class="text-danger">*</span>
+        </label>
+        <textarea
+          class="form-control field-input narration-area"
+          rows="4"
+          id="pnarration"
+          title="Narration"
+          formControlName="pnarration"
+          maxlength="250"
+          placeholder="Enter narration here..."
+          (blur)="tdsJvDetailsForm.get('pnarration')?.markAsTouched()"
+          [ngClass]="{
+            'is-invalid':
+              tdsJvDetailsForm.get('pnarration')?.touched &&
+              tdsJvDetailsForm.get('pnarration')?.invalid
+          }">
+        </textarea>
 
-        </p-table>
+        <small
+          class="text-danger"
+          *ngIf="
+            tdsJvDetailsForm.get('pnarration')?.touched &&
+            tdsJvDetailsForm.get('pnarration')?.errors?.['required']
+          ">
+          Please enter Narration
+        </small>
 
-        <!-- ── Narration ────────────────────────────────────────── -->
-        <div class="tds-jv__narration" [formGroup]="tdsJvDetailsForm">
-          <label class="tds-jv__label" for="pnarration">
-            Narration <span class="text-danger">*</span>
-          </label>
-          <textarea
-            class="form-control"
-            rows="4"
-            id="pnarration"
-            title="Narration"
-            formControlName="pnarration"
-            maxlength="250"
-            placeholder="Enter narration here..."
-            (blur)="tdsJvDetailsForm.get('pnarration')?.markAsTouched()"
+        <div class="char-count-wrap">
+          <small
             [ngClass]="{
-              'is-invalid':
-                tdsJvDetailsForm.get('pnarration')?.touched &&
-                tdsJvDetailsForm.get('pnarration')?.invalid
+              'char-limit-reached': (tdsJvDetailsForm.get('pnarration')?.value?.length || 0) >= 250,
+              'char-count-normal':  (tdsJvDetailsForm.get('pnarration')?.value?.length || 0) < 250
             }">
-          </textarea>
-
-          <small class="text-danger"
-                 *ngIf="tdsJvDetailsForm.get('pnarration')?.touched &&
-                        tdsJvDetailsForm.get('pnarration')?.errors?.['required']">
-            Please enter Narration
+            {{ tdsJvDetailsForm.get('pnarration')?.value?.length || 0 }} / 250
           </small>
-
-          <div class="tds-jv__char-counter">
-            <small [class.limit-reached]="isNarrationNearLimit()">
-              {{ getNarrationLength() }} / 250
-            </small>
-          </div>
         </div>
+      </div>
 
-        <!-- ── Action Buttons ────────────────────────────────────── -->
-        <div class="tds-jv__actions">
+      <!-- ── Action Buttons ── -->
+      <div class="action-buttons mt-3">
 
-          <button type="button"
-                  class="btn tds-jv__btn-clear d-flex align-items-center gap-2"
-                  (click)="clearAll()">
-            <img src="assets/images/icon-cancel-white.svg" alt="Clear">
-            Clear
-          </button>
+        <button
+          type="button"
+          class="btn btn-secondary btn-action"
+          (click)="clearJVDetails()">
+          <img src="assets/images/icon-cancel-white.svg" width="16" height="16" />
+          Clear
+        </button>
 
-          @if (isExists()) {
-            <button type="button"
-                    class="btn btn-primary tds-jv__btn-save d-flex align-items-center gap-2"
-                    (click)="saveJVDetails()"
-                    [disabled]="isSaveProcessing()">
-              @if (!isSaveProcessing()) {
-                <img src="assets/images/icon-check-white.svg" alt="Save">
-              }
-              <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isSaveProcessing() }"></i>
-              {{ saveButtonLabel() }}
-            </button>
-          }
+        <button
+          *ngIf="isExists"
+          type="button"
+          class="btn btn-primary btn-action"
+          (click)="saveJVDetails()"
+          [disabled]="disablesavebutton">
+          <img
+            *ngIf="!disablesavebutton"
+            src="assets/images/icon-check-white.svg"
+            width="16"
+            height="16" />
+          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton }"></i>
+          {{ savebutton }}
+        </button>
 
-        </div>
+      </div>
 
-      </div><!-- /Table Section -->
-    }
+    </div>
 
-  </div><!-- /Card -->
-</div><!-- /Screen Container -->
+  </div>
+</div>
