@@ -3,6 +3,7 @@ import {
   MotionModule,
   ObjectUtils,
   zindexutils
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-HHWN37PQ.js
 } from "./chunk-RNHT5IVR.js";
 import {
   BaseModelHolder
@@ -13,19 +14,66 @@ import {
 import {
   Fluid
 } from "./chunk-N5P5PXSK.js";
+========
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-ETA2Y3NG.js";
+import {
+  ConnectedOverlayScrollHandler
+} from "./chunk-BLS3V6PL.js";
+import {
+  BaseModelHolder
+} from "./chunk-TNHPQXHQ.js";
+import {
+  Fluid
+} from "./chunk-IYYU5SFB.js";
+========
+} from "./chunk-B64GD5W2.js";
+import {
+  ConnectedOverlayScrollHandler
+} from "./chunk-TXR7ZPJ7.js";
+import {
+  BaseModelHolder
+} from "./chunk-46LI7KQC.js";
+import {
+  Fluid
+} from "./chunk-62LRPL44.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+>>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
 import {
   BaseComponent,
   BaseStyle,
   PARENT_INSTANCE
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-HHWN37PQ.js
 } from "./chunk-QTKBQPIO.js";
 import {
   Bind
 } from "./chunk-TGCQ2ZEU.js";
+========
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-XPSM6MPK.js";
+import {
+  Bind
+} from "./chunk-EPBK36MI.js";
+========
+} from "./chunk-QKWHAPOX.js";
+import {
+  Bind
+} from "./chunk-IQNEANHD.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+>>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
 import {
   OverlayService,
   PrimeTemplate,
   SharedModule
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-HHWN37PQ.js
 } from "./chunk-WKO7SLM7.js";
+========
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-JMMZISEP.js";
+========
+} from "./chunk-A4R4ACSD.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+>>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
 import {
   D,
   I,
@@ -36,34 +84,44 @@ import {
   j,
   ut,
   v
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-HHWN37PQ.js
 } from "./chunk-OEMVMAOQ.js";
+========
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-6VT5MDB4.js";
+========
+} from "./chunk-3UI3UQ7C.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+>>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
 import {
   CommonModule,
   NgIf,
   NgTemplateOutlet,
   isPlatformBrowser
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-HHWN37PQ.js
 } from "./chunk-HYDT7WYP.js";
+========
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-2SZEWBVN.js";
+========
+} from "./chunk-622SXKCM.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+>>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
 import {
   ChangeDetectionStrategy,
   Component,
   ContentChild,
   ContentChildren,
   Directive,
-  EventEmitter,
   Injectable,
-  InjectionToken,
   Input,
   NgModule,
-  NgZone,
   Output,
   ViewChild,
   ViewEncapsulation,
   booleanAttribute,
-  computed,
-  inject,
   input,
   setClassMetadata,
-  signal,
   ɵɵHostDirectivesFeature,
   ɵɵInheritDefinitionFeature,
   ɵɵProvidersFeature,
@@ -74,8 +132,6 @@ import {
   ɵɵcontentQuery,
   ɵɵdefineComponent,
   ɵɵdefineDirective,
-  ɵɵdefineInjectable,
-  ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵdirectiveInject,
   ɵɵelementContainer,
@@ -92,12 +148,30 @@ import {
   ɵɵpureFunction0,
   ɵɵpureFunction1,
   ɵɵqueryRefresh,
-  ɵɵresetView,
-  ɵɵrestoreView,
   ɵɵstyleMap,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-TZETBKKJ.js";
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-PFFTO33I.js";
+========
+} from "./chunk-O4QVKDWN.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+import {
+  EventEmitter,
+  InjectionToken,
+  NgZone,
+  computed,
+  inject,
+  signal,
+  ɵɵdefineInjectable,
+  ɵɵdefineInjector,
+  ɵɵresetView,
+  ɵɵrestoreView
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+} from "./chunk-NHHASXIX.js";
+========
+} from "./chunk-UWDTAPIF.js";
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
 import {
   __spreadProps,
   __spreadValues
@@ -1678,4 +1752,12 @@ export {
   BaseInput,
   Overlay
 };
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-HHWN37PQ.js
 //# sourceMappingURL=chunk-HHWN37PQ.js.map
+========
+<<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps/chunk-FKHOTJXU.js
+//# sourceMappingURL=chunk-FKHOTJXU.js.map
+========
+//# sourceMappingURL=chunk-3AORIJHP.js.map
+>>>>>>>> 7d01da42de480c3e0e666c624d201ec4a6a2fc52:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js
+>>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps/chunk-3AORIJHP.js

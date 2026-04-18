@@ -2,11 +2,19 @@ import {
   BaseComponent,
   BaseStyle,
   PARENT_INSTANCE
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-RNHT5IVR.js
 } from "./chunk-QTKBQPIO.js";
 import {
   Bind,
   BindModule
 } from "./chunk-TGCQ2ZEU.js";
+=======
+} from "./chunk-376O7JDS.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-XME5LGLO.js";
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UYRCVMBN.js
 import {
   P,
   Qt,
@@ -15,7 +23,11 @@ import {
   qt,
   te,
   w
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-RNHT5IVR.js
 } from "./chunk-OEMVMAOQ.js";
+=======
+} from "./chunk-B4APTUDW.js";
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UYRCVMBN.js
 import {
   CommonModule
 } from "./chunk-HYDT7WYP.js";
@@ -1824,6 +1836,11 @@ var ObjectUtils = class _ObjectUtils {
     return typeof value === "string" && (empty || value !== "");
   }
 };
+var lastId = 0;
+function UniqueComponentId(prefix = "pn_id_") {
+  lastId++;
+  return `${prefix}${lastId}`;
+}
 function ZIndexUtils() {
   let zIndexes = [];
   const generateZIndex = (key, baseZIndex) => {
@@ -1866,6 +1883,11 @@ export {
   MotionDirective,
   MotionModule,
   ObjectUtils,
+  UniqueComponentId,
   zindexutils
 };
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-RNHT5IVR.js
 //# sourceMappingURL=chunk-RNHT5IVR.js.map
+=======
+//# sourceMappingURL=chunk-ZARRZPV3.js.map
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UYRCVMBN.js

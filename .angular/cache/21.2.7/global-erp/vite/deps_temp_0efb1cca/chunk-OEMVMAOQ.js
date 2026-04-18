@@ -13,9 +13,15 @@ function b(e, t2, n = /* @__PURE__ */ new WeakSet()) {
     return true;
   }
   if (o != r) return false;
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
   let S = e instanceof Date, A2 = t2 instanceof Date;
   if (S != A2) return false;
   if (S && A2) return e.getTime() == t2.getTime();
+=======
+  let S2 = e instanceof Date, A2 = t2 instanceof Date;
+  if (S2 != A2) return false;
+  if (S2 && A2) return e.getTime() == t2.getTime();
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
   let I2 = e instanceof RegExp, L = t2 instanceof RegExp;
   if (I2 != L) return false;
   if (I2 && L) return e.toString() == t2.toString();
@@ -58,6 +64,15 @@ function p(e, t2) {
 function k(e, t2, n) {
   return n ? p(e, n) === p(t2, n) : y(e, t2);
 }
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
+=======
+function q(e, t2) {
+  if (e != null && t2 && t2.length) {
+    for (let n of t2) if (k(e, n)) return true;
+  }
+  return false;
+}
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
 function i(e, t2 = true) {
   return e instanceof Object && e.constructor === Object && (t2 || Object.keys(e).length !== 0);
 }
@@ -93,6 +108,12 @@ function F(e, t2 = "", n = {}) {
 function C(e, t2 = true) {
   return Array.isArray(e) && (t2 || e.length !== 0);
 }
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
+=======
+function O(e) {
+  return e instanceof Date;
+}
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
 function z(e) {
   return s(e) && !isNaN(e);
 }
@@ -153,6 +174,12 @@ function W(t2, e) {
     [e].flat().filter(Boolean).forEach((n) => n.split(" ").forEach(o));
   }
 }
+function F2() {
+  return window.innerWidth - document.documentElement.offsetWidth;
+}
+function st(t2) {
+  typeof t2 == "string" ? W(document.body, t2 || "p-overflow-hidden") : (t2 != null && t2.variableName && document.body.style.setProperty(t2.variableName, F2() + "px"), W(document.body, (t2 == null ? void 0 : t2.className) || "p-overflow-hidden"));
+}
 function P(t2, e) {
   if (t2 && e) {
     let o = (n) => {
@@ -203,6 +230,9 @@ function D(t2, e, o = true) {
     let d2 = t2.offsetParent ? { width: t2.offsetWidth, height: t2.offsetHeight } : w(t2), s4 = d2.height, a2 = d2.width, u2 = e.offsetHeight, p3 = e.offsetWidth, f2 = e.getBoundingClientRect(), g3 = $(), it = k2(), lt = h(), L, N, ot = "top";
     f2.top + u2 + s4 > lt.height ? (L = f2.top + g3 - s4, ot = "bottom", L < 0 && (L = g3)) : L = u2 + f2.top + g3, f2.left + a2 > lt.width ? N = Math.max(0, f2.left + it + p3 - a2) : N = f2.left + it, V(t2) ? t2.style.insetInlineEnd = N + "px" : t2.style.insetInlineStart = N + "px", t2.style.top = L + "px", t2.style.transformOrigin = ot, o && (t2.style.marginTop = ot === "bottom" ? `calc(${(r = (n = x(/-anchor-gutter$/)) == null ? void 0 : n.value) != null ? r : "2px"} * -1)` : (l3 = (i3 = x(/-anchor-gutter$/)) == null ? void 0 : i3.value) != null ? l3 : "");
   }
+}
+function S(t2, e) {
+  t2 && (typeof e == "string" ? t2.style.cssText = e : Object.entries(e || {}).forEach(([o, n]) => t2.style[o] = n));
 }
 function v(t2, e) {
   if (t2 instanceof HTMLElement) {
@@ -329,6 +359,15 @@ function z2(t2, e) {
 function bt(t2, e) {
   t2 && document.activeElement !== t2 && t2.focus(e);
 }
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
+=======
+function Q(t2, e) {
+  if (c2(t2)) {
+    let o = t2.getAttribute(e);
+    return isNaN(o) ? o === "true" || o === "false" ? o === "true" : o : +o;
+  }
+}
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
 function b2(t2, e = "") {
   let o = Y2(t2, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
             [href]:not([tabindex = "-1"]):not([style*="display:none"]):not([hidden])${e},
@@ -350,6 +389,17 @@ function Tt(t2) {
     return e -= parseFloat(o.paddingTop) + parseFloat(o.paddingBottom) + parseFloat(o.borderTopWidth) + parseFloat(o.borderBottomWidth), e;
   }
   return 0;
+}
+function Ht(t2) {
+  var e;
+  if (t2) {
+    let o = (e = y2(t2)) == null ? void 0 : e.childNodes, n = 0;
+    if (o) for (let r = 0; r < o.length; r++) {
+      if (o[r] === t2) return n;
+      o[r].nodeType === 1 && n++;
+    }
+  }
+  return -1;
 }
 function Lt(t2, e) {
   let o = b2(t2, e);
@@ -373,12 +423,23 @@ function C2(t2, e) {
   }
   return 0;
 }
+function Mt() {
+  if (window.getSelection) return window.getSelection().toString();
+  if (document.getSelection) return document.getSelection().toString();
+}
 function Rt(t2) {
   if (t2) {
     let e = t2.offsetWidth, o = getComputedStyle(t2);
     return e -= parseFloat(o.paddingLeft) + parseFloat(o.paddingRight) + parseFloat(o.borderLeftWidth) + parseFloat(o.borderRightWidth), e;
   }
   return 0;
+}
+function Dt(t2) {
+  if (t2) {
+    let e = t2.nodeName, o = t2.parentElement && t2.parentElement.nodeName;
+    return e === "INPUT" || e === "TEXTAREA" || e === "BUTTON" || e === "A" || o === "INPUT" || o === "TEXTAREA" || o === "BUTTON" || o === "A" || !!t2.closest(".p-button, .p-checkbox, .p-radiobutton");
+  }
+  return false;
 }
 function et(t2) {
   return !!(t2 && t2.offsetParent != null);
@@ -515,6 +576,10 @@ export {
   s,
   p,
   k,
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
+=======
+  q,
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
   i,
   M,
   m,
@@ -522,6 +587,10 @@ export {
   g,
   F,
   C,
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
+=======
+  O,
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
   z,
   J,
   G,
@@ -533,6 +602,7 @@ export {
   f,
   R,
   W,
+  st,
   P,
   dt,
   x,
@@ -541,6 +611,7 @@ export {
   k2,
   $,
   D,
+  S,
   v,
   I,
   j,
@@ -548,15 +619,28 @@ export {
   A,
   U,
   ht,
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
   z2,
   bt,
+=======
+  Y2,
+  z2,
+  bt,
+  Q,
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
   b2 as b,
   vt,
   Tt,
+  Ht,
   Lt,
   K,
   C2,
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
+=======
+  Mt,
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js
   Rt,
+  Dt,
   et,
   qt,
   Yt,
@@ -569,4 +653,8 @@ export {
   w2,
   s2 as s3
 };
+<<<<<<< HEAD:.angular/cache/21.2.7/global-erp/vite/deps_temp_0efb1cca/chunk-OEMVMAOQ.js
 //# sourceMappingURL=chunk-OEMVMAOQ.js.map
+=======
+//# sourceMappingURL=chunk-B4APTUDW.js.map
+>>>>>>> bb3d2c41495ce2d4f006633fd30629eada5b2fcd:.angular/cache/21.2.7/global-erp/vite/deps_temp_1c0c1ca4/chunk-UQJJPLSK.js

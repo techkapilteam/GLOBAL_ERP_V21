@@ -9,7 +9,7 @@ export const accountsRoutes: Routes = [
         path: 'bank-config',
         loadComponent: () =>
           import('./Accounts_Config/bank-config/bank-config')
-            .then(m => m.BankConfig)
+            .then(m => m.BankConfigComponent)
       },
       {
         path: 'bank-config-view',
@@ -41,6 +41,12 @@ export const accountsRoutes: Routes = [
         loadComponent: () =>
           import('./Accounts_Transactions/general-receipt/general-receipt')
             .then(m => m.GeneralReceipt)
+      },
+      {
+        path: 'general-receipt-new',
+        loadComponent: () =>
+          import('./Accounts_Transactions/general-receipt-new/general-receipt-new')
+            .then(m => m.GeneralReceiptNew)
       },
       {
         path: 'payment-voucher',
