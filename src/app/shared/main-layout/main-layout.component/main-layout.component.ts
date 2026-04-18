@@ -2,7 +2,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { Module, NavigationService, SubModule, Screen } from '../../../core/services/Navigation/navigation.service';
+import {
+  Module,
+  NavigationService,
+  SubModule,
+  Screen
+} from '../../../core/services/Navigation/navigation.service';
 import { AuthService } from '../../../core/services/auth.service';
 
 export interface Theme {
@@ -38,26 +43,29 @@ export class MainLayoutComponent implements OnInit {
 
   sidebarCollapsed = true;
   username = '';
-  expandedSubModules: Set<string> = new Set();
+  expandedSubModules: Set<string> = new Set<string>();
 
   showMegaMenu = false;
   showAvatarMenu = false;
   showRecentForms = false;
-
   showFlyoutSearch = false;
+  showThemeDropdown = false;
+
   flyoutSearchQuery = '';
   megaMenuSearch = '';
-
   activeTheme = 'sky';
 
   recentForms: RecentForm[] = [];
 
   themes: Theme[] = [
-    { id: 'sky',     name: 'Sky',     colors: ['#7fb3ff', '#4d8fff'] },
-    { id: 'mist',    name: 'Mist',    colors: ['#b8d7ff', '#7aaeff'] },
-    { id: 'royal',   name: 'Royal',   colors: ['#6f8cff', '#5175ff'] },
+    { id: 'sky', name: 'Sky', colors: ['#7fb3ff', '#4d8fff'] },
+    { id: 'mist', name: 'Mist', colors: ['#b8d7ff', '#7aaeff'] },
+    { id: 'royal', name: 'Royal', colors: ['#6f8cff', '#5175ff'] },
     { id: 'emerald', name: 'Emerald', colors: ['#76d5c7', '#4fb8a8'] },
-    { id: 'slate',   name: 'Slate',   colors: ['#aab8d6', '#7d8fb3'] }
+    { id: 'slate', name: 'Slate', colors: ['#aab8d6', '#7d8fb3'] },
+    { id: 'gold', name: 'Gold', colors: ['#f0cf6a', '#c9a227'] },
+    { id: 'copper', name: 'Copper', colors: ['#d9996b', '#a85f3a'] },
+    { id: 'pink', name: 'Pink', colors: ['#f7a9c4', '#e26aa5'] }
   ];
 
   constructor(
@@ -98,12 +106,7 @@ export class MainLayoutComponent implements OnInit {
 
   selectModule(module: Module): void {
     if (this.selectedModule?.id === module.id) {
-      this.sidebarCollapsed = !this.sidebarCollapsed;
-
-      if (this.sidebarCollapsed) {
-        this.expandedSubModules.clear();
-        this.closeFlyoutSearch();
-      }
+      this.toggleSidebar();
       return;
     }
 
@@ -146,7 +149,8 @@ export class MainLayoutComponent implements OnInit {
     this.navigationService.selectScreen(screen);
     this.router.navigate([screen.route]);
     this.addToRecent(screen);
-    this.closeAllPanels();
+    this.showMegaMenu = false;
+    this.showRecentForms = false;
     this.closeFlyoutSearch();
   }
 
@@ -180,17 +184,19 @@ export class MainLayoutComponent implements OnInit {
     this.flyoutSearchQuery = '';
   }
 
+  toggleThemeDropdown(): void {
+    this.showThemeDropdown = !this.showThemeDropdown;
+  }
+
   get filteredFlyoutScreens(): Screen[] {
     const screens = this.selectedSubModule?.screens || [];
-    const query = this.flyoutSearchQuery.trim().toLowerCase();
+    const q = this.flyoutSearchQuery.trim().toLowerCase();
 
-    if (!query) {
+    if (!q) {
       return screens;
     }
 
-    return screens.filter(screen =>
-      screen.name.toLowerCase().includes(query)
-    );
+    return screens.filter(screen => screen.name.toLowerCase().includes(q));
   }
 
   get filteredMegaModules(): Module[] {
@@ -206,11 +212,11 @@ export class MainLayoutComponent implements OnInit {
         subModules: mod.subModules
           .map((sub: SubModule) => ({
             ...sub,
-            screens: sub.screens?.filter((sc: Screen) =>
+            screens: (sub.screens || []).filter((sc: Screen) =>
               sc.name.toLowerCase().includes(q) ||
               sub.name.toLowerCase().includes(q) ||
               mod.name.toLowerCase().includes(q)
-            ) || []
+            )
           }))
           .filter((sub: SubModule) =>
             sub.screens.length > 0 ||
@@ -306,6 +312,7 @@ export class MainLayoutComponent implements OnInit {
     this.showMegaMenu = false;
     this.showAvatarMenu = false;
     this.showRecentForms = false;
+    this.showThemeDropdown = false;
   }
 
   @HostListener('document:keydown.escape')
@@ -336,6 +343,9 @@ export class MainLayoutComponent implements OnInit {
   getSubModuleIcon(name?: string): string {
     const value = (name || '').toLowerCase();
 
+    if (value.includes('deposit')) return 'pi pi-folder-open';
+    if (value.includes('withdraw')) return 'pi pi-folder-open';
+    if (value.includes('transfer')) return 'pi pi-arrow-right-arrow-left';
     if (value.includes('report')) return 'pi pi-chart-line';
     if (value.includes('payroll')) return 'pi pi-wallet';
     if (value.includes('customer')) return 'pi pi-users';
@@ -361,6 +371,9 @@ export class MainLayoutComponent implements OnInit {
     if (value.includes('payslip')) return 'pi pi-file';
     if (value.includes('statement')) return 'pi pi-file-edit';
     if (value.includes('attendance')) return 'pi pi-clock';
+    if (value.includes('withdrawal')) return 'pi pi-angle-right';
+    if (value.includes('transfer')) return 'pi pi-angle-right';
+    if (value.includes('cheque')) return 'pi pi-angle-right';
 
     return 'pi pi-angle-right';
   }
