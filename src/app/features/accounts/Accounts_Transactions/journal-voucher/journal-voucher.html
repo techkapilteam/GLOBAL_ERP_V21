@@ -19,16 +19,14 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="form-label required-label">Date</label>
-                                <fieldset [disabled]="disabletransactiondate">
-                                    <input class="form-control" id="pjvdate" title="Date" type="text"
-                                        [bsConfig]="ppaymentdateConfig" bsDatepicker formControlName="pjvdate"
-                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pjvdate }" />
-                                </fieldset>
+                                <input class="form-control" id="pjvdate" title="Date" type="text" bsDatepicker
+                                    [bsConfig]="ppaymentdateConfig" formControlName="pjvdate"
+                                    [disabled]="disabletransactiondate"
+                                    [ngClass]="{ 'is-invalid': formValidationMessages?.pjvdate }" />
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- SECTION 2: Payment Details + GST/TDS -->
                 <div class="form-section">
                     <div class="row" formGroupName="ppaymentsslistcontrols">

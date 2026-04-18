@@ -374,6 +374,8 @@ export class MainLayoutComponent implements OnInit {
     if (value.includes('withdrawal')) return 'pi pi-angle-right';
     if (value.includes('transfer')) return 'pi pi-angle-right';
     if (value.includes('cheque')) return 'pi pi-angle-right';
+    if (value.includes('receipt')) return 'pi pi-angle-right';
+    if (value.includes('voucher')) return 'pi pi-angle-right';
 
     return 'pi pi-angle-right';
   }
