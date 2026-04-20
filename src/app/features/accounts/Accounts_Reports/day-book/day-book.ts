@@ -20,6 +20,7 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 
 @Component({
   selector: 'app-day-book',
@@ -31,7 +32,7 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     BsDatepickerModule,
     TableModule,
     NgSelectModule,
-    CompanyDetailsComponent
+    Companydetails
   ],
   templateUrl: './day-book.html',
   styleUrl: './day-book.css',

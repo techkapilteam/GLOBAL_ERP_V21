@@ -20,6 +20,7 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 
 @Component({
   selector: 'app-bank-book',
@@ -27,11 +28,10 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   imports: [
     CommonModule,
     FormsModule,
-    
+    Companydetails,
     BsDatepickerModule,
     TableModule,
     ReactiveFormsModule,
-    
     NgSelectModule
   ],
   templateUrl: './bank-book.html',
