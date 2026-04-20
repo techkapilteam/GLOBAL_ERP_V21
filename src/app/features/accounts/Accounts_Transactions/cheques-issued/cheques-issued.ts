@@ -65,7 +65,6 @@ type ActiveTabType =
   imports: [ CommonModule, CurrencyPipe, NgSelectModule, TableModule, CheckboxModule,
     FormsModule, ReactiveFormsModule, BsDatepickerModule],
   templateUrl: "./cheques-issued.html",
-  styleUrl: "./cheques-issued.css",
 })
 
 export class ChequesIssued implements OnInit {

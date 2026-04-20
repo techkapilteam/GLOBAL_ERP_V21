@@ -20,7 +20,6 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   standalone: true,
   imports: [CommonModule, AsyncPipe, DatePipe, DecimalPipe, NgSelectModule, FormsModule, ReactiveFormsModule, BsDatepickerModule, TableModule, ButtonModule, InputTextModule],
   templateUrl: "./general-receipt-cancel.html",
-  styleUrl: "./general-receipt-cancel.css",
 })
 
 export class GeneralReceiptCancel implements OnInit {

@@ -1,25 +1,25 @@
-<form [formGroup]="ChequesInBankForm">
-  <div class="section-wrapper">
+﻿<form [formGroup]="ChequesInBankForm">
+  <div class="erp-card">
 
     <!-- Header -->
-    <div class="screen-header">
-      <h2 class="screen-title">Cheques In Bank</h2>
+    <div class="card-header">
+      <h2 class="page-title">Cheques In Bank</h2>
     </div>
 
-    <div class="screen-content">
+    <div class="card-body">
 
       <!-- Top filter row -->
       <div class="filter-row">
 
         <!-- Transaction Date -->
         <div class="col-md-2 col-xl-2" *ngIf="tabsShowOrHideBasedOnfromFormName">
-          <div class="form-group">
-            <label class="form-label required-field">
+          <div class="erp-form-group">
+            <label class="erp-label required-field">
               Transaction Date <span class="required-star">*</span>
             </label>
             <fieldset [disabled]="!disabletransactiondate">
               <input
-                class="form-control form-control-sm"
+                class="erp-input"
                 type="text"
                 title="ptransactiondate"
                 id="ptransactiondate"
@@ -29,7 +29,7 @@
                 readonly
                 bsDatepicker
                 placement="bottom"
-                [ngClass]="{ 'is-invalid': ChequesInBankValidation.ptransactiondate }"
+                [ngClass]="{ 'ng-invalid': ChequesInBankValidation.ptransactiondate }"
               />
             </fieldset>
             <app-validation-message [messgae]="ChequesInBankValidation?.ptransactiondate" />
@@ -38,12 +38,12 @@
 
         <!-- Cheque Clear Date -->
         <div class="col-md-2 col-xl-2" *ngIf="tabsShowOrHideBasedOnfromFormName">
-          <div class="form-group">
-            <label class="form-label required-field">
+          <div class="erp-form-group">
+            <label class="erp-label required-field">
               Cheque Clear Date <span class="required-star">*</span>
             </label>
             <input
-              class="form-control form-control-sm"
+              class="erp-input"
               type="text"
               title="pchequecleardate"
               id="pchequecleardate"
@@ -53,7 +53,7 @@
               readonly
               bsDatepicker
               placement="bottom"
-              [ngClass]="{ 'is-invalid': ChequesInBankValidation.pchequecleardate }"
+              [ngClass]="{ 'ng-invalid': ChequesInBankValidation.pchequecleardate }"
               (bsValueChange)="change_date($event)"
               [isDisabled]="true"
               (keydown)="$event.preventDefault()"
@@ -63,8 +63,8 @@
 
         <!-- Bank Dropdown -->
         <div class="col-md-3 col-xl-3">
-          <div class="form-group">
-            <label class="form-label">
+          <div class="erp-form-group">
+            <label class="erp-label">
               Bank <span class="required-star">*</span>
             </label>
             <ng-select
@@ -72,10 +72,10 @@
               bindLabel="pbankname"
               placeholder="Select"
               formControlName="bankname"
-              [ngClass]="{ 'is-invalid': ChequesInBankValidation.bankname }"
+              [ngClass]="{ 'ng-invalid': ChequesInBankValidation.bankname }"
               (change)="SelectBank($event)"
               [clearable]="true"
-              class="ng-select-sm"
+              class="erp-select"
             />
             <div class="validation-error">
               <app-validation-message [messgae]="ChequesInBankValidation?.bankname" />
@@ -85,14 +85,14 @@
 
         <!-- Bank Balance Info -->
         <div class="col-md-5 col-xl-5">
-          <div class="bank-balance-card">
-            <span *ngIf="banknameshowhide() && bankname" class="bank-balance-name">
+          <div class="bank-info-card">
+            <span *ngIf="banknameshowhide() && bankname" class="bank-info-name">
               {{ bankname }}
             </span>
-            <h4 class="bank-balance-title">Cheques in Bank</h4>
-            <div class="bank-balance-row">
-              <label class="balance-label">Balance: </label>
-              <label class="balance-value">
+            <h4 class="bank-info-title">Cheques in Bank</h4>
+            <div class="bank-info-row">
+              <label class="info-label">Balance: </label>
+              <label class="info-value">
                 <span *ngIf="bankbalancetype === 'Dr'">
                   {{ bankbalance | currency: currencyCode:'symbol':'1.2-2' }} {{ bankbalancetype }}
                 </span>
@@ -116,20 +116,13 @@
 
         <!-- Search input -->
         <div class="col-md-4 col-xl-4 mb-3">
-          <div class="search-wrapper">
-            <span class="search-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                class="bi bi-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0
-                  1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-              </svg>
-            </span>
-            <input
+          <div class="search-container">
+            <i class="pi pi-search erp-input-icon"></i><input
               type="text"
               formControlName="searchtext"
               #search
               id="searchtext"
-              class="form-control search-input"
+              class="erp-input search-input"
               placeholder="Search"
               (paste)="onPaste($event)"
               (keydown.enter)="showSearchText('search')"
@@ -141,7 +134,7 @@
         <div class="col-md-2 col-xl-2 mb-3">
           <button
             (click)="showSearchText('search')"
-            class="btn btn-primary btn-sm btn-search"
+            class="erp-btn btn-primary btn-sm btn-search"
             [disabled]="searchloading()"
           >
             Search
@@ -176,7 +169,7 @@
               [class.active]="selectedTab === 'all'"
               (click)="selectedTab='all'; All(); $event.preventDefault()">
               All
-              <span class="badge badge-warning">{{ all || 0 }}</span>
+              <span class="erp-badge badge-warning">{{ all || 0 }}</span>
             </a>
           </li>
 
@@ -185,7 +178,7 @@
               [class.active]="selectedTab === 'chequesDeposited'"
               (click)="selectedTab='chequesDeposited'; ChequesDeposited(); $event.preventDefault()">
               Cheques Deposited
-              <span class="badge badge-secondary">{{ chequesdeposited || 0 }}</span>
+              <span class="erp-badge badge-secondary">{{ chequesdeposited || 0 }}</span>
             </a>
           </li>
 
@@ -194,7 +187,7 @@
               [class.active]="selectedTab === 'onlinereceipts'"
               (click)="selectedTab='onlinereceipts'; OnlineReceipts(); $event.preventDefault()">
               Online Receipts
-              <span class="badge badge-primary">{{ onlinereceipts || 0 }}</span>
+              <span class="erp-badge badge-primary">{{ onlinereceipts || 0 }}</span>
             </a>
           </li>
 
@@ -203,7 +196,7 @@
               [class.active]="selectedTab === 'cleared'"
               (click)="selectedTab='cleared'; Cleared(); $event.preventDefault()">
               Cleared
-              <span class="badge badge-success">{{ cleared || 0 }}</span>
+              <span class="erp-badge badge-success">{{ cleared || 0 }}</span>
             </a>
           </li>
 
@@ -212,7 +205,7 @@
               [class.active]="selectedTab === 'returned'"
               (click)="selectedTab='returned'; Returned(); $event.preventDefault()">
               Returned
-              <span class="badge badge-danger">{{ returned || 0 }}</span>
+              <span class="erp-badge badge-danger">{{ returned || 0 }}</span>
             </a>
           </li>
 
@@ -222,9 +215,9 @@
         <div *ngIf="brsdateshowhidecleared()" class="brs-date-row">
 
           <div class="col-md-3 col-xl-3">
-            <div class="form-group">
-              <label class="form-label">BRS From Date</label>
-              <input class="form-control form-control-sm" type="text" formControlName="pfrombrsdate"
+            <div class="erp-form-group">
+              <label class="erp-label">BRS From Date</label>
+              <input class="erp-input" type="text" formControlName="pfrombrsdate"
                 title="frombrsdate" placeholder="Select From Date" readonly
                 [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom"
                 (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()"
@@ -233,15 +226,15 @@
           </div>
 
           <div class="col-md-4 col-xl-4">
-            <div class="form-group">
-              <label class="form-label">BRS To Date</label>
+            <div class="erp-form-group">
+              <label class="erp-label">BRS To Date</label>
               <div class="brs-to-row">
-                <input class="form-control form-control-sm" type="text" formControlName="ptobrsdate"
+                <input class="erp-input" type="text" formControlName="ptobrsdate"
                   title="tobrsdate" placeholder="Select To Date" readonly
                   [bsConfig]="brstoConfig" #dp="bsDatepicker" bsDatepicker placement="bottom"
                   (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()"
                   (bsValueChange)="onBrsToDateChange($event)" />
-                <a (click)="ShowBrsClear()" class="btn btn-primary btn-sm btn-show" role="tab">Show</a>
+                <a (click)="ShowBrsClear()" class="erp-btn btn-primary btn-sm btn-show" role="tab">Show</a>
               </div>
               <div *ngIf="validatebrsdateclear()" class="brs-validation-error">
                 Brs To Date Should Be Greater Than From Date
@@ -256,22 +249,22 @@
           <div *ngIf="brsdateshowhidereturned()" class="brs-date-row">
 
             <div class="col-md-3 col-xl-3">
-              <div class="form-group">
-                <label class="form-label">BRS From Date</label>
-                <input class="form-control form-control-sm" type="text" placeholder="Select From Date"
+              <div class="erp-form-group">
+                <label class="erp-label">BRS From Date</label>
+                <input class="erp-input" type="text" placeholder="Select From Date"
                   readonly bsDatepicker [bsConfig]="brsfromConfig" formControlName="frombrsdate"
                   (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" />
               </div>
             </div>
 
             <div class="col-md-4 col-xl-4">
-              <div class="form-group">
-                <label class="form-label">BRS To Date</label>
+              <div class="erp-form-group">
+                <label class="erp-label">BRS To Date</label>
                 <div class="brs-to-row">
-                  <input class="form-control form-control-sm" type="text" placeholder="Select To Date"
+                  <input class="erp-input" type="text" placeholder="Select To Date"
                     readonly bsDatepicker [bsConfig]="brstoConfig" formControlName="tobrsdate"
                     (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" />
-                  <button type="button" class="btn btn-primary btn-sm btn-show" (click)="ShowBrsReturn()">Show</button>
+                  <button type="button" class="erp-btn btn-primary btn-sm btn-show" (click)="ShowBrsReturn()">Show</button>
                 </div>
                 <div *ngIf="validatebrsdatereturn()" class="brs-validation-error">
                   BRS To Date Should Be Greater Than From Date
@@ -301,23 +294,23 @@
 
             <ng-template pTemplate="header">
               <tr>
-                <th class="grid-th grid-th--checkbox" *ngIf="!showhidegridcolumns()">
+                <th class="erp-table-th erp-table-grid-header--checkbox" *ngIf="!showhidegridcolumns()">
                   <input type="checkbox" [checked]="preferdrows()" (change)="selectAllClear($event)" />
                 </th>
-                <th class="grid-th" *ngIf="!showhidegridcolumns2()">Clear</th>
-                <th class="grid-th" *ngIf="!showhidegridcolumns2()">Return</th>
-                <th class="grid-th" *ngIf="!showhidegridcolumns()">Reference No</th>
-                <th class="grid-th">Cheque/Reference No.</th>
-                <th class="grid-th">Branch Name</th>
-                <th class="grid-th">Amount</th>
-                <th class="grid-th">Party</th>
-                <th class="grid-th">Receipt Date</th>
-                <th class="grid-th">Deposited Date</th>
-                <th class="grid-th" *ngIf="!hiddendate()">{{ datetitle }}</th>
-                <th class="grid-th">Receipt Id</th>
-                <th class="grid-th">Transaction Mode</th>
-                <th class="grid-th">Cheque Bank Name</th>
-                <th class="grid-th">Cheque Branch Name</th>
+                <th class="erp-table-th" *ngIf="!showhidegridcolumns2()">Clear</th>
+                <th class="erp-table-th" *ngIf="!showhidegridcolumns2()">Return</th>
+                <th class="erp-table-th" *ngIf="!showhidegridcolumns()">Reference No</th>
+                <th class="erp-table-th">Cheque/Reference No.</th>
+                <th class="erp-table-th">Branch Name</th>
+                <th class="erp-table-th">Amount</th>
+                <th class="erp-table-th">Party</th>
+                <th class="erp-table-th">Receipt Date</th>
+                <th class="erp-table-th">Deposited Date</th>
+                <th class="erp-table-th" *ngIf="!hiddendate()">{{ datetitle }}</th>
+                <th class="erp-table-th">Receipt Id</th>
+                <th class="erp-table-th">Transaction Mode</th>
+                <th class="erp-table-th">Cheque Bank Name</th>
+                <th class="erp-table-th">Cheque Branch Name</th>
               </tr>
             </ng-template>
 
@@ -337,7 +330,7 @@
                 </td>
 
                 <td *ngIf="!showhidegridcolumns()" class="cell-center">
-                  <input class="form-control form-control-sm ref-input" type="text" maxlength="15"
+                  <input class="erp-input ref-input" type="text" maxlength="15"
                     [id]="'preferencetext' + rowIndex"
                     [(ngModel)]="row.preferencetext"
                     [ngModelOptions]="{standalone: true}"
@@ -367,29 +360,29 @@
 
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td [attr.colspan]="15" class="grid-empty">No records found.</td>
+                <td [attr.colspan]="15" class="erp-table-empty">No records found.</td>
               </tr>
             </ng-template>
 
             <ng-template pTemplate="footer">
               <tr>
-                <td *ngIf="!showhidegridcolumns()" class="grid-footer-cell"></td>
-                <td *ngIf="!showhidegridcolumns2()" class="grid-footer-cell"></td>
-                <td *ngIf="!showhidegridcolumns2()" class="grid-footer-cell"></td>
-                <td *ngIf="!showhidegridcolumns()" class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-total">
+                <td *ngIf="!showhidegridcolumns()" class="erp-table-td"></td>
+                <td *ngIf="!showhidegridcolumns2()" class="erp-table-td"></td>
+                <td *ngIf="!showhidegridcolumns2()" class="erp-table-td"></td>
+                <td *ngIf="!showhidegridcolumns()" class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td erp-table-total">
                   {{ getCurrentPageTotal(dt) | currency:currencyCode:'symbol':'1.2-2' }}
                 </td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td *ngIf="!hiddendate()" class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
-                <td class="grid-footer-cell"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td *ngIf="!hiddendate()" class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
+                <td class="erp-table-td"></td>
               </tr>
             </ng-template>
 
@@ -397,13 +390,13 @@
         </div>
 
         <!-- Save / Clear buttons -->
-        <div class="action-buttons" *ngIf="saveshowhide()">
-          <a (click)="Clear()" class="btn btn-dark btn-action" role="tab">
-            <img src="assets/images/icon-cancel-white.svg" class="btn-icon" width="16px" height="16px" />
+        <div class="d-flex gap-2" *ngIf="saveshowhide()">
+          <a (click)="Clear()" class="erp-btn btn-dark btn-action" role="tab">
+            <img src="assets/images/icon-cancel-white.svg" class="erp-btn btn-icon" width="16px" height="16px" />
             Clear
           </a>
-          <button (click)="Save()" class="btn btn-primary btn-action" [disabled]="disablesavebutton()">
-            <img src="assets/images/icon-check-white.svg" class="btn-icon" width="16px" height="16px"
+          <button (click)="Save()" class="erp-btn btn-primary btn-action" [disabled]="disablesavebutton()">
+            <img src="assets/images/icon-check-white.svg" class="erp-btn btn-icon" width="16px" height="16px"
               *ngIf="!disablesavebutton()" />
             <i class="fa fa-spin fa-spinner btn-icon" *ngIf="disablesavebutton()"></i>
             {{ buttonname }}
@@ -422,21 +415,21 @@
   <div class="modal-dialog modal-dialog--right">
     <div class="modal-content">
       <div class="modal-body">
-        <button type="button" class="modal-close" data-dismiss="modal" (click)="closeReturnModal()">&times;</button>
-        <div class="form-group">
-          <label class="form-label">
+        <button type="button" class="erp-btn btn-ghost" data-dismiss="modal" (click)="closeReturnModal()">&times;</button>
+        <div class="erp-form-group">
+          <label class="erp-label">
             Enter The Return Amount Charges For The Cheque: {{ chequenumber }}
           </label>
-          <input type="text" class="form-control text-end" name="cancelcharges" maxlength="6"
+          <input type="text" class="erp-input text-end" name="cancelcharges" maxlength="6"
             id="cancelcharges" #cancelRef (input)="returnCharges_Change($event)"
             appNumbersonly appMycurrencyFormatter />
-          <div *ngIf="returnChargesError()" class="modal-validation-error">
-            ⚠ Minimum amount should be ₹{{ minimumReturnCharge || 250 }}
+          <div *ngIf="returnChargesError()" class="erp-alert alert-danger">
+            âš  Minimum amount should be â‚¹{{ minimumReturnCharge || 250 }}
           </div>
         </div>
-        <div class="modal-actions">
-          <a (click)="CancelChargesOk(cancelRef.value)" class="btn btn-primary btn-action">
-            <img src="assets/images/icon-check-white.svg" class="btn-icon" width="20px" height="20px" />
+        <div class="d-flex gap-2 justify-end">
+          <a (click)="CancelChargesOk(cancelRef.value)" class="erp-btn btn-primary btn-action">
+            <img src="assets/images/icon-check-white.svg" class="erp-btn btn-icon" width="20px" height="20px" />
             Ok
           </a>
         </div>
@@ -444,3 +437,18 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

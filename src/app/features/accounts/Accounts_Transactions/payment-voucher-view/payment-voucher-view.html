@@ -1,36 +1,36 @@
-<div class="pv-screen">
-  <div class="pv-shell">
+﻿<div class="module-page">
+  <div class="erp-card">
 
-    <!-- ── Header ─────────────────────────────────────────────────────── -->
-    <div class="pv-header">
-      <h2 class="pv-header__title">Payment Voucher</h2>
-      <span class="pv-header__spacer"></span>
+    <!-- â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <div class="card-header">
+      <h2 class="card-title">Payment Voucher</h2>
+      <span style="flex: 1;"></span>
       <a
         routerLink="/dashboard/accounts/accounts-transactions/payment-voucher"
-        class="pv-header__view-btn"
+        class="erp-btn btn-white btn-sm"
       >
         <i class="fa fa-list"></i> View
       </a>
     </div>
 
-    <!-- ── Body ───────────────────────────────────────────────────────── -->
-    <div class="pv-body">
+    <!-- â”€â”€ Body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <div class="card-body">
       <form [formGroup]="paymentVoucherForm" autocomplete="off">
 
-        <!-- ──────────────────────────────────────────────────────────────
+        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
              DATE
-        ─────────────────────────────────────────────────────────────── -->
-        <div class="pv-card">
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <div class="erp-card">
           <div class="row">
             <div class="col-md-4">
-              <div class="mb-3">
-                <label class="pv-label">
-                  Date <span class="pv-label__required">*</span>
+              <div class="erp-form-group">
+                <label class="erp-label">
+                  Date <span class="required">*</span>
                 </label>
                 <fieldset [disabled]="!disableTransactionDate()">
                   <input
-                    class="pv-input"
-                    [class.pv-input--invalid]="formValidationMessages['ppaymentdate']"
+                    class="erp-input"
+                    [class.erp-input--invalid]="formValidationMessages['ppaymentdate']"
                     readonly
                     type="text"
                     [bsConfig]="ppaymentdateConfig"
@@ -43,14 +43,14 @@
           </div>
         </div>
 
-        <!-- ──────────────────────────────────────────────────────────────
+        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
              MODE OF PAYMENT
-        ─────────────────────────────────────────────────────────────── -->
-        <div class="pv-card">
-          <p class="pv-card__title">Mode of Payment</p>
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <div class="erp-card">
+          <p class="section-title">Mode of Payment</p>
 
-          <div class="pv-mode-group" id="pmodofpayment" title="Mode of Payment">
-            <label class="pv-mode-option">
+          <div class="erp-radio-group" id="pmodofpayment" title="Mode of Payment">
+            <label class="erp-radio">
               <input
                 type="radio"
                 name="pmodofpayment"
@@ -58,13 +58,13 @@
                 value="CASH"
                 (change)="modeofPaymentChange()"
               />
-              Cash —
-              <span class="pv-mode-option__balance">
+              Cash â€”
+              <span style="margin-left: auto; font-weight: 600;">
                 {{ currencySymbol }} {{ cashBalance }}
               </span>
             </label>
 
-            <label class="pv-mode-option">
+            <label class="erp-radio">
               <input
                 type="radio"
                 name="pmodofpayment"
@@ -72,8 +72,8 @@
                 value="BANK"
                 (change)="modeofPaymentChange()"
               />
-              Bank —
-              <span class="pv-mode-option__balance">
+              Bank â€”
+              <span style="margin-left: auto; font-weight: 600;">
                 {{ currencySymbol }} {{ bankBalance }}
               </span>
             </label>
@@ -84,13 +84,13 @@
 
               <!-- Trans type pills -->
               @if (showTransType()) {
-                <div class="pv-transtype-group" id="ptranstype" title="Trans Type">
+                <div class="erp-radio-pill-group" id="ptranstype" title="Trans Type">
                   @for (pill of [
                     { value: 'CHEQUE', label: 'Cheque' },
                     { value: 'ONLINE', label: 'Online' },
                     { value: 'DEBIT CARD', label: 'Debit Card' }
                   ]; track pill.value) {
-                    <label class="pv-transtype-pill">
+                    <label class="erp-radio-pill">
                       <input
                         type="radio"
                         name="ptranstype"
@@ -109,8 +109,8 @@
                 <!-- Bank Name (card visible) -->
                 @if (showBankCard()) {
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="bankName" title="Bank Name">Bank Name</label>
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="bankName" title="Bank Name">Bank Name</label>
                       <ng-select
                         [items]="banklist"
                         formControlName="pbankname"
@@ -121,7 +121,7 @@
                         [clearable]="false"
                         (change)="bankName_Change($event)"
                         (close)="paymentVoucherForm.get('pbankname')?.markAsTouched()"
-                        [class.is-invalid]="
+                        [class.ng-invalid]="
                           paymentVoucherForm.get('pbankname')?.touched &&
                           !paymentVoucherForm.get('pbankname')?.value
                         "
@@ -130,7 +130,7 @@
                         paymentVoucherForm.get('pbankname')?.touched &&
                         !paymentVoucherForm.get('pbankname')?.value
                       ) {
-                        <span class="pv-error">Please Select Bank Name</span>
+                        <span class="erp-field-error">Please Select Bank Name</span>
                       }
                     </div>
                   </div>
@@ -139,8 +139,8 @@
                 <!-- Debit / Credit Card (card hidden) -->
                 @if (!showBankCard()) {
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="pCardNumber" [title]="displayCardName">
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="pCardNumber" [title]="displayCardName">
                         {{ displayCardName }}
                       </label>
                       <ng-select
@@ -151,7 +151,7 @@
                         placeholder="Select"
                         (change)="debitCard_Change(); paymentVoucherForm.get('pCardNumber')?.markAsTouched()"
                         (blur)="paymentVoucherForm.get('pCardNumber')?.markAsTouched()"
-                        [class.is-invalid]="
+                        [class.ng-invalid]="
                           paymentVoucherForm.get('pCardNumber')?.touched &&
                           !paymentVoucherForm.get('pCardNumber')?.value
                         "
@@ -160,7 +160,7 @@
                         paymentVoucherForm.get('pCardNumber')?.touched &&
                         !paymentVoucherForm.get('pCardNumber')?.value
                       ) {
-                        <span class="pv-error">Please Select Card Number</span>
+                        <span class="erp-field-error">Please Select Card Number</span>
                       }
                     </div>
                   </div>
@@ -169,13 +169,13 @@
                 <!-- Type of Payment -->
                 @if (showTypeofPayment()) {
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="ptypeofpayment" title="Type of Payment">
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="ptypeofpayment" title="Type of Payment">
                         Type of Payment
                       </label>
                       <select
-                        class="pv-input"
-                        [class.pv-input--invalid]="formValidationMessages['ptypeofpayment']"
+                        class="erp-input"
+                        [class.erp-input--invalid]="formValidationMessages['ptypeofpayment']"
                         formControlName="ptypeofpayment"
                         (change)="typeofPaymentChange()"
                       >
@@ -194,14 +194,14 @@
                 <!-- Branch Name -->
                 @if (showBranch()) {
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="pbranchname" title="Branch Name">
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="pbranchname" title="Branch Name">
                         Branch Name
                       </label>
                       <input
                         readonly
-                        class="pv-input pv-input--readonly"
-                        [class.pv-input--invalid]="
+                        class="erp-input erp-input--readonly"
+                        [class.erp-input--invalid]="
                           paymentVoucherForm.get('pbranchname')?.touched &&
                           !paymentVoucherForm.get('pbranchname')?.value
                         "
@@ -214,7 +214,7 @@
                         paymentVoucherForm.get('pbranchname')?.touched &&
                         !paymentVoucherForm.get('pbranchname')?.value
                       ) {
-                        <span class="pv-error">Please Enter Branch Name</span>
+                        <span class="erp-field-error">Please Enter Branch Name</span>
                       }
                     </div>
                   </div>
@@ -223,12 +223,12 @@
                 <!-- Bank / Financial Services (readonly) -->
                 @if (showFinancial()) {
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="pbankname" title="Bank / Financial Services">
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="pbankname" title="Bank / Financial Services">
                         Bank / Financial Services
                       </label>
                       <input
-                        class="pv-input pv-input--readonly"
+                        class="erp-input erp-input--readonly"
                         type="text"
                         readonly
                         formControlName="pbankname"
@@ -240,11 +240,11 @@
                 <!-- UPI Name -->
                 @if (showUpi()) {
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="pUpiname" title="UPI">UPI</label>
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="pUpiname" title="UPI">UPI</label>
                       <select
-                        class="pv-input"
-                        [class.pv-input--invalid]="formValidationMessages['pUpiname']"
+                        class="erp-input"
+                        [class.erp-input--invalid]="formValidationMessages['pUpiname']"
                         formControlName="pUpiname"
                         (change)="upiName_Change($event)"
                       >
@@ -261,11 +261,11 @@
 
                   <!-- UPI ID -->
                   <div class="col-md-3">
-                    <div class="mb-3">
-                      <label class="pv-label" id="pUpiid" title="UPI ID">UPI ID</label>
+                    <div class="erp-form-group">
+                      <label class="erp-label" id="pUpiid" title="UPI ID">UPI ID</label>
                       <select
-                        class="pv-input"
-                        [class.pv-input--invalid]="formValidationMessages['pUpiid']"
+                        class="erp-input"
+                        [class.erp-input--invalid]="formValidationMessages['pUpiid']"
                         formControlName="pUpiid"
                         (change)="upiId_Change()"
                       >
@@ -283,8 +283,8 @@
 
                 <!-- Cheque / Reference No -->
                 <div class="col-md-3">
-                  <div class="mb-3">
-                    <label class="pv-label" id="pChequenumber" [title]="displayChequeNo">
+                  <div class="erp-form-group">
+                    <label class="erp-label" id="pChequenumber" [title]="displayChequeNo">
                       {{ displayChequeNo }}
                     </label>
 
@@ -297,15 +297,15 @@
                         placeholder="Select"
                         (close)="paymentVoucherForm.get('pChequenumber')?.markAsTouched()"
                         (change)="chequeNumber_Change()"
-                        [class.is-invalid]="
+                        [class.ng-invalid]="
                           paymentVoucherForm.get('pChequenumber')?.touched &&
                           !paymentVoucherForm.get('pChequenumber')?.value
                         "
                       ></ng-select>
                     } @else {
                       <input
-                        class="pv-input"
-                        [class.pv-input--invalid]="
+                        class="erp-input"
+                        [class.erp-input--invalid]="
                           paymentVoucherForm.get('pChequenumber')?.touched &&
                           (paymentVoucherForm.get('pChequenumber')?.errors?.['required'] ||
                            paymentVoucherForm.get('pChequenumber')?.errors?.['pattern'])
@@ -323,19 +323,19 @@
                       paymentVoucherForm.get('pChequenumber')?.touched &&
                       paymentVoucherForm.get('pChequenumber')?.errors?.['required']
                     ) {
-                      <span class="pv-error">Please Enter Cheque / Reference No.</span>
+                      <span class="erp-field-error">Please Enter Cheque / Reference No.</span>
                     }
                     @if (
                       paymentVoucherForm.get('pChequenumber')?.touched &&
                       paymentVoucherForm.get('pChequenumber')?.errors?.['pattern']
                     ) {
-                      <span class="pv-error">Reference No. must contain numbers only</span>
+                      <span class="erp-field-error">Reference No. must contain numbers only</span>
                     }
                     @if (
                       paymentVoucherForm.get('pChequenumber')?.touched &&
                       paymentVoucherForm.get('pChequenumber')?.errors?.['maxlength']
                     ) {
-                      <span class="pv-error">Maximum 40 characters allowed</span>
+                      <span class="erp-field-error">Maximum 40 characters allowed</span>
                     }
                   </div>
                 </div>
@@ -343,12 +343,12 @@
               </div><!-- /row -->
 
               <!-- Bank book / passbook balances -->
-              <div class="pv-balance-badges">
-                <span class="pv-balance-badge pv-balance-badge--book">
-                  Bank Book — {{ bankBookBalance }}
+              <div class="d-flex gap-2 flex-wrap mb-3">
+                <span class="erp-badge badge-info">
+                  Bank Book â€” {{ bankBookBalance }}
                 </span>
-                <span class="pv-balance-badge pv-balance-badge--passbook">
-                  Pass Book — {{ bankPassbookBalance }}
+                <span class="erp-badge badge-info">
+                  Pass Book â€” {{ bankPassbookBalance }}
                 </span>
               </div>
 
@@ -356,21 +356,21 @@
           }
         </div>
 
-        <!-- ──────────────────────────────────────────────────────────────
+        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
              PAYMENT DETAILS (line entry)
-        ─────────────────────────────────────────────────────────────── -->
-        <div class="pv-card" formGroupName="ppaymentsslistcontrols">
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <div class="erp-card" formGroupName="ppaymentsslistcontrols">
           <div class="row g-4">
 
             <!-- LEFT: Party / Ledger / Sub-ledger / Amount -->
             <div class="col-md-6 col-xl-4">
 
               <!-- Party -->
-              <div class="mb-3">
-                <label class="pv-label" id="ppartyid" title="Party">
-                  Party <span class="pv-label__required">*</span>
+              <div class="erp-form-group">
+                <label class="erp-label" id="ppartyid" title="Party">
+                  Party <span class="required">*</span>
                 </label>
-                <div class="pv-field-with-balance">
+                <div class="form-with-balance">
                   <div>
                     <ng-select
                       id="ppartyname"
@@ -384,7 +384,7 @@
                       [clearable]="true"
                       [virtualScroll]="true"
                       (change)="partyName_Change($event)"
-                      [class.is-invalid]="
+                      [class.ng-invalid]="
                         paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched &&
                         paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid
                       "
@@ -393,19 +393,19 @@
                       paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.touched &&
                       paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.invalid
                     ) {
-                      <span class="pv-error">Party is required</span>
+                      <span class="erp-field-error">Party is required</span>
                     }
                   </div>
-                  <span class="pv-balance-tag">{{ partyBalance }}</span>
+                  <span class="info-tag">{{ partyBalance }}</span>
                 </div>
               </div>
 
               <!-- Ledger -->
-              <div class="mb-3">
-                <label class="pv-label" id="pledgerid" title="Ledger">
-                  Ledger <span class="pv-label__required">*</span>
+              <div class="erp-form-group">
+                <label class="erp-label" id="pledgerid" title="Ledger">
+                  Ledger <span class="required">*</span>
                 </label>
-                <div class="pv-field-with-balance">
+                <div class="form-with-balance">
                   <div>
                     <ng-select
                       id="pledgername"
@@ -420,7 +420,7 @@
                       [clearable]="true"
                       dropdownPosition="auto"
                       (change)="ledgerName_Change($event)"
-                      [class.is-invalid]="
+                      [class.ng-invalid]="
                         paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched &&
                         paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid
                       "
@@ -433,20 +433,20 @@
                       paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.touched &&
                       paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.invalid
                     ) {
-                      <span class="pv-error">Ledger is required</span>
+                      <span class="erp-field-error">Ledger is required</span>
                     }
                   </div>
-                  <span class="pv-balance-tag">{{ ledgerBalance }}</span>
+                  <span class="info-tag">{{ ledgerBalance }}</span>
                 </div>
               </div>
 
               <!-- Sub Ledger -->
               @if (showSubledger()) {
-                <div class="mb-3">
-                  <label class="pv-label" id="psubledgername" title="Sub Ledger">
-                    Sub Ledger <span class="pv-label__required">*</span>
+                <div class="erp-form-group">
+                  <label class="erp-label" id="psubledgername" title="Sub Ledger">
+                    Sub Ledger <span class="required">*</span>
                   </label>
-                  <div class="pv-field-with-balance">
+                  <div class="form-with-balance">
                     <div>
                       <ng-select
                         title="Sub Ledger"
@@ -459,7 +459,7 @@
                         [clearable]="true"
                         dropdownPosition="auto"
                         (change)="subledger_Change($event)"
-                        [class.is-invalid]="
+                        [class.ng-invalid]="
                           paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.touched &&
                           paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.invalid
                         "
@@ -468,22 +468,22 @@
                         paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.touched &&
                         paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.invalid
                       ) {
-                        <span class="pv-error">Sub Ledger is required</span>
+                        <span class="erp-field-error">Sub Ledger is required</span>
                       }
                     </div>
-                    <span class="pv-balance-tag">{{ subLedgerBalance }}</span>
+                    <span class="info-tag">{{ subLedgerBalance }}</span>
                   </div>
                 </div>
               }
 
               <!-- Amount Paid -->
-              <div class="mb-3">
-                <label class="pv-label">
-                  Amount Paid <span class="pv-label__required">*</span>
+              <div class="erp-form-group">
+                <label class="erp-label">
+                  Amount Paid <span class="required">*</span>
                 </label>
                 <input
-                  class="pv-input pv-input--amount"
-                  [class.pv-input--invalid]="
+                  class="erp-input erp-input--amount"
+                  [class.erp-input--invalid]="
                     paymentVoucherForm.get('ppaymentsslistcontrols.pactualpaidamount')?.touched &&
                     paymentVoucherForm.get('ppaymentsslistcontrols.pactualpaidamount')?.invalid
                   "
@@ -500,7 +500,7 @@
                   paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.touched &&
                   paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.invalid
                 ) {
-                  <span class="pv-error">Amount is required</span>
+                  <span class="erp-field-error">Amount is required</span>
                 }
               </div>
             </div>
@@ -508,10 +508,10 @@
             <!-- RIGHT: GST + TDS toggles -->
             <div class="col-md-6 col-xl-6 offset-xl-2">
 
-              <!-- ── GST Section ────────────────────────────── -->
-              <div class="pv-toggle-section">
-                <div class="pv-toggle-section__header">
-                  <span class="pv-toggle-section__label">GST</span>
+              <!-- â”€â”€ GST Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+              <div class="toggle-section">
+                <div class="toggle-section__header">
+                  <span class="toggle-section__label">GST</span>
                   <fieldset [disabled]="disableGst()">
                     <div class="material-switch">
                       <input
@@ -520,7 +520,7 @@
                         formControlName="pisgstapplicable"
                         (change)="isgstapplicableChange()"
                       />
-                      <label for="gst-switch" class="badge-success"></label>
+                      <label for="gst-switch" class="erp-badge-success"></label>
                     </div>
                   </fieldset>
                 </div>
@@ -529,9 +529,9 @@
                   <div class="row g-2">
                     <!-- State -->
                     <div class="col-md-6">
-                      <div class="mb-3">
-                        <label class="pv-label" id="pState" title="State">
-                          State <span class="pv-label__required">*</span>
+                      <div class="erp-form-group">
+                        <label class="erp-label" id="pState" title="State">
+                          State <span class="required">*</span>
                         </label>
                         <ng-select
                           title="State"
@@ -549,12 +549,12 @@
                     <!-- GST No (conditional) -->
                     @if (showGstNo()) {
                       <div class="col-md-4">
-                        <div class="mb-3">
-                          <label class="pv-label" id="pgstno" title="GST No.">GST No.</label>
+                        <div class="erp-form-group">
+                          <label class="erp-label" id="pgstno" title="GST No.">GST No.</label>
                           <input
                             type="text"
-                            class="pv-input"
-                            [class.pv-input--invalid]="formValidationMessages['pgstno']"
+                            class="erp-input"
+                            [class.erp-input--invalid]="formValidationMessages['pgstno']"
                             maxlength="15"
                             appAlphanumeric
                             appUppercase
@@ -570,9 +570,9 @@
 
                     <!-- GST % -->
                     <div class="col-md-4">
-                      <div class="mb-3">
-                        <label class="pv-label" id="pgstpercentage" title="GST(%)">
-                          GST (%) <span class="pv-label__required">*</span>
+                      <div class="erp-form-group">
+                        <label class="erp-label" id="pgstpercentage" title="GST(%)">
+                          GST (%) <span class="required">*</span>
                         </label>
                         <ng-select
                           title="GST(%)"
@@ -580,7 +580,7 @@
                           (change)="gst_Change($event)"
                           (clear)="gst_Change(null)"
                           [clearable]="false"
-                          [class.is-invalid]="formValidationMessages['pgstpercentage']"
+                          [class.ng-invalid]="formValidationMessages['pgstpercentage']"
                         >
                           <ng-option value="">Select</ng-option>
                           @for (g of gstList; track g.pgstpercentage) {
@@ -595,51 +595,51 @@
                   </div>
 
                   <!-- GST Amount chips -->
-                  <div class="pv-gst-amounts">
+                  <div class="gst-amounts">
                     @if (showGstAmount()) {
-                      <div class="pv-gst-chip">
-                        <div class="pv-gst-chip__name">GST Amount</div>
-                        <div class="pv-gst-chip__value">
+                      <div class="gst-chip">
+                        <div class="gst-chip__name">GST Amount</div>
+                        <div class="gst-chip__value">
                           {{ getLineValue('pgstamount') | currency:currencyCode:'symbol':'1.2-2' }}
                         </div>
                       </div>
                     }
                     @if (showIgst()) {
-                      <div class="pv-gst-chip">
-                        <div class="pv-gst-chip__name">
+                      <div class="gst-chip">
+                        <div class="gst-chip__name">
                           IGST ({{ getLineValue('pigstpercentage') }}%)
                         </div>
-                        <div class="pv-gst-chip__value">
+                        <div class="gst-chip__value">
                           {{ getLineValue('pigstamount') | currency:currencyCode:'symbol':'1.2-2' }}
                         </div>
                       </div>
                     }
                     @if (showCgst()) {
-                      <div class="pv-gst-chip">
-                        <div class="pv-gst-chip__name">
+                      <div class="gst-chip">
+                        <div class="gst-chip__name">
                           CGST ({{ getLineValue('pcgstpercentage') }}%)
                         </div>
-                        <div class="pv-gst-chip__value">
+                        <div class="gst-chip__value">
                           {{ getLineValue('pcgstamount') | currency:currencyCode:'symbol':'1.2-2' }}
                         </div>
                       </div>
                     }
                     @if (showSgst()) {
-                      <div class="pv-gst-chip">
-                        <div class="pv-gst-chip__name">
+                      <div class="gst-chip">
+                        <div class="gst-chip__name">
                           SGST ({{ getLineValue('psgstpercentage') }}%)
                         </div>
-                        <div class="pv-gst-chip__value">
+                        <div class="gst-chip__value">
                           {{ getLineValue('psgstamount') | currency:currencyCode:'symbol':'1.2-2' }}
                         </div>
                       </div>
                     }
                     @if (showUtgst()) {
-                      <div class="pv-gst-chip">
-                        <div class="pv-gst-chip__name">
+                      <div class="gst-chip">
+                        <div class="gst-chip__name">
                           UTGST ({{ getLineValue('putgstpercentage') }}%)
                         </div>
-                        <div class="pv-gst-chip__value">
+                        <div class="gst-chip__value">
                           {{ getLineValue('putgstamount') | currency:currencyCode:'symbol':'1.2-2' }}
                         </div>
                       </div>
@@ -648,10 +648,10 @@
                 }
               </div><!-- /GST -->
 
-              <!-- ── TDS Section ────────────────────────────── -->
-              <div class="pv-toggle-section">
-                <div class="pv-toggle-section__header">
-                  <span class="pv-toggle-section__label" id="pistdsapplicable" title="TDS">
+              <!-- â”€â”€ TDS Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+              <div class="toggle-section">
+                <div class="toggle-section__header">
+                  <span class="toggle-section__label" id="pistdsapplicable" title="TDS">
                     TDS
                   </span>
                   <div class="material-switch">
@@ -662,7 +662,7 @@
                       type="checkbox"
                       (change)="istdsapplicable_Checked()"
                     />
-                    <label for="tds-switch" class="badge-success"></label>
+                    <label for="tds-switch" class="erp-badge-success"></label>
                   </div>
                 </div>
 
@@ -670,9 +670,9 @@
                   <div class="row g-2">
                     <!-- Section -->
                     <div class="col-md-4">
-                      <div class="mb-3">
-                        <label class="pv-label">
-                          Section <span class="pv-label__required">*</span>
+                      <div class="erp-form-group">
+                        <label class="erp-label">
+                          Section <span class="required">*</span>
                         </label>
                         <ng-select
                           formControlName="pTdsSection"
@@ -681,7 +681,7 @@
                           bindValue="pTdsSection"
                           placeholder="Select Section"
                           (change)="tdsSection_Change($event)"
-                          [class.is-invalid]="formValidationMessages['pTdsSection']"
+                          [class.ng-invalid]="formValidationMessages['pTdsSection']"
                         ></ng-select>
                         <app-validation-message
                           [messgae]="formValidationMessages['pTdsSection']"
@@ -691,9 +691,9 @@
 
                     <!-- Percentage -->
                     <div class="col-md-4">
-                      <div class="mb-3">
-                        <label class="pv-label">
-                          Percentage <span class="pv-label__required">*</span>
+                      <div class="erp-form-group">
+                        <label class="erp-label">
+                          Percentage <span class="required">*</span>
                         </label>
                         <ng-select
                           formControlName="pTdsPercentage"
@@ -702,7 +702,7 @@
                           bindValue="pTdsPercentage"
                           placeholder="Select %"
                           (change)="tds_Change($event)"
-                          [class.is-invalid]="formValidationMessages['pTdsPercentage']"
+                          [class.ng-invalid]="formValidationMessages['pTdsPercentage']"
                         ></ng-select>
                         <app-validation-message
                           [messgae]="formValidationMessages['pTdsPercentage']"
@@ -712,9 +712,9 @@
 
                     <!-- TDS Amount -->
                     <div class="col-md-4">
-                      <div class="mb-3">
-                        <label class="pv-label">Amount</label>
-                        <label class="pv-input pv-input--readonly" id="ptdsamount" title="TDS Amount"
+                      <div class="erp-form-group">
+                        <label class="erp-label">Amount</label>
+                        <label class="erp-input erp-input--readonly" id="ptdsamount" title="TDS Amount"
                                style="display:flex; align-items:center; justify-content:flex-end;">
                           {{ getLineValue('ptdsamount') | currency:currencyCode:'symbol':'1.2-2' }}
                         </label>
@@ -725,19 +725,19 @@
               </div><!-- /TDS -->
 
               <!-- Row action buttons -->
-              <div class="pv-row-actions">
+              <div class="row-actions">
                 <button
                   type="button"
-                  class="pv-btn pv-btn--dark"
+                  class="erp-btn"
                   appButtonDoubleClick
                   (click)="clearPaymentDetails()"
                 >
-                  <img src="assets/images/icon-cancel-white.svg" class="pv-btn__icon" alt="" />
+                  <img src="assets/images/icon-cancel-white.svg" class="erp-btn__icon" alt="" />
                   Clear
                 </button>
                 <button
                   type="button"
-                  class="pv-btn pv-btn--primary"
+                  class="erp-btn"
                   appButtonDoubleClick
                   (click)="addPaymentDetails()"
                   [disabled]="disableAddButton()"
@@ -754,11 +754,11 @@
           </div>
         </div>
 
-        <!-- ──────────────────────────────────────────────────────────────
+        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
              TRANSACTIONS GRID
-        ─────────────────────────────────────────────────────────────── -->
-        <div class="pv-card">
-          <div class="pv-table">
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <div class="erp-card">
+          <div class="table">
             <p-table
               [value]="paymentsList1"
               [scrollable]="true"
@@ -825,15 +825,15 @@
           </div>
         </div>
 
-        <!-- ──────────────────────────────────────────────────────────────
+        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
              JOURNAL ENTRY + NARRATION
-        ─────────────────────────────────────────────────────────────── -->
-        <div class="pv-card">
+        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <div class="erp-card">
           <div class="row g-4">
 
             <!-- Journal Entry Table -->
             <div class="col-md-6">
-              <div class="pv-table pv-table--journal">
+              <div class="table">
                 <p-table
                   [value]="partyjournalentrylist"
                   [paginator]="true"
@@ -879,12 +879,12 @@
 
               <!-- Narration -->
               <div class="mb-4">
-                <label class="pv-label" id="pnarration" title="Narration">
-                  Narration <span class="pv-label__required">*</span>
+                <label class="erp-label" id="pnarration" title="Narration">
+                  Narration <span class="required">*</span>
                 </label>
                 <textarea
-                  class="pv-textarea"
-                  [class.pv-input--invalid]="
+                  class="textarea"
+                  [class.erp-input--invalid]="
                     paymentVoucherForm.get('pnarration')?.touched &&
                     !paymentVoucherForm.get('pnarration')?.value
                   "
@@ -898,11 +898,11 @@
                   paymentVoucherForm.get('pnarration')?.touched &&
                   !paymentVoucherForm.get('pnarration')?.value
                 ) {
-                  <span class="pv-error">Please Enter Narration</span>
+                  <span class="erp-field-error">Please Enter Narration</span>
                 }
                 <div
-                  class="pv-char-count"
-                  [class.pv-char-count--limit]="
+                  class="char-count"
+                  [class.]="
                     (paymentVoucherForm.get('pnarration')?.value?.length || 0) >= 250
                   "
                 >
@@ -912,13 +912,13 @@
 
               <!-- Upload -->
               <div>
-                <label class="pv-label" id="pDocStorePath" title="Upload Document">
+                <label class="erp-label" id="pDocStorePath" title="Upload Document">
                   Upload Document
                 </label>
-                <div class="pv-upload-group">
+                <div class="upload-group">
                   <input
                     type="text"
-                    class="pv-input"
+                    class="erp-input"
                     placeholder="No file chosen"
                     [value]="imageResponse?.name ?? ''"
                     [disabled]="true"
@@ -926,7 +926,7 @@
                   />
                   <button
                     type="button"
-                    class="pv-upload-btn"
+                    class="upload-btn"
                     (click)="fileInput.click()"
                   >
                     <img src="assets/images/icon-upload-blue.svg" alt="Upload" />
@@ -945,31 +945,45 @@
         </div>
 
       </form>
-    </div><!-- /pv-body -->
+    </div><!-- / -->
 
-    <!-- ── Footer Actions ──────────────────────────────────────────────── -->
-    <div class="pv-footer">
+    <!-- â”€â”€ Footer Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <div class="footer">
       <button
         type="button"
-        class="pv-btn pv-btn--dark"
+        class="erp-btn"
         (click)="clearPaymentVoucher()"
       >
-        <img src="assets/images/icon-cancel-white.svg" class="pv-btn__icon" alt="" />
+        <img src="assets/images/icon-cancel-white.svg" class="erp-btn__icon" alt="" />
         Clear
       </button>
       <button
         type="button"
-        class="pv-btn pv-btn--save"
+        class="erp-btn"
         (click)="savePaymentVoucher()"
         [disabled]="disableSaveButton()"
       >
         @if (!disableSaveButton()) {
-          <img src="assets/images/icon-check-white.svg" class="pv-btn__icon" alt="" />
+          <img src="assets/images/icon-check-white.svg" class="erp-btn__icon" alt="" />
         }
         <i class="fa" [class.fa-spin]="disableSaveButton()" [class.fa-spinner]="disableSaveButton()"></i>
         {{ saveButtonLabel() }}
       </button>
     </div>
 
-  </div><!-- /pv-shell -->
-</div><!-- /pv-screen -->
+  </div><!-- / -->
+</div><!-- / -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+

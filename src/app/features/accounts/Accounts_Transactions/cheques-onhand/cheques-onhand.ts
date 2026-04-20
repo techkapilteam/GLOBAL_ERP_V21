@@ -20,7 +20,6 @@ declare var $: any;
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule, NgSelectModule, BsDatepickerModule, CurrencyPipe, TableModule, CheckboxModule, PaginatorModule, ValidationMessageComponent],
   templateUrl: "./cheques-onhand.html",
-  styleUrl: "./cheques-onhand.css",
 })
 
 export class ChequesOnhand implements OnInit {

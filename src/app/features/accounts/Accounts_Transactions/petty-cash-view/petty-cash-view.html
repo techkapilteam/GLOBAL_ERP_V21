@@ -1,34 +1,34 @@
-<div class="screen-container">
-  <div class="screen-card">
+﻿<div class="module-page">
+  <div class="erp-card">
 
-    <!-- ── Header ── -->
-    <div class="screen-header">
-      <h2 class="screen-title">Petty Cash View</h2>
+    <!-- â”€â”€ Header â”€â”€ -->
+    <div class="card-header">
+      <h2 class="page-title">Petty Cash View</h2>
     </div>
 
-    <div class="screen-content">
+    <div class="card-body">
 
-      <!-- ── Top Bar: New + Search ── -->
+      <!-- â”€â”€ Top Bar: New + Search â”€â”€ -->
       <div class="toolbar">
 
         <a
           routerLink="/dashboard/accounts/accounts-transactions/petty-cash"
-          class="btn btn-new">
+          class="erp-btn btn-new">
           <i class="fa fa-plus me-2"></i> New
         </a>
 
-        <div class="search-wrapper">
+        <div class="search-container">
           <i class="fa fa-search search-icon"></i>
           <input
             type="text"
-            class="form-control search-input"
+            class="erp-input search-input"
             placeholder="Search..."
             (keyup)="filterDatatable($event)" />
         </div>
 
       </div>
 
-      <!-- ── Data Table ── -->
+      <!-- â”€â”€ Data Table â”€â”€ -->
       <div class="table-wrapper">
         <p-table
           [value]="gridView()"
@@ -43,24 +43,24 @@
           responsiveLayout="scroll"
           styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped">
 
-          <!-- ── Table Header ── -->
+          <!-- â”€â”€ Table Header â”€â”€ -->
           <ng-template pTemplate="header">
             <tr>
-              <th class="tbl-header tbl-center">Actions</th>
-              <th class="tbl-header">Payment Date</th>
-              <th class="tbl-header tbl-center">Voucher No.</th>
-              <th class="tbl-header">Payment Details</th>
-              <th class="tbl-header tbl-right">Paid Amount</th>
-              <th class="tbl-header">Bank Name</th>
+              <th class="grid-header table-center">Actions</th>
+              <th class="grid-header">Payment Date</th>
+              <th class="grid-header table-center">Voucher No.</th>
+              <th class="grid-header">Payment Details</th>
+              <th class="grid-header table-right">Paid Amount</th>
+              <th class="grid-header">Bank Name</th>
             </tr>
           </ng-template>
 
-          <!-- ── Table Body ── -->
+          <!-- â”€â”€ Table Body â”€â”€ -->
           <ng-template pTemplate="body" let-row>
-            <tr class="tbl-row">
+            <tr class="grid-row">
 
               <!-- Action -->
-              <td class="tbl-cell tbl-center">
+              <td class="grid-cell table-center">
                 <button
                   type="button"
                   class="btn-icon-view"
@@ -71,25 +71,25 @@
               </td>
 
               <!-- Payment Date -->
-              <td class="tbl-cell">
+              <td class="grid-cell">
                 {{ row.paymentDate || '--' }}
               </td>
 
               <!-- Voucher No -->
-              <td class="tbl-cell tbl-center">
+              <td class="grid-cell table-center">
                 <span class="voucher-badge">
                   {{ row.paymentId || '--' }}
                 </span>
               </td>
 
               <!-- Payment Details -->
-              <td class="tbl-cell">
+              <td class="grid-cell">
                 @if (isCash(row.modeOfPayment)) {
-                  <span class="badge-cash">CASH</span>
+                  <span class="erp-badge-cash">CASH</span>
                 } @else {
                   <span>{{ row.modeOfPayment || '--' }}</span>
                   @if (row.typeOfPayment) {
-                    <span class="payment-meta">
+                    <span class="text-muted">
                       ({{ row.typeOfPayment }}
                       @if (row.referenceNumber) {
                         &ndash; {{ row.referenceNumber }}
@@ -101,28 +101,28 @@
               </td>
 
               <!-- Paid Amount -->
-              <td class="tbl-cell tbl-right">
+              <td class="grid-cell table-right">
                 <span class="amount-value">
                   {{ currencySymbol }} {{ row.totalPaidAmount | number:'1.2-2' }}
                 </span>
               </td>
 
               <!-- Bank Name -->
-              <td class="tbl-cell">
+              <td class="grid-cell">
                 @if (row.bankName && row.bankName !== '') {
                   {{ row.bankName }}
                 } @else {
-                  <span class="na-label">-- NA --</span>
+                  <span class="text-muted">-- NA --</span>
                 }
               </td>
 
             </tr>
           </ng-template>
 
-          <!-- ── Empty Message ── -->
+          <!-- â”€â”€ Empty Message â”€â”€ -->
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="6" class="tbl-empty">
+              <td colspan="6" class="grid-empty">
                 <i class="fa fa-inbox me-2"></i>
                 No records found
               </td>
@@ -135,3 +135,17 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

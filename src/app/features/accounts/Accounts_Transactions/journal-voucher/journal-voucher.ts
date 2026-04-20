@@ -24,7 +24,6 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     RouterModule,
   ],
   templateUrl: './journal-voucher.html',
-  styleUrl: './journal-voucher.css',
   providers: [CurrencyPipe],
 })
 export class JournalVoucher implements OnInit {

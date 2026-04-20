@@ -48,7 +48,6 @@ type AOA = any[][];
     InputTextModule,
   ],
   templateUrl: './cheques-inbank.html',
-  styleUrls: ['./cheques-inbank.css'],
   providers: [DatePipe, NumberToWordsPipe, CurrencyPipe],
 })
 export class ChequesInbank implements OnInit {

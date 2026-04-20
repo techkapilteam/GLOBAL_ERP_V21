@@ -37,7 +37,6 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
 @Component({
   selector: 'app-payment-voucher-view',
   templateUrl: './payment-voucher-view.html',
-  styleUrls: ['./payment-voucher-view.css'],
   standalone: true,
   imports: [
     CommonModule,

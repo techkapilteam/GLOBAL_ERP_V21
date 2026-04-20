@@ -1,9 +1,9 @@
-<!-- cheques-onhand.component.html -->
-<div class="screen-container">
-  <div class="screen-card card">
+﻿<!-- cheques-onhand.component.html -->
+<div class="module-page">
+  <div class="grid-card card">
 
     <!-- Header -->
-    <div class="screen-header">
+    <div class="card-header">
       <h2 class="header-title">Cheques On Hand</h2>
     </div>
 
@@ -13,11 +13,11 @@
 
         <!-- Date -->
         <div class="filter-col filter-col--sm">
-          <div class="form-group">
-            <label class="form-label">
+          <div class="erp-form-group">
+            <label class="erp-label">
               Date <span class="required-star">*</span>
             </label>
-            <input class="form-control" type="text" title="Date" id="ptransactiondate"
+            <input class="erp-input" type="text" title="Date" id="ptransactiondate"
               formControlName="ptransactiondate" readonly [bsConfig]="dpConfig" #dp="bsDatepicker" bsDatepicker
               placement="bottom" (ngModelChange)="change_date($event)" (keydown)="$event.preventDefault()"
               [attr.disabled]="!pdatepickerenablestatus() ? true : null" [maxDate]="today2" />
@@ -27,34 +27,34 @@
 
         <!-- Bank -->
         <div class="filter-col filter-col--md">
-          <div class="form-group">
-            <label class="form-label">
+          <div class="erp-form-group">
+            <label class="erp-label">
               Bank <span class="required-star">*</span>
             </label>
             <ng-select [items]="BanksList()" bindLabel="pdepositbankname" bindValue="pbankid" formControlName="bankname"
               (change)="SelectBank($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true" class="w-100"
-              [ngClass]="{ 'is-invalid': ChequesOnHandValidation()['bankname'] }" />
+              [ngClass]="{ 'ng-invalid': ChequesOnHandValidation()['bankname'] }" />
           </div>
         </div>
 
         <!-- Balance Info -->
         <div class="filter-col filter-col--lg">
-          <div class="balance-card">
+          <div class="info-card">
             @if (banknameshowhide()) {
-            <span class="balance-bank-name">{{ bankname() }}</span>
-            <hr class="balance-divider" />
+            <span class="info-bank-name">{{ bankname() }}</span>
+            <hr class="info-divider" />
             }
-            <h4 class="balance-title">Cheques On Hand</h4>
-            <div class="balance-info">
-              <span class="balance-item">
+            <h4 class="info-title">Cheques On Hand</h4>
+            <div class="info-info">
+              <span class="info-item">
                 <b>Balance:</b>
-                <span class="balance-value">
+                <span class="info-value">
                   {{ bankbalance() | currency: currencySymbol() }} {{ bankbalancetype() }}
                 </span>
               </span>
-              <span class="balance-item">
+              <span class="info-item">
                 <b>BRS Date:</b>
-                <span class="balance-value">{{ brsdate() }}</span>
+                <span class="info-value">{{ brsdate() }}</span>
               </span>
             </div>
           </div>
@@ -64,16 +64,10 @@
     </form>
 
     <!-- Search + Export Row -->
-    <div class="toolbar-row">
-      <div class="search-wrapper">
+    <div class="toolbar">
+      <div class="search-container">
         <div class="search-box">
-          <span class="search-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-              <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-            </svg>
-          </span>
-          <input type="search" class="form-control search-input" placeholder="Search..."
+          <i class="pi pi-search erp-input-icon"></i><input type="search" class="erp-input search-input" placeholder="Search..."
             (input)="onSearch($any($event.target).value)" />
         </div>
 
@@ -99,35 +93,35 @@
       <li class="nav-item-custom">
         <a class="nav-link-custom" [class.active]="selectedTab() === 'all'" (click)="selectTab('all')">
           All
-          <span class="badge badge--warning">{{ all() || 0 }}</span>
+          <span class="erp-badge badge--warning">{{ all() || 0 }}</span>
         </a>
       </li>
 
       <li class="nav-item-custom">
         <a class="nav-link-custom" [class.active]="selectedTab() === 'cheques'" (click)="selectTab('cheques')">
           Cheques Received
-          <span class="badge badge--secondary">{{ chequesreceived() || 0 }}</span>
+          <span class="erp-badge badge--secondary">{{ chequesreceived() || 0 }}</span>
         </a>
       </li>
 
       <li class="nav-item-custom">
         <a class="nav-link-custom" [class.active]="selectedTab() === 'online'" (click)="selectTab('online')">
           Online Receipts
-          <span class="badge badge--primary">{{ onlinereceipts() || 0 }}</span>
+          <span class="erp-badge badge--primary">{{ onlinereceipts() || 0 }}</span>
         </a>
       </li>
 
       <li class="nav-item-custom">
         <a class="nav-link-custom" [class.active]="selectedTab() === 'deposited'" (click)="selectTab('deposited')">
           Deposited
-          <span class="badge badge--success">{{ deposited() || 0 }}</span>
+          <span class="erp-badge badge--success">{{ deposited() || 0 }}</span>
         </a>
       </li>
 
       <li class="nav-item-custom">
         <a class="nav-link-custom" [class.active]="selectedTab() === 'cancelled'" (click)="selectTab('cancelled')">
           Cancelled
-          <span class="badge badge--danger">{{ cancelled() || 0 }}</span>
+          <span class="erp-badge badge--danger">{{ cancelled() || 0 }}</span>
         </a>
       </li>
 
@@ -138,21 +132,21 @@
       @if (brsdateshowhidedeposited()) {
       <div class="brs-date-row">
         <div class="brs-date-col">
-          <div class="form-group">
-            <label class="form-label">BRS From Date</label>
-            <input class="form-control form-control--sm" type="text" formControlName="pfrombrsdate"
+          <div class="erp-form-group">
+            <label class="erp-label">BRS From Date</label>
+            <input class="erp-input form-control--sm" type="text" formControlName="pfrombrsdate"
               [bsConfig]="brsfromConfig" #dpFrom="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
               (keydown)="$event.preventDefault()" />
           </div>
         </div>
         <div class="brs-date-col">
-          <div class="form-group">
-            <label class="form-label">BRS To Date</label>
+          <div class="erp-form-group">
+            <label class="erp-label">BRS To Date</label>
             <div class="brs-to-row">
-              <input class="form-control form-control--sm" type="text" formControlName="ptobrsdate"
+              <input class="erp-input form-control--sm" type="text" formControlName="ptobrsdate"
                 [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
                 (keydown)="$event.preventDefault()" />
-              <button type="button" class="btn btn--primary btn--show" (click)="ShowBrsDeposit()">
+              <button type="button" class="erp-btn btn--primary btn--show" (click)="ShowBrsDeposit()">
                 Show
               </button>
             </div>
@@ -169,21 +163,21 @@
       @if (brsdateshowhidecancelled()) {
       <div class="brs-date-row">
         <div class="brs-date-col">
-          <div class="form-group">
-            <label class="form-label">BRS From Date</label>
-            <input class="form-control form-control--sm" type="text" formControlName="frombrsdate" readonly
+          <div class="erp-form-group">
+            <label class="erp-label">BRS From Date</label>
+            <input class="erp-input form-control--sm" type="text" formControlName="frombrsdate" readonly
               [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
               (keydown)="$event.preventDefault()" />
           </div>
         </div>
         <div class="brs-date-col">
-          <div class="form-group">
-            <label class="form-label">BRS To Date</label>
+          <div class="erp-form-group">
+            <label class="erp-label">BRS To Date</label>
             <div class="brs-to-row">
-              <input class="form-control form-control--sm" type="text" formControlName="tobrsdate" readonly
+              <input class="erp-input form-control--sm" type="text" formControlName="tobrsdate" readonly
                 [bsConfig]="brstoConfig" #dp="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
                 (keydown)="$event.preventDefault()" />
-              <button type="button" class="btn btn--primary btn--show" (click)="ShowBrsCancel()">
+              <button type="button" class="erp-btn btn--primary btn--show" (click)="ShowBrsCancel()">
                 Show
               </button>
             </div>
@@ -197,7 +191,7 @@
     </form>
 
     <!-- Data Table -->
-    <div class="table-container">
+    <div class="table-wrapper">
       <p-table #dt [value]="gridData()" [lazy]="true" (onLazyLoad)="setPage($event)"
         [paginator]="!isCleared() && page().totalElements > 0" [rows]="pageCriteria.pageSize"
         [totalRecords]="page().totalElements" [first]="pageCriteria.offset * pageCriteria.pageSize" [scrollable]="true"
@@ -209,28 +203,28 @@
         <ng-template pTemplate="header">
           <tr>
             @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <th pFrozenColumn class="th-action">Deposit</th>
-            <th pFrozenColumn class="th-action">Cancel</th>
+            <th pFrozenColumn class="grid-header-action">Deposit</th>
+            <th pFrozenColumn class="grid-header-action">Cancel</th>
             }
-            <th class="th-cell">Cheque/Reference No.</th>
-            <th class="th-cell">Branch Name</th>
-            <th class="th-cell th-cell--right">Amount</th>
-            <th class="th-cell">Party</th>
-            <th class="th-cell">Receipt Date</th>
-            <th class="th-cell">Cheque Date</th>
+            <th class="grid-header-cell">Cheque/Reference No.</th>
+            <th class="grid-header-cell">Branch Name</th>
+            <th class="grid-header-cell grid-header-cell--right">Amount</th>
+            <th class="grid-header-cell">Party</th>
+            <th class="grid-header-cell">Receipt Date</th>
+            <th class="grid-header-cell">Cheque Date</th>
             @if (status() === 'deposited') {
-            <th class="th-cell">Deposited Date</th>
+            <th class="grid-header-cell">Deposited Date</th>
             }
             @if (status() === 'cancelled') {
-            <th class="th-cell">Cancelled Date</th>
+            <th class="grid-header-cell">Cancelled Date</th>
             }
-            <th class="th-cell">Receipt No</th>
-            <th class="th-cell">Transaction Mode</th>
-            <th class="th-cell">Cheque Bank Name</th>
+            <th class="grid-header-cell">Receipt No</th>
+            <th class="grid-header-cell">Transaction Mode</th>
+            <th class="grid-header-cell">Cheque Bank Name</th>
             @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <th class="th-cell">Self Cheque</th>
-            <th class="th-cell">Chit Status</th>
-            <th class="th-cell">Deposited Bank</th>
+            <th class="grid-header-cell">Self Cheque</th>
+            <th class="grid-header-cell">Chit Status</th>
+            <th class="grid-header-cell">Deposited Bank</th>
             }
           </tr>
         </ng-template>
@@ -238,41 +232,41 @@
         <ng-template pTemplate="body" let-row>
           <tr>
             @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <td pFrozenColumn class="td-action">
+            <td pFrozenColumn class="grid-cell-action">
               <p-checkbox [(ngModel)]="row.pdepositstatus" binary="true" (onChange)="onDepositChange($event, row)" />
             </td>
-            <td pFrozenColumn class="td-action">
+            <td pFrozenColumn class="grid-cell-action">
               <p-checkbox [(ngModel)]="row.pcancelstatus" binary="true" (onChange)="onCancelChange($event, row)" />
             </td>
             }
-            <td class="td-cell td-center">{{ row.pChequenumber || '--NA--' }}</td>
-            <td class="td-cell">{{ row.pbranchname || '--NA--' }}</td>
-            <td class="td-cell td-right">{{ row.ptotalreceivedamount | currency: currencySymbol() }}</td>
-            <td class="td-cell">{{ row.ppartyname || '--NA--' }}</td>
-            <td class="td-cell">{{ row.preceiptdate ? (row.preceiptdate | date) : '--NA--' }}</td>
-            <td class="td-cell">{{ row.pchequedate ? (row.pchequedate | date) : '--NA--' }}</td>
+            <td class="grid-cell-cell grid-cell-center">{{ row.pChequenumber || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.pbranchname || '--NA--' }}</td>
+            <td class="grid-cell-cell grid-cell-right">{{ row.ptotalreceivedamount | currency: currencySymbol() }}</td>
+            <td class="grid-cell-cell">{{ row.ppartyname || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.preceiptdate ? (row.preceiptdate | date) : '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.pchequedate ? (row.pchequedate | date) : '--NA--' }}</td>
             @if (status() === 'deposited') {
-            <td class="td-cell">{{ row.pdepositeddate ? (row.pdepositeddate | date) : '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.pdepositeddate ? (row.pdepositeddate | date) : '--NA--' }}</td>
             }
             @if (status() === 'cancelled') {
-            <td class="td-cell">{{ row.pdepositeddate ? (row.pdepositeddate | date) : '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.pdepositeddate ? (row.pdepositeddate | date) : '--NA--' }}</td>
             }
-            <td class="td-cell">{{ row.receiptnumbers || '--NA--' }}</td>
-            <td class="td-cell">{{ row.ptypeofpayment || '--NA--' }}</td>
-            <td class="td-cell">{{ row.cheque_bank || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.receiptnumbers || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.ptypeofpayment || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.cheque_bank || '--NA--' }}</td>
             @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <td class="td-cell td-center">
+            <td class="grid-cell-cell grid-cell-center">
               {{ row.selfchequestatus === true ? 'Yes' : row.selfchequestatus === false ? 'No' : '--NA--' }}
             </td>
-            <td class="td-cell">{{ row.chitstatus || '--NA--' }}</td>
-            <td class="td-cell">{{ row.pdepositedBankName || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.chitstatus || '--NA--' }}</td>
+            <td class="grid-cell-cell">{{ row.pdepositedBankName || '--NA--' }}</td>
             }
           </tr>
         </ng-template>
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="10" class="td-empty">No data to display</td>
+            <td colspan="10" class="grid-cell-empty">No data to display</td>
           </tr>
         </ng-template>
 
@@ -280,13 +274,13 @@
           @if (gridData().length > 0) {
           <tr>
             @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <td colspan="4" class="td-cell"></td>
-            <td class="td-cell td-right td-total">{{ amounttotal() | currency: currencySymbol(): '' }}</td>
-            <td colspan="10" class="td-cell"></td>
+            <td colspan="4" class="grid-cell-cell"></td>
+            <td class="grid-cell-cell grid-cell-right grid-cell-total">{{ amounttotal() | currency: currencySymbol(): '' }}</td>
+            <td colspan="10" class="grid-cell-cell"></td>
             } @else {
-            <td colspan="2" class="td-cell"></td>
-            <td class="td-cell td-right td-total">{{ amounttotal() | currency: currencySymbol(): '' }}</td>
-            <td colspan="8" class="td-cell"></td>
+            <td colspan="2" class="grid-cell-cell"></td>
+            <td class="grid-cell-cell grid-cell-right grid-cell-total">{{ amounttotal() | currency: currencySymbol(): '' }}</td>
+            <td colspan="8" class="grid-cell-cell"></td>
             }
           </tr>
           }
@@ -296,12 +290,12 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="action-bar">
-      <a (click)="Clear()" class="btn btn--dark">
+    <div class="d-flex gap-2 p-3">
+      <a (click)="Clear()" class="erp-btn btn--dark">
         <img src="assets/images/icon-cancel-white.svg" width="16" height="16" alt="Clear" />
         Clear
       </a>
-      <button (click)="Save()" class="btn btn--primary" [disabled]="disablesavebutton()">
+      <button (click)="Save()" class="erp-btn btn--primary" [disabled]="disablesavebutton()">
         @if (!disablesavebutton()) {
         <img src="assets/images/icon-check-white.svg" width="16" height="16" alt="Save" />
         }
@@ -318,14 +312,14 @@
   <div class="modal-dialog modal-dialog--right">
     <div class="modal-content model-cst">
       <div class="modal-body">
-        <button type="button" class="modal-close" data-dismiss="modal">&times;</button>
-        <div class="form-group">
+        <button type="button" class="erp-btn btn-ghost" data-dismiss="modal">&times;</button>
+        <div class="erp-form-group">
           <label>Enter The Cancel Amount Charges For The Cheque: {{ chequenumber() }}</label>
-          <input type="text" class="form-control form-control--right" name="cancelcharges" maxlength="3"
+          <input type="text" class="erp-input form-control--right" name="cancelcharges" maxlength="3"
             id="cancelcharges" #ref appNumbersonly appMycurrencyFormatter />
         </div>
         <div class="modal-footer-custom">
-          <a (click)="CancelChargesOk(ref.value)" class="btn btn--primary">
+          <a (click)="CancelChargesOk(ref.value)" class="erp-btn btn--primary">
             <img src="assets/images/icon-check-white.svg" width="16" height="16" alt="Ok" />
             Ok
           </a>
@@ -334,3 +328,18 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

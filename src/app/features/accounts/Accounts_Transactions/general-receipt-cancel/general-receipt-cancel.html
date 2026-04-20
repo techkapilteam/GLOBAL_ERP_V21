@@ -2,11 +2,11 @@
   <div class="screen-card">
 
     <!-- HEADER -->
-    <div class="screen-header">
-      <h2 class="screen-title">General Receipt Cancel</h2>
+    <div class="card-header">
+      <h2 class="page-title">General Receipt Cancel</h2>
     </div>
 
-    <div class="screen-content">
+    <div class="card-body">
       <form [formGroup]="GeneralReceiptCancelForm">
 
         <!-- Search Receipt Section -->
@@ -15,7 +15,7 @@
           <div class="row align-items-end">
 
             <div class="col-md-4">
-              <div class="form-group">
+              <div class="erp-form-group">
                 <label class="field-label">
                   Receipt No <span class="required">*</span>
                 </label>
@@ -39,10 +39,10 @@
             </div>
 
             <div class="col-md-3">
-              <div class="form-group">
+              <div class="erp-form-group">
                 <label class="field-label">Date</label>
                 <input
-                  class="form-control input-readonly"
+                  class="erp-input input-readonly"
                   type="text"
                   formControlName="ppaymentdate"
                   bsDatepicker
@@ -137,12 +137,12 @@
             <p class="section-label">Cancellation Details</p>
             <div class="row">
               <div class="col-md-6">
-                <div class="form-group">
+                <div class="erp-form-group">
                   <label class="field-label">
                     Cancellation Reason <span class="required">*</span>
                   </label>
                   <textarea
-                    class="form-control"
+                    class="erp-input"
                     rows="3"
                     formControlName="cancellationreason"
                     placeholder="Enter cancellation reason..."
@@ -155,7 +155,7 @@
                 </div>
               </div>
               <div class="col-md-4">
-                <div class="form-group">
+                <div class="erp-form-group">
                   <label class="field-label">
                     Cancelled By <span class="required">*</span>
                   </label>

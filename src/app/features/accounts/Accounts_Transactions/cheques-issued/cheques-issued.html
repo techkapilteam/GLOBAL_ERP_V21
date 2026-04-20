@@ -1,12 +1,12 @@
-<div class="screen-container">
-  <div class="screen-card card shadow-sm p-4">
+﻿<div class="module-page">
+  <div class="grid-card card shadow-sm p-4">
 
     <!-- Header -->
-    <div class="screen-header mb-4">
+    <div class="card-header mb-4">
       <h2 class="header-title">Cheques Issued</h2>
     </div>
 
-    <div class="screen-content">
+    <div class="card-body">
       <form [formGroup]="ChequesIssuedForm">
 
         <!-- Top Controls -->
@@ -15,10 +15,10 @@
 
             <!-- Date -->
             <div class="col-md-2 col-xl-2">
-              <div class="form-group" *ngIf="tabsShowOrHideBasedOnfromFormName()">
+              <div class="erp-form-group" *ngIf="tabsShowOrHideBasedOnfromFormName()">
                 <label class="fw-bold">Date <span class="text-danger">*</span></label>
                 <input
-                  class="form-control w-auto"
+                  class="erp-input w-auto"
                   type="text"
                   id="ptransactiondate"
                   title="Transaction Date"
@@ -31,7 +31,7 @@
                   (paste)="$event.preventDefault()"
                   (input)="$event.target.value = ChequesIssuedForm.get('ptransactiondate')?.value"
                   [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue' }"
-                  [ngClass]="{ 'is-invalid': ChequesIssuedForm.get('ptransactiondate')?.invalid && ChequesIssuedForm.get('ptransactiondate')?.touched }"
+                  [ngClass]="{ 'ng-invalid': ChequesIssuedForm.get('ptransactiondate')?.invalid && ChequesIssuedForm.get('ptransactiondate')?.touched }"
                   (bsValueChange)="change_date($event)"
                 />
                 <div
@@ -44,8 +44,8 @@
 
             <!-- Bank -->
             <div class="col-md-4 col-xl-4">
-              <div class="form-group">
-                <label class="field-label">Bank</label>
+              <div class="erp-form-group">
+                <label class="erp-label">Bank</label>
                 <ng-select
                   [items]="bankList()"
                   bindLabel="pdepositbankname"
@@ -57,7 +57,7 @@
                   [clearable]="true"
                   class="w-100">
                 </ng-select>
-                <div class="field-error" *ngIf="ChequesIssuedValidation()?.bankname">
+                <div class="form-error" *ngIf="ChequesIssuedValidation()?.bankname">
                   {{ ChequesIssuedValidation()?.bankname }}
                 </div>
               </div>
@@ -65,11 +65,11 @@
 
             <!-- Balance Info Box -->
             <div class="col-md-6 col-xl-6">
-              <div class="balance-card border rounded shadow-sm">
-                <div class="form-group mb-1">
-                  <h4 class="balance-card__title">Cheques Issued</h4>
+              <div class="info-card border rounded shadow-sm">
+                <div class="erp-form-group mb-1">
+                  <h4 class="info-card__title">Cheques Issued</h4>
                 </div>
-                <div class="balance-box">
+                <div class="info-box">
                   <div><strong>Bank:</strong>&nbsp;{{ selectedBankName() }}</div>
                   <div>
                     <strong>Balance:</strong>&nbsp;{{ currencySymbol() }}&nbsp;{{ bankbalance() }}
@@ -86,16 +86,11 @@
         <!-- Search + Export Row -->
         <div class="row mb-3 align-items-center">
           <div class="col-md-4 col-xl-4">
-            <div class="form-group custom-search m-0">
-              <span class="search-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg>
-              </span>
-              <input
+            <div class="erp-form-group nav-search m-0">
+              <i class="pi pi-search erp-input-icon"></i><input
                 type="search"
                 id="search"
-                class="form-control search-input"
+                class="erp-input search-input"
                 placeholder="Search"
                 (input)="onSearch($any($event.target).value)"
               />
@@ -118,10 +113,10 @@
         </div>
 
         <!-- Tabs -->
-        <ul class="custom-tabs">
+        <ul class="nav-tabs">
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'all'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'all'"
               (click)="All(); activeTab.set('all')">
               All
               <span class="count" [class.blue]="activeTab() === 'all'">{{ all() }}</span>
@@ -129,7 +124,7 @@
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'chequesissued'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'chequesissued'"
               (click)="ChequesIssued(); activeTab.set('chequesissued')">
               Cheques Issued
               <span class="count" [class.blue]="activeTab() === 'chequesissued'">{{ chequesissued() }}</span>
@@ -137,7 +132,7 @@
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'onlinepayment'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'onlinepayment'"
               (click)="OnlinePayments(); activeTab.set('onlinepayment')">
               Online Payments
               <span class="count" [class.blue]="activeTab() === 'onlinepayment'" [class.badge-blue]="activeTab() !== 'onlinepayment'">{{ onlinepayments() }}</span>
@@ -145,7 +140,7 @@
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'cleared'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'cleared'"
               (click)="Cleared(); activeTab.set('cleared')">
               Cleared
               <span class="count" [class.blue]="activeTab() === 'cleared'" [class.green]="activeTab() !== 'cleared'">{{ cleared() }}</span>
@@ -153,7 +148,7 @@
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'returned'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'returned'"
               (click)="Returned(); activeTab.set('returned')">
               Returned
               <span class="count" [class.blue]="activeTab() === 'returned'" [class.red]="activeTab() !== 'returned'">{{ returned() }}</span>
@@ -161,7 +156,7 @@
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'cancelled'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'cancelled'"
               (click)="Cancelled(); activeTab.set('cancelled')">
               Cancelled
               <span class="count" [class.blue]="activeTab() === 'cancelled'" [class.red]="activeTab() !== 'cancelled'">{{ cancelled() }}</span>
@@ -169,14 +164,14 @@
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName() && boolforAutoBrs()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'bankfileupload'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'bankfileupload'"
               (click)="BankUploadExcel(); activeTab.set('bankfileupload')">
               Bank File Upload
             </button>
           </li>
 
           <li *ngIf="tabsShowOrHideBasedOnfromFormName() && boolforAutoBrs()">
-            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'autobrs'"
+            <button type="button" class="nav-link" [class.active-tab]="activeTab() === 'autobrs'"
               (click)="AutoBrs(); activeTab.set('autobrs')">
               Auto BRS
             </button>
@@ -189,23 +184,23 @@
         <!-- BRS Cleared Date Range -->
         <div *ngIf="brsdateshowhidecleared()" class="row mb-3">
           <div class="col-md-3 col-xl-3">
-            <div class="form-group mb-0">
+            <div class="erp-form-group mb-0">
               <label class="brs-label">BRS From Date</label>
-              <input class="form-control brs-date-input" type="text" formControlName="pfrombrsdate" readonly
+              <input class="erp-input brs-date-input" type="text" formControlName="pfrombrsdate" readonly
                 bsDatepicker placement="bottom"
                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
                 [maxDate]="today" (bsValueChange)="onClearFromDateChange($event)" />
             </div>
           </div>
           <div class="col-md-4 col-xl-4">
-            <div class="form-group mb-0">
+            <div class="erp-form-group mb-0">
               <label class="brs-label">BRS To Date</label>
               <div class="d-flex align-items-center">
-                <input class="form-control brs-date-input" type="text" formControlName="ptobrsdate" readonly
+                <input class="erp-input brs-date-input" type="text" formControlName="ptobrsdate" readonly
                   bsDatepicker placement="bottom"
                   [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
                   [minDate]="clearMinToDate" [maxDate]="today" />
-                <button type="button" class="btn btn-show ms-3" (click)="ShowBrsClear()">Show</button>
+                <button type="button" class="erp-btn btn-show ms-3" (click)="ShowBrsClear()">Show</button>
               </div>
               <div *ngIf="validatebrsdateclear()" class="brs-error">
                 BRS To Date should be greater than or equal to From Date.
@@ -218,23 +213,23 @@
         <div [formGroup]="BrsReturnForm">
           <div *ngIf="brsdateshowhidereturned()" class="row mb-3 align-items-center">
             <div class="col-md-3 col-xl-3">
-              <div class="form-group mb-0">
+              <div class="erp-form-group mb-0">
                 <label class="brs-label">BRS From Date</label>
-                <input class="form-control brs-date-input" type="text" formControlName="frombrsdate" readonly
+                <input class="erp-input brs-date-input" type="text" formControlName="frombrsdate" readonly
                   bsDatepicker placement="bottom"
                   [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
                   [maxDate]="today" (bsValueChange)="onReturnFromDateChange($event)" />
               </div>
             </div>
             <div class="col-md-4 col-xl-4">
-              <div class="form-group mb-0">
+              <div class="erp-form-group mb-0">
                 <label class="brs-label">BRS To Date</label>
                 <div class="d-flex align-items-center">
-                  <input class="form-control brs-date-input" type="text" formControlName="tobrsdate" readonly
+                  <input class="erp-input brs-date-input" type="text" formControlName="tobrsdate" readonly
                     bsDatepicker placement="bottom"
                     [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
                     [minDate]="returnMinToDate" [maxDate]="today" />
-                  <button type="button" class="btn btn-show ms-3" (click)="ShowBrsReturn()">Show</button>
+                  <button type="button" class="erp-btn btn-show ms-3" (click)="ShowBrsReturn()">Show</button>
                 </div>
                 <div *ngIf="validatebrsdatereturn()" class="brs-error">
                   BRS To Date should be greater than or equal to From Date.
@@ -248,23 +243,23 @@
         <div [formGroup]="BrsCancelForm">
           <div *ngIf="brsdateshowhidecancelled()" class="row mb-3 align-items-center">
             <div class="col-md-3 col-xl-3">
-              <div class="form-group mb-0">
+              <div class="erp-form-group mb-0">
                 <label class="brs-label">BRS From Date</label>
-                <input class="form-control brs-date-input" type="text" formControlName="frombrsdate" readonly
+                <input class="erp-input brs-date-input" type="text" formControlName="frombrsdate" readonly
                   bsDatepicker placement="bottom"
                   [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
                   [maxDate]="today" (bsValueChange)="onCancelFromDateChange($event)" />
               </div>
             </div>
             <div class="col-md-4 col-xl-4">
-              <div class="form-group mb-0">
+              <div class="erp-form-group mb-0">
                 <label class="brs-label">BRS To Date</label>
                 <div class="d-flex align-items-center">
-                  <input class="form-control brs-date-input" type="text" formControlName="tobrsdate" readonly
+                  <input class="erp-input brs-date-input" type="text" formControlName="tobrsdate" readonly
                     bsDatepicker placement="bottom"
                     [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
                     [minDate]="cancelMinToDate" [maxDate]="today" />
-                  <button type="button" class="btn btn-show ms-3" (click)="ShowBrsCancel()">Show</button>
+                  <button type="button" class="erp-btn btn-show ms-3" (click)="ShowBrsCancel()">Show</button>
                 </div>
                 <div *ngIf="validatebrsdatecancel()" class="brs-error">
                   BRS To Date should be greater than or equal to From Date.
@@ -294,63 +289,63 @@
                 styleClass="p-datatable-sm p-datatable-gridlines">
                 <ng-template pTemplate="header">
                   <tr>
-                    <th *ngIf="!showhidegridcolumns()" class="th-action">Clear</th>
-                    <th *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="th-action">Return</th>
-                    <th *ngIf="!showhidegridcolumns()" class="th-cell">Reference No</th>
-                    <th *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="th-action">Cancel</th>
-                    <th class="th-cell">Cheque / Reference No.</th>
-                    <th class="th-cell th-right">Amount</th>
-                    <th class="th-cell">Party</th>
-                    <th class="th-cell">Payment Id</th>
-                    <th class="th-cell">Payment Date</th>
-                    <th *ngIf="!hiddendate()" class="th-cell">{{ datetitle() }}</th>
-                    <th class="th-cell">Transaction Mode</th>
+                    <th *ngIf="!showhidegridcolumns()" class="grid-header-action">Clear</th>
+                    <th *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="grid-header-action">Return</th>
+                    <th *ngIf="!showhidegridcolumns()" class="grid-header-cell">Reference No</th>
+                    <th *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="grid-header-action">Cancel</th>
+                    <th class="grid-header-cell">Cheque / Reference No.</th>
+                    <th class="grid-header-cell grid-header-right">Amount</th>
+                    <th class="grid-header-cell">Party</th>
+                    <th class="grid-header-cell">Payment Id</th>
+                    <th class="grid-header-cell">Payment Date</th>
+                    <th *ngIf="!hiddendate()" class="grid-header-cell">{{ datetitle() }}</th>
+                    <th class="grid-header-cell">Transaction Mode</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
                   <tr>
-                    <td *ngIf="!showhidegridcolumns()" class="td-center">
+                    <td *ngIf="!showhidegridcolumns()" class="grid-cell-center">
                       <input type="checkbox" [checked]="row?.pdepositstatus === true"
                         [disabled]="status() === 'autobrs'" (change)="checkedClear($event, row)" />
                     </td>
-                    <td *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="td-center">
+                    <td *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="grid-cell-center">
                       <input type="checkbox" [checked]="row?.preturnstatus === true" (change)="checkedReturn($event, row)" />
                     </td>
-                    <td *ngIf="!showhidegridcolumns()" class="td-cell">
-                      <input *ngIf="status() !== 'autobrs'" class="form-control form-control-sm" type="text"
+                    <td *ngIf="!showhidegridcolumns()" class="grid-cell-cell">
+                      <input *ngIf="status() !== 'autobrs'" class="erp-input" type="text"
                         [value]="row?.preferencetext || ''"
                         (keyup)="checkDuplicateValueslatest($event, rowIndex, row)" maxlength="15" />
                       <span *ngIf="status() === 'autobrs'">{{ row?.preferencetext }}</span>
                     </td>
-                    <td *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="td-center">
+                    <td *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="grid-cell-center">
                       <input type="checkbox" [checked]="row?.pcancelstatus === true" (change)="checkedCancel($event, row)" />
                     </td>
-                    <td class="td-cell">{{ row?.pChequenumber }}</td>
-                    <td class="td-cell td-right">
+                    <td class="grid-cell-cell">{{ row?.pChequenumber }}</td>
+                    <td class="grid-cell-cell grid-cell-right">
                       {{ currencySymbol() }} {{ (row?.ptotalreceivedamount || 0) | currency:'INR':'symbol':'1.2-2' }}
                     </td>
-                    <td class="td-cell">{{ row?.ppartyname }}</td>
-                    <td class="td-cell">{{ row?.preceiptid }}</td>
-                    <td class="td-cell">{{ row?.preceiptdate | date:'dd-MMM-yyyy' }}</td>
-                    <td *ngIf="!hiddendate()" class="td-cell">{{ row?.pdepositeddate | date:'dd-MMM-yyyy' }}</td>
-                    <td class="td-cell">{{ row?.ptypeofpayment }}</td>
+                    <td class="grid-cell-cell">{{ row?.ppartyname }}</td>
+                    <td class="grid-cell-cell">{{ row?.preceiptid }}</td>
+                    <td class="grid-cell-cell">{{ row?.preceiptdate | date:'dd-MMM-yyyy' }}</td>
+                    <td *ngIf="!hiddendate()" class="grid-cell-cell">{{ row?.pdepositeddate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="grid-cell-cell">{{ row?.ptypeofpayment }}</td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="footer">
                   <tr>
                     <td [attr.colspan]="!showhidegridcolumns() ? (status() !== 'autobrs' ? 4 : 2) : 0"
-                      *ngIf="!showhidegridcolumns()" class="td-cell"></td>
-                    <td class="td-cell td-right"><b>Total</b></td>
-                    <td class="td-cell td-right">
+                      *ngIf="!showhidegridcolumns()" class="grid-cell-cell"></td>
+                    <td class="grid-cell-cell grid-cell-right"><b>Total</b></td>
+                    <td class="grid-cell-cell grid-cell-right">
                       <b>{{ currencySymbol() }} {{ (amounttotal() || 0) | currency:'INR':'symbol':'1.2-2' }}</b>
                     </td>
-                    <td colspan="4" class="td-cell"></td>
-                    <td *ngIf="!hiddendate()" class="td-cell"></td>
+                    <td colspan="4" class="grid-cell-cell"></td>
+                    <td *ngIf="!hiddendate()" class="grid-cell-cell"></td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                   <tr>
-                    <td colspan="11" class="td-empty">No Data Available</td>
+                    <td colspan="11" class="grid-cell-empty">No Data Available</td>
                   </tr>
                 </ng-template>
               </p-table>
@@ -370,32 +365,32 @@
                 styleClass="p-datatable-sm p-datatable-gridlines">
                 <ng-template pTemplate="header">
                   <tr>
-                    <th class="th-cell">Cheque Status</th>
-                    <th class="th-cell">Cheque / Reference No.</th>
-                    <th class="th-cell th-right">Amount</th>
-                    <th class="th-cell">Payment Id</th>
-                    <th class="th-cell">Payment Date</th>
-                    <th class="th-cell">Cleared / Returned / Cancelled Date</th>
-                    <th class="th-cell">Transaction Mode</th>
-                    <th class="th-cell">Party</th>
+                    <th class="grid-header-cell">Cheque Status</th>
+                    <th class="grid-header-cell">Cheque / Reference No.</th>
+                    <th class="grid-header-cell grid-header-right">Amount</th>
+                    <th class="grid-header-cell">Payment Id</th>
+                    <th class="grid-header-cell">Payment Date</th>
+                    <th class="grid-header-cell">Cleared / Returned / Cancelled Date</th>
+                    <th class="grid-header-cell">Transaction Mode</th>
+                    <th class="grid-header-cell">Party</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
                   <tr>
-                    <td class="td-cell">{{ row?.chequeStatus }}</td>
-                    <td class="td-cell">{{ row?.pChequenumber }}</td>
-                    <td class="td-cell td-right">
+                    <td class="grid-cell-cell">{{ row?.chequeStatus }}</td>
+                    <td class="grid-cell-cell">{{ row?.pChequenumber }}</td>
+                    <td class="grid-cell-cell grid-cell-right">
                       {{ currencySymbol() }} {{ (row?.ptotalreceivedamount || 0) | currency:'INR':'symbol':'1.2-2' }}
                     </td>
-                    <td class="td-cell">{{ row?.preceiptid }}</td>
-                    <td class="td-cell">{{ row?.preceiptdate | date:'dd-MMM-yyyy' }}</td>
-                    <td class="td-cell">{{ row?.pdepositeddate | date:'dd-MMM-yyyy' }}</td>
-                    <td class="td-cell">{{ row?.ptypeofpayment }}</td>
-                    <td class="td-cell">{{ row?.ppartyname }}</td>
+                    <td class="grid-cell-cell">{{ row?.preceiptid }}</td>
+                    <td class="grid-cell-cell">{{ row?.preceiptdate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="grid-cell-cell">{{ row?.pdepositeddate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="grid-cell-cell">{{ row?.ptypeofpayment }}</td>
+                    <td class="grid-cell-cell">{{ row?.ppartyname }}</td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="8" class="td-empty">No Data Available</td></tr>
+                  <tr><td colspan="8" class="grid-cell-empty">No Data Available</td></tr>
                 </ng-template>
               </p-table>
 
@@ -414,30 +409,30 @@
                 styleClass="p-datatable-sm p-datatable-gridlines">
                 <ng-template pTemplate="header">
                   <tr>
-                    <th class="th-cell">Transaction No.</th>
-                    <th class="th-cell">Transaction Date</th>
-                    <th class="th-cell">Particulars</th>
-                    <th class="th-cell th-right">Debit Amount</th>
-                    <th class="th-cell th-right">Credit Amount</th>
-                    <th class="th-cell">Account Name</th>
+                    <th class="grid-header-cell">Transaction No.</th>
+                    <th class="grid-header-cell">Transaction Date</th>
+                    <th class="grid-header-cell">Particulars</th>
+                    <th class="grid-header-cell grid-header-right">Debit Amount</th>
+                    <th class="grid-header-cell grid-header-right">Credit Amount</th>
+                    <th class="grid-header-cell">Account Name</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
                   <tr>
-                    <td class="td-cell">{{ row?.ptransactionnumber }}</td>
-                    <td class="td-cell">{{ row?.ptransactiondate | date:'dd-MMM-yyyy' }}</td>
-                    <td class="td-cell">{{ row?.particulars }}</td>
-                    <td class="td-cell td-right">
+                    <td class="grid-cell-cell">{{ row?.ptransactionnumber }}</td>
+                    <td class="grid-cell-cell">{{ row?.ptransactiondate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="grid-cell-cell">{{ row?.particulars }}</td>
+                    <td class="grid-cell-cell grid-cell-right">
                       {{ currencySymbol() }} {{ (row?.debitamount || 0) | currency:'INR':'symbol':'1.2-2' }}
                     </td>
-                    <td class="td-cell td-right">
+                    <td class="grid-cell-cell grid-cell-right">
                       {{ currencySymbol() }} {{ (row?.creditamount || 0) | currency:'INR':'symbol':'1.2-2' }}
                     </td>
-                    <td class="td-cell td-link">{{ row?.accountname }}</td>
+                    <td class="grid-cell-cell grid-cell-link">{{ row?.accountname }}</td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="6" class="td-empty">No Data Available</td></tr>
+                  <tr><td colspan="6" class="grid-cell-empty">No Data Available</td></tr>
                 </ng-template>
               </p-table>
 
@@ -462,7 +457,7 @@
               </div>
             </div>
             <div *ngIf="auto_brs_type_name() === 'Pending'" class="col-md-3 d-flex align-items-center">
-              <button type="button" class="btn btn-primary btn-action" (click)="getAutoBrs('N')">
+              <button type="button" class="erp-btn btn-primary btn-action" (click)="getAutoBrs('N')">
                 Get Pending Data
               </button>
             </div>
@@ -470,10 +465,10 @@
 
           <div class="row mt-2 mb-3" *ngIf="auto_brs_type_name() === 'Upload'">
             <div class="col-md-3 col-xl-3">
-              <input type="file" class="form-control file-input" accept=".xlsx,.xls" (change)="onFileChange($event)" />
+              <input type="file" class="erp-input file-input" accept=".xlsx,.xls" (change)="onFileChange($event)" />
             </div>
             <div class="col-md-3 col-xl-3">
-              <a type="button" class="btn btn-primary btn-action btn-download" (click)="DownloadExcelforPreDefinedBidAmount()">
+              <a type="button" class="erp-btn btn-primary btn-action btn-download" (click)="DownloadExcelforPreDefinedBidAmount()">
                 <i class="fa fa-download me-1"></i> Download BRS Format
               </a>
             </div>
@@ -493,30 +488,30 @@
                   styleClass="p-datatable-sm p-datatable-gridlines">
                   <ng-template pTemplate="header">
                     <tr>
-                      <th *ngIf="auto_brs_type_name() === 'Pending'" class="th-action">Action</th>
-                      <th class="th-cell">Date</th>
-                      <th class="th-cell">UTR Number</th>
-                      <th class="th-cell th-right">Amount</th>
-                      <th class="th-cell">Reference Text</th>
+                      <th *ngIf="auto_brs_type_name() === 'Pending'" class="grid-header-action">Action</th>
+                      <th class="grid-header-cell">Date</th>
+                      <th class="grid-header-cell">UTR Number</th>
+                      <th class="grid-header-cell grid-header-right">Amount</th>
+                      <th class="grid-header-cell">Reference Text</th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
                     <tr>
-                      <td *ngIf="auto_brs_type_name() === 'Pending'" class="td-center">
+                      <td *ngIf="auto_brs_type_name() === 'Pending'" class="grid-cell-center">
                         <input type="checkbox" [checked]="row?.check === true"
                           (change)="checkbox_pending_data(row, $event)" />
                       </td>
-                      <td class="td-cell">{{ row?.transactiondate | date:'dd-MMM-yyyy' }}</td>
-                      <td class="td-cell">{{ row?.chqueno }}</td>
-                      <td class="td-cell td-right">
+                      <td class="grid-cell-cell">{{ row?.transactiondate | date:'dd-MMM-yyyy' }}</td>
+                      <td class="grid-cell-cell">{{ row?.chqueno }}</td>
+                      <td class="grid-cell-cell grid-cell-right">
                         {{ (row?.chequeamount || 0) | currency:'INR':'symbol':'1.2-2' }}
                       </td>
-                      <td class="td-cell td-link">{{ row?.preferencetext }}</td>
+                      <td class="grid-cell-cell grid-cell-link">{{ row?.preferencetext }}</td>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="emptymessage">
                     <tr>
-                      <td [attr.colspan]="auto_brs_type_name() === 'Pending' ? 5 : 4" class="td-empty">No Data Available</td>
+                      <td [attr.colspan]="auto_brs_type_name() === 'Pending' ? 5 : 4" class="grid-cell-empty">No Data Available</td>
                     </tr>
                   </ng-template>
                 </p-table>
@@ -525,7 +520,7 @@
           </div>
 
           <div class="d-flex justify-content-end mt-2">
-            <button type="button" class="btn btn-primary btn-action" (click)="saveAutoBrs()">
+            <button type="button" class="erp-btn btn-primary btn-action" (click)="saveAutoBrs()">
               <i class="fa fa-spin fa-spinner" *ngIf="saveAutoBrsBool()"></i>
               {{ saveAutoBrsBool() ? 'Processing' : 'Save' }}
             </button>
@@ -535,11 +530,11 @@
 
         <!-- Action Buttons -->
         <div class="action-row mt-4">
-          <a (click)="Clear()" class="btn btn-primary btn-action">
+          <a (click)="Clear()" class="erp-btn btn-primary btn-action">
             <img src="assets/images/icon-cancel-white.svg" width="16px" height="16px"> Clear
           </a>
           <div *ngIf="saveshowhide()">
-            <button (click)="Save()" class="btn btn-secondary btn-action" [disabled]="disablesavebutton()">
+            <button (click)="Save()" class="erp-btn btn-secondary btn-action" [disabled]="disablesavebutton()">
               <img src="assets/images/icon-check-white.svg" width="16px" height="16px" *ngIf="!disablesavebutton()">
               <i class="fa" [ngClass]="{'fa-spin fa-spinner': disablesavebutton()}"></i>
               {{ buttonname() }}
@@ -551,3 +546,17 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

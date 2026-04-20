@@ -1,13 +1,13 @@
-<div class="page-wrapper">
-    <div class="screen-card">
+﻿<div class="page-wrapper">
+    <div class="erp-card">
 
         <!-- HEADER -->
-        <div class="screen-header">
+        <div class="card-header">
             <div class="header-accent"></div>
             <h2 class="header-title">Petty Cash Receipt Cancel</h2>
         </div>
 
-        <div class="screen-content">
+        <div class="card-body">
             <form [formGroup]="PettyCashCancel" autocomplete="off">
 
                 <!-- Search Receipt Section -->
@@ -16,8 +16,8 @@
                     <div class="row align-items-end">
 
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="field-label">
+                            <div class="erp-form-group">
+                                <label class="erp-label">
                                     Receipt No. <span class="required-star">*</span>
                                 </label>
                                 <ng-select [items]="receiptdata()" bindLabel="payment_number"
@@ -28,17 +28,17 @@
                         </div>
 
                         <div class="col-md-2">
-                            <button type="button" (click)="showdata()" class="btn-show">
-                                <span class="btn-icon">⊕</span> Show
+                            <button type="button" (click)="showdata()" class="erp-btn btn-secondary btn-sm">
+                                <span class="erp-btn btn-icon">âŠ•</span> Show
                             </button>
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="field-label">
+                            <div class="erp-form-group">
+                                <label class="erp-label">
                                     Date <span class="required-star">*</span>
                                 </label>
-                                <input class="form-control" type="text" bsDatepicker [bsConfig]="pDobConfig"
+                                <input class="erp-input" type="text" bsDatepicker [bsConfig]="pDobConfig"
                                     formControlName="ppaymentdate" />
                             </div>
                         </div>
@@ -134,12 +134,12 @@
                     <div class="row">
 
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="field-label">
+                            <div class="erp-form-group">
+                                <label class="erp-label">
                                     Reason <span class="required-star">*</span>
                                 </label>
-                                <textarea class="form-control textarea-control"
-                                    [class.is-invalid]="pettycashValidation()['cancellationreason']" rows="3"
+                                <textarea class="erp-input textarea-control"
+                                    [class.ng-invalid]="pettycashValidation()['cancellationreason']" rows="3"
                                     formControlName="cancellationreason" maxlength="250"
                                     placeholder="Enter cancellation reason...">
                   </textarea>
@@ -150,8 +150,8 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="field-label">
+                            <div class="erp-form-group">
+                                <label class="erp-label">
                                     Authorised By <span class="required-star">*</span>
                                 </label>
                                 <ng-select [items]="(authorizedbylist$ | async) ?? []" bindLabel="subintroducedname"
@@ -159,7 +159,7 @@
                                     [typeahead]="contactSearchevent" [multiple]="false" [searchable]="true"
                                     [clearable]="true" (change)="subIntroducedGridRowSelect($event)"
                                     placeholder="Select"
-                                    [class.is-invalid]="pettycashValidation()['autorizedcontactid']">
+                                    [class.ng-invalid]="pettycashValidation()['autorizedcontactid']">
 
                                     <ng-template ng-header-tmp>
                                         <div class="ng-select-header-row">
@@ -193,9 +193,9 @@
                 }
 
                 <!-- Footer Action Buttons -->
-                <div class="footer-actions">
+                <div class="d-flex gap-2 justify-end p-4">
                     <button type="button" (click)="clear()" class="btn-cancel">
-                        ✖ Cancel
+                        âœ– Cancel
                     </button>
                     <button type="button" (click)="Save()" [disabled]="disablesavebutton()" class="btn-save"
                         [class.btn-loading]="disablesavebutton()">
@@ -208,3 +208,17 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,22 +1,22 @@
-<div class="screen-container">
-    <div class="screen-card">
+﻿<div class="module-page">
+    <div class="erp-card">
 
         <!-- HEADER -->
-        <div class="screen-header">
-            <h2 class="screen-title">Journal Voucher View</h2>
+        <div class="card-header">
+            <h2 class="page-title">Journal Voucher View</h2>
         </div>
 
-        <div class="screen-body">
+        <div class="grid-body">
 
             <!-- TOOLBAR -->
-            <div class="toolbar-row">
+            <div class="toolbar">
                 <a routerLink="/dashboard/accounts/accounts-transactions/journal-voucher" class="btn-new">
                     + New
                 </a>
 
-                <div class="search-wrapper">
+                <div class="search-container">
                     <i class="pi pi-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search..." (keyup)="filterDatatable($event)" />
+                    <input type="text" class="erp-input" placeholder="Search..." (keyup)="filterDatatable($event)" />
                 </div>
             </div>
 
@@ -30,43 +30,43 @@
                     <!-- HEADER -->
                     <ng-template pTemplate="header">
                         <tr>
-                            <th class="col-actions th-base">Actions</th>
-                            <th pSortableColumn="jvDate" class="col-date th-base th-sortable">
+                            <th class="col-actions grid-header-base">Actions</th>
+                            <th pSortableColumn="jvDate" class="col-date grid-header-base grid-header-sortable">
                                 JV Date &nbsp;<i class="pi pi-sort-alt sort-icon"></i>
                             </th>
-                            <th pSortableColumn="journalVoucherNo" class="col-jvno th-base th-sortable">
+                            <th pSortableColumn="journalVoucherNo" class="col-jvno grid-header-base grid-header-sortable">
                                 Journal Voucher No &nbsp;<i class="pi pi-sort-alt sort-icon"></i>
                             </th>
-                            <th pSortableColumn="amount" class="col-amount th-base th-sortable th-right">
+                            <th pSortableColumn="amount" class="col-amount grid-header-base grid-header-sortable grid-header-right">
                                 Amount &nbsp;<i class="pi pi-sort-alt sort-icon"></i>
                             </th>
-                            <th class="col-narration th-base">Narration</th>
+                            <th class="col-narration grid-header-base">Narration</th>
                         </tr>
                     </ng-template>
 
                     <!-- BODY -->
                     <ng-template pTemplate="body" let-row>
                         <tr>
-                            <td class="td-center td-base">
+                            <td class="grid-cell-center grid-cell-base">
                                 <button pButton type="button" icon="pi pi-eye"
                                     class="p-button-text p-button-sm p-button-primary btn-view"
                                     (click)="viewHandler($event, row)">
                                 </button>
                             </td>
 
-                            <td class="td-center td-base td-text">
+                            <td class="grid-cell-center grid-cell-base grid-cell-text">
                                 {{ row.jvDate || '--' }}
                             </td>
 
-                            <td class="td-center td-base td-text">
+                            <td class="grid-cell-center grid-cell-base grid-cell-text">
                                 {{ row.journalVoucherNo || '--' }}
                             </td>
 
-                            <td class="td-right td-base td-text">
+                            <td class="grid-cell-right grid-cell-base grid-cell-text">
                                 {{ row.amount | currency:'INR':'symbol':'1.2-2' }}
                             </td>
 
-                            <td class="td-base td-text">
+                            <td class="grid-cell-base grid-cell-text">
                                 {{ row.narration || '-- NA --' }}
                             </td>
                         </tr>
@@ -75,7 +75,7 @@
                     <!-- EMPTY -->
                     <ng-template pTemplate="emptymessage">
                         <tr>
-                            <td colspan="5" class="td-empty">No records found</td>
+                            <td colspan="5" class="grid-cell-empty">No records found</td>
                         </tr>
                     </ng-template>
 
@@ -85,3 +85,16 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+

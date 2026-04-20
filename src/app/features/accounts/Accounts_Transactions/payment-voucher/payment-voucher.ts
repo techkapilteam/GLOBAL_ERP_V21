@@ -55,7 +55,6 @@ interface PageState {
   ],
   providers: [CurrencyPipe, DatePipe],
   templateUrl: './payment-voucher.html',
-  styleUrls: ['./payment-voucher.css'],
 })
 export class PaymentVoucher implements OnInit {
 

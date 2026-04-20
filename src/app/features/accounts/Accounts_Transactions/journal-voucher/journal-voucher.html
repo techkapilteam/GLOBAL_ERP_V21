@@ -1,29 +1,29 @@
-<div class="screen-container">
-  <div class="screen-card">
+﻿<div class="module-page">
+  <div class="erp-card">
 
     <!-- HEADER -->
-    <div class="screen-header">
-      <h2 class="screen-title">Journal Voucher</h2>
+    <div class="card-header">
+      <h2 class="page-title">Journal Voucher</h2>
       <a routerLink="/dashboard/accounts/accounts-transactions/journal-voucher-view"
-        class="btn btn-warning btn-view">
+        class="erp-btn btn-warning btn-view">
         <i class="fa fa-list me-2"></i> View
       </a>
     </div>
 
-    <div class="screen-content">
+    <div class="card-body">
       <form [formGroup]="paymentVoucherForm" autocomplete="off">
 
-        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <!-- SECTION 1: Date                                                -->
-        <!-- ═══════════════════════════════════════════════════════════════ -->
-        <div class="form-section">
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <div class="erp-form-section">
           <div class="row">
             <div class="col-md-4">
-              <div class="form-group">
-                <label class="form-label required-label">Date</label>
+              <div class="erp-form-group">
+                <label class="erp-label required-label">Date</label>
                 <fieldset [disabled]="disabletransactiondate">
                   <input
-                    class="form-control"
+                    class="erp-input"
                     id="pjvdate"
                     title="Date"
                     type="text"
@@ -33,27 +33,27 @@
                     [readonly]="true"
                     (keydown)="$event.preventDefault()"
                     (paste)="$event.preventDefault()"
-                    [ngClass]="{ 'is-invalid': formValidationMessages?.pjvdate }" />
+                    [ngClass]="{ 'ng-invalid': formValidationMessages?.pjvdate }" />
                 </fieldset>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <!-- SECTION 2: Payment Details + GST/TDS                          -->
-        <!-- ═══════════════════════════════════════════════════════════════ -->
-        <div class="form-section">
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <div class="erp-form-section">
           <div class="row" formGroupName="ppaymentsslistcontrols">
 
-            <!-- ── LEFT: Ledger / Sub-Ledger / Party / Debit / Credit ── -->
+            <!-- â”€â”€ LEFT: Ledger / Sub-Ledger / Party / Debit / Credit â”€â”€ -->
             <div class="col-md-6 col-xl-4">
 
               <!-- Ledger -->
-              <div class="form-group">
-                <div class="field-balance-row">
-                  <div class="field-flex">
-                    <label class="form-label required-label">Ledger</label>
+              <div class="erp-form-group">
+                <div class="form-info-row">
+                  <div class="form-flex">
+                    <label class="erp-label required-label">Ledger</label>
                     <ng-select
                       id="pledgername"
                       title="Ledger"
@@ -70,7 +70,7 @@
                       [clearOnBackspace]="true"
                       (change)="ledgerName_Change($event)"
                       [ngClass]="{
-                        'is-invalid':
+                        'ng-invalid':
                           paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid &&
                           (paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched ||
                            paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.dirty)
@@ -85,16 +85,16 @@
                       }
                     </div>
                   </div>
-                  <div class="balance-label">{{ ledgerBalance || '0 Dr' }}</div>
+                  <div class="info-label">{{ ledgerBalance || '0 Dr' }}</div>
                 </div>
               </div>
 
               <!-- Sub Ledger -->
               @if (showsubledger) {
-              <div class="form-group">
-                <div class="field-balance-row">
-                  <div class="field-flex">
-                    <label id="psubledgerid" class="form-label required-label" title="Sub Ledger">
+              <div class="erp-form-group">
+                <div class="form-info-row">
+                  <div class="form-flex">
+                    <label id="psubledgerid" class="erp-label required-label" title="Sub Ledger">
                       Sub Ledger
                     </label>
                     <ng-select
@@ -113,16 +113,16 @@
                       (change)="subledger_Change($event)">
                     </ng-select>
                   </div>
-                  <div class="balance-label">{{ subledgerBalance || '0 Dr' }}</div>
+                  <div class="info-label">{{ subledgerBalance || '0 Dr' }}</div>
                 </div>
               </div>
               }
 
               <!-- Party -->
-              <div class="form-group">
-                <div class="field-balance-row">
-                  <div class="field-flex">
-                    <label id="ppartyid" class="form-label required-label" title="Party">Party</label>
+              <div class="erp-form-group">
+                <div class="form-info-row">
+                  <div class="form-flex">
+                    <label id="ppartyid" class="erp-label required-label" title="Party">Party</label>
                     <ng-select
                       id="ppartyname"
                       title="Party"
@@ -139,7 +139,7 @@
                       (change)="partyName_Change($event)"
                       [virtualScroll]="true"
                       [ngClass]="{
-                        'is-invalid':
+                        'ng-invalid':
                           paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid &&
                           (paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched ||
                            paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.dirty)
@@ -151,17 +151,17 @@
                       }
                     </div>
                   </div>
-                  <div class="balance-label">{{ partyBalance || '0 Dr' }}</div>
+                  <div class="info-label">{{ partyBalance || '0 Dr' }}</div>
                 </div>
               </div>
 
               <!-- Debit / Credit -->
               <div class="debit-credit-row mt-2">
 
-                <div class="form-group flex-1">
-                  <label class="form-label required-label">Debit</label>
+                <div class="erp-form-group flex-1">
+                  <label class="erp-label required-label">Debit</label>
                   <input
-                    class="form-control amount-input border-warning"
+                    class="erp-input amount-input border-warning"
                     id="pdebitamount"
                     title="Debit Amount"
                     formControlName="pdebitamount"
@@ -174,7 +174,7 @@
                     appRoundecimal="12@2"
                     appMyCurrencyFormatorincludingzero
                     [ngClass]="{
-                      'is-invalid':
+                      'ng-invalid':
                         paymentVoucherForm.get('ppaymentsslistcontrols.pdebitamount')?.invalid &&
                         (paymentVoucherForm.get('ppaymentsslistcontrols.pdebitamount')?.touched ||
                          paymentVoucherForm.get('ppaymentsslistcontrols.pdebitamount')?.dirty)
@@ -186,10 +186,10 @@
                   </div>
                 </div>
 
-                <div class="form-group flex-1">
-                  <label class="form-label required-label">Credit</label>
+                <div class="erp-form-group flex-1">
+                  <label class="erp-label required-label">Credit</label>
                   <input
-                    class="form-control amount-input border-warning"
+                    class="erp-input amount-input border-warning"
                     id="pcreditamount"
                     title="Credit Amount"
                     formControlName="pcreditamount"
@@ -202,7 +202,7 @@
                     appRoundecimal="12@2"
                     appMyCurrencyFormatorincludingzero
                     [ngClass]="{
-                      'is-invalid':
+                      'ng-invalid':
                         paymentVoucherForm.get('ppaymentsslistcontrols.pcreditamount')?.invalid &&
                         (paymentVoucherForm.get('ppaymentsslistcontrols.pcreditamount')?.touched ||
                          paymentVoucherForm.get('ppaymentsslistcontrols.pcreditamount')?.dirty)
@@ -220,14 +220,14 @@
               <div class="section-action-bar">
                 <button
                   type="button"
-                  class="btn btn-dark-navy d-flex align-items-center gap-2"
+                  class="erp-btn btn-dark-navy d-flex align-items-center gap-2"
                   (click)="clearPaymentDetails()">
                   <img src="assets/images/icon-cancel-white.svg" width="16" height="16" alt="clear" />
                   Clear
                 </button>
                 <button
                   type="button"
-                  class="btn btn-primary-action d-flex align-items-center gap-2"
+                  class="erp-btn btn-primary-action d-flex align-items-center gap-2"
                   appButtonDoubleClick
                   (click)="addPaymentDetails()">
                   <img src="assets/images/icon-add-blue.svg" width="16" height="16" alt="add" />
@@ -238,7 +238,7 @@
             </div>
             <!-- END LEFT col -->
 
-            <!-- ── RIGHT: GST + TDS ── -->
+            <!-- â”€â”€ RIGHT: GST + TDS â”€â”€ -->
             <div class="col-md-6 col-xl-6 offset-xl-2">
               @if (showgstandtds) {
 
@@ -254,7 +254,7 @@
                         formControlName="pisgstapplicable"
                         type="checkbox"
                         (change)="isgstapplicableChange()" />
-                      <label for="gst-switch" class="badge-success" data-toggle="collapse" data-target="#gst"></label>
+                      <label for="gst-switch" class="erp-badge-success" data-toggle="collapse" data-target="#gst"></label>
                     </div>
                   </fieldset>
                 </div>
@@ -272,7 +272,7 @@
                           name="pgstcalculationtype"
                           value="INCLUDE"
                           (change)="claculategsttdsamounts()"
-                          [ngClass]="{ 'is-invalid': formValidationMessages.pgstcalculationtype }" />
+                          [ngClass]="{ 'ng-invalid': formValidationMessages.pgstcalculationtype }" />
                         Include
                       </label>
                       <label class="radio-pill">
@@ -291,9 +291,9 @@
 
                   <div class="row">
                     <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">State</label>
-                        <select class="form-control" id="pState" title="State"
+                      <div class="erp-form-group">
+                        <label class="erp-label">State</label>
+                        <select class="erp-input" id="pState" title="State"
                           formControlName="pStateId" (change)="state_change($event)">
                           <option value="">Select</option>
                           @for (state of statelist; track state.pStateId) {
@@ -305,18 +305,18 @@
 
                     @if (showgstno) {
                     <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">GST No.</label>
-                        <input type="text" class="form-control" id="pgstno" title="GST No."
+                      <div class="erp-form-group">
+                        <label class="erp-label">GST No.</label>
+                        <input type="text" class="erp-input" id="pgstno" title="GST No."
                           formControlName="pgstno" (blur)="gsno_change()" />
                       </div>
                     </div>
                     }
 
                     <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">GST (%)</label>
-                        <select class="form-control" id="pgstpercentage" title="GST(%)"
+                      <div class="erp-form-group">
+                        <label class="erp-label">GST (%)</label>
+                        <select class="erp-input" id="pgstpercentage" title="GST(%)"
                           formControlName="pgstpercentage" (change)="gst_Change($event)">
                           <option value="">Select</option>
                           @for (gst of gstlist; track gst.pgstpercentage) {
@@ -328,51 +328,51 @@
                   </div>
 
                   <!-- GST Amount Mini Cards -->
-                  <div class="gst-cards-row">
+                  <div class="d-flex gap-2 flex-wrap mb-3">
                     @if (showgstamount) {
-                    <div class="gst-mini-card">
-                      <div class="gst-card-label">Amount</div>
-                      <div class="gst-card-value">
+                    <div class="erp-badge badge-primary">
+                      <div class="text-muted small">Amount</div>
+                      <div class="font-weight-bold">
                         {{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('pgstamount')?.value ?? 0 }}
                       </div>
                     </div>
                     }
                     @if (showigst) {
-                    <div class="gst-mini-card">
-                      <div class="gst-card-label">
+                    <div class="erp-badge badge-primary">
+                      <div class="text-muted small">
                         IGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('pigstpercentage')?.value ?? 0 }}%)
                       </div>
-                      <div class="gst-card-value">
+                      <div class="font-weight-bold">
                         {{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('pigstamount')?.value ?? 0 }}
                       </div>
                     </div>
                     }
                     @if (showcgst) {
-                    <div class="gst-mini-card">
-                      <div class="gst-card-label">
+                    <div class="erp-badge badge-primary">
+                      <div class="text-muted small">
                         CGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('pcgstpercentage')?.value ?? 0 }}%)
                       </div>
-                      <div class="gst-card-value">
+                      <div class="font-weight-bold">
                         {{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('pcgstamount')?.value ?? 0 }}
                       </div>
                     </div>
                     }
                     @if (showsgst) {
-                    <div class="gst-mini-card">
-                      <div class="gst-card-label">
+                    <div class="erp-badge badge-primary">
+                      <div class="text-muted small">
                         SGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('psgstpercentage')?.value ?? 0 }}%)
                       </div>
-                      <div class="gst-card-value">
+                      <div class="font-weight-bold">
                         {{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('psgstamount')?.value ?? 0 }}
                       </div>
                     </div>
                     }
                     @if (showutgst) {
-                    <div class="gst-mini-card">
-                      <div class="gst-card-label">
+                    <div class="erp-badge badge-primary">
+                      <div class="text-muted small">
                         UTGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('putgstpercentage')?.value ?? 0 }}%)
                       </div>
-                      <div class="gst-card-value">
+                      <div class="font-weight-bold">
                         {{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('putgstamount')?.value ?? 0 }}
                       </div>
                     </div>
@@ -395,8 +395,8 @@
                       formControlName="pistdsapplicable"
                       type="checkbox"
                       (change)="istdsapplicableChange()"
-                      [ngClass]="{ 'is-invalid': formValidationMessages.pistdsapplicable }" />
-                    <label for="tds-switch" class="badge-success" data-toggle="collapse" data-target="#tds"></label>
+                      [ngClass]="{ 'ng-invalid': formValidationMessages.pistdsapplicable }" />
+                    <label for="tds-switch" class="erp-badge-success" data-toggle="collapse" data-target="#tds"></label>
                   </div>
                 </div>
 
@@ -412,7 +412,7 @@
                           value="INCLUDE"
                           formControlName="ptdscalculationtype"
                           name="ptdscalculationtype"
-                          [ngClass]="{ 'is-invalid': formValidationMessages.ptdscalculationtype }"
+                          [ngClass]="{ 'ng-invalid': formValidationMessages.ptdscalculationtype }"
                           (change)="claculategsttdsamounts()" />
                         Include
                       </label>
@@ -432,9 +432,9 @@
 
                   <div class="row">
                     <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label required-label">Section</label>
-                        <select class="form-control" id="pTdsSection" title="Section"
+                      <div class="erp-form-group">
+                        <label class="erp-label required-label">Section</label>
+                        <select class="erp-input" id="pTdsSection" title="Section"
                           formControlName="pTdsSection" (change)="tdsSection_Change($event)">
                           <option value="">Select</option>
                           @for (tds of tdssectionlist; track tds.pTdsSection) {
@@ -445,9 +445,9 @@
                     </div>
 
                     <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label required-label">Percentage</label>
-                        <select class="form-control" id="pTdsPercentage" title="TDS Percentage"
+                      <div class="erp-form-group">
+                        <label class="erp-label required-label">Percentage</label>
+                        <select class="erp-input" id="pTdsPercentage" title="TDS Percentage"
                           formControlName="pTdsPercentage" (change)="tds_Change($event)">
                           <option value="">Select</option>
                           @for (tds of tdspercentagelist; track tds.pTdsPercentage) {
@@ -458,9 +458,9 @@
                     </div>
 
                     <div class="col-md-4">
-                      <div class="form-group">
-                        <label class="form-label">Amount</label>
-                        <label class="form-control text-right pt-2" id="ptdsamount" title="TDS Amount">
+                      <div class="erp-form-group">
+                        <label class="erp-label">Amount</label>
+                        <label class="erp-input text-right pt-2" id="ptdsamount" title="TDS Amount">
                           {{ paymentVoucherForm.get('ppaymentsslistcontrols')?.get('ptdsamount')?.value ?? 0 }}
                         </label>
                       </div>
@@ -479,10 +479,10 @@
         </div>
         <!-- END SECTION 2 -->
 
-        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <!-- SECTION 3: Payments Grid                                       -->
-        <!-- ═══════════════════════════════════════════════════════════════ -->
-        <div class="form-section">
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <div class="erp-form-section">
           <div class="row">
             <div class="col-md-12">
               <p-table
@@ -548,7 +548,7 @@
                   </tr>
                   @if (debittotalamount() !== credittotalamount()) {
                   <tr>
-                    <td colspan="6" class="grid-balance-error text-center">
+                    <td colspan="6" class="grid-info-error text-center">
                       Debit and Credit must be equal
                     </td>
                   </tr>
@@ -557,7 +557,7 @@
 
                 <ng-template pTemplate="emptymessage">
                   <tr>
-                    <td colspan="6" class="grid-empty text-center">No records found.</td>
+                    <td colspan="6" class="erp-table-empty text-center">No records found.</td>
                   </tr>
                 </ng-template>
 
@@ -566,10 +566,10 @@
           </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <!-- SECTION 4: Journal Entry + Narration + Upload                  -->
-        <!-- ═══════════════════════════════════════════════════════════════ -->
-        <div class="form-section">
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <div class="erp-form-section">
           <div class="row">
 
             <!-- LEFT: Journal Entry Table -->
@@ -611,7 +611,7 @@
 
                 <ng-template pTemplate="emptymessage">
                   <tr>
-                    <td colspan="3" class="grid-empty text-center">No records found.</td>
+                    <td colspan="3" class="erp-table-empty text-center">No records found.</td>
                   </tr>
                 </ng-template>
 
@@ -622,10 +622,10 @@
             <div class="col-md-6">
 
               <!-- Narration -->
-              <div class="form-group">
-                <label class="form-label required-label">Narration</label>
+              <div class="erp-form-group">
+                <label class="erp-label required-label">Narration</label>
                 <textarea
-                  class="form-control"
+                  class="erp-input"
                   rows="4"
                   id="pnarration"
                   title="Narration"
@@ -634,7 +634,7 @@
                   placeholder="Enter narration"
                   (blur)="paymentVoucherForm.get('pnarration')?.markAsTouched()"
                   [ngClass]="{
-                    'is-invalid':
+                    'ng-invalid':
                       paymentVoucherForm.get('pnarration')?.touched &&
                       paymentVoucherForm.get('pnarration')?.invalid
                   }">
@@ -652,20 +652,20 @@
               </div>
 
               <!-- Upload Document -->
-              <div class="form-group upload-group">
-                <label class="form-label" id="pDocStorePath" title="Upload Document">
+              <div class="erp-form-group upload-group">
+                <label class="erp-label" id="pDocStorePath" title="Upload Document">
                   Upload Document
                 </label>
                 <div class="input-group">
                   <input
                     type="text"
-                    class="form-control"
+                    class="erp-input"
                     placeholder=""
                     [value]="imageResponse?.name"
                     [disabled]="true"
                     formControlName="pDocStorePath" />
                   <div class="input-group-append">
-                    <button class="btn btn-upload" type="button" (click)="fileInput.click()">
+                    <button class="erp-btn btn-upload" type="button" (click)="fileInput.click()">
                       <img src="assets/images/icon-upload-blue.svg" width="18" height="18" alt="upload" />
                     </button>
                     <input
@@ -688,7 +688,7 @@
       <div class="form-footer">
         <button
           type="button"
-          class="btn btn-dark-navy d-flex align-items-center gap-2"
+          class="erp-btn btn-dark-navy d-flex align-items-center gap-2"
           (click)="clearPaymentVoucher()"
           appButtonDoubleClick>
           <img src="assets/images/icon-cancel-white.svg" width="18" height="18" alt="clear" />
@@ -696,7 +696,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-save d-flex align-items-center gap-2"
+          class="erp-btn btn-save d-flex align-items-center gap-2"
           (click)="saveJournalVoucher()"
           [disabled]="disablesavebutton">
           @if (!disablesavebutton) {
@@ -710,3 +710,18 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
