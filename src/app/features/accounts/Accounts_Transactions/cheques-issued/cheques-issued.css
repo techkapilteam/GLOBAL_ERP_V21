@@ -1,0 +1,384 @@
+/* ============================================================
+   SCREEN CONTAINER & CARD
+   ============================================================ */
+.screen-container {
+  padding: 16px;
+}
+
+.screen-card {
+  border: 1px solid #dce8fd !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 24px rgba(22, 34, 70, 0.10) !important;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.screen-header {
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 3px solid #0d6efd;
+  border-radius: 10px 10px 0 0;
+  margin: -24px -24px 24px -24px;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #070707;
+}
+
+/* ============================================================
+   FIELD LABELS
+   ============================================================ */
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #162246;
+}
+
+.field-error {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   BALANCE INFO CARD
+   ============================================================ */
+.balance-card {
+  background-color: #fff !important;
+  border-color: #b8cff5 !important;
+  padding: 12px 16px;
+  border-width: 2px !important;
+}
+
+.balance-card__title {
+  color: #0d6efd;
+  margin: 0;
+  font-size: 1.1rem;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.balance-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: #162246;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+.custom-search {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  height: 36px;
+  border-radius: 4px;
+  padding-left: 32px !important;
+  font-size: 13px;
+  border: 1.5px solid #cdd8f0;
+  color: #162246;
+}
+
+/* ============================================================
+   EXPORT ROW
+   ============================================================ */
+.export-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-icons {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+
+.export-icons:hover {
+  opacity: 0.75;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+.custom-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab-btn {
+  border: 1.5px solid #c5d4f0;
+  background: #fff;
+  color: #162246;
+  border-radius: 100px;
+  padding: 5px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tab-btn:hover {
+  background: #f2f6ff;
+}
+
+.tab-btn.active-tab {
+  background: #0d6efd;
+  color: #fff !important;
+  border-color: #0d6efd;
+  font-weight: 600;
+}
+
+/* ============================================================
+   COUNT BADGES
+   ============================================================ */
+.count {
+  background: #e8eef9;
+  color: #162246;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.count.blue {
+  background: #fff;
+  color: #0d6efd;
+}
+
+.count.green {
+  background: #d4edda;
+  color: #155724;
+}
+
+.count.red {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.count.badge-blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* ============================================================
+   BRS DATE CONTROLS
+   ============================================================ */
+.brs-label {
+  font-weight: 500;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.brs-date-input {
+  height: 36px;
+  border-radius: 4px;
+}
+
+.brs-error {
+  color: red;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.btn-show {
+  background-color: #0d6efd;
+  color: white;
+  height: 36px;
+  padding: 6px 20px;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.btn-show:hover {
+  background-color: #0b5ed7;
+  color: #fff;
+}
+
+/* ============================================================
+   TABLE CARD
+   ============================================================ */
+.table-card {
+  border: 1px solid #dce8fd !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.07);
+}
+
+/* ============================================================
+   TABLE HEADERS
+   ============================================================ */
+.th-cell {
+  background: #2E86C1 !important;
+  color: #fff !important;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-right: 1px solid #2e4278 !important;
+  white-space: nowrap;
+}
+
+.th-action {
+  width: 60px;
+  background: #2E86C1 !important;
+  color: #fff !important;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-right: 1px solid #2e4278 !important;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.th-right {
+  text-align: right !important;
+}
+
+/* ============================================================
+   TABLE CELLS
+   ============================================================ */
+.td-cell {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #162246;
+}
+
+.td-center {
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.td-right {
+  text-align: right !important;
+}
+
+.td-link {
+  color: #2E86C1;
+}
+
+.td-empty {
+  text-align: center;
+  padding: 20px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-action {
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: 0;
+  height: 36px;
+}
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ============================================================
+   FILE INPUT
+   ============================================================ */
+.file-input {
+  height: 36px;
+  font-size: 13px;
+}
+
+/* ============================================================
+   PRIMENG TABLE OVERRIDES
+   ============================================================ */
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  display: table-cell !important;
+  align-items: unset !important;
+  justify-content: unset !important;
+}
+
+::ng-deep .p-datatable-gridlines .p-datatable-thead > tr > th,
+::ng-deep .p-datatable-gridlines .p-datatable-tbody > tr > td {
+  border: 1px solid #dee2e6;
+}
+
+::ng-deep .p-paginator {
+  font-size: 13px;
+}
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+@media (max-width: 768px) {
+  .screen-header {
+    padding: 12px 16px;
+    margin: -16px -16px 16px -16px;
+  }
+
+  .custom-tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .balance-box {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .action-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .export-row {
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+}

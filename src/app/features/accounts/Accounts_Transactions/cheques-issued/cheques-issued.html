@@ -1,1 +1,553 @@
-<p>cheques-issued works!</p>
+<div class="screen-container">
+  <div class="screen-card card shadow-sm p-4">
+
+    <!-- Header -->
+    <div class="screen-header mb-4">
+      <h2 class="header-title">Cheques Issued</h2>
+    </div>
+
+    <div class="screen-content">
+      <form [formGroup]="ChequesIssuedForm">
+
+        <!-- Top Controls -->
+        <div class="section-content card shadow-sm p-3 mb-3">
+          <div class="row">
+
+            <!-- Date -->
+            <div class="col-md-2 col-xl-2">
+              <div class="form-group" *ngIf="tabsShowOrHideBasedOnfromFormName()">
+                <label class="fw-bold">Date <span class="text-danger">*</span></label>
+                <input
+                  class="form-control w-auto"
+                  type="text"
+                  id="ptransactiondate"
+                  title="Transaction Date"
+                  formControlName="ptransactiondate"
+                  bsDatepicker
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (keypress)="$event.preventDefault()"
+                  (paste)="$event.preventDefault()"
+                  (input)="$event.target.value = ChequesIssuedForm.get('ptransactiondate')?.value"
+                  [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue' }"
+                  [ngClass]="{ 'is-invalid': ChequesIssuedForm.get('ptransactiondate')?.invalid && ChequesIssuedForm.get('ptransactiondate')?.touched }"
+                  (bsValueChange)="change_date($event)"
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="ChequesIssuedForm.get('ptransactiondate')?.invalid && ChequesIssuedForm.get('ptransactiondate')?.touched">
+                  Transaction Date is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Bank -->
+            <div class="col-md-4 col-xl-4">
+              <div class="form-group">
+                <label class="field-label">Bank</label>
+                <ng-select
+                  [items]="bankList()"
+                  bindLabel="pdepositbankname"
+                  bindValue="pbankid"
+                  formControlName="bankname"
+                  (change)="onBankChange($event)"
+                  placeholder="Select"
+                  [closeOnSelect]="true"
+                  [clearable]="true"
+                  class="w-100">
+                </ng-select>
+                <div class="field-error" *ngIf="ChequesIssuedValidation()?.bankname">
+                  {{ ChequesIssuedValidation()?.bankname }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Balance Info Box -->
+            <div class="col-md-6 col-xl-6">
+              <div class="balance-card border rounded shadow-sm">
+                <div class="form-group mb-1">
+                  <h4 class="balance-card__title">Cheques Issued</h4>
+                </div>
+                <div class="balance-box">
+                  <div><strong>Bank:</strong>&nbsp;{{ selectedBankName() }}</div>
+                  <div>
+                    <strong>Balance:</strong>&nbsp;{{ currencySymbol() }}&nbsp;{{ bankbalance() }}
+                    <span *ngIf="bankbalancetype()">&nbsp;{{ bankbalancetype() }}</span>
+                  </div>
+                  <div><strong>BRS Date:</strong>&nbsp;{{ brsdate() }}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Search + Export Row -->
+        <div class="row mb-3 align-items-center">
+          <div class="col-md-4 col-xl-4">
+            <div class="form-group custom-search m-0">
+              <span class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+              </span>
+              <input
+                type="search"
+                id="search"
+                class="form-control search-input"
+                placeholder="Search"
+                (input)="onSearch($any($event.target).value)"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-8 col-xl-8">
+            <div class="export-row" *ngIf="showicons()">
+              <a class="export-icons" (click)="pdfOrprint('pdf')">
+                <img src="assets/images/pdf-icon-blue.svg" title="Pdf" width="18" />
+              </a>
+              <a class="export-icons" (click)="pdfOrprint('print')">
+                <img src="assets/images/print-icon-blue.svg" title="Print" width="18" />
+              </a>
+              <a class="export-icons" (click)="export()">
+                <img src="assets/images/icon-excel.svg" title="Excel" width="18" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="custom-tabs">
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'all'"
+              (click)="All(); activeTab.set('all')">
+              All
+              <span class="count" [class.blue]="activeTab() === 'all'">{{ all() }}</span>
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'chequesissued'"
+              (click)="ChequesIssued(); activeTab.set('chequesissued')">
+              Cheques Issued
+              <span class="count" [class.blue]="activeTab() === 'chequesissued'">{{ chequesissued() }}</span>
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'onlinepayment'"
+              (click)="OnlinePayments(); activeTab.set('onlinepayment')">
+              Online Payments
+              <span class="count" [class.blue]="activeTab() === 'onlinepayment'" [class.badge-blue]="activeTab() !== 'onlinepayment'">{{ onlinepayments() }}</span>
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'cleared'"
+              (click)="Cleared(); activeTab.set('cleared')">
+              Cleared
+              <span class="count" [class.blue]="activeTab() === 'cleared'" [class.green]="activeTab() !== 'cleared'">{{ cleared() }}</span>
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'returned'"
+              (click)="Returned(); activeTab.set('returned')">
+              Returned
+              <span class="count" [class.blue]="activeTab() === 'returned'" [class.red]="activeTab() !== 'returned'">{{ returned() }}</span>
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'cancelled'"
+              (click)="Cancelled(); activeTab.set('cancelled')">
+              Cancelled
+              <span class="count" [class.blue]="activeTab() === 'cancelled'" [class.red]="activeTab() !== 'cancelled'">{{ cancelled() }}</span>
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName() && boolforAutoBrs()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'bankfileupload'"
+              (click)="BankUploadExcel(); activeTab.set('bankfileupload')">
+              Bank File Upload
+            </button>
+          </li>
+
+          <li *ngIf="tabsShowOrHideBasedOnfromFormName() && boolforAutoBrs()">
+            <button type="button" class="tab-btn" [class.active-tab]="activeTab() === 'autobrs'"
+              (click)="AutoBrs(); activeTab.set('autobrs')">
+              Auto BRS
+            </button>
+          </li>
+
+        </ul>
+
+        <br />
+
+        <!-- BRS Cleared Date Range -->
+        <div *ngIf="brsdateshowhidecleared()" class="row mb-3">
+          <div class="col-md-3 col-xl-3">
+            <div class="form-group mb-0">
+              <label class="brs-label">BRS From Date</label>
+              <input class="form-control brs-date-input" type="text" formControlName="pfrombrsdate" readonly
+                bsDatepicker placement="bottom"
+                [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
+                [maxDate]="today" (bsValueChange)="onClearFromDateChange($event)" />
+            </div>
+          </div>
+          <div class="col-md-4 col-xl-4">
+            <div class="form-group mb-0">
+              <label class="brs-label">BRS To Date</label>
+              <div class="d-flex align-items-center">
+                <input class="form-control brs-date-input" type="text" formControlName="ptobrsdate" readonly
+                  bsDatepicker placement="bottom"
+                  [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
+                  [minDate]="clearMinToDate" [maxDate]="today" />
+                <button type="button" class="btn btn-show ms-3" (click)="ShowBrsClear()">Show</button>
+              </div>
+              <div *ngIf="validatebrsdateclear()" class="brs-error">
+                BRS To Date should be greater than or equal to From Date.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BRS Returned Date Range -->
+        <div [formGroup]="BrsReturnForm">
+          <div *ngIf="brsdateshowhidereturned()" class="row mb-3 align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <div class="form-group mb-0">
+                <label class="brs-label">BRS From Date</label>
+                <input class="form-control brs-date-input" type="text" formControlName="frombrsdate" readonly
+                  bsDatepicker placement="bottom"
+                  [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
+                  [maxDate]="today" (bsValueChange)="onReturnFromDateChange($event)" />
+              </div>
+            </div>
+            <div class="col-md-4 col-xl-4">
+              <div class="form-group mb-0">
+                <label class="brs-label">BRS To Date</label>
+                <div class="d-flex align-items-center">
+                  <input class="form-control brs-date-input" type="text" formControlName="tobrsdate" readonly
+                    bsDatepicker placement="bottom"
+                    [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
+                    [minDate]="returnMinToDate" [maxDate]="today" />
+                  <button type="button" class="btn btn-show ms-3" (click)="ShowBrsReturn()">Show</button>
+                </div>
+                <div *ngIf="validatebrsdatereturn()" class="brs-error">
+                  BRS To Date should be greater than or equal to From Date.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BRS Cancelled Date Range -->
+        <div [formGroup]="BrsCancelForm">
+          <div *ngIf="brsdateshowhidecancelled()" class="row mb-3 align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <div class="form-group mb-0">
+                <label class="brs-label">BRS From Date</label>
+                <input class="form-control brs-date-input" type="text" formControlName="frombrsdate" readonly
+                  bsDatepicker placement="bottom"
+                  [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
+                  [maxDate]="today" (bsValueChange)="onCancelFromDateChange($event)" />
+              </div>
+            </div>
+            <div class="col-md-4 col-xl-4">
+              <div class="form-group mb-0">
+                <label class="brs-label">BRS To Date</label>
+                <div class="d-flex align-items-center">
+                  <input class="form-control brs-date-input" type="text" formControlName="tobrsdate" readonly
+                    bsDatepicker placement="bottom"
+                    [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue', showWeekNumbers: false }"
+                    [minDate]="cancelMinToDate" [maxDate]="today" />
+                  <button type="button" class="btn btn-show ms-3" (click)="ShowBrsCancel()">Show</button>
+                </div>
+                <div *ngIf="validatebrsdatecancel()" class="brs-error">
+                  BRS To Date should be greater than or equal to From Date.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="row" *ngIf="activeTab() !== 'bankfileupload'">
+          <div class="col-12">
+            <div class="table-card border rounded p-3 bg-white">
+
+              <!-- Cheques Issued Grid -->
+              <p-table
+                *ngIf="showOrHideChequesIssuedGrid()"
+                [value]="gridData()"
+                [paginator]="true"
+                [rows]="pageCriteria().pageSize"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [scrollable]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                styleClass="p-datatable-sm p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th *ngIf="!showhidegridcolumns()" class="th-action">Clear</th>
+                    <th *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="th-action">Return</th>
+                    <th *ngIf="!showhidegridcolumns()" class="th-cell">Reference No</th>
+                    <th *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="th-action">Cancel</th>
+                    <th class="th-cell">Cheque / Reference No.</th>
+                    <th class="th-cell th-right">Amount</th>
+                    <th class="th-cell">Party</th>
+                    <th class="th-cell">Payment Id</th>
+                    <th class="th-cell">Payment Date</th>
+                    <th *ngIf="!hiddendate()" class="th-cell">{{ datetitle() }}</th>
+                    <th class="th-cell">Transaction Mode</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                  <tr>
+                    <td *ngIf="!showhidegridcolumns()" class="td-center">
+                      <input type="checkbox" [checked]="row?.pdepositstatus === true"
+                        [disabled]="status() === 'autobrs'" (change)="checkedClear($event, row)" />
+                    </td>
+                    <td *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="td-center">
+                      <input type="checkbox" [checked]="row?.preturnstatus === true" (change)="checkedReturn($event, row)" />
+                    </td>
+                    <td *ngIf="!showhidegridcolumns()" class="td-cell">
+                      <input *ngIf="status() !== 'autobrs'" class="form-control form-control-sm" type="text"
+                        [value]="row?.preferencetext || ''"
+                        (keyup)="checkDuplicateValueslatest($event, rowIndex, row)" maxlength="15" />
+                      <span *ngIf="status() === 'autobrs'">{{ row?.preferencetext }}</span>
+                    </td>
+                    <td *ngIf="!showhidegridcolumns() && status() !== 'autobrs'" class="td-center">
+                      <input type="checkbox" [checked]="row?.pcancelstatus === true" (change)="checkedCancel($event, row)" />
+                    </td>
+                    <td class="td-cell">{{ row?.pChequenumber }}</td>
+                    <td class="td-cell td-right">
+                      {{ currencySymbol() }} {{ (row?.ptotalreceivedamount || 0) | currency:'INR':'symbol':'1.2-2' }}
+                    </td>
+                    <td class="td-cell">{{ row?.ppartyname }}</td>
+                    <td class="td-cell">{{ row?.preceiptid }}</td>
+                    <td class="td-cell">{{ row?.preceiptdate | date:'dd-MMM-yyyy' }}</td>
+                    <td *ngIf="!hiddendate()" class="td-cell">{{ row?.pdepositeddate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="td-cell">{{ row?.ptypeofpayment }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                  <tr>
+                    <td [attr.colspan]="!showhidegridcolumns() ? (status() !== 'autobrs' ? 4 : 2) : 0"
+                      *ngIf="!showhidegridcolumns()" class="td-cell"></td>
+                    <td class="td-cell td-right"><b>Total</b></td>
+                    <td class="td-cell td-right">
+                      <b>{{ currencySymbol() }} {{ (amounttotal() || 0) | currency:'INR':'symbol':'1.2-2' }}</b>
+                    </td>
+                    <td colspan="4" class="td-cell"></td>
+                    <td *ngIf="!hiddendate()" class="td-cell"></td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="11" class="td-empty">No Data Available</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+
+              <!-- All Cheques Grid -->
+              <p-table
+                *ngIf="showOrHideAllChequesGrid()"
+                [value]="displayAllChequesDataBasedOnForm()"
+                [paginator]="true"
+                [rows]="pageCriteria().pageSize"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [scrollable]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                styleClass="p-datatable-sm p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th class="th-cell">Cheque Status</th>
+                    <th class="th-cell">Cheque / Reference No.</th>
+                    <th class="th-cell th-right">Amount</th>
+                    <th class="th-cell">Payment Id</th>
+                    <th class="th-cell">Payment Date</th>
+                    <th class="th-cell">Cleared / Returned / Cancelled Date</th>
+                    <th class="th-cell">Transaction Mode</th>
+                    <th class="th-cell">Party</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                  <tr>
+                    <td class="td-cell">{{ row?.chequeStatus }}</td>
+                    <td class="td-cell">{{ row?.pChequenumber }}</td>
+                    <td class="td-cell td-right">
+                      {{ currencySymbol() }} {{ (row?.ptotalreceivedamount || 0) | currency:'INR':'symbol':'1.2-2' }}
+                    </td>
+                    <td class="td-cell">{{ row?.preceiptid }}</td>
+                    <td class="td-cell">{{ row?.preceiptdate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="td-cell">{{ row?.pdepositeddate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="td-cell">{{ row?.ptypeofpayment }}</td>
+                    <td class="td-cell">{{ row?.ppartyname }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr><td colspan="8" class="td-empty">No Data Available</td></tr>
+                </ng-template>
+              </p-table>
+
+              <!-- Other Cheques Grid -->
+              <p-table
+                *ngIf="showOrHideOtherChequesGrid()"
+                [value]="OtherChequesData()"
+                [paginator]="true"
+                [rows]="pageCriteria().pageSize"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [scrollable]="true"
+                scrollHeight="500px"
+                responsiveLayout="scroll"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                styleClass="p-datatable-sm p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th class="th-cell">Transaction No.</th>
+                    <th class="th-cell">Transaction Date</th>
+                    <th class="th-cell">Particulars</th>
+                    <th class="th-cell th-right">Debit Amount</th>
+                    <th class="th-cell th-right">Credit Amount</th>
+                    <th class="th-cell">Account Name</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                  <tr>
+                    <td class="td-cell">{{ row?.ptransactionnumber }}</td>
+                    <td class="td-cell">{{ row?.ptransactiondate | date:'dd-MMM-yyyy' }}</td>
+                    <td class="td-cell">{{ row?.particulars }}</td>
+                    <td class="td-cell td-right">
+                      {{ currencySymbol() }} {{ (row?.debitamount || 0) | currency:'INR':'symbol':'1.2-2' }}
+                    </td>
+                    <td class="td-cell td-right">
+                      {{ currencySymbol() }} {{ (row?.creditamount || 0) | currency:'INR':'symbol':'1.2-2' }}
+                    </td>
+                    <td class="td-cell td-link">{{ row?.accountname }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr><td colspan="6" class="td-empty">No Data Available</td></tr>
+                </ng-template>
+              </p-table>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank File Upload Section -->
+        <div *ngIf="activeTab() === 'bankfileupload'" class="mt-3">
+
+          <div class="row mb-2">
+            <div class="col-md-6 col-xl-6">
+              <div class="form-check form-check-inline radio-btn-secondary">
+                <input class="form-check-input" type="radio" value="Upload" formControlName="auto_brs_type"
+                  (change)="auto_brs_typeChange($any($event.target).value)" />
+                <label class="form-check-label mt-1">Upload</label>
+              </div>
+              <div class="form-check form-check-inline radio-btn-secondary">
+                <input class="form-check-input" type="radio" value="Pending" formControlName="auto_brs_type"
+                  (change)="auto_brs_typeChange($any($event.target).value)" />
+                <label class="form-check-label mt-1">Pending</label>
+              </div>
+            </div>
+            <div *ngIf="auto_brs_type_name() === 'Pending'" class="col-md-3 d-flex align-items-center">
+              <button type="button" class="btn btn-primary btn-action" (click)="getAutoBrs('N')">
+                Get Pending Data
+              </button>
+            </div>
+          </div>
+
+          <div class="row mt-2 mb-3" *ngIf="auto_brs_type_name() === 'Upload'">
+            <div class="col-md-3 col-xl-3">
+              <input type="file" class="form-control file-input" accept=".xlsx,.xls" (change)="onFileChange($event)" />
+            </div>
+            <div class="col-md-3 col-xl-3">
+              <a type="button" class="btn btn-primary btn-action btn-download" (click)="DownloadExcelforPreDefinedBidAmount()">
+                <i class="fa fa-download me-1"></i> Download BRS Format
+              </a>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-12">
+              <div class="table-card border rounded p-3 bg-white">
+                <p-table
+                  [value]="PreDefinedAutoBrsArrayData()"
+                  [paginator]="true"
+                  [rows]="pageCriteria2().pageSize"
+                  [rowsPerPageOptions]="[10, 20, 50]"
+                  [scrollable]="true"
+                  scrollHeight="450px"
+                  responsiveLayout="scroll"
+                  styleClass="p-datatable-sm p-datatable-gridlines">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th *ngIf="auto_brs_type_name() === 'Pending'" class="th-action">Action</th>
+                      <th class="th-cell">Date</th>
+                      <th class="th-cell">UTR Number</th>
+                      <th class="th-cell th-right">Amount</th>
+                      <th class="th-cell">Reference Text</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                      <td *ngIf="auto_brs_type_name() === 'Pending'" class="td-center">
+                        <input type="checkbox" [checked]="row?.check === true"
+                          (change)="checkbox_pending_data(row, $event)" />
+                      </td>
+                      <td class="td-cell">{{ row?.transactiondate | date:'dd-MMM-yyyy' }}</td>
+                      <td class="td-cell">{{ row?.chqueno }}</td>
+                      <td class="td-cell td-right">
+                        {{ (row?.chequeamount || 0) | currency:'INR':'symbol':'1.2-2' }}
+                      </td>
+                      <td class="td-cell td-link">{{ row?.preferencetext }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td [attr.colspan]="auto_brs_type_name() === 'Pending' ? 5 : 4" class="td-empty">No Data Available</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-2">
+            <button type="button" class="btn btn-primary btn-action" (click)="saveAutoBrs()">
+              <i class="fa fa-spin fa-spinner" *ngIf="saveAutoBrsBool()"></i>
+              {{ saveAutoBrsBool() ? 'Processing' : 'Save' }}
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-row mt-4">
+          <a (click)="Clear()" class="btn btn-primary btn-action">
+            <img src="assets/images/icon-cancel-white.svg" width="16px" height="16px"> Clear
+          </a>
+          <div *ngIf="saveshowhide()">
+            <button (click)="Save()" class="btn btn-secondary btn-action" [disabled]="disablesavebutton()">
+              <img src="assets/images/icon-check-white.svg" width="16px" height="16px" *ngIf="!disablesavebutton()">
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': disablesavebutton()}"></i>
+              {{ buttonname() }}
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
