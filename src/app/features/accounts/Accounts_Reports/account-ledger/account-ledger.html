@@ -1,1 +1,306 @@
-<p>account-ledger works!</p>
+<!-- account-ledger.component.html -->
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <div class="screen-header">
+      <h2 class="screen-title">Account Ledger</h2>
+    </div>
+
+    <!-- ── Form Section ───────────────────────────────────────────────────── -->
+    <div class="screen-content">
+      <div class="form-wrapper">
+        <form [formGroup]="form" autocomplete="off" novalidate>
+
+          <div class="filter-grid">
+
+            <!-- Ledger -->
+            <div class="field-group">
+              <label class="field-label required">Ledger</label>
+              <ng-select
+                [items]="ledgerList()"
+                formControlName="pledgerid"
+                bindLabel="pledgername"
+                bindValue="pledgerid"
+                groupBy="pAccounttype"
+                appendTo="body"
+                placeholder="Select Ledger"
+                [searchable]="true"
+                [clearable]="false"
+                (change)="onLedgerChange($event)"
+                [class.ng-invalid-select]="fieldInvalid('pledgerid')"
+              />
+              @if (fieldInvalid('pledgerid')) {
+                <span class="error-msg">Ledger is required</span>
+              }
+            </div>
+
+            <!-- Sub Ledger -->
+            <div class="field-group">
+              <label class="field-label">Sub Ledger</label>
+              <ng-select
+                [items]="subLedgerList()"
+                formControlName="psubledgerid"
+                bindLabel="psubledgername"
+                bindValue="psubledgerid"
+                appendTo="body"
+                placeholder="Select Sub Ledger"
+                [searchable]="true"
+                [clearable]="true"
+              />
+            </div>
+
+            <!-- From Date -->
+            <div class="field-group">
+              <label class="field-label required">From Date</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fromDate"
+                bsDatepicker
+                [bsConfig]="dpConfig"
+                placement="bottom"
+                readonly
+                (keydown)="$event.preventDefault()"
+                (bsValueChange)="onFromDateChange($event)"
+                [class.is-invalid]="submitted() && form.controls['fromDate'].invalid"
+              />
+              @if (submitted() && form.controls['fromDate'].errors?.['required']) {
+                <span class="error-msg">From Date is required</span>
+              }
+            </div>
+
+            <!-- To Date -->
+            <div class="field-group">
+              <label class="field-label required">To Date</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="toDate"
+                bsDatepicker
+                [bsConfig]="dpConfig1"
+                placement="bottom"
+                readonly
+                (keydown)="$event.preventDefault()"
+                (bsValueChange)="onToDateChange($event)"
+                [class.is-invalid]="submitted() && form.controls['toDate'].invalid"
+              />
+              @if (submitted() && form.controls['toDate'].errors?.['required']) {
+                <span class="error-msg">To Date is required</span>
+              }
+            </div>
+
+            <!-- With Narration -->
+            <div class="field-group narration-group">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  (change)="onNarrationChange($event)"
+                  id="WithNarration"
+                  class="checkbox-input"
+                />
+                <span class="checkbox-text">With Narration</span>
+              </label>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="field-group action-group">
+              <button
+                type="button"
+                class="btn-generate"
+                (click)="generateReport()"
+                [disabled]="isLoading()"
+              >
+                @if (!isLoading()) {
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Generate Report
+                } @else {
+                  <svg class="btn-icon spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                  </svg>
+                  Processing...
+                }
+              </button>
+            </div>
+
+          </div><!-- /filter-grid -->
+
+          <!-- Date range error -->
+          @if (form.errors?.['dateRangeInvalid'] && submitted()) {
+            <p class="error-msg form-error">From Date cannot be greater than To Date.</p>
+          }
+
+        </form>
+      </div>
+
+      <!-- ── Report Section ────────────────────────────────────────────────── -->
+      @if (showReport()) {
+        <div class="report-card">
+
+          <!-- Export Actions -->
+          <div class="export-bar">
+            <button class="export-btn" (click)="pdfOrPrint('Pdf')" title="Export PDF">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              PDF
+            </button>
+            <button class="export-btn" (click)="pdfOrPrint('Print')" title="Print">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+              Print
+            </button>
+            <button class="export-btn" (click)="exportToExcel()" title="Export Excel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="18" rx="2"/>
+                <line x1="8" y1="3" x2="8" y2="21"/>
+                <line x1="16" y1="3" x2="16" y2="21"/>
+                <line x1="2" y1="9" x2="22" y2="9"/>
+                <line x1="2" y1="15" x2="22" y2="15"/>
+              </svg>
+              Excel
+            </button>
+          </div>
+
+          <!-- Company Details -->
+          <app-company-details [PrintedDateShowhide]="printedDate()" />
+          <hr class="report-divider" />
+
+          <!-- Report Title -->
+          <h6 class="report-title">
+            Account Ledger - ADVICE IN TRANSIT {{ reportTitle() }}
+          </h6>
+
+          <!-- Date Range -->
+          <div class="report-meta">
+            <span>
+              <strong>Between :</strong>
+              {{ formatDate(form.get('fromDate')?.value) }}
+              &nbsp;And&nbsp;
+              {{ formatDate(form.get('toDate')?.value) }}
+            </span>
+          </div>
+
+          <!-- Data Table -->
+          <p-table
+            [value]="gridView()"
+            dataKey="ptransactiondate"
+            rowGroupMode="subheader"
+            groupRowsBy="ptransactiondate"
+            sortField="ptransactiondate"
+            [sortOrder]="1"
+            [paginator]="true"
+            [rows]="pageSize()"
+            [rowsPerPageOptions]="[10, 20, 50]"
+            [loading]="isLoading()"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm p-datatable-gridlines ledger-table"
+          >
+
+            <!-- Group Header -->
+            <ng-template pTemplate="groupheader" let-rowData>
+              <tr class="group-header-row">
+                <td colspan="5">
+                  <span class="group-date">
+                    {{ rowData.ptransactiondate | date:'dd-MMM-yyyy' }}
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+
+            <!-- Table Header -->
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="th-cell th-center" (click)="sortBy('ptransactionno')">
+                  Transaction No.
+                  <span class="sort-icon" [innerHTML]="getSortIcon('ptransactionno')"></span>
+                </th>
+                <th class="th-cell" (click)="sortBy('pparticulars')">
+                  Particulars
+                  <span class="sort-icon" [innerHTML]="getSortIcon('pparticulars')"></span>
+                </th>
+                <th class="th-cell th-right" (click)="sortBy('pdebitamount')">
+                  Debit
+                  <span class="sort-icon" [innerHTML]="getSortIcon('pdebitamount')"></span>
+                </th>
+                <th class="th-cell th-right" (click)="sortBy('pcreditamount')">
+                  Credit
+                  <span class="sort-icon" [innerHTML]="getSortIcon('pcreditamount')"></span>
+                </th>
+                <th class="th-cell th-right" (click)="sortBy('popeningbal')">
+                  Balance
+                  <span class="sort-icon" [innerHTML]="getSortIcon('popeningbal')"></span>
+                </th>
+              </tr>
+            </ng-template>
+
+            <!-- Table Body -->
+            <ng-template pTemplate="body" let-row>
+              <tr class="td-row">
+                <td class="td-cell td-center">
+                  {{ row.ptransactionno === 0 ? '--NA--' : row.ptransactionno }}
+                </td>
+                <td class="td-cell">{{ row.pparticulars }}</td>
+                <td class="td-cell td-right">
+                  @if (row.pdebitamount !== 0) {
+                    {{ currencySymbol() }} {{ row.pdebitamount.toFixed(2) | number:'1.2-2' }}
+                  }
+                </td>
+                <td class="td-cell td-right">
+                  @if (row.pcreditamount !== 0) {
+                    {{ currencySymbol() }} {{ row.pcreditamount.toFixed(2) | number:'1.2-2' }}
+                  }
+                </td>
+                <td class="td-cell td-right">
+                  {{ currencySymbol() }} {{ row.popeningbal.toFixed(2) | number:'1.2-2' }} {{ row.pBalanceType }}
+                </td>
+              </tr>
+            </ng-template>
+
+            <!-- Footer Totals -->
+            <ng-template pTemplate="footer">
+              <tr class="footer-row">
+                <td class="td-cell" colspan="2"><strong>Total</strong></td>
+                <td class="td-cell td-right">
+                  <strong>{{ currencySymbol() }} {{ totalDebit().toFixed(2) | number:'1.2-2' }}</strong>
+                </td>
+                <td class="td-cell td-right">
+                  <strong>{{ currencySymbol() }} {{ totalCredit().toFixed(2) | number:'1.2-2' }}</strong>
+                </td>
+                <td class="td-cell"></td>
+              </tr>
+            </ng-template>
+
+            <!-- Empty State -->
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5" class="empty-cell">
+                  <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                  <p>No records found for the selected criteria.</p>
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+
+        </div>
+      }<!-- /showReport -->
+
+    </div><!-- /screen-content -->
+  </div><!-- /screen-card -->
+</div><!-- /screen-container -->
