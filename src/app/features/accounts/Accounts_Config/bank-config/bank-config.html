@@ -1,7 +1,6 @@
 <div class="screen-header">
   <h2 class="screen-title">Bank Config</h2>
-  <a routerLink="/dashboard/accounts/accounts-config/bank-config-view"
-     class="btn btn-warning btn-view">
+  <a routerLink="/dashboard/accounts/accounts-config/bank-config-view" class="btn btn-warning btn-view">
     <i class="fa fa-list icon-mr"></i> View
   </a>
 </div>
@@ -13,16 +12,13 @@
     <div class="col-md-6 col-xl-4">
       <div class="form-group mb-3">
         <label class="form-label fw-semibold">Date</label>
-        <input class="form-control date-input" type="text"
-               [readonly]="true" [bsConfig]="currentdate"
-               bsDatepicker formControlName="pBankdate"
-               (keydown)="$event.preventDefault()"
-               (paste)="$event.preventDefault()"/>
+        <input class="form-control date-input" type="text" [readonly]="true" [bsConfig]="currentdate" bsDatepicker
+          formControlName="pBankdate" (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" />
       </div>
     </div>
   </div>
 
-  <hr class="my-3"/>
+  <hr class="my-3" />
 
   <!-- Row 2: Main fields -->
   <div class="row g-3 mt-1">
@@ -33,10 +29,8 @@
         <label class="form-label fw-semibold">
           A/C Type <span class="required-star">*</span>
         </label>
-        <ng-select [items]="accountTypes" bindLabel="label"
-                   bindValue="value" placeholder="Select"
-                   formControlName="pAcctountype"
-                   [class.is-invalid]="f['pAcctountype'].touched && f['pAcctountype'].invalid">
+        <ng-select [items]="accountTypes" bindLabel="label" bindValue="value" placeholder="Select"
+          formControlName="pAcctountype" [class.is-invalid]="f['pAcctountype'].touched && f['pAcctountype'].invalid">
         </ng-select>
         <div *ngIf="f['pAcctountype'].touched && f['pAcctountype'].invalid" class="invalid-feedback d-block">
           A/C Type is required
@@ -50,12 +44,9 @@
         <label class="form-label fw-semibold">
           Account No. <span class="required-star">*</span>
         </label>
-        <input class="form-control" type="text"
-               [attr.disabled]="accountno() ? '' : null"
-               formControlName="pAccountnumber"
-               (input)="allowNumbersOnly1($event)"
-               maxlength="16" inputmode="numeric" pattern="[0-9]*"
-               [class.is-invalid]="f['pAccountnumber'].touched && f['pAccountnumber'].invalid"/>
+        <input class="form-control" type="text" [attr.disabled]="accountno() ? '' : null"
+          formControlName="pAccountnumber" (input)="allowNumbersOnly1($event)" maxlength="16" inputmode="numeric"
+          pattern="[0-9]*" [class.is-invalid]="f['pAccountnumber'].touched && f['pAccountnumber'].invalid" />
         <div *ngIf="f['pAccountnumber'].touched && f['pAccountnumber'].invalid" class="invalid-feedback">
           Account No is required
         </div>
@@ -68,10 +59,9 @@
         <label class="form-label fw-semibold">
           Bank <span class="required-star">*</span>
         </label>
-        <ng-select formControlName="bankName" [items]="banksList"
-                   bindLabel="bankName" bindValue="bankName"
-                   placeholder="Select" (change)="onChange($event)"
-                   [class.is-invalid]="f['bankName'].touched && f['bankName'].invalid">
+        <ng-select formControlName="bankName" [items]="banksList" bindLabel="bankName" bindValue="bankName"
+          placeholder="Select" (change)="onChange($event)"
+          [class.is-invalid]="f['bankName'].touched && f['bankName'].invalid">
         </ng-select>
         <div *ngIf="f['bankName'].touched && f['bankName'].invalid" class="invalid-feedback d-block">
           Bank Name is required
@@ -85,10 +75,8 @@
         <label class="form-label fw-semibold">
           Account Name <span class="required-star">*</span>
         </label>
-        <input class="form-control" type="text"
-               formControlName="account_name" maxlength="150"
-               appTitlecaseword appCharactersonly
-               [class.is-invalid]="f['account_name'].touched && f['account_name'].invalid"/>
+        <input class="form-control" type="text" formControlName="account_name" maxlength="150" appTitlecaseword
+          appCharactersonly [class.is-invalid]="f['account_name'].touched && f['account_name'].invalid" />
         <div *ngIf="f['account_name'].touched && f['account_name'].invalid" class="invalid-feedback">
           Account Name is required
         </div>
@@ -99,11 +87,9 @@
     <div class="col-md-6 col-xl-4">
       <div class="form-group mb-3">
         <label class="form-label fw-semibold">Branch</label>
-        <input class="form-control" type="text"
-               formControlName="pBankbranch" maxlength="125"
-               (blur)="convertTitleCase('pBankbranch')"
-               (input)="lettersOnly($event)"
-               [class.is-invalid]="bankmastervalidations.pBankbranch"/>
+        <input class="form-control" type="text" formControlName="pBankbranch" maxlength="125"
+          (blur)="convertTitleCase('pBankbranch')" (input)="lettersOnly($event)"
+          [class.is-invalid]="bankmastervalidations.pBankbranch" />
         <div *ngIf="bankmastervalidations.pBankbranch" class="invalid-feedback">
           {{ bankmastervalidations.pBankbranch }}
         </div>
@@ -116,20 +102,17 @@
         <div class="row g-2">
           <div class="col-6">
             <label class="form-label fw-semibold">IFSC Code</label>
-            <input class="form-control" type="text"
-                   maxlength="12" formControlName="pIfsccode"
-                   (input)="onIfscInput()"
-                   [class.is-invalid]="bankmastervalidations.pIfsccode"/>
+            <input class="form-control" type="text" maxlength="12" formControlName="pIfsccode" (input)="onIfscInput()"
+              [class.is-invalid]="bankmastervalidations.pIfsccode" />
             <div *ngIf="bankmastervalidations.pIfsccode" class="invalid-feedback">
               {{ bankmastervalidations.pIfsccode }}
             </div>
           </div>
           <div class="col-6">
             <label class="form-label fw-semibold">Overdraft Limit</label>
-            <input class="form-control text-end" type="text"
-                   formControlName="pOverdraft" placeholder="0.00"
-                   (input)="onCleanInput($event, 'pOverdraft')"
-                   [class.is-invalid]="f['pOverdraft'].invalid && f['pOverdraft'].touched"/>
+            <input class="form-control text-end" type="text" formControlName="pOverdraft" placeholder="0.00"
+              (input)="onCleanInput($event, 'pOverdraft')"
+              [class.is-invalid]="f['pOverdraft'].invalid && f['pOverdraft'].touched" />
             <div *ngIf="f['pOverdraft'].invalid && f['pOverdraft'].touched" class="invalid-feedback">
               Enter valid amount (max 2 decimals)
             </div>
@@ -140,14 +123,13 @@
 
   </div><!-- row end -->
 
-  <hr class="my-3"/>
+  <hr class="my-3" />
 
   <!-- Branch Address Toggle -->
   <div class="col-12 mt-2 px-0">
     <a class="toggle-link lc-title acc1" (click)="toggleBranch()">
       <img [src]="isBranchOpen() ? 'assets/images/icon-toogle-bottom.svg'
-                       : 'assets/images/icon-toggle-default.svg'"
-           class="toggle-icon"/>
+                       : 'assets/images/icon-toggle-default.svg'" class="toggle-icon" />
       Branch Address
     </a>
     <div *ngIf="isBranchOpen()" class="mt-3">
@@ -157,7 +139,7 @@
     </div>
   </div>
 
-  <hr class="my-3"/>
+  <hr class="my-3" />
 
   <!-- Debit Card / UPI / Bank Setup -->
   <div class="row g-3">
@@ -166,8 +148,7 @@
     <div class="col-md-6 col-xl-4">
       <a class="toggle-link lc-title acc2" (click)="toggleDebitCard()">
         <img [src]="isDebitCardOpen() ? 'assets/images/icon-toogle-bottom.svg'
-                         : 'assets/images/icon-toggle-default.svg'"
-             class="toggle-icon"/>
+                         : 'assets/images/icon-toggle-default.svg'" class="toggle-icon" />
         Add Debit Card
       </a>
 
@@ -177,9 +158,8 @@
             <h6 class="lc-title mb-0">Debit Card Setup</h6>
             <div class="switch-row">
               <span>Status</span>
-              <input id="Employment" type="checkbox"
-                     formControlName="pIsdebitcardapplicable"
-                     (change)="bankdebitcardchecked($event)"/>
+              <input id="Employment" type="checkbox" formControlName="pIsdebitcardapplicable"
+                (change)="bankdebitcardchecked($event)" />
               <label for="Employment" class="badge-success mb-0"></label>
             </div>
           </div>
@@ -188,16 +168,11 @@
             <label class="form-label fw-semibold">
               Card No. <span class="required-star">*</span>
             </label>
-            <input class="form-control" type="text"
-                   [attr.disabled]="cardno ? '' : null"
-                   placeholder="XXXX XXXX XXXX 3006"
-                   (keypress)="allowNumbersOnly($event)"
-                   (paste)="blockNonNumericPaste($event)"
-                   formControlName="pCardNo"
-                   minlength="16" maxlength="16"
-                   (blur)="cardno_change()"
-                   [class.is-invalid]="f['pCardNo'].invalid &&
-                     (f['pCardNo'].dirty || f['pCardNo'].touched)"/>
+            <input class="form-control" type="text" [attr.disabled]="cardno ? '' : null"
+              placeholder="XXXX XXXX XXXX 3006" (keypress)="allowNumbersOnly($event)"
+              (paste)="blockNonNumericPaste($event)" formControlName="pCardNo" minlength="16" maxlength="16"
+              (blur)="cardno_change()" [class.is-invalid]="f['pCardNo'].invalid &&
+                     (f['pCardNo'].dirty || f['pCardNo'].touched)" />
             <div *ngIf="f['pCardNo'].invalid && (f['pCardNo'].dirty || f['pCardNo'].touched)" class="invalid-feedback">
               <div *ngIf="f['pCardNo'].errors?.['required']">Card number is required.</div>
               <div *ngIf="f['pCardNo'].errors?.['minlength']">Card number must be 16 digits.</div>
@@ -209,22 +184,16 @@
           <div *ngIf="debitCardHideShow()" class="row g-2 mb-3">
             <div class="col-6">
               <label class="form-label fw-semibold">Valid From</label>
-              <input class="form-control" type="text"
-                     [bsConfig]="dpConfig" readonly
-                     bsDatepicker placeholder="MM/YY"
-                     formControlName="pValidfrom"
-                     [class.is-invalid]="bankmastervalidations.pValidfrom"/>
+              <input class="form-control" type="text" [bsConfig]="dpConfig" readonly bsDatepicker placeholder="MM/YY"
+                formControlName="pValidfrom" [class.is-invalid]="bankmastervalidations.pValidfrom" />
               <div *ngIf="bankmastervalidations.pValidfrom" class="invalid-feedback">
                 {{ bankmastervalidations.pValidfrom }}
               </div>
             </div>
             <div class="col-6">
               <label class="form-label fw-semibold">Valid Thru</label>
-              <input class="form-control" type="text"
-                     [bsConfig]="ddpConfig" readonly
-                     bsDatepicker placeholder="MM/YY"
-                     formControlName="pValidto"
-                     [class.is-invalid]="bankmastervalidations.pValidto"/>
+              <input class="form-control" type="text" [bsConfig]="ddpConfig" readonly bsDatepicker placeholder="MM/YY"
+                formControlName="pValidto" [class.is-invalid]="bankmastervalidations.pValidto" />
               <div *ngIf="bankmastervalidations.pValidto" class="invalid-feedback">
                 {{ bankmastervalidations.pValidto }}
               </div>
@@ -236,13 +205,10 @@
             <label class="form-label fw-semibold">
               Name on The Card <span class="required-star">*</span>
             </label>
-            <input class="form-control" type="text"
-                   formControlName="pCardName" placeholder="XYZ"
-                   maxlength="50" (input)="lettersOnly($event)"
-                   (blur)="convertTitleCase('pCardName')"
-                   [class.is-invalid]="bankmastervalidations.pCardName ||
+            <input class="form-control" type="text" formControlName="pCardName" placeholder="XYZ" maxlength="50"
+              (input)="lettersOnly($event)" (blur)="convertTitleCase('pCardName')" [class.is-invalid]="bankmastervalidations.pCardName ||
                      (f['pCardName'].invalid &&
-                     (f['pCardName'].dirty || f['pCardName'].touched))"/>
+                     (f['pCardName'].dirty || f['pCardName'].touched))" />
             <div *ngIf="f['pCardName'].errors?.['required']" class="invalid-feedback">
               Name is required.
             </div>
@@ -256,8 +222,7 @@
     <div class="col-md-6 col-xl-4">
       <a class="toggle-link lc-title acc3" (click)="toggleUpi()">
         <img [src]="isUpiOpen() ? 'assets/images/icon-toogle-bottom.svg'
-                       : 'assets/images/icon-toggle-default.svg'"
-             class="toggle-icon"/>
+                       : 'assets/images/icon-toggle-default.svg'" class="toggle-icon" />
         UPI Setup
       </a>
 
@@ -268,9 +233,8 @@
             <div class="switch-row">
               <label for="upi" class="mb-0 fw-semibold">Status</label>
               <div class="form-check form-switch m-0">
-                <input class="form-check-input" type="checkbox"
-                       id="upi" formControlName="pIsupiapplicable"
-                       (change)="bankupichecked($event)"/>
+                <input class="form-check-input" type="checkbox" id="upi" formControlName="pIsupiapplicable"
+                  (change)="bankupichecked($event)" />
               </div>
             </div>
           </div>
@@ -281,10 +245,9 @@
             <label class="form-label fw-semibold">
               UPI ID <span class="required-star">*</span>
             </label>
-            <input class="form-control" type="text"
-                   appEmailFormat appEmailpattern maxlength="150"
-                   placeholder="xyz@okicici" formControlName="pUpiid"
-                   [class.is-invalid]="submitted && f['pUpiid'].invalid"/>
+            <input class="form-control" type="text" appEmailFormat appEmailpattern maxlength="150"
+              placeholder="xyz@okicici" formControlName="pUpiid"
+              [class.is-invalid]="submitted && f['pUpiid'].invalid" />
             <div *ngIf="bankmastervalidations.pUpiid" class="invalid-feedback d-block">
               {{ bankmastervalidations.pUpiid }}
             </div>
@@ -296,7 +259,7 @@
                 UPI Link with <span class="required-star">*</span>
               </label>
               <select class="form-control" formControlName="upiname"
-                      [class.is-invalid]="submitted && bankmastervalidations.upiname">
+                [class.is-invalid]="submitted && bankmastervalidations.upiname">
                 <option value="" disabled>Select</option>
                 <ng-container *ngFor="let i of upiname">
                   <option [value]="i.upiname">{{ i.upiname }}</option>
@@ -308,18 +271,17 @@
             </div>
             <div class="col-4 d-flex justify-content-end">
               <a (click)="addtogrid()" class="btn btn-primary btn-add-icon">
-                <img src="assets/images/icon-add-blue-rounded.svg" class="btn-icon"/> Add
+                <img src="assets/images/icon-add-blue-rounded.svg" class="btn-icon" /> Add
               </a>
             </div>
           </div>
 
-          <p-table [value]="gridData" [paginator]="false"
-                   [resizableColumns]="true" [reorderableColumns]="true"
-                   sortMode="single">
+          <p-table [value]="gridData" [paginator]="false" [resizableColumns]="true" [reorderableColumns]="true"
+            sortMode="single">
             <ng-template pTemplate="header">
               <tr>
-                <th pSortableColumn="pUpiid">UPI ID <p-sortIcon field="pUpiid"/></th>
-                <th pSortableColumn="pUpiname">Link with <p-sortIcon field="pUpiname"/></th>
+                <th pSortableColumn="pUpiid">UPI ID <p-sortIcon field="pUpiid" /></th>
+                <th pSortableColumn="pUpiname">Link with <p-sortIcon field="pUpiname" /></th>
                 <th class="col-actions">Actions</th>
               </tr>
             </ng-template>
@@ -328,9 +290,8 @@
                 <td>{{ row.bank_upi_address || row.pUpiid }}</td>
                 <td>{{ row.upi_name || row.pUpiname }}</td>
                 <td>
-                  <button pButton icon="pi pi-times"
-                          class="p-button-text p-button-sm"
-                          (click)="removeHandler(row, rowIndex)"></button>
+                  <button pButton icon="pi pi-times" class="p-button-text p-button-sm"
+                    (click)="removeHandler(row, rowIndex)"></button>
                 </td>
               </tr>
             </ng-template>
@@ -343,8 +304,7 @@
     <div class="col-md-6 col-xl-4">
       <a class="toggle-link lc-title acc3" (click)="toggleBank()">
         <img [src]="bankOpen() ? 'assets/images/icon-toogle-bottom.svg'
-                      : 'assets/images/icon-toggle-default.svg'"
-             class="toggle-icon"/>
+                      : 'assets/images/icon-toggle-default.svg'" class="toggle-icon" />
         Bank Setup <span class="required-star">*</span>
       </a>
 
@@ -357,8 +317,7 @@
               </h6>
             </div>
             <div class="col-7">
-              <select class="form-select" formControlName="bankType"
-                      (change)="bankchange($event)">
+              <select class="form-select" formControlName="bankType" (change)="bankchange($event)">
                 <option value="" disabled selected>Select Bank Type</option>
                 <option value="primary">Primary</option>
                 <option value="foreman">Foreman Bank</option>
@@ -376,22 +335,19 @@
 
   </div><!-- row end -->
 
-  <hr class="my-4"/>
+  <hr class="my-4" />
 
   <!-- Action Buttons -->
   <div class="row mt-2">
     <div class="col-12 d-flex justify-content-end gap-3 pe-2">
       <a (click)="clear()" class="btn btn-secondary btn-action border-0">
-        <img src="assets/images/icon-cancel-white.svg" class="btn-icon"/> Clear
+        <img src="assets/images/icon-cancel-white.svg" class="btn-icon" /> Clear
       </a>
-      <button (click)="save()"
-              class="btn btn-primary btn-action border-0"
-              [disabled]="disableSaveButton()">
+      <button (click)="save()" class="btn btn-primary btn-action border-0" [disabled]="disableSaveButton()">
         <ng-container *ngIf="!disableSaveButton()">
-          <img src="assets/images/icon-check-white.svg" class="btn-icon"/>
+          <img src="assets/images/icon-check-white.svg" class="btn-icon" />
         </ng-container>
-        <i class="fa" [class.fa-spin]="disableSaveButton()"
-           [class.fa-spinner]="disableSaveButton()"></i>
+        <i class="fa" [class.fa-spin]="disableSaveButton()" [class.fa-spinner]="disableSaveButton()"></i>
         {{ buttonName() }}
       </button>
     </div>
