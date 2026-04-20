@@ -1,1 +1,137 @@
-<p>petty-cash-view works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- ── Header ── -->
+    <div class="screen-header">
+      <h2 class="screen-title">Petty Cash View</h2>
+    </div>
+
+    <div class="screen-content">
+
+      <!-- ── Top Bar: New + Search ── -->
+      <div class="toolbar">
+
+        <a
+          routerLink="/dashboard/accounts/accounts-transactions/petty-cash"
+          class="btn btn-new">
+          <i class="fa fa-plus me-2"></i> New
+        </a>
+
+        <div class="search-wrapper">
+          <i class="fa fa-search search-icon"></i>
+          <input
+            type="text"
+            class="form-control search-input"
+            placeholder="Search..."
+            (keyup)="filterDatatable($event)" />
+        </div>
+
+      </div>
+
+      <!-- ── Data Table ── -->
+      <div class="table-wrapper">
+        <p-table
+          [value]="gridView()"
+          [loading]="loading()"
+          [paginator]="true"
+          [rows]="pageCriteria.pageSize"
+          [totalRecords]="totalRows()"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          (onPage)="onPageChange($event)"
+          responsiveLayout="scroll"
+          styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped">
+
+          <!-- ── Table Header ── -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="tbl-header tbl-center">Actions</th>
+              <th class="tbl-header">Payment Date</th>
+              <th class="tbl-header tbl-center">Voucher No.</th>
+              <th class="tbl-header">Payment Details</th>
+              <th class="tbl-header tbl-right">Paid Amount</th>
+              <th class="tbl-header">Bank Name</th>
+            </tr>
+          </ng-template>
+
+          <!-- ── Table Body ── -->
+          <ng-template pTemplate="body" let-row>
+            <tr class="tbl-row">
+
+              <!-- Action -->
+              <td class="tbl-cell tbl-center">
+                <button
+                  type="button"
+                  class="btn-icon-view"
+                  title="View"
+                  (click)="viewRow(row)">
+                  <i class="fa fa-eye"></i>
+                </button>
+              </td>
+
+              <!-- Payment Date -->
+              <td class="tbl-cell">
+                {{ row.paymentDate || '--' }}
+              </td>
+
+              <!-- Voucher No -->
+              <td class="tbl-cell tbl-center">
+                <span class="voucher-badge">
+                  {{ row.paymentId || '--' }}
+                </span>
+              </td>
+
+              <!-- Payment Details -->
+              <td class="tbl-cell">
+                @if (isCash(row.modeOfPayment)) {
+                  <span class="badge-cash">CASH</span>
+                } @else {
+                  <span>{{ row.modeOfPayment || '--' }}</span>
+                  @if (row.typeOfPayment) {
+                    <span class="payment-meta">
+                      ({{ row.typeOfPayment }}
+                      @if (row.referenceNumber) {
+                        &ndash; {{ row.referenceNumber }}
+                      }
+                      )
+                    </span>
+                  }
+                }
+              </td>
+
+              <!-- Paid Amount -->
+              <td class="tbl-cell tbl-right">
+                <span class="amount-value">
+                  {{ currencySymbol }} {{ row.totalPaidAmount | number:'1.2-2' }}
+                </span>
+              </td>
+
+              <!-- Bank Name -->
+              <td class="tbl-cell">
+                @if (row.bankName && row.bankName !== '') {
+                  {{ row.bankName }}
+                } @else {
+                  <span class="na-label">-- NA --</span>
+                }
+              </td>
+
+            </tr>
+          </ng-template>
+
+          <!-- ── Empty Message ── -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="tbl-empty">
+                <i class="fa fa-inbox me-2"></i>
+                No records found
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+
+    </div>
+  </div>
+</div>
