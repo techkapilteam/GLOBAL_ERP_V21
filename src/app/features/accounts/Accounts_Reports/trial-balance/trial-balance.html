@@ -1,1 +1,212 @@
-<p>trial-balance works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- Header -->
+    <div class="screen-header">
+      <h2 class="screen-title">Trial Balance</h2>
+    </div>
+
+    <div class="screen-content">
+      <form [formGroup]="TrialBalanceForm">
+        <div class="filter-row">
+
+          <!-- As On Checkbox -->
+          <div class="filter-col filter-col--auto">
+            <div class="form-check-wrapper">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="asdate"
+                (change)="checkboxChecked($event)"
+              />
+              <label class="form-check-label" for="asdate">As On</label>
+            </div>
+          </div>
+
+          <!-- From Date / Date Field -->
+          <div class="filter-col filter-col--md">
+            <div class="form-group">
+              <label class="form-label">
+                {{ groupType === 'ASON' ? 'Date' : 'From Date' }}
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                readonly
+                [bsConfig]="dpConfig"
+                (keydown)="$event.preventDefault()"
+                (bsValueChange)="onFromDateChange($event)"
+                formControlName="fromdate"
+                bsDatepicker
+              />
+            </div>
+          </div>
+
+          <!-- To Date Field -->
+          @if (showhideason) {
+            <div class="filter-col filter-col--md">
+              <div class="form-group">
+                <label class="form-label">To Date</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  readonly
+                  [bsConfig]="dppConfig"
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onToDateChange($event)"
+                  formControlName="todate"
+                  bsDatepicker
+                />
+              </div>
+            </div>
+          }
+
+          <!-- With Grouping Checkbox -->
+          <div class="filter-col filter-col--auto">
+            <div class="form-check-wrapper">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="grouping"
+                (change)="withGrouping($event)"
+              />
+              <label class="form-check-label" for="grouping">With Grouping</label>
+            </div>
+          </div>
+
+          <!-- Generate Button -->
+          <div class="filter-col filter-col--auto">
+            <button
+              type="button"
+              class="btn btn-primary btn-generate"
+              (click)="generateReport()"
+              [disabled]="savebutton() === 'Processing...'"
+            >
+              <img
+                src="assets/images/icon-check-white.svg"
+                class="btn-icon"
+                width="18"
+                height="18"
+                alt=""
+              />
+              {{ savebutton() }}
+            </button>
+          </div>
+
+        </div>
+      </form>
+
+      <!-- No Records Message -->
+      @if (dataisempty()) {
+        <div class="empty-message">No Records to Display</div>
+      }
+
+      <!-- Report Section -->
+      @if (showhidetable()) {
+
+        <!-- Export Icons -->
+        @if (trialBalanceList().length) {
+          <div class="export-icons">
+            <img src="assets/images/pdf-icon-blue.svg"   class="export-icon" alt="PDF"   (click)="pdfOrprint('Pdf')"   />
+            <img src="assets/images/print-icon-blue.svg" class="export-icon" alt="Print" (click)="pdfOrprint('Print')" />
+            <img src="assets/images/icon-excel.svg"      class="export-icon" alt="Excel" (click)="export()"            />
+          </div>
+        }
+
+        <div class="report-card">
+          <div class="report-card-body">
+
+            <!-- Company Details -->
+            <app-companydetails [printedDateShowhide]="printedDate" />
+            <hr class="section-divider">
+
+            <!-- Report Title -->
+            <div class="report-title-box">
+              <h5 class="report-title">Trial Balance</h5>
+            </div>
+
+            <!-- Date Range Display -->
+            <div class="date-range-display">
+              <span class="date-range-label">{{ betweendates }} :</span>
+              <span class="date-range-value">
+                {{ betweenfrom }}
+                @if (betweendates === 'Between') {
+                  And {{ betweento }}
+                }
+              </span>
+            </div>
+
+            <!-- Data Table -->
+            <p-table
+              #dt
+              [value]="trialBalanceList()"
+              [paginator]="true"
+              [rows]="10"
+              responsiveLayout="scroll"
+            >
+
+              <ng-template pTemplate="header">
+                <tr class="table-header-row">
+                  <th class="th-left th-sortable" (click)="sortBy('pparentname')">
+                    Type <span [innerHTML]="getSortIcon('pparentname')"></span>
+                  </th>
+                  <th class="th-left th-sortable" (click)="sortBy('paccountname')">
+                    Particulars <span [innerHTML]="getSortIcon('paccountname')"></span>
+                  </th>
+                  <th class="th-right th-sortable" (click)="sortBy('pdebitamount')">
+                    Debit <span [innerHTML]="getSortIcon('pdebitamount')"></span>
+                  </th>
+                  <th class="th-right th-sortable" (click)="sortBy('pcreditamount')">
+                    Credit <span [innerHTML]="getSortIcon('pcreditamount')"></span>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr class="table-body-row">
+                  <td class="td-left">{{ row.pparentname }}</td>
+                  <td class="td-left">{{ row.paccountname }}</td>
+                  <td class="td-right td-debit">
+                    @if (row.pdebitamount !== 0) {
+                      {{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }}
+                    } @else {
+                      <span class="td-zero">—</span>
+                    }
+                  </td>
+                  <td class="td-right td-credit">
+                    @if (row.pcreditamount !== 0) {
+                      {{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}
+                    } @else {
+                      <span class="td-zero">—</span>
+                    }
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="footer">
+                <tr class="table-footer-row">
+                  <td colspan="2" class="td-total-label">Total</td>
+                  <td class="td-right td-total-debit">
+                    {{ currencysymbol }} {{ totalDebit() | number:'1.2-2' }}
+                  </td>
+                  <td class="td-right td-total-credit">
+                    {{ currencysymbol }} {{ totalCredit() | number:'1.2-2' }}
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4" class="td-empty">No data to display</td>
+                </tr>
+              </ng-template>
+
+            </p-table>
+
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

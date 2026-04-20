@@ -1,1 +1,226 @@
-<p>comparison-tb works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- Header -->
+    <div class="screen-header">
+      <h2 class="screen-title">Comparison Trial Balance</h2>
+    </div>
+
+    <div class="screen-content">
+      <div class="inner-wrapper">
+
+        <form [formGroup]="ComparisionTBForm" autocomplete="off">
+          <div class="filter-panel">
+            <div class="filter-row">
+
+              <!-- From Date -->
+              <div class="filter-col filter-col--md">
+                <div class="form-group">
+                  <label class="form-label required-field">From Date</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="submitted && ComparisionTBForm.controls['fromDate'].invalid"
+                    formControlName="fromDate"
+                    placeholder="Select From Date"
+                    bsDatepicker
+                    [bsConfig]="dpConfig"
+                    placement="bottom"
+                    readonly
+                    (keydown)="$event.preventDefault()"
+                    (bsValueChange)="onFromDateChange($event)"
+                  />
+                  @if (submitted && ComparisionTBForm.controls['fromDate'].errors?.['required']) {
+                    <div class="invalid-feedback">From Date is required</div>
+                  }
+                </div>
+              </div>
+
+              <!-- To Date -->
+              <div class="filter-col filter-col--md">
+                <div class="form-group">
+                  <label class="form-label required-field">To Date</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="submitted && ComparisionTBForm.controls['toDate'].invalid"
+                    formControlName="toDate"
+                    placeholder="Select To Date"
+                    bsDatepicker
+                    [bsConfig]="dpConfig1"
+                    placement="bottom"
+                    readonly
+                    (keydown)="$event.preventDefault()"
+                    (bsValueChange)="onFromDateBound($event)"
+                  />
+                  @if (submitted && ComparisionTBForm.controls['toDate'].errors?.['required']) {
+                    <div class="invalid-feedback">To Date is required</div>
+                  }
+                </div>
+              </div>
+
+              <!-- Grouping Checkbox -->
+              <div class="filter-col filter-col--auto">
+                <div class="form-check-wrapper">
+                  <input
+                    class="form-check-input"
+                    id="grouping"
+                    type="checkbox"
+                    formControlName="grouping"
+                    (change)="checkbox($event)"
+                  />
+                  <label class="form-check-label" for="grouping">Grouping</label>
+                </div>
+              </div>
+
+              <!-- Generate Button -->
+              <div class="filter-col filter-col--auto">
+                <button
+                  class="btn btn-primary btn-generate"
+                  type="button"
+                  (click)="show()"
+                  [disabled]="loading()"
+                >
+                  <img
+                    src="assets/images/icon-check-white.svg"
+                    class="btn-icon"
+                    width="18"
+                    height="18"
+                    alt=""
+                  />
+                  {{ savebutton() }}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </form>
+
+        <!-- Report Section -->
+        @if (!showHide()) {
+          <div class="report-card">
+            <div class="report-card-body">
+
+              <!-- Company Details -->
+              <app-companydetails [printedDateShowhide]="printedDate" />
+
+              <!-- Export Icons -->
+              <div class="export-icons">
+                <a class="export-link" (click)="pdfOrprint('Pdf')">
+                  <img src="assets/images/pdf-icon-blue.svg"   class="export-icon" title="PDF"   />
+                </a>
+                <a class="export-link" (click)="pdfOrprint('Print')">
+                  <img src="assets/images/print-icon-blue.svg" class="export-icon" title="Print" />
+                </a>
+                <a class="export-link" (click)="export()">
+                  <img src="assets/images/icon-excel.svg"      class="export-icon" title="Excel" />
+                </a>
+              </div>
+
+              <hr class="section-divider">
+
+              <!-- Report Title -->
+              <div class="report-title-box">
+                <h6 class="report-title">Comparison Trial Balance</h6>
+              </div>
+
+              <!-- Date Range -->
+              <div class="date-range-display">
+                <span class="date-range-label">Between:</span>
+                <span class="date-range-value">
+                  {{ fromdate | date:'dd-MMM-yyyy' }} And {{ todate | date:'dd-MMM-yyyy' }}
+                </span>
+              </div>
+
+              <!-- Comparison Header Table -->
+              <table class="comparison-header-table">
+                <thead>
+                  <tr>
+                    <th colspan="3" class="ch-cell">As at</th>
+                    <th colspan="3" class="ch-cell">{{ fromdate | date:'dd-MMM-yyyy' }}</th>
+                    <th colspan="3" class="ch-cell">{{ todate | date:'dd-MMM-yyyy' }}</th>
+                    <th colspan="3" class="ch-cell">For the Period</th>
+                  </tr>
+                </thead>
+              </table>
+
+              <!-- Data Table -->
+              <p-table
+                #myTable
+                [value]="gridData()"
+                [paginator]="true"
+                [rows]="pageCriteria.pageSize"
+                [first]="pageCriteria.offset * pageCriteria.pageSize"
+                [scrollable]="true"
+                scrollHeight="400px"
+                rowGroupMode="subheader"
+                groupRowsBy="pparentaccountName"
+                sortField="pparentaccountName"
+                [sortOrder]="1"
+                styleClass="p-datatable-gridlines p-datatable-sm"
+              >
+
+                <ng-template pTemplate="header">
+                  <tr class="table-header-row">
+                    <th class="th-particulars th-sortable" (click)="sortBy('accountname')">
+                      Particulars <span [innerHTML]="getSortIcon('accountname')"></span>
+                    </th>
+                    <th class="th-right th-sortable" (click)="sortBy('debitamount1')">
+                      Debit <span [innerHTML]="getSortIcon('debitamount1')"></span>
+                    </th>
+                    <th class="th-right th-sortable" (click)="sortBy('creditamount1')">
+                      Credit <span [innerHTML]="getSortIcon('creditamount1')"></span>
+                    </th>
+                    <th class="th-right th-sortable" (click)="sortBy('debitamount2')">
+                      Debit <span [innerHTML]="getSortIcon('debitamount2')"></span>
+                    </th>
+                    <th class="th-right th-sortable" (click)="sortBy('creditamount2')">
+                      Credit <span [innerHTML]="getSortIcon('creditamount2')"></span>
+                    </th>
+                    <th class="th-right th-sortable" (click)="sortBy('debittotal')">
+                      Debit Total <span [innerHTML]="getSortIcon('debittotal')"></span>
+                    </th>
+                    <th class="th-right th-sortable" (click)="sortBy('credittotal')">
+                      Credit Total <span [innerHTML]="getSortIcon('credittotal')"></span>
+                    </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="groupheader" let-rowData>
+                  <tr class="group-header-row">
+                    <td colspan="7" class="group-header-cell">
+                      {{ rowData.parentaccountname }}
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-row>
+                  <tr class="table-body-row">
+                    <td class="td-left" [class.td-bold]="row.isHeader || row.isTotal">
+                      {{ row.accountname }}
+                    </td>
+                    <td class="td-right">{{ row.debitamount1  || '' }}</td>
+                    <td class="td-right">{{ row.creditamount1 || '' }}</td>
+                    <td class="td-right">{{ row.debitamount2  || '' }}</td>
+                    <td class="td-right">{{ row.creditamount2 || '' }}</td>
+                    <td class="td-right">{{ row.debittotal    || '' }}</td>
+                    <td class="td-right">{{ row.credittotal   || '' }}</td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="7" class="td-empty">No data to display</td>
+                  </tr>
+                </ng-template>
+
+              </p-table>
+
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>
