@@ -1,1 +1,212 @@
-<p>cash-book works!</p>
+<div class="screen-container">
+    <div class="screen-card">
+
+        <!-- Header -->
+        <div class="screen-header">
+            <h2 class="screen-title">Cash Book Details</h2>
+        </div>
+
+        <div class="screen-content">
+            <div class="container-fluid section-wrapper">
+                <form [formGroup]="cashBookForm" autocomplete="off">
+
+                    <div class="filter-row">
+
+                        <!-- From Date -->
+                        <div class="filter-field">
+                            <label class="field-label required-field">
+                                From Date <span class="required-star">*</span>
+                            </label>
+                            <input type="text" class="form-control field-input" formControlName="fromDate" bsDatepicker
+                                [bsConfig]="dpConfig()" placement="bottom" readonly (keydown)="$event.preventDefault()"
+                                (bsValueChange)="onFromDateChange($event)"
+                                [ngClass]="{ 'is-invalid': submitted() && cashBookForm.controls['fromDate'].invalid }" />
+                            @if (submitted() && cashBookForm.controls['fromDate'].errors?.['required']) {
+                            <div class="invalid-feedback">From Date is required</div>
+                            }
+                        </div>
+
+                        <!-- To Date -->
+                        <div class="filter-field">
+                            <label class="field-label required-field">
+                                To Date <span class="required-star">*</span>
+                            </label>
+                            <input type="text" class="form-control field-input" formControlName="toDate" bsDatepicker
+                                [bsConfig]="dpConfig1()" placement="bottom" readonly (keydown)="$event.preventDefault()"
+                                (bsValueChange)="onToDateChange($event)"
+                                [ngClass]="{ 'is-invalid': submitted() && cashBookForm.controls['toDate'].invalid }" />
+                            @if (submitted() && cashBookForm.controls['toDate'].errors?.['required']) {
+                            <div class="invalid-feedback">To Date is required</div>
+                            }
+                        </div>
+
+                        <!-- Transaction Type -->
+                        <div class="filter-field filter-field--wide">
+                            <label class="field-label">Transaction Type</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" value="CASH" formControlName="ptranstype" id="cash"
+                                        class="radio-input" />
+                                    <label for="cash" class="radio-label">Cash</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" value="CHEQUE" formControlName="ptranstype" id="cheque"
+                                        class="radio-input" />
+                                    <label for="cheque" class="radio-label">Cheque</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" value="BOTH" formControlName="ptranstype" id="both"
+                                        class="radio-input" />
+                                    <label for="both" class="radio-label">Both</label>
+                                </div>
+                            </div>
+                            @if (cashBookForm.get('ptranstype')?.touched && cashBookForm.get('ptranstype')?.invalid) {
+                            <small class="validation-error">Select Transaction Type</small>
+                            }
+                        </div>
+
+                        <!-- Generate Button -->
+                        <div class="filter-field filter-field--action">
+                            <button type="button" class="btn btn-primary generate-btn" (click)="generateReport()"
+                                [disabled]="isLoading()">
+                                <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18"
+                                    alt="" />
+                                @if (!isLoading()) {
+                                <span>Generate Report</span>
+                                } @else {
+                                <span><i class="pi pi-spin pi-spinner"></i> Processing</span>
+                                }
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+                <!-- Report Section -->
+                @if (gridView().length > 0) {
+                <div class="report-section">
+                    <div class="report-card">
+
+                        <!-- Export Icons -->
+                        @if (showIcons()) {
+                        <div class="export-bar">
+                            <a (click)="pdfOrPrint('Pdf')" class="export-icon" title="Export PDF">
+                                <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
+                            </a>
+                            <a (click)="pdfOrPrint('Print')" class="export-icon" title="Print">
+                                <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
+                            </a>
+                            <a (click)="export()" class="export-icon" title="Export Excel">
+                                <img src="assets/images/icon-excel.svg" width="18" alt="Excel" />
+                            </a>
+                        </div>
+                        }
+
+                        <!-- Company Details -->
+                        <app-companydetails [printedDateShowhide]="printedDate" />
+                        <hr class="section-divider" />
+
+                        <!-- Report Title -->
+                        <h6 class="report-title">Cash Book Details</h6>
+
+                        <!-- Date Range -->
+                        <div class="date-range-row">
+                            <strong class="date-range-label">Between:</strong>
+                            <span class="date-range-value">
+                                {{ startDate() | date:'dd-MMM-yyyy' }} And {{ endDate() | date:'dd-MMM-yyyy' }}
+                            </span>
+                        </div>
+
+                        <!-- Data Table -->
+                        <p-table [value]="gridView()" [paginator]="true" [rows]="10" [loading]="isLoading()"
+                            [rowGroupMode]="'subheader'" groupRowsBy="ptransactiondate" sortField="ptransactiondate"
+                            responsiveLayout="scroll" styleClass="cashbook-table">
+
+                            <ng-template pTemplate="groupheader" let-rowData>
+                                <tr class="group-header-row">
+                                    <td colspan="6" class="group-header-cell">
+                                        <b>{{ rowData.ptransactiondate | date:'dd-MMM-yyyy' }}</b>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="header">
+                                <tr class="table-header-row">
+                                    <th class="th-text" (click)="sortBy('ptransactionno')">
+                                        Transaction No.
+                                        <span [innerHTML]="getSortIcon('ptransactionno')"></span>
+                                    </th>
+                                    <th class="th-text" (click)="sortBy('pparticulars')">
+                                        Particulars
+                                        <span [innerHTML]="getSortIcon('pparticulars')"></span>
+                                    </th>
+                                    <th class="th-text">Narration</th>
+                                    <th class="th-number" (click)="sortBy('pdebitamount')">
+                                        Receipts
+                                        <span [innerHTML]="getSortIcon('pdebitamount')"></span>
+                                    </th>
+                                    <th class="th-number" (click)="sortBy('pcreditamount')">
+                                        Payments
+                                        <span [innerHTML]="getSortIcon('pcreditamount')"></span>
+                                    </th>
+                                    <th class="th-number" (click)="sortBy('pclosingbal')">
+                                        Balance
+                                        <span [innerHTML]="getSortIcon('pclosingbal')"></span>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-row>
+                                <tr class="table-body-row">
+                                    <td class="td-text">
+                                        @if (!row.ptransactionno) {
+                                        <span class="na-text">--NA--</span>
+                                        } @else {
+                                        <a (click)="clickTransNo(row)" class="trans-link">
+                                            {{ row.ptransactionno }}
+                                        </a>
+                                        }
+                                    </td>
+                                    <td class="td-text">{{ row.pparticulars }}</td>
+                                    <td class="td-muted">{{ row.pdescription || '--NA--' }}</td>
+                                    <td class="td-number td-credit">
+                                        @if (row.pdebitamount) {
+                                        {{ currencySymbol }} {{ row.pdebitamount | number:'1.2-2' }}
+                                        } @else {
+                                        <span class="na-text">—</span>
+                                        }
+                                    </td>
+                                    <td class="td-number td-debit">
+                                        @if (row.pcreditamount) {
+                                        {{ currencySymbol }} {{ row.pcreditamount | number:'1.2-2' }}
+                                        } @else {
+                                        <span class="na-text">—</span>
+                                        }
+                                    </td>
+                                    <td class="td-number td-balance">
+                                        @if (row.pclosingbal) {
+                                        {{ currencySymbol }} {{ row.pclosingbal | number:'1.2-2' }}
+                                        <span class="balance-type">{{ row.pBalanceType }}</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6" class="empty-message">No data to display</td>
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</div>

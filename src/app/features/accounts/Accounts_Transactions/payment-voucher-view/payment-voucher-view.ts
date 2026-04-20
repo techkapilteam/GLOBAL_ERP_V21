@@ -30,9 +30,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { Subject, takeUntil } from 'rxjs';
-import { ValidationMessageComponent } from '../../common/validation-message/validation-message.component';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 
 @Component({
   selector: 'app-payment-voucher-view',

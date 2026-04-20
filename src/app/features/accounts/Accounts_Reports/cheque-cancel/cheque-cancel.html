@@ -1,1 +1,165 @@
-<p>cheque-cancel works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <div class="screen-header">
+      <h2 class="screen-title">Cheque Cancel</h2>
+    </div>
+
+    <div class="screen-content">
+      <div class="content-wrapper">
+
+        <div class="filter-panel">
+          <form [formGroup]="FrmChequeCancel" autocomplete="off">
+            <div class="filter-row">
+
+              <div class="form-group">
+                <label class="form-label required-field">From Date</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="fromdate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onFromDateChange($event)"
+                  [class.is-invalid]="submitted && FrmChequeCancel.controls['fromdate'].invalid"
+                />
+                @if (submitted && FrmChequeCancel.controls['fromdate'].errors?.['required']) {
+                  <div class="invalid-feedback">From Date is required</div>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label required-field">To Date</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="todate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig1"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onToDateChange($event)"
+                  [class.is-invalid]="submitted && FrmChequeCancel.controls['todate'].invalid"
+                />
+                @if (submitted && FrmChequeCancel.controls['todate'].errors?.['required']) {
+                  <div class="invalid-feedback">To Date is required</div>
+                }
+              </div>
+
+              <div class="form-group form-group--btn">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm btn-generate"
+                  (click)="GetChequeCancelDetails()"
+                >
+                  <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18" />
+                  {{ savebutton() }}
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        @if (!showHide()) {
+          <div class="report-card">
+
+            <app-companydetails [printedDateShowhide]="printedDate" />
+
+            <hr class="report-divider" />
+
+            <div class="report-title">Cheque Cancel</div>
+
+            @if (showicons()) {
+              <div class="export-toolbar">
+                <a (click)="pdfOrprint('Pdf')" class="export-icon-link" title="PDF">
+                  <img src="assets/images/pdf-icon-blue.svg" width="18" />
+                </a>
+                <a (click)="pdfOrprint('Print')" class="export-icon-link" title="Print">
+                  <img src="assets/images/print-icon-blue.svg" width="18" />
+                </a>
+                <a (click)="export()" class="export-icon-link" title="Excel">
+                  <img src="assets/images/icon-excel.svg" width="18" />
+                </a>
+              </div>
+            }
+
+            @if (StartDate && EndDate) {
+              <div class="date-range-row">
+                <strong>Between:</strong>
+                <span class="date-range-value">
+                  {{ StartDate | date:'dd-MMM-yyyy' }} And {{ EndDate | date:'dd-MMM-yyyy' }}
+                </span>
+              </div>
+            }
+
+            <div class="table-section-headers">
+              <div class="section-label section-label--cheque">Cheque Details</div>
+              <div class="section-label section-label--receipt">Receipt Details</div>
+            </div>
+
+            <p-table
+              [value]="gridData()"
+              [paginator]="true"
+              [rows]="pageCriteria.pageSize"
+              [totalRecords]="pageCriteria.totalrows"
+              responsiveLayout="scroll"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr class="table-header-row">
+                  <th class="th-cell th-cell--left" (click)="sortBy('depositedDate')">
+                    Cancel Date &nbsp;<span [innerHTML]="getSortIcon('depositedDate')"></span>
+                  </th>
+                  <th class="th-cell th-cell--left" (click)="sortBy('referenceNumber')">
+                    Cheque No. &nbsp;<span [innerHTML]="getSortIcon('referenceNumber')"></span>
+                  </th>
+                  <th class="th-cell th-cell--right" (click)="sortBy('totalReceivedAmount')">
+                    Cheque Amt. &nbsp;<span [innerHTML]="getSortIcon('totalReceivedAmount')"></span>
+                  </th>
+                  <th class="th-cell th-cell--left" (click)="sortBy('bankName')">
+                    Bank Name &nbsp;<span [innerHTML]="getSortIcon('bankName')"></span>
+                  </th>
+                  <th class="th-cell th-cell--left" (click)="sortBy('receiptNumber')">
+                    Receipt No. &nbsp;<span [innerHTML]="getSortIcon('receiptNumber')"></span>
+                  </th>
+                  <th class="th-cell th-cell--left" (click)="sortBy('receiptDate')">
+                    Receipt Date &nbsp;<span [innerHTML]="getSortIcon('receiptDate')"></span>
+                  </th>
+                  <th class="th-cell th-cell--left" (click)="sortBy('particulars')">
+                    Particulars &nbsp;<span [innerHTML]="getSortIcon('particulars')"></span>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr class="table-body-row">
+                  <td class="td-cell td-cell--left">{{ row.depositedDate | date:'dd-MMM-yyyy' }}</td>
+                  <td class="td-cell td-cell--left">{{ row.referenceNumber }}</td>
+                  <td class="td-cell td-cell--right">{{ currencysymbol }} {{ row.totalReceivedAmount | number:'1.2-2' }}</td>
+                  <td class="td-cell td-cell--left">{{ row.bankName }}</td>
+                  <td class="td-cell td-cell--left">{{ row.receiptNumber }}</td>
+                  <td class="td-cell td-cell--left">{{ row.receiptDate | date:'dd-MMM-yyyy' }}</td>
+                  <td class="td-cell td-cell--left">{{ row.particulars }}</td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="7" class="td-empty">No data to display</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+          </div>
+        }
+
+      </div>
+    </div>
+
+  </div>
+</div>

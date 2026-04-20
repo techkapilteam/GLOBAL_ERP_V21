@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs'
+import { catchError, Observable, throwError } from 'rxjs'
 import { CommonService } from '../Common/common.service';
 
 
@@ -1361,6 +1361,41 @@ export class AccountsTransactions {
 
     return this._CommonService.getAPI('/Accounts/GetCalendarYear', params, 'YES');
 
+  }
+
+
+
+
+
+
+  //Contact master Service
+
+
+  getCountryDetails(): Observable<any> {
+  
+      return this._CommonService.getAPI('/Common/getCountry', '', 'NO') .pipe(
+          catchError((e:any) => {
+            this._CommonService.showErrorMessage(e);
+            return throwError(() => e);
+          })
+        )
+  }
+  getcountrys(GlobalSchema:any): Observable<any> {
+      debugger;
+    const params = new HttpParams().set('GlobalSchema', GlobalSchema);
+    return this._CommonService.getAPI('/Accounts/getCountry', params, 'YES');
+  }
+
+getstates(GlobalSchema:any,id:any): Observable<any> {
+      debugger;
+    const params = new HttpParams().set('GlobalSchema', GlobalSchema).set('id', id);
+    return this._CommonService.getAPI('/Accounts/getstate', params, 'YES');
+  }
+
+getDistrict(GlobalSchema:any,id:any): Observable<any> {
+      debugger;
+    const params = new HttpParams().set('GlobalSchema', GlobalSchema).set('id', id);
+    return this._CommonService.getAPI('/Accounts/getDistrict', params, 'YES');
   }
 }
 

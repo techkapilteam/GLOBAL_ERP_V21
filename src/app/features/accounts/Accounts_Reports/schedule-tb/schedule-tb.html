@@ -1,1 +1,65 @@
-<p>schedule-tb works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- Header -->
+    <div class="screen-header">
+      <h2 class="screen-title">Schedule TB</h2>
+    </div>
+
+    <!-- Content -->
+    <div class="section-content">
+      <form name="ScheduleTB" novalidate #scheduleTBForm="ngForm"
+        (ngSubmit)="print(scheduleTBForm)">
+
+        <div class="filter-panel">
+
+          <!-- Date Field -->
+          <div class="filter-field">
+            <label class="field-label" for="asOnDate">
+              As On Date <span class="required-star">*</span>
+            </label>
+            <div class="field-row">
+              <input
+                type="text"
+                class="form-control date-input"
+                id="asOnDate"
+                name="asOnDate"
+                [(ngModel)]="asOnDate"
+                [bsConfig]="dpConfig"
+                bsDatepicker
+                required
+                readonly
+                #asOnDateRef="ngModel"
+                (keydown)="$event.preventDefault()"
+              />
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                class="btn btn-primary submit-btn"
+                [disabled]="loading()"
+              >
+                <i class="fa fa-print"></i>
+                {{ btnPrint() }}
+              </button>
+            </div>
+
+            @if ((asOnDateRef.dirty || submitted()) && asOnDateRef.errors?.['required']) {
+              <div class="field-error">As On Date is required.</div>
+            }
+          </div>
+
+        </div>
+
+        <!-- Error Alert -->
+        @if (errorMsg()) {
+          <div class="alert alert-danger error-alert">
+            {{ errorMsg() }}
+          </div>
+        }
+
+      </form>
+    </div>
+
+  </div>
+</div>

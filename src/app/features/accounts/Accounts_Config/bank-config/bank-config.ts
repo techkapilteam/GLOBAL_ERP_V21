@@ -1,5 +1,3 @@
-
-
 import {
   Component,
   OnInit,
@@ -31,9 +29,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
-
+import { Address } from '../../../common/address/address/address';
 import { AccountingMasterService } from '../../../services/accounting-master.service';
-import { AddressComponent } from '../../../common/address/address/address.component';
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 
 // ── Typed form shape ──────────────────────────────────────────────────────────
@@ -91,7 +88,7 @@ interface BankMasterFormShape {
     BsDatepickerModule,
     TableModule,
     ValidationMessageComponent,
-    AddressComponent,
+    Address,
     NgSelectModule,
     ButtonModule,
     RouterModule,
@@ -99,7 +96,7 @@ interface BankMasterFormShape {
   templateUrl: './bank-config.html',
   styleUrls: ['./bank-config.css'],
 })
-export class BankConfigComponent implements OnInit {
+export class BankConfig implements OnInit {
 
   // ── DI via inject() ─────────────────────────────────────────────────────────
   private readonly fb                      = inject(FormBuilder);
@@ -110,7 +107,7 @@ export class BankConfigComponent implements OnInit {
   private readonly destroyRef              = inject(DestroyRef);
 
   // ── viewChild signal (replaces @ViewChild + setter) ─────────────────────────
-  private readonly addressRef = viewChild(AddressComponent);
+  private readonly addressRef = viewChild(Address);
 
   // ── Signals (replaces plain mutable properties) ──────────────────────────────
   loading            = signal(false);

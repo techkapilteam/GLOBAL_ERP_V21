@@ -1,1 +1,165 @@
-<p>cheque-management works!</p>
+<div class="cm-container">
+  <div class="cm-card">
+
+    <!-- ── Page Header ─────────────────────────────────────────── -->
+    <header class="cm-page-header">
+      <h2 class="cm-page-header__title">Cheque Management View</h2>
+    </header>
+
+    <!-- ── Card Body ──────────────────────────────────────────── -->
+    <div class="cm-card-body">
+
+      <!-- ── Toolbar: New Button + Export Icons ──────────────── -->
+      <div class="cm-toolbar">
+        <div class="cm-toolbar__left">
+          <a
+            routerLink="/dashboard/accounts/accounts-config/cheque-managementnew"
+            class="cm-btn-primary">
+            + New
+          </a>
+        </div>
+
+        <div class="cm-toolbar__right">
+          @if (hasPrintableData()) {
+            <div class="cm-export-icons">
+              <a class="cm-export-icon" (click)="exportToPdf('Pdf')" title="Export PDF">
+                <img src="assets/images/pdf-icon-blue.svg" alt="PDF" />
+              </a>
+              <a class="cm-export-icon" (click)="exportToPdf('Print')" title="Print">
+                <img src="assets/images/print-icon-blue.svg" alt="Print" />
+              </a>
+              <a class="cm-export-icon" (click)="exportToExcel()" title="Export Excel">
+                <img src="assets/images/icon-excel.svg" alt="Excel" />
+              </a>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ── Filter Row ──────────────────────────────────────── -->
+      <div class="cm-filters">
+
+        <!-- Select Bank -->
+        <div class="cm-form-group">
+          <label class="cm-label">
+            Select Bank <span class="cm-required">*</span>
+          </label>
+          <ng-select
+            [items]="bankDetails()"
+            bindLabel="bankName"
+            bindValue="bankName"
+            placeholder="--Select--"
+            (change)="onBankChange($event)">
+          </ng-select>
+        </div>
+
+        <!-- Status -->
+        <div class="cm-form-group">
+          <label class="cm-label">
+            Status <span class="cm-required">*</span>
+          </label>
+          <ng-select
+            [items]="statusList"
+            bindLabel="label"
+            bindValue="value"
+            placeholder="--Select--"
+            [(ngModel)]="selectedStatus"
+            [clearable]="false">
+          </ng-select>
+        </div>
+
+        <!-- Show Button -->
+        <button class="cm-btn-show" type="button" (click)="onShowClick()">
+          Show
+        </button>
+      </div>
+
+      <!-- ── Data Table ───────────────────────────────────────── -->
+      <div class="cm-table-wrapper">
+        <p-table
+          class="cm-table"
+          [value]="gridData()"
+          [paginator]="true"
+          [rows]="pageSize"
+          [totalRecords]="totalRecords()"
+          [lazy]="true"
+          [loading]="loading()"
+          [first]="currentPage * pageSize"
+          [rowsPerPageOptions]="[5, 10, 20, 30, 40, 50, 100]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          responsiveLayout="scroll"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          (onLazyLoad)="onPageChange($event)">
+
+          <!-- ── Table Header ─────────────────────────────────── -->
+          <ng-template pTemplate="header">
+            <tr>
+              @for (col of tableColumns; track col.field) {
+                <th [class.text-center]="col.align === 'center'">
+                  {{ col.header }}
+                </th>
+              }
+            </tr>
+          </ng-template>
+
+          <!-- ── Table Body ───────────────────────────────────── -->
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td class="text-center">{{ row.pchequebookid ?? '--' }}</td>
+              <td class="text-center">{{ row.pnoofcheques ?? '--' }}</td>
+              <td class="text-center">{{ row.pchequefromnumber ?? '--' }}</td>
+              <td class="text-center">{{ row.pchequetonumber ?? '--' }}</td>
+
+              <!-- Cheque Status -->
+              <td class="text-center">
+                @if (row.pchequegeneratestatus) {
+                  <span class="cm-badge cm-badge--active">Active</span>
+                } @else {
+                  <button
+                    class="cm-generate-link"
+                    type="button"
+                    (click)="onGenerateCheques(row)">
+                    Generate Cheques
+                  </button>
+                }
+              </td>
+
+              <td>{{ row.pbankname ?? '--' }}</td>
+              <td>{{ row.paccountnumber ?? '--' }}</td>
+              <td>{{ row.pchequestatus ?? 'Un Used' }}</td>
+            </tr>
+          </ng-template>
+
+          <!-- ── Empty State ──────────────────────────────────── -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td [attr.colspan]="tableColumns.length">
+                <div class="cm-empty-state">No records found</div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <!-- ── Table Footer ─────────────────────────────────── -->
+          <ng-template pTemplate="footer">
+            <tr>
+              <td [attr.colspan]="tableColumns.length">
+                @if (gridData().length > 0) {
+                  <span>
+                    Page {{ pageCriteria.CurrentPage }} of {{ pageCriteria.TotalPages }}
+                    ({{ pageCriteria.totalrows }} items)
+                  </span>
+                }
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+      <!-- end table wrapper -->
+
+    </div>
+    <!-- end card body -->
+  </div>
+  <!-- end card -->
+</div>

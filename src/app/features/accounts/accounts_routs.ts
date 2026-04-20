@@ -9,7 +9,7 @@ export const accountsRoutes: Routes = [
         path: 'bank-config',
         loadComponent: () =>
           import('./Accounts_Config/bank-config/bank-config')
-            .then(m => m.BankConfigComponent)
+            .then(m => m.BankConfig)
       },
       {
         path: 'bank-config-view',

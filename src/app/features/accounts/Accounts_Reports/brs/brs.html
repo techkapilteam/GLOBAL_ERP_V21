@@ -1,1 +1,319 @@
-<p>brs works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- Header -->
+    <div class="screen-header">
+      <h2 class="screen-title">Bank Reconciliation</h2>
+    </div>
+
+    <div class="screen-content">
+      <form [formGroup]="BRStatmentForm" (ngSubmit)="getBRStatmentReports()" autocomplete="off">
+
+        <div class="row filter-row">
+
+          <!-- Bank Name -->
+          <div class="col-md-3 filter-col">
+            <div class="form-group">
+              <label class="form-label">
+                Bank Name <span class="required-asterisk">*</span>
+              </label>
+              <ng-select
+                formControlName="bankAccountId"
+                [items]="bankData()"
+                bindLabel="bankName"
+                bindValue="bankAccountId"
+                placeholder="Select Bank"
+                [searchable]="true"
+                appendTo="body"
+                [ngClass]="{
+                  'is-invalid': f['bankAccountId'].invalid && f['bankAccountId'].touched
+                }"
+              ></ng-select>
+              <small
+                class="text-danger error-msg"
+                *ngIf="f['bankAccountId'].hasError('required') && f['bankAccountId'].touched"
+              >
+                Bank Name is required
+              </small>
+            </div>
+          </div>
+
+          <!-- Cheques Info Checkbox -->
+          <div class="col-md-2 filter-col">
+            <div class="form-group">
+              <div class="checkbox-wrap">
+                <input
+                  class="form-check-input check-box"
+                  type="checkbox"
+                  id="chequesInfo"
+                  (change)="onChequesInfoChange($event)"
+                />
+                <label class="form-check-label check-label" for="chequesInfo">
+                  Cheques Info
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- From Date (cheques info ON) -->
+          @if (chequesInfo()) {
+            <div class="col-md-2 filter-col">
+              <div class="form-group">
+                <label class="form-label">
+                  From Date <span class="required-asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="fromDate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onFromDateChange($event)"
+                  [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
+                />
+                <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
+                  From Date is required
+                </div>
+              </div>
+            </div>
+
+            <!-- To Date (cheques info ON) -->
+            <div class="col-md-2 filter-col">
+              <div class="form-group">
+                <label class="form-label">
+                  To Date <span class="required-asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="toDate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig1"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onToDateChange($event)"
+                  [ngClass]="{ 'is-invalid': submitted && f['toDate'].invalid }"
+                />
+                <div class="invalid-feedback" *ngIf="submitted && f['toDate'].errors?.['required']">
+                  To Date is required
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- As on Date (cheques info OFF) -->
+          @if (!chequesInfo()) {
+            <div class="col-md-2 filter-col">
+              <div class="form-group">
+                <label class="form-label">
+                  As on Date <span class="required-asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="fromDate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
+                />
+                <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
+                  As on Date is required
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Generate Button -->
+          <div class="col-md-2 filter-col btn-col">
+            <button type="submit" class="btn btn-primary btn-generate">
+              <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18" alt="generate" />
+              {{ savebutton }}
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- Report Section -->
+    @if (!showhide()) {
+      <div class="report-wrapper">
+        <div class="card report-card">
+          <div class="card-body">
+
+            <!-- Export Icons (non-cheques mode) -->
+            @if (!chequesInfo()) {
+              <div class="export-toolbar">
+                <img
+                  src="assets/images/pdf-icon-blue.svg"
+                  width="20"
+                  class="export-icon"
+                  title="PDF"
+                  (click)="pdfOrprint('Pdf')"
+                  alt="PDF"
+                />
+                <img
+                  src="assets/images/print-icon-blue.svg"
+                  width="20"
+                  class="export-icon"
+                  title="Print"
+                  (click)="pdfOrprint('Print')"
+                  alt="Print"
+                />
+              </div>
+
+              <!-- Company Details -->
+              <app-companydetails [printedDateShowhide]="printedDate" />
+              <hr class="report-divider" />
+
+              <!-- Report Header -->
+              <div class="report-header-box mt-3">
+                <h5 class="report-title">Bank Reconciliation</h5>
+                <div class="report-meta">
+                  <div>
+                    <strong class="meta-label">As on :</strong>
+                    <span class="meta-value ms-1">{{ startDate | date:'dd-MMM-yyyy' }}</span>
+                  </div>
+                  <div class="meta-bankname">{{ bankname }}</div>
+                </div>
+              </div>
+
+              <!-- Main Table -->
+              <div class="mt-4">
+                <p-table
+                  [value]="gridView()"
+                  rowGroupMode="subheader"
+                  groupRowsBy="pGroupType"
+                  sortField="pGroupType"
+                  [sortOrder]="1"
+                  [paginator]="true"
+                  [rows]="pageCriteria.pageSize"
+                  [tableStyle]="{'min-width':'100%'}"
+                >
+
+                  <ng-template pTemplate="groupheader" let-rowData>
+                    <tr class="group-header-row">
+                      <td colspan="4" class="group-header-cell">
+                        {{ rowData.pGroupType }}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="header">
+                    <tr class="table-header-row">
+                      <th class="th-left">Transaction Date</th>
+                      <th class="th-left">Cheque No.</th>
+                      <th class="th-left">Particulars</th>
+                      <th class="th-right">Amount</th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-row>
+                    <tr class="data-row">
+                      <td class="td-left td-text">{{ row.ptransactiondate | date:'dd-MMM-yyyy' }}</td>
+                      <td class="td-left td-text">{{ row.pChequeNumber || '--NA--' }}</td>
+                      <td class="td-left td-text">{{ row.pparticulars  || '--NA--' }}</td>
+                      <td class="td-right td-amount">
+                        {{ currencysymbol }} {{ row.ptotalreceivedamount | number:'1.2-2' }}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="groupfooter" let-rowData>
+                    <tr class="group-footer-row">
+                      <td colspan="3" class="td-right group-footer-label">Total :</td>
+                      <td class="td-right td-amount">
+                        @if (rowData.pGroupType === 'CHEQUES DEPOSITED BUT NOT CREDITED') {
+                          {{ currencysymbol }} {{ chequesdepositedbutnotcredited | number:'1.2-2' }}
+                        }
+                        @if (rowData.pGroupType === 'CHEQUES ISSUED BUT NOT CLEARED') {
+                          {{ currencysymbol }} {{ CHEQUESISSUEDBUTNOTCLEARED | number:'1.2-2' }}
+                        }
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="4" class="empty-message">No data to display</td>
+                    </tr>
+                  </ng-template>
+
+                </p-table>
+              </div>
+            }
+
+            <!-- Reconciliation Form -->
+            @if (show()) {
+              <div class="reconcile-box mt-4">
+                <form [formGroup]="BRStatmentForm">
+
+                  <div class="reconcile-summary">
+                    <p class="summary-row">
+                      <strong class="summary-label">Balance as per bank book:</strong>
+                      <span class="summary-primary">{{ currencysymbol }} {{ pBankBookBalance | number:'1.2-2' }}</span>
+                    </p>
+                    <p class="summary-row">
+                      <strong class="summary-label">Less: Cheques deposited but not credited:</strong>
+                      <span class="summary-danger">{{ currencysymbol }} {{ chequesdepositedbutnotcredited | number:'1.2-2' }}</span>
+                    </p>
+                    <p class="summary-row">
+                      <strong class="summary-label">Add: Cheques issued but not cleared:</strong>
+                      <span class="summary-success">{{ currencysymbol }} {{ CHEQUESISSUEDBUTNOTCLEARED | number:'1.2-2' }}</span>
+                    </p>
+                    <p class="summary-row">
+                      <strong class="summary-label">Balance as per pass book:</strong>
+                      <span class="summary-primary">{{ currencysymbol }} {{ Balanceasperbankbook | number:'1.2-2' }}</span>
+                    </p>
+                  </div>
+
+                  <!-- Bank Balance -->
+                  <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Bank Balance</label>
+                    <input type="text" class="form-control form-input" formControlName="pbankbalance" />
+                  </div>
+
+                  <!-- Upload Document -->
+                  <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Upload Document</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-input" formControlName="pFilename" readonly />
+                      <button type="button" class="btn btn-outline-primary btn-upload" (click)="fileInput.click()">
+                        Upload
+                      </button>
+                      <input hidden type="file" #fileInput (change)="uploadAndProgress($event)" />
+                    </div>
+                  </div>
+
+                  <!-- Save Button -->
+                  @if (f['pbankbalance'].value) {
+                    <div class="text-end">
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-save"
+                        [disabled]="isLoading()"
+                        (click)="saveWithPrint()"
+                      >
+                        {{ isLoading() ? 'Processing...' : 'Save' }}
+                      </button>
+                    </div>
+                  }
+
+                </form>
+              </div>
+            }
+
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

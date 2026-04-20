@@ -1,1 +1,244 @@
-<p>jv-list works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- Header -->
+    <div class="screen-header">
+      <h2 class="screen-title">JV List</h2>
+    </div>
+
+    <div class="screen-content">
+      <div class="container-fluid p-0">
+
+        <form [formGroup]="JvlistReportForm" autocomplete="off">
+          <div class="row filter-row">
+
+            <!-- From & To Date -->
+            <div class="col-md-4 filter-col">
+              <div class="row inner-row">
+
+                <!-- From Date -->
+                <div class="col-md-6 filter-col">
+                  <div class="form-group">
+                    <label class="form-label">
+                      From Date <span class="required-asterisk">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="fromDate"
+                      bsDatepicker
+                      [bsConfig]="dpConfig"
+                      placement="bottom"
+                      readonly
+                      (keydown)="$event.preventDefault()"
+                      (bsValueChange)="onFromDateChange($event)"
+                      [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
+                    />
+                    <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
+                      From Date is required
+                    </div>
+                  </div>
+                </div>
+
+                <!-- To Date -->
+                <div class="col-md-6 filter-col">
+                  <div class="form-group">
+                    <label class="form-label">
+                      To Date <span class="required-asterisk">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="toDate"
+                      bsDatepicker
+                      [bsConfig]="dpConfig1"
+                      placement="bottom"
+                      readonly
+                      (keydown)="$event.preventDefault()"
+                      (bsValueChange)="onToDateChange($event)"
+                      [ngClass]="{ 'is-invalid': submitted && f['toDate'].invalid }"
+                    />
+                    <div class="invalid-feedback" *ngIf="submitted && f['toDate'].errors?.['required']">
+                      To Date is required
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Form Name -->
+            <div class="col-md-3 filter-col">
+              <div class="form-group">
+                <label class="form-label">
+                  Form Name <span class="required-asterisk">*</span>
+                </label>
+                <ng-select
+                  formControlName="formName"
+                  [items]="formNameData()"
+                  bindLabel="formNames"
+                  bindValue="formNames"
+                  placeholder="Select Form Name"
+                  [searchable]="true"
+                  appendTo="body"
+                  [ngClass]="{ 'is-invalid': submitted && f['formName'].invalid }"
+                ></ng-select>
+                <div class="invalid-feedback d-block" *ngIf="submitted && f['formName'].errors?.['required']">
+                  Form Name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Transaction Type -->
+            <div class="col-md-3 filter-col">
+              <div class="form-group">
+                <label class="form-label">
+                  Transaction Type <span class="required-asterisk">*</span>
+                </label>
+                <select
+                  class="form-control form-select-input"
+                  formControlName="ptranstype"
+                  (change)="SelectTransactiontype()"
+                  [ngClass]="{ 'is-invalid': submitted && f['ptranstype'].invalid }"
+                >
+                  <option value="All">ALL</option>
+                  <option value="Auto">AUTO</option>
+                  <option value="Manual">MANUAL</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="submitted && f['ptranstype'].errors?.['required']">
+                  Select Transaction Type
+                </div>
+              </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="col-md-2 filter-col btn-col">
+              <button
+                type="button"
+                class="btn btn-primary btn-generate"
+                (click)="getjvListReports()"
+                [disabled]="loading()"
+              >
+                <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18" alt="generate" />
+                {{ savebutton }}
+              </button>
+            </div>
+
+          </div>
+        </form>
+
+        <!-- Report Section -->
+        @if (!showHide()) {
+          <div class="report-wrapper mt-4">
+            <div class="card report-card">
+              <div class="card-body">
+
+                <!-- Export Icons -->
+                <div class="export-toolbar">
+                  <img
+                    src="assets/images/pdf-icon-blue.svg"
+                    width="20"
+                    class="export-icon"
+                    title="PDF"
+                    (click)="pdfOrprint('Pdf')"
+                    alt="PDF"
+                  />
+                  <img
+                    src="assets/images/print-icon-blue.svg"
+                    width="20"
+                    class="export-icon"
+                    title="Print"
+                    (click)="pdfOrprint('Print')"
+                    alt="Print"
+                  />
+                </div>
+
+                <!-- Company Header -->
+                <div class="company-header-box">
+                  <app-companydetails [printedDateShowhide]="printedDate" />
+                  <p class="report-title">JV List</p>
+                </div>
+
+                <!-- Date + Type Info -->
+                <div class="row info-row">
+                  <div class="col-md-6">
+                    <strong class="info-label">Between :</strong>
+                    <span class="info-value ms-1">
+                      {{ startDate | date:'dd-MMM-yyyy' }} And {{ endDate | date:'dd-MMM-yyyy' }}
+                    </span>
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <strong class="info-label">JV Type :</strong>
+                    <span class="info-value ms-1">{{ jvtype }}</span>
+                  </div>
+                </div>
+
+                <!-- Data Table -->
+                <p-table
+                  [value]="jvlistDataa()"
+                  [paginator]="true"
+                  [rows]="10"
+                  [rowsPerPageOptions]="[10, 20, 50]"
+                  [responsiveLayout]="'scroll'"
+                  styleClass="p-datatable-sm"
+                >
+
+                  <ng-template pTemplate="header">
+                    <tr class="table-header-row">
+                      <th class="th-left">Particulars</th>
+                      <th class="th-right th-sortable" (click)="sortJv('pdebitamount')">
+                        Debit Amount &nbsp;<span [innerHTML]="getSortIconJv('pdebitamount')"></span>
+                      </th>
+                      <th class="th-right th-sortable" (click)="sortJv('pcreditamount')">
+                        Credit Amount &nbsp;<span [innerHTML]="getSortIconJv('pcreditamount')"></span>
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-row>
+                    <tr class="data-row">
+                      <td
+                        class="td-left"
+                        [class.td-date-row]="isDateRow(row)"
+                        [class.td-normal-row]="!isDateRow(row)"
+                      >
+                        @if (isDateRow(row)) {
+                          {{ (row.formOrModulename || row.pparticulars) | date:'dd-MMM-yyyy' }}
+                        } @else {
+                          {{ row.formOrModulename || row.pparticulars }}
+                        }
+                      </td>
+                      <td class="td-right td-debit">
+                        @if (row.pdebitamount != 0) {
+                          {{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }}
+                        } @else {
+                          <span class="td-empty">—</span>
+                        }
+                      </td>
+                      <td class="td-right td-credit">
+                        @if (row.pcreditamount != 0) {
+                          {{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}
+                        } @else {
+                          <span class="td-empty">—</span>
+                        }
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="3" class="empty-message">No Records Found</td>
+                    </tr>
+                  </ng-template>
+
+                </p-table>
+
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>
