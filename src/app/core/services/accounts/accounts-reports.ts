@@ -76,6 +76,20 @@ export class AccountsReports {
     );
   }
 
+
+   GetChequesIssuedData(bankid: any, startindex: any, endindex: any, modeofreceipt: any, _searchText: any, GlobalSchema: any,branchcode:any,companycode:any): Observable<any> {
+    const params = new HttpParams().set('_BankId', bankid).set('BranchSchema', this._CommonService.getbranchname()).set('startindex', startindex).set('endindex', endindex).set('modeofreceipt', modeofreceipt).set('searchtext', _searchText).set('GlobalSchema', GlobalSchema).set('branchcode', branchcode).set('companycode', companycode);
+    return this._CommonService.getAPI('/Accounts/GetChequesIssued', params, 'YES')
+  }
+   GetChequeEnquiryData(bankid: any, startindex: any, endindex: any, modeofreceipt: any, searchtext: any): Observable<any> {
+    const params = new HttpParams().set('depositedBankid', bankid).set('BranchSchema', this._CommonService.getbranchname()).set('startindex', startindex).set('endindex', endindex).set('modeofreceipt', modeofreceipt).set('searchtext', searchtext).set('BrsFromDate', '01-01-1991').set('BrsTodate', '11-03-2026').set('GlobalSchema', this._CommonService.getschemaname()).set('CompanyCode', this._CommonService.getCompanyCode()).set('BranchCode', this._CommonService.getBranchCode());
+    return this._CommonService.getAPI('/Accounts/GetChequeEnquiryData', params, 'YES')
+  }
+   GetBankBalance(bankid: any) {
+    const params = new HttpParams().set('brstodate', String(new Date())).set('_recordid', bankid).set('BranchSchema', this._CommonService.getbranchname()).set('branchCode', this._CommonService.getBranchCode()).set('companyCode', this._CommonService.getCompanyCode());
+    return this._CommonService.getAPI('/Accounts/GetBankBalance', params, 'YES');
+  }
+
   GetLedgerAccountListforInterbranch(formname: string, BranchSchema: string): Observable<any> {
     const params = new HttpParams()
       .set('formname', formname)
