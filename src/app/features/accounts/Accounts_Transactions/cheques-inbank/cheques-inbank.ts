@@ -36,7 +36,7 @@ type AOA = any[][];
   imports: [
     CommonModule,
     FormsModule,
-    
+
     NgSelectModule,
     BsDatepickerModule,
     ReactiveFormsModule,
@@ -811,8 +811,8 @@ export class ChequesInbank implements OnInit {
           this.gridData.update(r =>
             r.map(el =>
               el?.['pChequenumber'] === data.pChequenumber &&
-              data.cheque_bank === el.cheque_bank &&
-              data.receipt_branch_name === el.receipt_branch_name
+                data.cheque_bank === el.cheque_bank &&
+                data.receipt_branch_name === el.receipt_branch_name
                 ? { ...el, pdepositstatus: true, preturnstatus: false, pchequestatus: 'Y' }
                 : el
             )
@@ -1034,7 +1034,7 @@ export class ChequesInbank implements OnInit {
                       for (let i = 0; i < this.previewdetails.length; i++) {
                         this.previewdetails[i].paddress = this.previewdetails[i]['paddress'].split(',');
                         const incidentalcharges = JSON.stringify(this.previewdetails[i].incidentalcharges);
-                        if (incidentalcharges === '{}' || 
+                        if (incidentalcharges === '{}' ||
                           this._commonService.isNullOrEmptyString(this.previewdetails[i].incidentalcharges)) {
                           this.previewdetails[i].incidentalcharges = 0;
                         }

@@ -1,1 +1,92 @@
-<p>bank-config-view works!</p>
+<div class="screen-container">
+    <div class="screen-card">
+
+        <!-- Header -->
+        <div class="screen-header">
+            <h2 class="screen-title">Bank View</h2>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar-row">
+
+            <!-- New Button -->
+            <a routerLink="/dashboard/accounts/accounts-config/bank-config" class="btn btn-primary new-btn"
+                (click)="newSchemeForm()">
+                + New
+            </a>
+
+            <!-- Search Box -->
+            <div class="search-wrapper">
+                <i class="pi pi-search search-icon"></i>
+                <input type="text" class="form-control search-input" placeholder="Search..."
+                    (keyup)="filterDatatable($event)" />
+            </div>
+
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+
+            <p-table [value]="gridData()" [paginator]="true" [rows]="pageCriteria.pageSize"
+                [rowsPerPageOptions]="[5, 10, 20, 50]" sortMode="single" responsiveLayout="scroll" [loading]="loading()"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                styleClass="p-datatable-sm p-datatable-gridlines">
+
+                <!-- Header -->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="th-actions">Actions</th>
+                        <th class="th-cell" pSortableColumn="bankName">
+                            Bank Name <i class="pi pi-sort-alt sort-icon"></i>
+                        </th>
+                        <th class="th-cell" pSortableColumn="account_number">
+                            Account No. <i class="pi pi-sort-alt sort-icon"></i>
+                        </th>
+                        <th class="th-cell" pSortableColumn="account_name">
+                            Name of the Account <i class="pi pi-sort-alt sort-icon"></i>
+                        </th>
+                        <th class="th-cell">A/C Status</th>
+                        <th class="th-cell th-last">A/C Type</th>
+                    </tr>
+                </ng-template>
+
+                <!-- Body -->
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr class="table-row">
+
+                        <td class="td-actions">
+                            <button class="btn btn-sm edit-btn" (click)="editHandler(row)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+
+                        <td class="td-cell">{{ row.bankName || '--' }}</td>
+                        <td class="td-cell">{{ row.account_number || '--' }}</td>
+                        <td class="td-cell">{{ row.account_name || '--' }}</td>
+
+                        <td class="td-cell">
+                            @if (row.status) {
+                            <span class="badge-active">Active</span>
+                            } @else {
+                            <span class="badge-inactive">Inactive</span>
+                            }
+                        </td>
+
+                        <td class="td-cell">{{ getAccountType(row) }}</td>
+
+                    </tr>
+                </ng-template>
+
+                <!-- Empty State -->
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6" class="empty-message">No records found</td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+
+        </div>
+    </div>
+</div>

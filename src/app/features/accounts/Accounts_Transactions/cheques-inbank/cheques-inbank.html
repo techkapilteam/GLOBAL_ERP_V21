@@ -18,19 +18,10 @@
               Transaction Date <span class="required-star">*</span>
             </label>
             <fieldset [disabled]="!disabletransactiondate">
-              <input
-                class="form-control form-control-sm"
-                type="text"
-                title="ptransactiondate"
-                id="ptransactiondate"
-                formControlName="ptransactiondate"
-                [bsConfig]="ptransactiondateConfig"
-                #dp="bsDatepicker"
-                readonly
-                bsDatepicker
-                placement="bottom"
-                [ngClass]="{ 'is-invalid': ChequesInBankValidation.ptransactiondate }"
-              />
+              <input class="form-control form-control-sm" type="text" title="ptransactiondate" id="ptransactiondate"
+                formControlName="ptransactiondate" [bsConfig]="ptransactiondateConfig" #dp="bsDatepicker" readonly
+                bsDatepicker placement="bottom"
+                [ngClass]="{ 'is-invalid': ChequesInBankValidation.ptransactiondate }" />
             </fieldset>
             <app-validation-message [messgae]="ChequesInBankValidation?.ptransactiondate" />
           </div>
@@ -42,22 +33,10 @@
             <label class="form-label required-field">
               Cheque Clear Date <span class="required-star">*</span>
             </label>
-            <input
-              class="form-control form-control-sm"
-              type="text"
-              title="pchequecleardate"
-              id="pchequecleardate"
-              formControlName="pchequecleardate"
-              [bsConfig]="pchequecleardateConfig"
-              #dp="bsDatepicker"
-              readonly
-              bsDatepicker
-              placement="bottom"
-              [ngClass]="{ 'is-invalid': ChequesInBankValidation.pchequecleardate }"
-              (bsValueChange)="change_date($event)"
-              [isDisabled]="true"
-              (keydown)="$event.preventDefault()"
-            />
+            <input class="form-control form-control-sm" type="text" title="pchequecleardate" id="pchequecleardate"
+              formControlName="pchequecleardate" [bsConfig]="pchequecleardateConfig" #dp="bsDatepicker" readonly
+              bsDatepicker placement="bottom" [ngClass]="{ 'is-invalid': ChequesInBankValidation.pchequecleardate }"
+              (bsValueChange)="change_date($event)" [isDisabled]="true" (keydown)="$event.preventDefault()" />
           </div>
         </div>
 
@@ -67,16 +46,9 @@
             <label class="form-label">
               Bank <span class="required-star">*</span>
             </label>
-            <ng-select
-              [items]="BanksList"
-              bindLabel="pbankname"
-              placeholder="Select"
-              formControlName="bankname"
-              [ngClass]="{ 'is-invalid': ChequesInBankValidation.bankname }"
-              (change)="SelectBank($event)"
-              [clearable]="true"
-              class="ng-select-sm"
-            />
+            <ng-select [items]="BanksList" bindLabel="pbankname" placeholder="Select" formControlName="bankname"
+              [ngClass]="{ 'is-invalid': ChequesInBankValidation.bankname }" (change)="SelectBank($event)"
+              [clearable]="true" class="ng-select-sm" />
             <div class="validation-error">
               <app-validation-message [messgae]="ChequesInBankValidation?.bankname" />
             </div>
@@ -118,32 +90,21 @@
         <div class="col-md-4 col-xl-4 mb-3">
           <div class="search-wrapper">
             <span class="search-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                class="bi bi-search" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0
-                  1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                  1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
               </svg>
             </span>
-            <input
-              type="text"
-              formControlName="searchtext"
-              #search
-              id="searchtext"
-              class="form-control search-input"
-              placeholder="Search"
-              (paste)="onPaste($event)"
-              (keydown.enter)="showSearchText('search')"
-            />
+            <input type="text" formControlName="searchtext" #search id="searchtext" class="form-control search-input"
+              placeholder="Search" (paste)="onPaste($event)" (keydown.enter)="showSearchText('search')" />
           </div>
         </div>
 
         <!-- Search button -->
         <div class="col-md-2 col-xl-2 mb-3">
-          <button
-            (click)="showSearchText('search')"
-            class="btn btn-primary btn-sm btn-search"
-            [disabled]="searchloading()"
-          >
+          <button (click)="showSearchText('search')" class="btn btn-primary btn-sm btn-search"
+            [disabled]="searchloading()">
             Search
           </button>
         </div>
@@ -153,16 +114,16 @@
           <div class="export-icons">
             <ul *ngIf="gridData().length > 0" class="export-list">
               <li>
-                <img src="assets/images/pdf-icon-blue.svg" width="18px" title="pdf"
-                  class="export-icon" (click)="pdfOrprint('Pdf')" />
+                <img src="assets/images/pdf-icon-blue.svg" width="18px" title="pdf" class="export-icon"
+                  (click)="pdfOrprint('Pdf')" />
               </li>
               <li>
-                <img src="assets/images/print-icon-blue.svg" width="18px" title="print"
-                  class="export-icon" (click)="pdfOrprint('Print')" />
+                <img src="assets/images/print-icon-blue.svg" width="18px" title="print" class="export-icon"
+                  (click)="pdfOrprint('Print')" />
               </li>
               <li>
-                <img src="assets/images/icon-excel.svg" width="18px" title="excel"
-                  class="export-icon" (click)="export()" />
+                <img src="assets/images/icon-excel.svg" width="18px" title="excel" class="export-icon"
+                  (click)="export()" />
               </li>
             </ul>
           </div>
@@ -172,8 +133,7 @@
         <ul class="nav status-tabs" *ngIf="tabsShowOrHideBasedOnfromFormName">
 
           <li class="nav-item">
-            <a id="allcss" href="#" class="status-tab-link"
-              [class.active]="selectedTab === 'all'"
+            <a id="allcss" href="#" class="status-tab-link" [class.active]="selectedTab === 'all'"
               (click)="selectedTab='all'; All(); $event.preventDefault()">
               All
               <span class="badge badge-warning">{{ all || 0 }}</span>
@@ -190,8 +150,7 @@
           </li>
 
           <li class="nav-item">
-            <a id="onlinereceiptscss" href="#" class="status-tab-link"
-              [class.active]="selectedTab === 'onlinereceipts'"
+            <a id="onlinereceiptscss" href="#" class="status-tab-link" [class.active]="selectedTab === 'onlinereceipts'"
               (click)="selectedTab='onlinereceipts'; OnlineReceipts(); $event.preventDefault()">
               Online Receipts
               <span class="badge badge-primary">{{ onlinereceipts || 0 }}</span>
@@ -199,8 +158,7 @@
           </li>
 
           <li class="nav-item">
-            <a id="clearedcss" href="#" class="status-tab-link"
-              [class.active]="selectedTab === 'cleared'"
+            <a id="clearedcss" href="#" class="status-tab-link" [class.active]="selectedTab === 'cleared'"
               (click)="selectedTab='cleared'; Cleared(); $event.preventDefault()">
               Cleared
               <span class="badge badge-success">{{ cleared || 0 }}</span>
@@ -208,8 +166,7 @@
           </li>
 
           <li class="nav-item">
-            <a id="returnedcss" href="#" class="status-tab-link"
-              [class.active]="selectedTab === 'returned'"
+            <a id="returnedcss" href="#" class="status-tab-link" [class.active]="selectedTab === 'returned'"
               (click)="selectedTab='returned'; Returned(); $event.preventDefault()">
               Returned
               <span class="badge badge-danger">{{ returned || 0 }}</span>
@@ -224,10 +181,9 @@
           <div class="col-md-3 col-xl-3">
             <div class="form-group">
               <label class="form-label">BRS From Date</label>
-              <input class="form-control form-control-sm" type="text" formControlName="pfrombrsdate"
-                title="frombrsdate" placeholder="Select From Date" readonly
-                [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom"
-                (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()"
+              <input class="form-control form-control-sm" type="text" formControlName="pfrombrsdate" title="frombrsdate"
+                placeholder="Select From Date" readonly [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker
+                placement="bottom" (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()"
                 (bsValueChange)="onBrsFromDateChange($event)" />
             </div>
           </div>
@@ -236,10 +192,9 @@
             <div class="form-group">
               <label class="form-label">BRS To Date</label>
               <div class="brs-to-row">
-                <input class="form-control form-control-sm" type="text" formControlName="ptobrsdate"
-                  title="tobrsdate" placeholder="Select To Date" readonly
-                  [bsConfig]="brstoConfig" #dp="bsDatepicker" bsDatepicker placement="bottom"
-                  (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()"
+                <input class="form-control form-control-sm" type="text" formControlName="ptobrsdate" title="tobrsdate"
+                  placeholder="Select To Date" readonly [bsConfig]="brstoConfig" #dp="bsDatepicker" bsDatepicker
+                  placement="bottom" (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()"
                   (bsValueChange)="onBrsToDateChange($event)" />
                 <a (click)="ShowBrsClear()" class="btn btn-primary btn-sm btn-show" role="tab">Show</a>
               </div>
@@ -258,8 +213,8 @@
             <div class="col-md-3 col-xl-3">
               <div class="form-group">
                 <label class="form-label">BRS From Date</label>
-                <input class="form-control form-control-sm" type="text" placeholder="Select From Date"
-                  readonly bsDatepicker [bsConfig]="brsfromConfig" formControlName="frombrsdate"
+                <input class="form-control form-control-sm" type="text" placeholder="Select From Date" readonly
+                  bsDatepicker [bsConfig]="brsfromConfig" formControlName="frombrsdate"
                   (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" />
               </div>
             </div>
@@ -268,8 +223,8 @@
               <div class="form-group">
                 <label class="form-label">BRS To Date</label>
                 <div class="brs-to-row">
-                  <input class="form-control form-control-sm" type="text" placeholder="Select To Date"
-                    readonly bsDatepicker [bsConfig]="brstoConfig" formControlName="tobrsdate"
+                  <input class="form-control form-control-sm" type="text" placeholder="Select To Date" readonly
+                    bsDatepicker [bsConfig]="brstoConfig" formControlName="tobrsdate"
                     (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" />
                   <button type="button" class="btn btn-primary btn-sm btn-show" (click)="ShowBrsReturn()">Show</button>
                 </div>
@@ -284,20 +239,11 @@
 
         <!-- Data Grid -->
         <div class="col-md-12 col-xl-12 grid-container">
-          <p-table
-            #dt
-            [value]="gridData()"
-            [paginator]="true"
-            [rows]="10"
-            [rowsPerPageOptions]="[10,25,50]"
-            [scrollable]="true"
-            scrollHeight="500px"
-            [resizableColumns]="true"
-            columnResizeMode="fit"
+          <p-table #dt [value]="gridData()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+            [scrollable]="true" scrollHeight="500px" [resizableColumns]="true" columnResizeMode="fit"
             [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            styleClass="p-datatable-sm p-datatable-gridlines"
-          >
+            styleClass="p-datatable-sm p-datatable-gridlines">
 
             <ng-template pTemplate="header">
               <tr>
@@ -327,33 +273,32 @@
                 <td *ngIf="!showhidegridcolumns()" class="cell-center cell-muted"></td>
 
                 <td *ngIf="!showhidegridcolumns()" class="cell-center">
-                  <input type="checkbox" [(ngModel)]="row.pdepositstatus"
-                    [ngModelOptions]="{standalone: true}" (change)="onRowClearCheck($event, row)" />
+                  <input type="checkbox" [(ngModel)]="row.pdepositstatus" [ngModelOptions]="{standalone: true}"
+                    (change)="onRowClearCheck($event, row)" />
                 </td>
 
                 <td class="cell-center" *ngIf="!showhidegridcolumns2()">
-                  <input type="checkbox" [(ngModel)]="row.preturnstatus"
-                    [ngModelOptions]="{standalone: true}" (change)="CheckedReturn($event, row)" />
+                  <input type="checkbox" [(ngModel)]="row.preturnstatus" [ngModelOptions]="{standalone: true}"
+                    (change)="CheckedReturn($event, row)" />
                 </td>
 
                 <td *ngIf="!showhidegridcolumns()" class="cell-center">
                   <input class="form-control form-control-sm ref-input" type="text" maxlength="15"
-                    [id]="'preferencetext' + rowIndex"
-                    [(ngModel)]="row.preferencetext"
-                    [ngModelOptions]="{standalone: true}"
-                    (keyup)="checkDuplicateValueslatest($event, rowIndex, row)" />
+                    [id]="'preferencetext' + rowIndex" [(ngModel)]="row.preferencetext"
+                    [ngModelOptions]="{standalone: true}" (keyup)="checkDuplicateValueslatest($event, rowIndex, row)" />
                 </td>
 
                 <td class="cell-center">{{ row.pChequenumber || '--NA--' }}</td>
                 <td class="cell-left">{{ row.pbranchname || '--NA--' }}</td>
                 <td class="cell-right">
                   {{ row.ptotalreceivedamount != null
-                    ? (row.ptotalreceivedamount | currency:currencyCode:'symbol':'1.2-2')
-                    : (currencySymbol + ' 0.00') }}
+                  ? (row.ptotalreceivedamount | currency:currencyCode:'symbol':'1.2-2')
+                  : (currencySymbol + ' 0.00') }}
                 </td>
                 <td class="cell-left">{{ row.ppartyname || '--NA--' }}</td>
                 <td class="cell-center">{{ row.preceiptdate ? (row.preceiptdate | date:'dd-MM-yyyy') : '--NA--' }}</td>
-                <td class="cell-center">{{ row.pdepositeddate ? (row.pdepositeddate | date:'dd-MM-yyyy') : '--NA--' }}</td>
+                <td class="cell-center">{{ row.pdepositeddate ? (row.pdepositeddate | date:'dd-MM-yyyy') : '--NA--' }}
+                </td>
                 <td class="cell-center" *ngIf="!hiddendate()">
                   {{ row.pCleardate ? (row.pCleardate | date:'dd-MMM-yyyy') : '--NA--' }}
                 </td>
@@ -427,9 +372,8 @@
           <label class="form-label">
             Enter The Return Amount Charges For The Cheque: {{ chequenumber }}
           </label>
-          <input type="text" class="form-control text-end" name="cancelcharges" maxlength="6"
-            id="cancelcharges" #cancelRef (input)="returnCharges_Change($event)"
-            appNumbersonly appMycurrencyFormatter />
+          <input type="text" class="form-control text-end" name="cancelcharges" maxlength="6" id="cancelcharges"
+            #cancelRef (input)="returnCharges_Change($event)" appNumbersonly appMycurrencyFormatter />
           <div *ngIf="returnChargesError()" class="modal-validation-error">
             ⚠ Minimum amount should be ₹{{ minimumReturnCharge || 250 }}
           </div>
