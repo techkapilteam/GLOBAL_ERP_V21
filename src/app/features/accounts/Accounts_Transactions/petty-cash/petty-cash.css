@@ -1,0 +1,397 @@
+/* =============================================
+   Petty Cash Component Styles
+============================================= */
+
+/* --- Screen Layout --- */
+.screen-container {
+  padding: 12px;
+}
+
+.screen-card {
+  background: #fff;
+  border-radius: 10px;
+}
+
+/* --- Screen Header --- */
+.screen-header {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 3px solid #0d6efd;
+}
+
+.screen-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #070707;
+}
+
+.screen-header .btn-view {
+  margin-left: auto;
+  margin-top: 4px;
+  background: #ffc107;
+  border-color: #ffc107;
+  border-radius: 7px;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 8px 20px;
+  color: #000;
+}
+
+/* --- Screen Content --- */
+.screen-content {
+  padding: 20px 24px;
+}
+
+/* --- Section Cards --- */
+.section-card {
+  border: 1px solid #dce8fd;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.07);
+}
+
+/* --- Section Title --- */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #162246;
+  border-bottom: 3px solid #dce8fd;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+/* --- Form Labels --- */
+.form-label-primary {
+  font-size: 15px;
+  font-weight: 600;
+  color: #162246;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-label-sm {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #162246;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* --- Payment Mode --- */
+.payment-mode-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border: 1.5px solid #cdd8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #162246;
+  background: #fff;
+  margin: 0;
+}
+
+.payment-mode-label input[type="radio"] {
+  margin: 0;
+}
+
+/* --- Balance Badge --- */
+.balance-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.balance-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+}
+
+.balance-badge--green {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.balance-badge--yellow {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+/* --- Tax Section --- */
+.tax-section-box {
+  background: #f8faff;
+  border: 1.5px solid #dce8fd;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.tax-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tax-section-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #162246;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Amount Display --- */
+.amount-display-box {
+  background: #fff;
+  border: 1.5px solid #0d6efd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-align: right;
+  min-height: 38px;
+}
+
+.amount-display-box .amount-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #162246;
+}
+
+.amount-display-box--light {
+  border-color: #dce8fd;
+}
+
+/* --- Balance Hint --- */
+.balance-hint {
+  font-style: italic;
+  font-size: 12px;
+  color: #0d6efd;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 65px;
+}
+
+/* --- Amount Input --- */
+.amount-input {
+  text-align: right;
+  font-weight: 700;
+}
+
+/* --- Character Count --- */
+.char-count {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.char-count small {
+  font-weight: 500;
+  color: #8fa0c4;
+}
+
+.char-count small.limit-reached {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+/* --- Details Actions --- */
+.details-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1.5px solid #dce8fd;
+}
+
+.btn-clear-dark {
+  background: #162246;
+  border: 1.5px solid #cdd8f0;
+  color: #f1f1f2;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add {
+  background: #0d6efd;
+  border: 1.5px solid #0d6efd;
+  color: #fff;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Footer --- */
+.form-footer {
+  background: #f0f4fd;
+  border-top: 2px solid #dce8fd;
+  border-radius: 0 0 10px 10px;
+  padding: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-footer-clear {
+  background: #162246;
+  border: 1.5px solid #cdd8f0;
+  color: #fefefe;
+  border-radius: 7px;
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-footer-save {
+  background: #007bff;
+  border: 1.5px solid #b2c5ff;
+  color: #fff;
+  border-radius: 7px;
+  padding: 8px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Record Count --- */
+.record-count {
+  font-size: 12px;
+  color: #8fa0c4;
+  margin-top: 8px;
+}
+
+/* --- Upload --- */
+.upload-group {
+  max-width: 300px;
+}
+
+.upload-group .upload-btn {
+  background: #eef4ff;
+  border: 1.5px solid #cdd8f0;
+  border-left: none;
+  padding: 6px 12px;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+
+/* --- Table Sticky --- */
+.petty-cash-table .p-datatable-wrapper {
+  overflow-x: auto;
+}
+
+.petty-cash-table .p-datatable table {
+  table-layout: auto;
+}
+
+.petty-cash-table .p-datatable-thead > tr > th:first-child,
+.petty-cash-table .p-datatable-tbody > tr > td:first-child,
+.petty-cash-table .p-datatable-tfoot > tr > td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.08);
+}
+
+.petty-cash-table .p-datatable-thead > tr > th:first-child {
+  background: #2E86C1;
+  z-index: 4;
+}
+
+.petty-cash-table .p-datatable-tbody > tr:nth-child(even) > td:first-child {
+  background: #f8faff;
+}
+
+/* --- Table --- */
+.th-primary {
+  background: #2E86C1;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 12px;
+  border-right: 1px solid #fff;
+}
+
+.th-actions {
+  background: #2E86C1;
+  color: #fff;
+  min-width: 70px;
+  width: 70px;
+  position: sticky;
+  left: 0;
+  z-index: 4;
+}
+
+.td-base {
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.td-sticky {
+  padding: 8px 12px;
+  text-align: center;
+  width: 70px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.08);
+}
+
+/* --- Remove Button --- */
+.btn-remove {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #fff0f0;
+  border-radius: 6px;
+  border: 1px solid #ffc9c9;
+}
+
+/* --- Notes --- */
+.account-received-note {
+  display: block;
+  font-size: 11px;
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* --- GST Disabled --- */
+.gst-toggle-wrapper.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}       
