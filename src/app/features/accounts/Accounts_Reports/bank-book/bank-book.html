@@ -1,1 +1,294 @@
-<p>bank-book works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- Header -->
+    <div class="screen-header">
+      <h2 class="screen-title">Bank Book</h2>
+    </div>
+
+    <div class="section-content">
+      <div class="container-fluid filter-container">
+        <form [formGroup]="bankBookForm" autocomplete="off">
+
+          <div class="row filter-row">
+
+            <!-- From Date -->
+            <div class="col-md-3 filter-col">
+              <div class="form-group">
+                <label class="form-label required-field">
+                  From Date <span class="required-asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="fromDate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onFromDateChange($event)"
+                  [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
+                />
+                <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
+                  From Date is required
+                </div>
+              </div>
+            </div>
+
+            <!-- To Date -->
+            <div class="col-md-3 filter-col">
+              <div class="form-group">
+                <label class="form-label required-field">
+                  To Date <span class="required-asterisk">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="toDate"
+                  bsDatepicker
+                  [bsConfig]="dpConfig1"
+                  placement="bottom"
+                  readonly
+                  (keydown)="$event.preventDefault()"
+                  (bsValueChange)="onToDateChange($event)"
+                  [ngClass]="{ 'is-invalid': submitted && f['toDate'].invalid }"
+                />
+                <div class="invalid-feedback" *ngIf="submitted && f['toDate'].errors?.['required']">
+                  To Date is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Bank Name -->
+            <div class="col-md-3 filter-col">
+              <div class="form-group">
+                <label class="form-label">
+                  Bank Name <span class="required-asterisk">*</span>
+                </label>
+                <ng-select
+                  [items]="bankData()"
+                  bindLabel="bankName"
+                  bindValue="bankAccountId"
+                  placeholder="Select Bank"
+                  formControlName="pbankname"
+                  (change)="onBankChange($event)"
+                  appendTo="body"
+                  [ngClass]="{ 'is-invalid': submitted && f['pbankname'].errors?.['required'] }"
+                ></ng-select>
+                <div class="invalid-feedback" *ngIf="submitted && f['pbankname'].errors?.['required']">
+                  Bank Name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="col-md-3 filter-col btn-col">
+              <button
+                type="button"
+                class="btn btn-primary btn-generate"
+                (click)="getBankBookReports()"
+                [disabled]="loading()"
+              >
+                <img
+                  src="assets/images/icon-check-white.svg"
+                  class="btn-icon"
+                  width="18"
+                  height="18"
+                  alt="generate"
+                />
+                {{ loading() ? 'Processing...' : 'Generate Report' }}
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Report Section -->
+    @if (showReport()) {
+      <div class="report-wrapper">
+        <div class="card report-card">
+          <div class="card-body">
+
+            <!-- Export Icons -->
+            <div class="export-toolbar">
+              <a (click)="pdfOrPrint('Pdf')" class="export-icon" title="PDF">
+                <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
+              </a>
+              <a (click)="pdfOrPrint('Print')" class="export-icon" title="Print">
+                <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
+              </a>
+              <a (click)="export()" class="export-icon" title="Excel">
+                <img src="assets/images/icon-excel.svg" width="18" alt="Excel" />
+              </a>
+            </div>
+
+            <!-- Company Details -->
+            <app-company-details [PrintedDateShowhide]="printedDate" />
+            <hr class="report-divider" />
+
+            <!-- Report Title -->
+            <div class="report-title-wrap">
+              <h5 class="report-title">Bank Book - {{ bankName() }}</h5>
+            </div>
+
+            <!-- Date Range -->
+            <div class="row date-range-row">
+              <div class="col-md-6">
+                <strong class="date-range-label">Between:</strong>
+                <span class="date-range-value">
+                  {{ StartDate() | date:'dd-MMM-yyyy' }} And {{ EndDate() | date:'dd-MMM-yyyy' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Data Table -->
+            <p-table
+              [value]="gridView()"
+              dataKey="ptransactionno"
+              [paginator]="true"
+              [rows]="10"
+              [responsiveLayout]="'scroll'"
+              sortField="ptransactiondate"
+              [sortOrder]="1"
+              [expandedRowKeys]="expandedRows"
+              [showFirstLastIcon]="false"
+              groupRowsBy="ptransactiondate"
+              [rowGroupMode]="'subheader'"
+              [loading]="loading()"
+              [showCurrentPageReport]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+
+              <!-- Table Header -->
+              <ng-template pTemplate="header">
+                <tr class="table-header-row">
+                  <th class="th-left" (click)="sortBy('ptransactionno')">
+                    Transaction No. &nbsp;
+                    <span [innerHTML]="getSortIcon('ptransactionno')"></span>
+                  </th>
+                  <th class="th-left" (click)="sortBy('pparticulars')">
+                    Particulars &nbsp;
+                    <span [innerHTML]="getSortIcon('pparticulars')"></span>
+                  </th>
+                  <th class="th-left" (click)="sortBy('pdescription')">
+                    Narration &nbsp;
+                    <span [innerHTML]="getSortIcon('pdescription')"></span>
+                  </th>
+                  <th class="th-right" (click)="sortBy('pdebitamount')">
+                    Receipts &nbsp;
+                    <span [innerHTML]="getSortIcon('pdebitamount')"></span>
+                  </th>
+                  <th class="th-right" (click)="sortBy('pcreditamount')">
+                    Payments &nbsp;
+                    <span [innerHTML]="getSortIcon('pcreditamount')"></span>
+                  </th>
+                  <th class="th-right" (click)="sortBy('popeningbal')">
+                    Balance &nbsp;
+                    <span [innerHTML]="getSortIcon('popeningbal')"></span>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- Group Header -->
+              <ng-template pTemplate="groupheader" let-row>
+                <tr class="group-header-row">
+                  <td colspan="6" class="group-header-cell">
+                    <span class="group-header-label">
+                      {{ row.ptransactiondate | date:'dd-MMM-yyyy' }}
+                    </span>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <!-- Body Row -->
+              <ng-template pTemplate="body" let-row>
+                <tr class="data-row">
+                  <td class="td-left">
+                    @if (row.ptransactionno) {
+                      <a class="tx-link" (click)="toggleRow(row)">
+                        {{ row.ptransactionno }}
+                      </a>
+                    } @else {
+                      <span class="text-muted">--NA--</span>
+                    }
+                  </td>
+                  <td class="td-left td-particulars">{{ row.pparticulars }}</td>
+                  <td class="td-left td-narration">{{ row.pdescription || '--NA--' }}</td>
+                  <td class="td-right td-receipt">
+                    @if (row.pdebitamount !== 0) {
+                      ₹ {{ row.pdebitamount | number:'1.2-2' }}
+                    } @else {
+                      <span class="text-muted">—</span>
+                    }
+                  </td>
+                  <td class="td-right td-payment">
+                    @if (row.pcreditamount !== 0) {
+                      ₹ {{ row.pcreditamount | number:'1.2-2' }}
+                    } @else {
+                      <span class="text-muted">—</span>
+                    }
+                  </td>
+                  <td class="td-right td-balance">
+                    <span [ngClass]="{
+                      'balance-cr': row.pBalanceType === 'Cr',
+                      'balance-dr': row.pBalanceType === 'Dr'
+                    }">
+                      ₹ {{ row.popeningbal | number:'1.2-2' }} {{ row.pBalanceType }}
+                    </span>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <!-- Row Expansion -->
+              <ng-template pTemplate="rowexpansion" let-row>
+                <tr class="expansion-row">
+                  <td colspan="6" class="expansion-cell">
+                    <div class="expansion-content">
+                      <table class="table table-sm expansion-table">
+                        <thead>
+                          <tr class="expansion-header-row">
+                            <th class="expansion-th">Ledger Name</th>
+                            <th class="expansion-th text-end">Debit (₹)</th>
+                            <th class="expansion-th text-end">Credit (₹)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (d of row.details; track $index) {
+                            <tr class="expansion-data-row">
+                              <td class="expansion-td">{{ d.ledgerName }}</td>
+                              <td class="expansion-td text-end expansion-debit">{{ d.debit | number:'1.2-2' }}</td>
+                              <td class="expansion-td text-end expansion-credit">{{ d.credit | number:'1.2-2' }}</td>
+                            </tr>
+                          }
+                          @if (!row.details || row.details.length === 0) {
+                            <tr>
+                              <td colspan="3" class="expansion-empty">No details found</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <!-- Empty Message -->
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6" class="empty-message">No data to display</td>
+                </tr>
+              </ng-template>
+
+            </p-table>
+
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

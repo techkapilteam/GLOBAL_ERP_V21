@@ -1,1 +1,343 @@
-<p>cheque-managementnew works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- ═══════════════════════════════════════════
+         HEADER
+    ════════════════════════════════════════════ -->
+    <div class="screen-header">
+      <h2 class="screen-title">Cheque Management</h2>
+
+      <a
+        routerLink="/dashboard/accounts/accounts-config/cheque-management"
+        class="btn-view"
+        title="Go to Cheque Management list">
+        <i class="fa fa-list" aria-hidden="true"></i>
+        View
+      </a>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE BODY
+    ════════════════════════════════════════════ -->
+    <div class="page-body">
+      <div class="form-card">
+        <form
+          [formGroup]="chequemanagementform"
+          autocomplete="off"
+          novalidate>
+
+          <!-- ── BANK DETAILS ────────────────────────── -->
+          <span class="section-label">Bank Details</span>
+
+          <div class="row mb-3">
+
+            <!-- Select Bank -->
+            <div class="col-md-6">
+              <div class="form-group mb-0">
+                <label class="form-label-custom" for="bankName">
+                  Select Bank
+                  <span class="req" aria-hidden="true">*</span>
+                </label>
+
+                <ng-select
+                  inputId="bankName"
+                  [items]="bankdetails()"
+                  bindLabel="bankName"
+                  bindValue="bankName"
+                  placeholder="-- Select --"
+                  formControlName="bankName"
+                  [loading]="isLoadingBanks()"
+                  loadingText="Loading banks..."
+                  notFoundText="No banks found"
+                  [ngClass]="{
+                    'ng-invalid ng-touched':
+                      bankNameCtrl.touched && bankNameCtrl.invalid
+                  }"
+                  (change)="onBankChange($event)"
+                  aria-label="Select Bank">
+                </ng-select>
+
+                @if (bankNameCtrl.touched && bankNameCtrl.invalid) {
+                  <small class="val-error" role="alert">
+                    Bank is required
+                  </small>
+                }
+              </div>
+            </div>
+
+            <!-- Date (hidden — kept for form value) -->
+            <div class="col-md-3 d-none" aria-hidden="true">
+              <div class="form-group">
+                <label class="form-label-custom">Date</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  [bsConfig]="currentdate"
+                  bsDatepicker
+                  formControlName="pChequeGenerateDate" />
+              </div>
+            </div>
+
+          </div>
+
+          <hr class="section-divider" />
+
+          <!-- ── CHEQUE RANGE ──────────────────────────── -->
+          <span class="section-label">Cheque Range</span>
+
+          <div class="row">
+
+            <!-- Number of Cheques -->
+            <div class="col-md-3 mb-3">
+              <div class="form-group mb-0">
+                <label class="form-label-custom" for="pNoofcheques">
+                  Number Of Cheques
+                  <span class="req" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pNoofcheques"
+                  title="Number of Cheques"
+                  maxlength="3"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  formControlName="pNoofcheques"
+                  [ngClass]="{
+                    'is-invalid': noofchequesCtrl.touched && noofchequesCtrl.errors
+                  }"
+                  (input)="allowOnlyNumbers($event, 3)"
+                  (change)="onNoofchequesChange($event)"
+                  aria-describedby="noofcheques-error" />
+
+                @if (noofchequesCtrl.touched && noofchequesCtrl.errors) {
+                  <div
+                    id="noofcheques-error"
+                    class="val-error"
+                    role="alert">
+                    @if (noofchequesCtrl.errors['required']) {
+                      <span>Number of cheques is required</span>
+                    }
+                    @if (noofchequesCtrl.errors['min']) {
+                      <span>Minimum value is 1</span>
+                    }
+                    @if (noofchequesCtrl.errors['max']) {
+                      <span>Maximum value is 999</span>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- From No. -->
+            <div class="col-md-3 mb-3">
+              <div class="form-group mb-0">
+                <label class="form-label-custom" for="pChequefrom">
+                  From No.
+                  <span class="req" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pChequefrom"
+                  title="From Cheque No"
+                  maxlength="8"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  formControlName="pChequefrom"
+                  [ngClass]="{
+                    'is-invalid': chequefromCtrl.touched && chequefromCtrl.invalid
+                  }"
+                  (input)="allowOnlyNumbers($event, 8)"
+                  (change)="onFromchequenoChange($event)"
+                  aria-describedby="chequefrom-error" />
+
+                @if (chequefromCtrl.touched && chequefromCtrl.invalid) {
+                  <small
+                    id="chequefrom-error"
+                    class="val-error"
+                    role="alert">
+                    From cheque number is required
+                  </small>
+                }
+              </div>
+            </div>
+
+            <!-- To No. (auto-calculated, read-only) -->
+            <div class="col-md-3 mb-3">
+              <div class="form-group mb-0">
+                <label class="form-label-custom" for="pChequeto">
+                  To No.
+                  <span class="req" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pChequeto"
+                  title="To Cheque No"
+                  formControlName="pChequeto"
+                  readonly
+                  [ngClass]="{
+                    'is-invalid': chequetoCtrl.touched && chequetoCtrl.invalid
+                  }"
+                  aria-describedby="chequeto-error"
+                  aria-readonly="true" />
+
+                @if (chequetoCtrl.touched && chequetoCtrl.invalid) {
+                  <small
+                    id="chequeto-error"
+                    class="val-error"
+                    role="alert">
+                    To cheque number is required
+                  </small>
+                }
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Add Button -->
+          <div class="add-row">
+            <button
+              type="button"
+              class="btn-add"
+              (click)="addtoGrid()"
+              title="Add cheque range to grid"
+              aria-label="Add cheque range to grid">
+              <span class="add-plus" aria-hidden="true">+</span>
+              Add
+            </button>
+          </div>
+
+          <hr class="section-divider" />
+
+          <!-- ── CHEQUE RECORDS GRID ─────────────────── -->
+          <span class="section-label">
+            Cheque Records
+            @if (hasGridData()) {
+              <span class="ms-2 text-muted fw-normal">({{ gridRowCount() }})</span>
+            }
+          </span>
+
+          <p-table
+            [value]="gridData()"
+            [rows]="5"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-gridlines p-datatable-sm cheque-table">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center" style="min-width:130px">No. of Cheques</th>
+                <th style="min-width:120px">From No.</th>
+                <th style="min-width:120px">To No.</th>
+                <th class="text-center" style="min-width:110px">Status</th>
+                <th class="text-center" style="min-width:80px">Action</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+              <tr>
+                <td class="text-center">{{ row.pNoofcheques }}</td>
+                <td>{{ row.pChequefrom }}</td>
+                <td>{{ row.pChequeto }}</td>
+                <td class="text-center">
+                  <!-- Angular 21: @if control flow instead of *ngIf -->
+                  @if (row.pStatusname === true) {
+                    <span class="badge-active">Active</span>
+                  } @else if (row.pStatusname === false) {
+                    <span class="badge-inactive">Inactive</span>
+                  }
+                </td>
+                <td class="text-center">
+                  <button
+                    type="button"
+                    class="btn-icon-remove"
+                    (click)="removeHandler(rowIndex)"
+                    [attr.aria-label]="'Remove row ' + (rowIndex + 1)"
+                    title="Remove row">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5" class="table-empty">
+                  No cheque records added yet
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+
+          <!-- ── FOOTER BUTTONS ──────────────────────── -->
+          <div class="form-footer">
+
+            <!-- Clear -->
+            <button
+              type="button"
+              class="btn-clear"
+              (click)="clear()"
+              title="Reset entire form"
+              aria-label="Clear form">
+              <img
+                src="assets/images/icon-cancel-white.svg"
+                width="18"
+                height="18"
+                alt="" />
+              Clear
+            </button>
+
+            <!-- Save (InActive) -->
+            <button
+              type="button"
+              class="btn-save"
+              [disabled]="disablesavebutton()"
+              (click)="save('InActive')"
+              title="Save without activating cheques"
+              [attr.aria-busy]="disablesavebutton()">
+
+              @if (!disablesavebutton()) {
+                <img
+                  src="assets/images/icon-check-white.svg"
+                  width="18"
+                  height="18"
+                  alt="" />
+              } @else {
+                <span class="spinner-inline" aria-hidden="true"></span>
+              }
+
+              {{ buttonname() }}
+            </button>
+
+            <!-- Save & Generate (Active) -->
+            <button
+              type="button"
+              class="btn-save-active"
+              [disabled]="disablesaveactivebutton()"
+              (click)="save('Active')"
+              title="Save and activate cheques"
+              [attr.aria-busy]="disablesaveactivebutton()">
+
+              @if (!disablesaveactivebutton()) {
+                <img
+                  src="assets/images/icon-check-white.svg"
+                  width="18"
+                  height="18"
+                  alt="" />
+              } @else {
+                <span class="spinner-inline" aria-hidden="true"></span>
+              }
+
+              {{ buttonnameactive() }}
+            </button>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
