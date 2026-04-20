@@ -97,6 +97,12 @@ export const accountsRoutes: Routes = [
             .then(m => m.PettyCashView)
       },
       {
+        path: 'petty-cash',
+        loadComponent: () =>
+          import('./Accounts_Transactions/petty-cash/petty-cash')
+            .then(m => m.PettyCash)
+      },
+      {
         path: 'general-receipt-cancel',
         loadComponent: () =>
           import('./Accounts_Transactions/general-receipt-cancel/general-receipt-cancel')

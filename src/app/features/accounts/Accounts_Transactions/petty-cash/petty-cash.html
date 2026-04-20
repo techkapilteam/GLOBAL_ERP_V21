@@ -1,1 +1,818 @@
-<p>petty-cash works!</p>
+<div class="screen-container">
+    <div class="screen-card">
+
+        <!-- ═══ HEADER ═══ -->
+        <div class="screen-header">
+            <h2 class="screen-title">Petty Cash New</h2>
+            <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="btn btn-view">
+                <i class="fa fa-list me-1"></i> View
+            </a>
+        </div>
+
+        <div class="screen-content">
+            <form [formGroup]="paymentVoucherForm" autocomplete="off">
+
+                <!-- ═══ SECTION 1: DATE ═══ -->
+                <div class="section-card">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="form-group">
+                                <label class="form-label required-label">Date</label>
+                                <fieldset [disabled]="!disabletransactiondate">
+                                    <input class="form-control" type="text" id="ppaymentdate" title="Date" readonly
+                                        onkeydown="return false" onpaste="return false" [bsConfig]="ppaymentdateConfig"
+                                        bsDatepicker formControlName="ppaymentdate"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.ppaymentdate }" />
+                                </fieldset>
+                                @if (formValidationMessages?.ppaymentdate) {
+                                <small class="form-error">Select Date</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ SECTION 2: MODE OF PAYMENT ═══ -->
+                <div class="section-card">
+                    <p class="section-title">Mode of Payment</p>
+
+                    <div class="radio-group" id="pmodofPayment" title="Mode of Payment">
+                        <label class="radio-pill-label">
+                            <input class="form-check-input" type="radio" name="pmodofPayment"
+                                formControlName="pmodofPayment" value="CASH" (change)="modeofPaymentChange()" />
+                            Cash — {{ currencySymbol }} {{ cashBalance }}
+                        </label>
+                    </div>
+
+                    @if (formValidationMessages?.pmodofPayment) {
+                    <small class="form-error">Select Mode of Payment</small>
+                    }
+
+                    <!-- Bank/Instrument details -->
+                    @if (showModeofPayment) {
+                    <div class="instrument-panel mt-3">
+                        @if (formValidationMessages?.ptranstype) {
+                        <small class="form-error">Select Trans Type</small>
+                        }
+                        <div class="row mt-2">
+
+                            <!-- Bank Name -->
+                            @if (showbankcard) {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">Bank Name</label>
+                                    <select class="form-control" id="pbankname" title="Bank Name"
+                                        formControlName="pbankid"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pbankname }"
+                                        (change)="bankName_Change($event)">
+                                        <option value="">Select</option>
+                                        @for (bank of banklist; track bank.pbankid) {
+                                        <option [value]="bank.pbankid">{{ bank.pbankname }}</option>
+                                        }
+                                    </select>
+                                    @if (formValidationMessages?.pbankname) {
+                                    <small class="form-error">Select Bank Name</small>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            <!-- Card Number -->
+                            @if (!showbankcard) {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">{{ displayCardName }}</label>
+                                    <select class="form-control" id="pCardNumber" [title]="displayCardName"
+                                        formControlName="pCardNumber"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pCardNumber }"
+                                        (change)="debitCard_Change()">
+                                        <option value="">Select</option>
+                                        @for (card of debitcardlist; track card.pCardNumber) {
+                                        <option [value]="card.pCardNumber">{{ card.pCardNumber }}</option>
+                                        }
+                                    </select>
+                                    @if (formValidationMessages?.pCardNumber) {
+                                    <small class="form-error">Select {{ displayCardName }}</small>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            <!-- Type of Payment -->
+                            @if (showTypeofPayment) {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">Type of Payment</label>
+                                    <select class="form-control" id="ptypeofpayment" title="Type of Payment"
+                                        formControlName="ptypeofpayment"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.ptypeofpayment }"
+                                        (change)="typeofPaymentChange()">
+                                        <option value="">Select</option>
+                                        @for (t of typeofpaymentlist; track t.ptypeofpayment) {
+                                        <option [value]="t.ptypeofpayment">{{ t.ptypeofpayment }}</option>
+                                        }
+                                    </select>
+                                    @if (formValidationMessages?.ptypeofpayment) {
+                                    <small class="form-error">Select Type of Payment</small>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            <!-- Branch Name -->
+                            @if (showbranch) {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">Branch Name</label>
+                                    <input class="form-control" type="text" readonly placeholder="Branch Name"
+                                        id="pbranchname" title="Branch Name" formControlName="pbranchname"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pbranchname }" />
+                                    @if (formValidationMessages?.pbranchname) {
+                                    <small class="form-error">Enter Branch Name</small>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            <!-- Financial Services -->
+                            @if (showfinancial) {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">Bank / Financial Services</label>
+                                    <input class="form-control" type="text" readonly id="pbankname"
+                                        title="Bank / Financial Services" formControlName="pbankname"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pbankname }" />
+                                    @if (formValidationMessages?.pbankname) {
+                                    <small class="form-error">Enter Bank / Financial Services</small>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            <!-- UPI Name -->
+                            @if (showupi) {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">UPI</label>
+                                    <select class="form-control" id="pUpiname" title="UPI" formControlName="pUpiname"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pUpiname }"
+                                        (change)="upiName_Change($event)">
+                                        <option value="">Select</option>
+                                        @for (u of upinameslist; track u.pUpiname) {
+                                        <option [value]="u.pUpiname">{{ u.pUpiname }}</option>
+                                        }
+                                    </select>
+                                    @if (formValidationMessages?.pUpiname) {
+                                    <small class="form-error">Select UPI</small>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label">UPI ID</label>
+                                    <select class="form-control" id="pUpiid" title="UPI ID" formControlName="pUpiid"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pUpiid }"
+                                        (change)="upid_change()">
+                                        <option value="">Select</option>
+                                        @for (u of upiidlist; track u.pUpiid) {
+                                        <option [value]="u.pUpiid">{{ u.pUpiid }}</option>
+                                        }
+                                    </select>
+                                    @if (formValidationMessages?.pUpiid) {
+                                    <small class="form-error">Select UPI ID</small>
+                                    }
+                                </div>
+                            </div>
+                            }
+
+                            <!-- Cheque / Reference No -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label-sm required-label" id="pChequenumber"
+                                        [title]="displaychequeno">{{ displaychequeno }}</label>
+                                    @if (showchequno) {
+                                    <select class="form-control" [title]="displaychequeno"
+                                        formControlName="pChequenumber"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pChequenumber }"
+                                        (change)="chequenumber_Change()">
+                                        <option value="">Select</option>
+                                        @for (c of chequenumberslist; track c.pChequenumber) {
+                                        <option [value]="c.pChequenumber">{{ c.pChequenumber }}</option>
+                                        }
+                                    </select>
+                                    } @else {
+                                    <input class="form-control" type="text" [placeholder]="displaychequeno"
+                                        formControlName="pChequenumber" maxlength="20"
+                                        [ngClass]="{ 'is-invalid': formValidationMessages?.pChequenumber }"
+                                        (blur)="chequenumber_Change()" />
+                                    }
+                                    @if (formValidationMessages?.pChequenumber) {
+                                    <small class="form-error">Enter {{ displaychequeno }}</small>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Book Balances -->
+                            <div class="col-md-12 mt-3">
+                                <div class="balance-badges">
+                                    <span class="balance-badge balance-badge--green">
+                                        <span class="balance-dot"></span>
+                                        Bank Book — {{ bankbookBalance }}
+                                    </span>
+                                    <span class="balance-badge balance-badge--yellow">
+                                        <span class="balance-dot"></span>
+                                        Pass Book — {{ bankpassbookBalance }}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <!-- ═══ SECTION 3: PAYMENT DETAILS ═══ -->
+                <div class="section-card" formGroupName="ppaymentsslistcontrols">
+
+                    <!-- ROW 1: Ledger + Sub Ledger -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group mb-0">
+                                <label class="form-label required-label">Ledger</label>
+                                <div class="field-balance-row">
+                                    <div class="field-flex">
+                                        <ng-select id="pledgername" title="Ledger" [items]="ledgeraccountslist"
+                                            formControlName="pledgerid" groupBy="pAccounttype" bindLabel="pledgername"
+                                            bindValue="pledgerid" [multiple]="false" placeholder="Select"
+                                            [searchable]="true" [clearable]="false" dropdownPosition="bottom"
+                                            (change)="ledgerName_Change($event)"
+                                            (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.markAsTouched()"
+                                            [ngClass]="{
+                        'is-invalid':
+                          paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched &&
+                          !paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.value
+                      }">
+                                            <ng-template ng-optgroup-tmp let-item="item">{{ item.pAccounttype
+                                                }}</ng-template>
+                                        </ng-select>
+                                        @if (paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched &&
+                                        !paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.value) {
+                                        <small class="form-error">Select Ledger</small>
+                                        }
+                                    </div>
+                                    <span class="balance-hint">{{ ledgerBalance || '0 Dr' }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (showsubledger) {
+                        <div class="col-md-6">
+                            <div class="form-group mb-0">
+                                <label class="form-label required-label">Sub Ledger</label>
+                                <div class="field-balance-row">
+                                    <div class="field-flex">
+                                        <ng-select id="psubledgername" title="Sub Ledger"
+                                            [items]="subledgeraccountslist" formControlName="psubledgerid"
+                                            bindLabel="psubledgername" bindValue="psubledgerid" [multiple]="false"
+                                            placeholder="Select" [searchable]="true" [clearable]="true"
+                                            dropdownPosition="bottom"
+                                            [ngClass]="{ 'is-invalid': formValidationMessages?.psubledgername }"
+                                            (change)="subledger_Change($event)">
+                                        </ng-select>
+                                        @if (formValidationMessages?.psubledgername) {
+                                        <small class="form-error">{{ formValidationMessages.psubledgername }}</small>
+                                        }
+                                    </div>
+                                    <span class="balance-hint">{{ subledgerBalance || '0 Dr' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+
+                    <!-- ROW 2: Party + Amount -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group mb-0">
+                                <label class="form-label required-label">Party</label>
+                                <div class="field-balance-row">
+                                    <div class="field-flex">
+                                        <ng-select id="ppartyname" title="Party" [items]="partylist"
+                                            formControlName="ppartyid" bindLabel="ppartyname" bindValue="ppartyid"
+                                            [multiple]="false" placeholder="Select" [searchable]="true"
+                                            [clearable]="true" dropdownPosition="bottom"
+                                            (change)="partyName_Change($event)" (clear)="partyName_Change(null)"
+                                            (close)="paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.markAsTouched()"
+                                            [ngClass]="{
+                        'is-invalid':
+                          paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched &&
+                          !paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.value
+                      }">
+                                        </ng-select>
+                                        @if (paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched &&
+                                        !paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.value) {
+                                        <small class="form-error">Select Party</small>
+                                        }
+                                    </div>
+                                    <span class="balance-hint">{{ partyBalance || '0 Dr' }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-0">
+                                <label class="form-label required-label">Amount Paid</label>
+                                <input class="form-control amount-input border-warning" type="text"
+                                    id="pactualpaidamount" title="Amount Paid" formControlName="pactualpaidamount"
+                                    inputmode="numeric"
+                                    [ngClass]="{ 'is-invalid': formValidationMessages?.pactualpaidamount }"
+                                    (input)="onAmountInput($event)" (keydown)="blockInvalidAmountKeys($event)"
+                                    (blur)="formatAmountOnBlur()" />
+                                @if (formValidationMessages?.pactualpaidamount) {
+                                <small class="form-error">Enter Amount Paid</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══ GST SECTION ═══ -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="tax-box">
+                                <div class="tax-box-header">
+                                    <span class="tax-box-label" id="pisgstapplicable" title="GST">GST</span>
+                                    <div class="material-switch" [class.switch-disabled]="!isPartySelected()">
+                                        <input id="gst-switch" name="gst-switch" type="checkbox"
+                                            formControlName="pisgstapplicable" (change)="isgstapplicable_Checked()" />
+                                        <label for="gst-switch" class="badge-success ms-2"></label>
+                                    </div>
+                                </div>
+
+                                @if (!showgst) {
+                                <div id="gst">
+                                    <div class="row mb-3">
+
+                                        <!-- State -->
+                                        <!-- <div class="col-md-4">
+                      <div class="form-group mb-0">
+                        <label class="form-label required-label">State</label>
+                        @if (statelist?.length === 1) {
+                          <input type="text" class="form-control bg-light fw-semibold"
+                            [value]="getStateName(statelist[0])" readonly />
+                        } @else {
+                          <ng-select [items]="statelist" bindLabel="pState" bindValue="pStateId"
+                            placeholder="Select" formControlName="pStateId"
+                            (change)="state_change($event)"
+                            (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.markAsTouched()"
+                            [ngClass]="{
+                              'is-invalid':
+                                paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched &&
+                                !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value
+                            }">
+                            <ng-template ng-label-tmp let-item="item">{{ getStateName(item) }}</ng-template>
+                            <ng-template ng-option-tmp let-item="item">{{ getStateName(item) }}</ng-template>
+                          </ng-select>
+                          @if (paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched &&
+                               !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value) {
+                            <small class="form-error">Select State</small>
+                          }
+                        }
+                      </div>
+                    </div> -->
+
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label required-label">State</label>
+
+                                                @if (statelist.length === 1) {
+                                                <input type="text" class="form-control bg-light fw-semibold"
+                                                    [value]="getStateName(statelist[0])" readonly />
+                                                } @else {
+                                                <ng-select [items]="statelist" bindLabel="pState" bindValue="pStateId"
+                                                    placeholder="Select" formControlName="pStateId"
+                                                    (change)="state_change($event)"
+                                                    (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.markAsTouched()"
+                                                    [ngClass]="{
+          'is-invalid':
+            paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched &&
+            !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value
+        }">
+
+                                                    <ng-template ng-label-tmp let-item="item">
+                                                        {{ getStateName(item) }}
+                                                    </ng-template>
+
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        {{ getStateName(item) }}
+                                                    </ng-template>
+
+                                                </ng-select>
+
+                                                @if (
+                                                paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched &&
+                                                !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value
+                                                ) {
+                                                <small class="form-error">Select State</small>
+                                                }
+                                                }
+                                            </div>
+                                        </div>
+                                        <!-- GST No -->
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label">GST No.</label>
+                                                <input type="text" class="form-control text-uppercase" maxlength="15"
+                                                    id="pgstno" title="GST No." formControlName="pgstno"
+                                                    placeholder="ENTER GST NO"
+                                                    [ngClass]="{ 'is-invalid': formValidationMessages?.pgstno }"
+                                                    (blur)="gsno_change()" />
+                                            </div>
+                                        </div>
+
+                                        <!-- GST % -->
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label required-label">GST (%)</label>
+                                                <ng-select title="GST %" [items]="gstlist" bindLabel="pgstpercentage"
+                                                    bindValue="pgstpercentage" placeholder="Select"
+                                                    formControlName="pgstpercentage" [readonly]="disablegst"
+                                                    (change)="gst_Change($event)"
+                                                    (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.markAsTouched()"
+                                                    [ngClass]="{
+                            'is-invalid':
+                              paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.touched &&
+                              !paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.value
+                          }">
+                                                </ng-select>
+                                                @if
+                                                (paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.touched
+                                                &&
+                                                !paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.value)
+                                                {
+                                                <small class="form-error">Select GST %</small>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- GST Amount Cards -->
+                                    <div class="gst-cards-row mt-3">
+                                        @if (showgstamount) {
+                                        <div class="gst-mini-card">
+                                            <div class="gst-card-label">GST Amount</div>
+                                            <div class="gst-card-value">
+                                                {{ currencyCode }}
+                                                {{ paymentVoucherForm.get('ppaymentsslistcontrols.pgstamount')?.value |
+                                                number:'1.2-2' }}
+                                            </div>
+                                        </div>
+                                        }
+                                        @if (showigst) {
+                                        <div class="gst-mini-card">
+                                            <div class="gst-card-label">
+                                                IGST ({{
+                                                paymentVoucherForm.get('ppaymentsslistcontrols.pigstpercentage')?.value
+                                                }}%)
+                                            </div>
+                                            <div class="gst-card-value">
+                                                {{ currencyCode }}
+                                                {{ paymentVoucherForm.get('ppaymentsslistcontrols.pigstamount')?.value |
+                                                number:'1.2-2' }}
+                                            </div>
+                                        </div>
+                                        }
+                                        @if (showcgst) {
+                                        <div class="gst-mini-card">
+                                            <div class="gst-card-label">
+                                                CGST ({{
+                                                paymentVoucherForm.get('ppaymentsslistcontrols.pcgstpercentage')?.value
+                                                }}%)
+                                            </div>
+                                            <div class="gst-card-value">
+                                                {{ currencyCode }}
+                                                {{ paymentVoucherForm.get('ppaymentsslistcontrols.pcgstamount')?.value |
+                                                number:'1.2-2' }}
+                                            </div>
+                                        </div>
+                                        }
+                                        @if (showsgst) {
+                                        <div class="gst-mini-card">
+                                            <div class="gst-card-label">
+                                                SGST ({{
+                                                paymentVoucherForm.get('ppaymentsslistcontrols.psgstpercentage')?.value
+                                                }}%)
+                                            </div>
+                                            <div class="gst-card-value">
+                                                {{ currencyCode }}
+                                                {{ paymentVoucherForm.get('ppaymentsslistcontrols.psgstamount')?.value |
+                                                number:'1.2-2' }}
+                                            </div>
+                                        </div>
+                                        }
+                                        @if (showutgst) {
+                                        <div class="gst-mini-card">
+                                            <div class="gst-card-label">
+                                                UTGST ({{
+                                                paymentVoucherForm.get('ppaymentsslistcontrols.putgstpercentage')?.value
+                                                }}%)
+                                            </div>
+                                            <div class="gst-card-value">
+                                                {{ currencyCode }}
+                                                {{ paymentVoucherForm.get('ppaymentsslistcontrols.putgstamount')?.value
+                                                | number:'1.2-2' }}
+                                            </div>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══ TDS SECTION ═══ -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="tax-box">
+                                <div class="tax-box-header">
+                                    <span class="tax-box-label" id="pistdsapplicable" title="TDS">TDS</span>
+                                    <div class="material-switch">
+                                        <input id="tds-switch" name="tds-switch" type="checkbox"
+                                            formControlName="pistdsapplicable"
+                                            [ngClass]="{ 'is-invalid': formValidationMessages?.pistdsapplicable }"
+                                            (change)="istdsapplicable_Checked()" />
+                                        <label for="tds-switch" class="badge-success ms-2"></label>
+                                    </div>
+                                </div>
+
+                                @if (!showtds) {
+                                <div id="tds">
+                                    <div class="row mb-2">
+
+                                        <!-- Section -->
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label required-label">Section</label>
+                                                <select class="form-control" id="pTdsSection" title="Section"
+                                                    formControlName="pTdsSection" [ngClass]="{
+                            'is-invalid':
+                              paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched &&
+                              !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value
+                          }" (change)="tdsSection_Change($event)">
+                                                    <option value="">Select</option>
+                                                    @for (tds of tdssectionlist; track tds.pTdsSection) {
+                                                    <option [value]="tds.pTdsSection">{{ tds.pTdsSection }}</option>
+                                                    }
+                                                </select>
+                                                @if
+                                                (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched
+                                                &&
+                                                !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value) {
+                                                <small class="form-error">Select Section</small>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- Percentage -->
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label required-label">Percentage</label>
+                                                <select class="form-control" id="pTdsPercentage" title="TDS Percentage"
+                                                    formControlName="pTdsPercentage" [ngClass]="{
+                            'is-invalid':
+                              paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched &&
+                              !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value
+                          }" (change)="tds_Change($event)">
+                                                    <option value="">Select</option>
+                                                    @for (tds of tdspercentagelist; track tds.pTdsPercentage) {
+                                                    <option [value]="tds.pTdsPercentage">{{ tds.pTdsPercentage }}
+                                                    </option>
+                                                    }
+                                                </select>
+                                                @if
+                                                (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched
+                                                &&
+                                                !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value)
+                                                {
+                                                <small class="form-error">Select Percentage</small>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- TDS Amount -->
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label">TDS Amount</label>
+                                                <div class="amount-display-box" id="ptdsamount" title="TDS Amount">
+                                                    {{ currencyCode }}
+                                                    {{
+                                                    paymentVoucherForm.get('ppaymentsslistcontrols.ptdsamount')?.value |
+                                                    number:'1.2-2' }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details Action Buttons -->
+                    <div class="details-actions">
+                        <button type="button" class="btn btn-clear-dark" (click)="clearPaymentDetails()">
+                            <img src="assets/images/icon-cancel-white.svg" width="16" height="16" alt="clear" />
+                            Clear
+                        </button>
+                        <button type="button" class="btn btn-add" [disabled]="disableaddbutton()"
+                            (click)="addPaymentDetails()">
+                            <i class="fa"
+                                [ngClass]="{ 'fa-spin fa-spinner': disableaddbutton(), 'fa-plus': !disableaddbutton() }">
+                            </i>
+                            {{ addbutton() }}
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- ═══ SECTION 4: PAYMENTS GRID ═══ -->
+                <div class="section-card">
+                    <p-table [value]="paymentslist1()"
+                        styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped" [scrollable]="true"
+                        scrollHeight="flex">
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tbl-header th-actions">Actions</th>
+                                <th class="tbl-header">Party Name</th>
+                                <th class="tbl-header">Ledger Name</th>
+                                <th class="tbl-header">Sub Ledger</th>
+                                <th class="tbl-header tbl-right">Total Paid</th>
+                                <th class="tbl-header tbl-right">Paid Amount</th>
+                                <th class="tbl-header tbl-center">GST Type</th>
+                                <th class="tbl-header">TDS Section</th>
+                                <th class="tbl-header tbl-center">GST %</th>
+                                <th class="tbl-header tbl-right">TDS Amount</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                            <tr class="tbl-row">
+                                <td class="tbl-cell tbl-center">
+                                    <button type="button" class="btn-icon-remove" (click)="removeHandler(rowIndex)"
+                                        title="Remove">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td class="tbl-cell">{{ row.ppartyname }}</td>
+                                <td class="tbl-cell">{{ row.pledgername }}</td>
+                                <td class="tbl-cell">{{ row.psubledgername }}</td>
+                                <td class="tbl-cell tbl-right fw-bold">
+                                    {{ currencySymbol }} {{ row.ptotalamount | number:'1.2-2' }}
+                                </td>
+                                <td class="tbl-cell tbl-right">
+                                    {{ currencySymbol }} {{ row.pamount | number:'1.2-2' }}
+                                </td>
+                                <td class="tbl-cell tbl-center">{{ row.pgstcalculationtype || '-- NA --' }}</td>
+                                <td class="tbl-cell">{{ row.pTdsSection || '-- NA --' }}</td>
+                                <td class="tbl-cell tbl-center">
+                                    {{ (row.pgstpercentage === 0 || row.pgstpercentage === '0') ? '-- NA --' :
+                                    row.pgstpercentage }}
+                                </td>
+                                <td class="tbl-cell tbl-right">
+                                    {{ (row.ptdsamount && row.ptdsamount != 0)
+                                    ? (currencySymbol + ' ' + (row.ptdsamount | number:'1.2-2'))
+                                    : '-- NA --' }}
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="10" class="tbl-empty">No records found.</td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                    <div class="record-count">{{ paymentslist1().length }} total</div>
+                </div>
+
+                <!-- ═══ SECTION 5: JOURNAL ENTRY + NARRATION ═══ -->
+                <div class="section-card">
+                    <div class="row">
+
+                        <!-- Journal Entry -->
+                        <div class="col-md-6">
+                            <p-table [value]="partyjournalentrylist()"
+                                styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped">
+
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tbl-header">Particulars</th>
+                                        <th class="tbl-header tbl-right">Dr</th>
+                                        <th class="tbl-header tbl-right">Cr</th>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                    <tr class="tbl-row">
+                                        <td class="tbl-cell">
+                                            {{ row.accountname }}
+                                            @if (rowIndex === 0) {
+                                            <span class="received-note">Amount Received</span>
+                                            }
+                                        </td>
+                                        <td class="tbl-cell tbl-right">
+                                            @if (row.debitamount > 0) {
+                                            {{ currencySymbol }} {{ row.debitamount | number:'1.2-2' }}
+                                            }
+                                        </td>
+                                        <td class="tbl-cell tbl-right">
+                                            @if (row.creditamount > 0) {
+                                            {{ currencySymbol }} {{ row.creditamount | number:'1.2-2' }}
+                                            }
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="3" class="tbl-empty">No records found.</td>
+                                    </tr>
+                                </ng-template>
+
+                            </p-table>
+                            <div class="record-count">{{ partyjournalentrylist().length }} total</div>
+                        </div>
+
+                        <!-- Narration + Upload -->
+                        <div class="col-md-6">
+
+                            <div class="form-group mt-2">
+                                <label class="form-label required-label">Narration</label>
+                                <textarea class="form-control" rows="4" id="pnarration" title="Narration"
+                                    formControlName="pnarration" maxlength="250"
+                                    (blur)="paymentVoucherForm.get('pnarration')?.markAsTouched()" [ngClass]="{
+                    'is-invalid':
+                      paymentVoucherForm.get('pnarration')?.touched &&
+                      !paymentVoucherForm.get('pnarration')?.value
+                  }">
+                </textarea>
+                                @if (paymentVoucherForm.get('pnarration')?.touched &&
+                                !paymentVoucherForm.get('pnarration')?.value) {
+                                <small class="form-error">Enter Narration</small>
+                                }
+                                <div class="char-count">
+                                    <small
+                                        [class.limit-reached]="(paymentVoucherForm.get('pnarration')?.value?.length || 0) >= 250">
+                                        {{ paymentVoucherForm.get('pnarration')?.value?.length || 0 }} / 250
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3 upload-group">
+                                <label class="form-label">Upload Document</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="imageResponse?.name || ''" [disabled]="true"
+                                        formControlName="pDocStorePath" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-upload" (click)="fileInput.click()">
+                                            <img src="assets/images/icon-upload-blue.svg" width="18" height="18"
+                                                alt="upload" />
+                                        </button>
+                                        <input class="d-none" type="file" accept=".jpg,.png,.pdf"
+                                            (change)="uploadAndProgress($event)" #fileInput />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- ═══ FOOTER ACTIONS ═══ -->
+            <div class="form-footer">
+                <button type="button" class="btn btn-footer-clear" (click)="clearPaymentVoucher()">
+                    <img src="assets/images/icon-cancel-white.svg" width="18" height="18" alt="clear" />
+                    Clear
+                </button>
+                <button type="button" class="btn btn-footer-save" [disabled]="disablesavebutton()"
+                    (click)="savePaymentVoucher()">
+                    @if (!disablesavebutton()) {
+                    <img src="assets/images/icon-check-white.svg" width="18" height="18" alt="save" />
+                    }
+                    <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
+                    {{ savebutton() }}
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
