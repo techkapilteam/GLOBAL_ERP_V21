@@ -2263,7 +2263,7 @@ export class AccountsReports {
 
 
 
-//bank book servies
+  //bank book servies
 
 
 
@@ -2319,8 +2319,8 @@ export class AccountsReports {
 
 
 
-  GetBankNames(GlobalSchema:any, AccountsSchema:any,CompanyCode:any,BranchCode:any): Observable<any> {
-      debugger;
+  GetBankNames(GlobalSchema: any, AccountsSchema: any, CompanyCode: any, BranchCode: any): Observable<any> {
+    debugger;
     const params = new HttpParams()
       .set('GlobalSchema', GlobalSchema)
       .set('AccountsSchema', AccountsSchema)
@@ -2339,7 +2339,7 @@ export class AccountsReports {
   //       })
   //     );
   // }
-  GetBankBookReportbyDates(FromDate: string | number | boolean, ToDate: string | number | boolean, _pBankAccountId: string | number | boolean,GlobalSchema:any, AccountsSchema:any,CompanyCode:any,BranchCode:any): Observable<any> {
+  GetBankBookReportbyDates(FromDate: string | number | boolean, ToDate: string | number | boolean, _pBankAccountId: string | number | boolean, GlobalSchema: any, AccountsSchema: any, CompanyCode: any, BranchCode: any): Observable<any> {
 
     let params = new HttpParams().set('FromDate', FromDate).set('ToDate', ToDate).set('_pBankAccountId', _pBankAccountId).set('BranchSchema', this._CommonService.getschemaname()).set('GlobalSchema', GlobalSchema)
       .set('AccountsSchema', AccountsSchema)
@@ -2365,7 +2365,7 @@ export class AccountsReports {
   //       })
   //     );
   // }
-  GetBrsReportBankDebitsBankCredits(fromdate: string | number | boolean, todate: string | number | boolean, bankid: string | number | boolean, transtype: string | number | boolean, branchschema: any,GlobalSchema:any,Branchcode:any,companycode:any): Observable<any> {
+  GetBrsReportBankDebitsBankCredits(fromdate: string | number | boolean, todate: string | number | boolean, bankid: string | number | boolean, transtype: string | number | boolean, branchschema: any, GlobalSchema: any, Branchcode: any, companycode: any): Observable<any> {
 
     let params = new HttpParams().set('fromdate', fromdate).set('todate', todate).set('bankid', bankid).set('transtype', transtype).set('branchschema', branchschema).set('GlobalSchema', GlobalSchema).set('Branchcode', Branchcode).set('companycode', companycode);
     return this._CommonService.getAPI('/Accounts/GetBrsReportBankDebitsBankCredits', params, 'YES')
@@ -2400,7 +2400,7 @@ export class AccountsReports {
   //       })
   //     );
   // }
-  GetBankEntriesDetails2(fromDate: string|null, toDate: string|null, branchName: string, ReportType: string): Observable<any> {
+  GetBankEntriesDetails2(fromDate: string | null, toDate: string | null, branchName: string, ReportType: string): Observable<any> {
 
     let params = new HttpParams()
       .set('fromDate', fromDate || '')
@@ -2436,50 +2436,50 @@ export class AccountsReports {
 
 
 
-  GetBrStatementReportbyDates(fromdate: string | number | boolean,pBankAccountId: string | number | boolean): Observable<any> {
+  GetBrStatementReportbyDates(fromdate: string | number | boolean, pBankAccountId: string | number | boolean): Observable<any> {
 
-      let params = new HttpParams().set('fromdate', fromdate).set('_pBankAccountId', pBankAccountId).set('BranchSchema', this._CommonService.getschemaname());
-      return this._CommonService.getAPI('/Accounting/AccountingReports/GetBrs', params, 'YES') .pipe(
-        catchError((e:any) => {
-          this._CommonService.showErrorMessage(e);
-          return throwError(() => e);
-        })
-      );
+    let params = new HttpParams().set('fromdate', fromdate).set('_pBankAccountId', pBankAccountId).set('BranchSchema', this._CommonService.getschemaname());
+    return this._CommonService.getAPI('/Accounting/AccountingReports/GetBrs', params, 'YES').pipe(
+      catchError((e: any) => {
+        this._CommonService.showErrorMessage(e);
+        return throwError(() => e);
+      })
+    );
   }
-  GetBrStatementReportbyDatesChequesInfo(fromdate: string | number | boolean,todate: string | number | boolean,pBankAccountId: string | number | boolean): Observable<any> {
+  GetBrStatementReportbyDatesChequesInfo(fromdate: string | number | boolean, todate: string | number | boolean, pBankAccountId: string | number | boolean): Observable<any> {
 
-      
-      const params = new HttpParams().set('fromdate', fromdate).set('todate', todate).set('_pBankAccountId', pBankAccountId).set('BranchSchema', this._CommonService.getschemaname());
-      return this._CommonService.getAPI('/Accounting/AccountingReports/GetBrStatementReportbyDatesChequesInfo', params, 'YES') .pipe(
-        catchError((e:any) => {
-          this._CommonService.showErrorMessage(e);
-          return throwError(() => e);
-        })
-      );
+
+    const params = new HttpParams().set('fromdate', fromdate).set('todate', todate).set('_pBankAccountId', pBankAccountId).set('BranchSchema', this._CommonService.getschemaname());
+    return this._CommonService.getAPI('/Accounting/AccountingReports/GetBrStatementReportbyDatesChequesInfo', params, 'YES').pipe(
+      catchError((e: any) => {
+        this._CommonService.showErrorMessage(e);
+        return throwError(() => e);
+      })
+    );
   }
-  GetBRSBankbalance(fromdate: string | number | boolean,pBankAccountId: string | number | boolean): Observable<any> {
-    
-      const params = new HttpParams().set('fromdate', fromdate).set('_pBankAccountId', pBankAccountId).set('BranchSchema', this._CommonService.getschemaname());
-      return this._CommonService.getAPI('/Accounting/AccountingReports/GetBrsBankBalance', params, 'YES') .pipe(
-        catchError((e:any) => {
-          this._CommonService.showErrorMessage(e);
-          return throwError(() => e);
-        })
-      );
+  GetBRSBankbalance(fromdate: string | number | boolean, pBankAccountId: string | number | boolean): Observable<any> {
+
+    const params = new HttpParams().set('fromdate', fromdate).set('_pBankAccountId', pBankAccountId).set('BranchSchema', this._CommonService.getschemaname());
+    return this._CommonService.getAPI('/Accounting/AccountingReports/GetBrsBankBalance', params, 'YES').pipe(
+      catchError((e: any) => {
+        this._CommonService.showErrorMessage(e);
+        return throwError(() => e);
+      })
+    );
   }
-  
-  Getbrscount(brsdate: string | number | boolean,_pBankAccountId: string | number | boolean,BranchSchema: string | number | boolean): Observable<any> {
-   
-      const params = new HttpParams().set('brsdate', brsdate).set('_pBankAccountId', _pBankAccountId).set('BranchSchema', BranchSchema);
-      return this._CommonService.getAPI('/Accounting/AccountingReports/Getbrscount', params, 'YES') .pipe(
-        catchError((e:any) => {
-          this._CommonService.showErrorMessage(e);
-          return throwError(() => e);
-        })
-      );
+
+  Getbrscount(brsdate: string | number | boolean, _pBankAccountId: string | number | boolean, BranchSchema: string | number | boolean): Observable<any> {
+
+    const params = new HttpParams().set('brsdate', brsdate).set('_pBankAccountId', _pBankAccountId).set('BranchSchema', BranchSchema);
+    return this._CommonService.getAPI('/Accounting/AccountingReports/Getbrscount', params, 'YES').pipe(
+      catchError((e: any) => {
+        this._CommonService.showErrorMessage(e);
+        return throwError(() => e);
+      })
+    );
   }
-  saveBRS(brsData:any) {
-    
+  saveBRS(brsData: any) {
+
     return this._CommonService.postAPI('/Accounting/AccountingReports/SaveBrs', brsData)
   }
 
@@ -2488,95 +2488,95 @@ export class AccountsReports {
 
   //subscriber jv
 
- 
-
-    GetAccountHeads(trantype:any,accountheadname:any) {
-        const params = new HttpParams().set('BranchSchema',  this._CommonService.getschemaname()).set("accounttype",trantype).set('accountheadname',accountheadname );
-        return this._CommonService.getAPI('/ChitTransactions/GetSubscriberJVAccountHeads', params, 'Yes');
-
-    }
-
-    GetPartyDetails() {
-        const params = new HttpParams().set('BranchSchema',  this._CommonService.getschemaname());
-        return this._CommonService.getAPI('/AccountingTransactions/GetPartyList', params, 'Yes');
-
-    }
-
-    GetPartyDetailsByGroup(group:any) {
-        const params = new HttpParams().set('BranchSchema',  this._CommonService.getschemaname())
-                                       .set('subledger',  group);
-        return this._CommonService.getAPI('/AccountingTransactions/GetPartyListByGroup', params, 'Yes');
-
-    }
-
-    GetSubcategories(accountheadid:any,chitgroupid:any,ticketno:any,accountid:any,accountheadtype:any,subcategoryname:any) {
-        const params = new HttpParams().set('BranchSchema',  this._CommonService.getschemaname())
-                        .set('accountheadid', accountheadid)
-                        .set('chitgroupid', chitgroupid)
-                        .set('ticketno', ticketno)
-                        .set('accountid', accountid)
-                        .set('accountheadtype', accountheadtype)
-                        .set('subcategoryname', subcategoryname);
-        return this._CommonService.getAPI('/ChitTransactions/GetSubscriberJVSubcategory', params, 'YES');
-    }
-    GetTDSSubcategoryDetails(subcategoryID:any,partyid:any) {
-        debugger;
-        const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname())
-            .set('subcategoryId', subcategoryID)
-            .set('partyId', partyid);
-        return this._CommonService.getAPI('/ChitTransactions/GetTDSSubcategoryDetails', params, 'YES');
-    }
-
-    GetdebitchitCheckbalance(BranchSchema:any,accountheadId:any, subcategory:any,subcategoryId:any,GlobalSchema:any,companyCode:any,branchCode:any) {
-        const params = new HttpParams().set('BranchSchema', BranchSchema)
-            .set('accountheadId', accountheadId)
-            .set('subcategory', subcategory)
-            .set('subcategoryId', subcategoryId).set('GlobalSchema',GlobalSchema).set('companyCode',companyCode).set('branchCode',branchCode);
-        return this._CommonService.getAPI('/Accounts/SubscriberJVCheckbalance', params, 'YES');
-    }
-
-    PartyStatusChecking(accounthead:any, subcategory:any) {
-        const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname())
-            .set('accounthead', accounthead)
-            .set('subcategory', subcategory)
-            return this._CommonService.getAPI('/ChitTransactions/PartyStatusChecking', params, 'YES');
-    }
-
-    saveChitReceipt(data:any) {
-        return this._CommonService.postAPI('/ChitTransactions/SaveSubscriberJV', data)
-    }
-
-    saveSubscriberVoucher(data:any) {
-        return this._CommonService.postAPI('/ChitTransactions/SaveSubscriberVoucher', data)
-    }
-
-    getSubscriberJVReport(jvnumber:any) {
-        const params = new HttpParams().set('localSchema', this._CommonService.getschemaname())
-            .set('jvnumber', jvnumber);
-        return this._CommonService.getAPI('/ChitTransactions/ChitReports/getSubscriberJVReport', params, 'YES');
-    }
-    getSubscriberJVReportForLegal(jvnumber:any,localSchema:any) {
-        const params = new HttpParams().set('localSchema', localSchema)
-            .set('jvnumber', jvnumber);
-        return this._CommonService.getAPI('/ChitTransactions/ChitReports/getSubscriberJVReport', params, 'YES');
-    }
-    // Removal Filing Date by Ramakanth : 02-10-2021
-    
-    
-    getRemovalFilingDetails(fromdate:any,todate:any,localschema:any,branchschema:any){
-        const params = new HttpParams().set("BranchSchema",branchschema).set('fromdate', fromdate).set('todate', todate).set('Localschema', localschema);
-        return this._CommonService.getAPI('/ChitTransactions/GetSubscriberRemovalFilingDetails', params, 'YES');;
-    }
-    saveRemovalFilingDate(sremovaldata:any){
-        return this._CommonService.postAPI('/ChitTransactions/SaveSubscriberRemovalFiling', sremovaldata)
-    }
 
 
+  GetAccountHeads(trantype: any, accountheadname: any) {
+    const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname()).set("accounttype", trantype).set('accountheadname', accountheadname);
+    return this._CommonService.getAPI('/ChitTransactions/GetSubscriberJVAccountHeads', params, 'Yes');
+
+  }
+
+  GetPartyDetails() {
+    const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname());
+    return this._CommonService.getAPI('/AccountingTransactions/GetPartyList', params, 'Yes');
+
+  }
+
+  GetPartyDetailsByGroup(group: any) {
+    const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname())
+      .set('subledger', group);
+    return this._CommonService.getAPI('/AccountingTransactions/GetPartyListByGroup', params, 'Yes');
+
+  }
+
+  GetSubcategories(accountheadid: any, chitgroupid: any, ticketno: any, accountid: any, accountheadtype: any, subcategoryname: any) {
+    const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname())
+      .set('accountheadid', accountheadid)
+      .set('chitgroupid', chitgroupid)
+      .set('ticketno', ticketno)
+      .set('accountid', accountid)
+      .set('accountheadtype', accountheadtype)
+      .set('subcategoryname', subcategoryname);
+    return this._CommonService.getAPI('/ChitTransactions/GetSubscriberJVSubcategory', params, 'YES');
+  }
+  GetTDSSubcategoryDetails(subcategoryID: any, partyid: any) {
+    debugger;
+    const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname())
+      .set('subcategoryId', subcategoryID)
+      .set('partyId', partyid);
+    return this._CommonService.getAPI('/ChitTransactions/GetTDSSubcategoryDetails', params, 'YES');
+  }
+
+  GetdebitchitCheckbalance(BranchSchema: any, accountheadId: any, subcategory: any, subcategoryId: any, GlobalSchema: any, companyCode: any, branchCode: any) {
+    const params = new HttpParams().set('BranchSchema', BranchSchema)
+      .set('accountheadId', accountheadId)
+      .set('subcategory', subcategory)
+      .set('subcategoryId', subcategoryId).set('GlobalSchema', GlobalSchema).set('companyCode', companyCode).set('branchCode', branchCode);
+    return this._CommonService.getAPI('/Accounts/SubscriberJVCheckbalance', params, 'YES');
+  }
+
+  PartyStatusChecking(accounthead: any, subcategory: any) {
+    const params = new HttpParams().set('BranchSchema', this._CommonService.getschemaname())
+      .set('accounthead', accounthead)
+      .set('subcategory', subcategory)
+    return this._CommonService.getAPI('/ChitTransactions/PartyStatusChecking', params, 'YES');
+  }
+
+  saveChitReceipt(data: any) {
+    return this._CommonService.postAPI('/ChitTransactions/SaveSubscriberJV', data)
+  }
+
+  saveSubscriberVoucher(data: any) {
+    return this._CommonService.postAPI('/ChitTransactions/SaveSubscriberVoucher', data)
+  }
+
+  getSubscriberJVReport(jvnumber: any) {
+    const params = new HttpParams().set('localSchema', this._CommonService.getschemaname())
+      .set('jvnumber', jvnumber);
+    return this._CommonService.getAPI('/ChitTransactions/ChitReports/getSubscriberJVReport', params, 'YES');
+  }
+  getSubscriberJVReportForLegal(jvnumber: any, localSchema: any) {
+    const params = new HttpParams().set('localSchema', localSchema)
+      .set('jvnumber', jvnumber);
+    return this._CommonService.getAPI('/ChitTransactions/ChitReports/getSubscriberJVReport', params, 'YES');
+  }
+  // Removal Filing Date by Ramakanth : 02-10-2021
 
 
-    //brs statement service
+  getRemovalFilingDetails(fromdate: any, todate: any, localschema: any, branchschema: any) {
+    const params = new HttpParams().set("BranchSchema", branchschema).set('fromdate', fromdate).set('todate', todate).set('Localschema', localschema);
+    return this._CommonService.getAPI('/ChitTransactions/GetSubscriberRemovalFilingDetails', params, 'YES');;
+  }
+  saveRemovalFilingDate(sremovaldata: any) {
+    return this._CommonService.postAPI('/ChitTransactions/SaveSubscriberRemovalFiling', sremovaldata)
+  }
 
-    
+
+
+
+  //brs statement service
+
+
   // GetBrStatementReportByDates(
   //   fromDate: string,
   //   bankAccountId: number
@@ -2599,10 +2599,10 @@ export class AccountsReports {
   GetBrStatementReportByDates(
     fromdate: string,
     _pBankAccountId: number,
-    BranchSchema:any,
-    branchCode:any,
-    companyCode:any,
-    GlobalSchema:any
+    BranchSchema: any,
+    branchCode: any,
+    companyCode: any,
+    GlobalSchema: any
   ): Observable<any> {
 
     const params = new HttpParams({
@@ -2610,9 +2610,9 @@ export class AccountsReports {
         fromdate: fromdate,
         _pBankAccountId: _pBankAccountId,
         BranchSchema: BranchSchema,
-        branchCode:branchCode,
-        companyCode:companyCode,
-        GlobalSchema:GlobalSchema
+        branchCode: branchCode,
+        companyCode: companyCode,
+        GlobalSchema: GlobalSchema
       }
     });
 
@@ -2643,15 +2643,15 @@ export class AccountsReports {
   //     'YES'
   //   );
   // }
-  
+
   GetBrStatementReportByDatesChequesInfo(
     fromDate: string,
     toDate: string,
     bankAccountId: number,
-    BranchSchema:any,
-    GlobalSchema:any,
-    BranchCode:any,
-CompanyCode:any
+    BranchSchema: any,
+    GlobalSchema: any,
+    BranchCode: any,
+    CompanyCode: any
   ): Observable<any> {
 
     const params = new HttpParams({
@@ -2660,9 +2660,9 @@ CompanyCode:any
         todate: toDate,
         pBankAccountId: bankAccountId.toString(),
         BranchSchema: BranchSchema,
-        GlobalSchema:GlobalSchema,
-        BranchCode:BranchCode,
-        CompanyCode:CompanyCode
+        GlobalSchema: GlobalSchema,
+        BranchCode: BranchCode,
+        CompanyCode: CompanyCode
       }
     });
 
@@ -2717,13 +2717,13 @@ CompanyCode:any
       brsData
     );
   }
-  
+
 
   //chit transcation service
- 
 
 
-  
+
+
   // getBranchesByCAO(BranchSchema: string, Caoname: string) {
 
   //   const params = new HttpParams()
@@ -2747,60 +2747,59 @@ CompanyCode:any
       'YES'
     );
   }
-   getPaytmAutoreceiptCount(branchcode:any,OfflineSchema:any,trdate:any)
-  {
-    const params = new HttpParams().set('OfflineSchema',OfflineSchema).set('branchcode',branchcode).set('trdate',trdate);
+  getPaytmAutoreceiptCount(branchcode: any, OfflineSchema: any, trdate: any) {
+    const params = new HttpParams().set('OfflineSchema', OfflineSchema).set('branchcode', branchcode).set('trdate', trdate);
     return this._CommonService.getAPI('/ChitTransactions/getPaytmAutoreceiptCount', params, 'YES');
   }
 
 
-   updatestatuspatm(transactiondate:any):any{
-    try{
+  updatestatuspatm(transactiondate: any): any {
+    try {
       debugger;
-      const params = new HttpParams().set('transactiondate',transactiondate);
-      return this._CommonService.getAPI('/ChitTransactions/updatestatuspatm',params,'YES');
+      const params = new HttpParams().set('transactiondate', transactiondate);
+      return this._CommonService.getAPI('/ChitTransactions/updatestatuspatm', params, 'YES');
     }
-    catch(errormssg){
+    catch (errormssg) {
       this._CommonService.showErrorMessage(errormssg);
     }
   }
 
 
 
-     updatestatusCashfree(transactiondate:any):any{
-    try{
+  updatestatusCashfree(transactiondate: any): any {
+    try {
       debugger;
-      const params = new HttpParams().set('transactiondate',transactiondate);
-      return this._CommonService.getAPI('/ChitTransactions/updatestatuscashfree',params,'YES');
+      const params = new HttpParams().set('transactiondate', transactiondate);
+      return this._CommonService.getAPI('/ChitTransactions/updatestatuscashfree', params, 'YES');
     }
-    catch(errormssg){
+    catch (errormssg) {
       this._CommonService.showErrorMessage(errormssg);
     }
   }
 
 
 
-   gettransations(OfflineSchema:any,transactiondate:any):any{
-    try{
+  gettransations(OfflineSchema: any, transactiondate: any): any {
+    try {
       //let params =this._commonService.getschemaname()
-      let params = new HttpParams().set('OfflineSchema',OfflineSchema).set('caoname',this._CommonService.getbranchname()).set('transactiondate', transactiondate)
-    return this._CommonService.getAPI('/ChitTransactions/GetSQLonlinetransactions',params, 'YES')
+      let params = new HttpParams().set('OfflineSchema', OfflineSchema).set('caoname', this._CommonService.getbranchname()).set('transactiondate', transactiondate)
+      return this._CommonService.getAPI('/ChitTransactions/GetSQLonlinetransactions', params, 'YES')
     }
-    catch(errormssg){
+    catch (errormssg) {
       this._CommonService.showErrorMessage(errormssg);
     }
   }
 
 
- 
-  getpaytmautoreceipt(fromdate:any,globalschema:any):any{
-    try{
+
+  getpaytmautoreceipt(fromdate: any, globalschema: any): any {
+    try {
       debugger;
       //let params =this._commonService.getschemaname()
-      let params = new HttpParams().set('strdate',fromdate).set('BranchSchema',  this._CommonService.getschemaname()).set('GLOBAL',globalschema)
-    return this._CommonService.getAPI('/ChitTransactions/paytmautoreceipt',params, 'YES')
+      let params = new HttpParams().set('strdate', fromdate).set('BranchSchema', this._CommonService.getschemaname()).set('GLOBAL', globalschema)
+      return this._CommonService.getAPI('/ChitTransactions/paytmautoreceipt', params, 'YES')
     }
-    catch(errormssg){
+    catch (errormssg) {
       this._CommonService.showErrorMessage(errormssg);
     }
   }
@@ -2825,9 +2824,9 @@ CompanyCode:any
     BranchSchema: string,
     Caoschema: string,
     ptypeofpayment: string,
-    CompanyCode:any,
-    BranchCode:any,
-    GlobalSchema:any
+    CompanyCode: any,
+    BranchCode: any,
+    GlobalSchema: any
   ) {
 
     const params = new HttpParams()
@@ -2848,7 +2847,7 @@ CompanyCode:any
   //   const params = new HttpParams().set('BranchSchema', BranchSchema);
   //   return this._commonService.getAPI('/ChitTransactions/ChitReports/getCAOBranches', params, 'YES');
   // }
-  getCAOBranchlist(BranchSchema: any,GlobalSchema:any,CompanyCode:any,BranchCode:any){
+  getCAOBranchlist(BranchSchema: any, GlobalSchema: any, CompanyCode: any, BranchCode: any) {
     const params = new HttpParams().set('BranchSchema', BranchSchema).set('GlobalSchema', GlobalSchema).set('CompanyCode', CompanyCode).set('BranchCode', BranchCode);
     return this._CommonService.getAPI('/Accounts/GetCAOBranchList', params, 'YES');
   }
@@ -2874,170 +2873,170 @@ CompanyCode:any
         })
       );
   }
-  
 
 
-//subscriber balance services
+
+  //subscriber balance services
 
 
 
   _downloadPending_transferinReportsPdf(
-  reportName: string,
-  gridData: any[],
-  gridheaders: any[],
-  colWidthHeight: any,
-  pagetype: any,
-  printorpdf: string,
-  branchname: string,
-  typeofpaymentforreport: string
-) {
-  const address = this._CommonService.getcompanyaddress();
-  const Companyreportdetails = this._CommonService._getCompanyDetails();
-  const doc = new jsPDF(pagetype);
-  const totalPagesExp = '{total_pages_count_string}';
-  const today = this._CommonService.pdfProperties("Date");
-  const currencyformat = this._CommonService.currencysymbol;
-  const kapil_logo = this._CommonService.getKapilGroupLogo();
-  const rupeeImage = this._CommonService._getRupeeSymbol();
+    reportName: string,
+    gridData: any[],
+    gridheaders: any[],
+    colWidthHeight: any,
+    pagetype: any,
+    printorpdf: string,
+    branchname: string,
+    typeofpaymentforreport: string
+  ) {
+    const address = this._CommonService.getcompanyaddress();
+    const Companyreportdetails = this._CommonService._getCompanyDetails();
+    const doc = new jsPDF(pagetype);
+    const totalPagesExp = '{total_pages_count_string}';
+    const today = this._CommonService.pdfProperties("Date");
+    const currencyformat = this._CommonService.currencysymbol;
+    const kapil_logo = this._CommonService.getKapilGroupLogo();
+    const rupeeImage = this._CommonService._getRupeeSymbol();
 
-  let lMargin = 15;
-  let rMargin = 15;
-  let pdfInMM = 0;
+    let lMargin = 15;
+    let rMargin = 15;
+    let pdfInMM = 0;
 
-  (doc as any).autoTable({
-    head: [gridheaders],
-    body: gridData,
-    theme: 'grid',
-    headStyles: {
-      fillColor: this._CommonService.pdfProperties("Header Color"),
-      halign: this._CommonService.pdfProperties("Header Alignment"),
-      fontSize: this._CommonService.pdfProperties("Header Fontsize")
-    },
-    styles: {
-      cellWidth: 'wrap',
-      fontSize: this._CommonService.pdfProperties("Cell Fontsize"),
-      rowPageBreak: 'avoid',
-      overflow: 'linebreak'
-    },
-    columnStyles: colWidthHeight,
-    startY: 48,
-    margins: { left: 10 },
-    showHead: 'everyPage',
-    showFoot: 'lastPage',
+    (doc as any).autoTable({
+      head: [gridheaders],
+      body: gridData,
+      theme: 'grid',
+      headStyles: {
+        fillColor: this._CommonService.pdfProperties("Header Color"),
+        halign: this._CommonService.pdfProperties("Header Alignment"),
+        fontSize: this._CommonService.pdfProperties("Header Fontsize")
+      },
+      styles: {
+        cellWidth: 'wrap',
+        fontSize: this._CommonService.pdfProperties("Cell Fontsize"),
+        rowPageBreak: 'avoid',
+        overflow: 'linebreak'
+      },
+      columnStyles: colWidthHeight,
+      startY: 48,
+      margins: { left: 10 },
+      showHead: 'everyPage',
+      showFoot: 'lastPage',
 
-    didDrawPage: (data: any) => {
-      const pageSize = doc.internal.pageSize;
-      const pageWidth = pageSize.width ?? pageSize.getWidth();
-      const pageHeight = pageSize.height ?? pageSize.getHeight();
+      didDrawPage: (data: any) => {
+        const pageSize = doc.internal.pageSize;
+        const pageWidth = pageSize.width ?? pageSize.getWidth();
+        const pageHeight = pageSize.height ?? pageSize.getHeight();
 
-      doc.setFont("helvetica", "normal");
+        doc.setFont("helvetica", "normal");
 
-      if ((doc as any).internal.getNumberOfPages() === 1) {
-        doc.setFontSize(15);
+        if ((doc as any).internal.getNumberOfPages() === 1) {
+          doc.setFontSize(15);
 
-        if (pagetype === "a4") {
-          if (kapil_logo) doc.addImage(kapil_logo, 'JPEG', 10, 5,20,20);
+          if (pagetype === "a4") {
+            if (kapil_logo) doc.addImage(kapil_logo, 'JPEG', 10, 5, 20, 20);
 
-          doc.setTextColor('black');
-          doc.text(Companyreportdetails?.pCompanyName??'', 60, 10);
-          doc.setFontSize(8);
+            doc.setTextColor('black');
+            doc.text(Companyreportdetails?.pCompanyName ?? '', 60, 10);
+            doc.setFontSize(8);
 
-          if (reportName === 'Pending Transfer In') {
-            doc.text(address, pageWidth / 2, 17, { align: 'center' });
-          } else {
-            doc.text(address, 70, 17, { align: 'left' });
+            if (reportName === 'Pending Transfer In') {
+              doc.text(address, pageWidth / 2, 17, { align: 'center' });
+            } else {
+              doc.text(address, 70, 17, { align: 'left' });
+            }
+
+            if (Companyreportdetails?.pCinNo ?? '') {
+              doc.text('CIN : ' + Companyreportdetails.pCinNo, 75, 22);
+            }
+
+            doc.setFontSize(14);
+            doc.text(reportName, reportName === 'Pending Transfer In' ? 75 : 85, 32);
+
+            doc.setFontSize(10);
+            doc.text('Branch : ' + branchname, 163, 42);
+            doc.text('Type of Payment : ' + typeofpaymentforreport, 10, 42);
+
+            pdfInMM = 233;
+            doc.setDrawColor(0, 0, 0);
+            doc.line(10, 45, (pdfInMM - lMargin - rMargin), 45);
           }
 
-          if (Companyreportdetails?.pCinNo??'') {
-            doc.text('CIN : ' + Companyreportdetails.pCinNo, 75, 22);
+          if (pagetype === "landscape") {
+            if (kapil_logo) doc.addImage(kapil_logo, 'JPEG', 10, 5, 20, 20);
+
+            doc.setTextColor('black');
+            doc.text(Companyreportdetails?.pCompanyName ?? '', 110, 10);
+            doc.setFontSize(10);
+            doc.text(address, 80, 15, { align: 'left' });
+
+            if (Companyreportdetails?.pCinNo ?? '') {
+              doc.text('CIN : ' + Companyreportdetails.pCinNo, 125, 20);
+            }
+
+            doc.setFontSize(14);
+            doc.text(reportName, 130, 30);
+            doc.setFontSize(10);
+            doc.text('Branch : ' + branchname, 235, 40);
+
+            pdfInMM = 315;
+            doc.setDrawColor(0, 0, 0);
+            doc.line(10, 45, (pdfInMM - lMargin - rMargin), 45);
           }
-
-          doc.setFontSize(14);
-          doc.text(reportName, reportName === 'Pending Transfer In' ? 75 : 85, 32);
-
-          doc.setFontSize(10);
-          doc.text('Branch : ' + branchname, 163, 42);
-          doc.text('Type of Payment : ' + typeofpaymentforreport, 10, 42);
-
-          pdfInMM = 233;
-          doc.setDrawColor(0, 0, 0);
-          doc.line(10, 45, (pdfInMM - lMargin - rMargin), 45);
+        } else {
+          data.settings.margin.top = 20;
+          data.settings.margin.bottom = 20;
         }
 
-        if (pagetype === "landscape") {
-          if (kapil_logo) doc.addImage(kapil_logo, 'JPEG', 10, 5,20,20);
+        const page = `Page ${(doc as any).internal.getNumberOfPages()}${typeof doc.putTotalPages === 'function' ? ' of ' + totalPagesExp : ''}`;
 
-          doc.setTextColor('black');
-          doc.text(Companyreportdetails?.pCompanyName??'', 110, 10);
-          doc.setFontSize(10);
-          doc.text(address, 80, 15, { align: 'left' });
+        doc.line(5, pageHeight - 10, (pdfInMM - lMargin - rMargin), pageHeight - 10);
+        doc.setFontSize(10);
+        doc.text("Printed on : " + today, data.settings.margin.left, pageHeight - 5);
+        doc.text(page, pageWidth - data.settings.margin.right - 20, pageHeight - 5);
+      },
 
-          if (Companyreportdetails?.pCinNo??'') {
-            doc.text('CIN : ' + Companyreportdetails.pCinNo, 125, 20);
+      willDrawCell: (data: any) => {
+        if (data.row.index === gridData.length - 1) {
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(9);
+        }
+      },
+
+      didDrawCell: (data: any) => {
+        if (data.column.index === 11 && data.cell.section === 'body') {
+          const td = data.cell.raw;
+          if (td && currencyformat === "₹") {
+            const textPos = (data.cell as any).textPos;
+            doc.setFont("helvetica", "normal");
+            doc.addImage(rupeeImage, textPos.x - data.cell.contentWidth, textPos.y + 0.5, 1.5, 1.5);
           }
-
-          doc.setFontSize(14);
-          doc.text(reportName, 130, 30);
-          doc.setFontSize(10);
-          doc.text('Branch : ' + branchname, 235, 40);
-
-          pdfInMM = 315;
-          doc.setDrawColor(0, 0, 0);
-          doc.line(10, 45, (pdfInMM - lMargin - rMargin), 45);
-        }
-      } else {
-        data.settings.margin.top = 20;
-        data.settings.margin.bottom = 20;
-      }
-
-      const page = `Page ${(doc as any).internal.getNumberOfPages()}${typeof doc.putTotalPages === 'function' ? ' of ' + totalPagesExp : ''}`;
-
-      doc.line(5, pageHeight - 10, (pdfInMM - lMargin - rMargin), pageHeight - 10);
-      doc.setFontSize(10);
-      doc.text("Printed on : " + today, data.settings.margin.left, pageHeight - 5);
-      doc.text(page, pageWidth - data.settings.margin.right - 20, pageHeight - 5);
-    },
-
-    willDrawCell: (data: any) => {
-      if (data.row.index === gridData.length - 1) {
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(9);
-      }
-    },
-
-    didDrawCell: (data: any) => {
-      if (data.column.index === 11 && data.cell.section === 'body') {
-        const td = data.cell.raw;
-        if (td && currencyformat === "₹") {
-          const textPos = (data.cell as any).textPos;
-          doc.setFont("helvetica", "normal");
-          doc.addImage(rupeeImage, textPos.x - data.cell.contentWidth, textPos.y + 0.5, 1.5, 1.5);
         }
       }
+    });
+
+    if (typeof doc.putTotalPages === 'function') {
+      doc.putTotalPages(totalPagesExp);
     }
-  });
 
-  if (typeof doc.putTotalPages === 'function') {
-    doc.putTotalPages(totalPagesExp);
+    if (printorpdf === "Pdf") {
+      doc.save(reportName + '.pdf');
+    }
+
+    if (printorpdf === "Print") {
+      this._CommonService.setiFrameForPrint(doc);
+    }
   }
 
-  if (printorpdf === "Pdf") {
-    doc.save(reportName + '.pdf');
-  }
-
-  if (printorpdf === "Print") {
-    this._CommonService.setiFrameForPrint(doc);
-  }
-}
-
-  
 
 
 
 
 
 
-//tds service
+
+  //tds service
 
 
 
@@ -3057,41 +3056,41 @@ CompanyCode:any
 
     return this._CommonService.getAPI('/TDS/GetTdsReportDetails', params, 'YES');
   }
-//   getTdsSectionDetails(): Observable<any> {
-//   return this.commonService
-//     .getAPI('/Tds/getTdsSectionNo', '', 'NO')
-//     .pipe(
-//       catchError((error: any) => {
-//         this.commonService.showErrorMessage(error);
-//         return of(null);
-//       })
-//     );
-// }
-getTdsSectionDetails(globalSchema:any,companyCode:any,branchCode:any): Observable<any> {
-  const params = new HttpParams()
+  //   getTdsSectionDetails(): Observable<any> {
+  //   return this.commonService
+  //     .getAPI('/Tds/getTdsSectionNo', '', 'NO')
+  //     .pipe(
+  //       catchError((error: any) => {
+  //         this.commonService.showErrorMessage(error);
+  //         return of(null);
+  //       })
+  //     );
+  // }
+  getTdsSectionDetails(globalSchema: any, companyCode: any, branchCode: any): Observable<any> {
+    const params = new HttpParams()
       .set('globalSchema', globalSchema)
       .set('companyCode', companyCode)
       .set('branchCode', branchCode);
-  return this._CommonService
-    .getAPI('/Accounts/GetTdsSectionNo', params, 'YES')
-    .pipe(
-      catchError((error: any) => {
-        this._CommonService.showErrorMessage(error);
-        return of(null);
-      })
-    );
-}
-  
+    return this._CommonService
+      .getAPI('/Accounts/GetTdsSectionNo', params, 'YES')
+      .pipe(
+        catchError((error: any) => {
+          this._CommonService.showErrorMessage(error);
+          return of(null);
+        })
+      );
+  }
 
 
 
 
-//tds report services
+
+  //tds report services
 
 
 
 
-  public getTDSSectionDetails(GlobalSchema:any,CompanyCode:any,BranchCode:any) {
+  public getTDSSectionDetails(GlobalSchema: any, CompanyCode: any, BranchCode: any) {
     const params = new HttpParams()
       .set('GlobalSchema', GlobalSchema)
       .set('CompanyCode', CompanyCode)
@@ -3100,12 +3099,12 @@ getTdsSectionDetails(globalSchema:any,companyCode:any,branchCode:any): Observabl
   }
 
 
-  public getTDSReportDetails(localSchema:any, sectionid:any, fromdate:any, todate:any, grouptype:any,reporttype:any) {
+  public getTDSReportDetails(localSchema: any, sectionid: any, fromdate: any, todate: any, grouptype: any, reporttype: any) {
     const params = new HttpParams().set("localSchema", localSchema).set("sectionid", sectionid).set("fromdate", fromdate).set("todate", todate).set("grouptype", grouptype).set("reporttype", reporttype);
     return this._CommonService.getAPI('/ChitTransactions/ChitReports/getTDSReportDetails', params, 'YES');
   }
 
-  public getTDSReportDiffDetails(localSchema:any, sectionid:any, fromdate:any, todate:any) {
+  public getTDSReportDiffDetails(localSchema: any, sectionid: any, fromdate: any, todate: any) {
     const params = new HttpParams().set("localSchema", localSchema).set("sectionid", sectionid).set("fromdate", fromdate).set("todate", todate);
     return this._CommonService.getAPI('/ChitTransactions/ChitReports/getTDSReportDiffDetails', params, 'YES');
   }
@@ -3119,17 +3118,17 @@ getTdsSectionDetails(globalSchema:any,companyCode:any,branchCode:any): Observabl
   //     this._commonservice.showErrorMessage(errormssg);
   //   }
   // }
-  getGstReportDetails(localSchema:any,fromdate:any, todate:any, reporttype:any,ledgername:any,GlobalSchema:any,branchcode:any,companycode:any) :any{
+  getGstReportDetails(localSchema: any, fromdate: any, todate: any, reporttype: any, ledgername: any, GlobalSchema: any, branchcode: any, companycode: any): any {
     try {
       const params = new HttpParams().set('localSchema', localSchema).set('fromdate', fromdate).set('todate', todate).set('reporttype', reporttype).set('ledgername', ledgername).set('GlobalSchema', GlobalSchema).set('branchcode', branchcode).set('companycode', companycode);
       return this._CommonService.getAPI('/Accounts/getGstReport1', params, 'YES');
     }
-    catch (errormssg:any) {
+    catch (errormssg: any) {
       this._CommonService.showErrorMessage(errormssg);
     }
   }
   // public exportAsExcelFile(json: any[], excelFileName: string): void {
-    
+
   //   const myworksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
   //   const myworkbook: XLSX.WorkBook = { Sheets: { 'data': myworksheet }, SheetNames: ['data'] };
   //   const excelBuffer: any = XLSX.write(myworkbook, { bookType: 'xlsx', type: 'array' });
@@ -3142,17 +3141,272 @@ getTdsSectionDetails(globalSchema:any,companyCode:any,branchCode:any): Observabl
   //   });
   //   FileSaver.saveAs(data, fileName + '_Excel'+ EXCEL_EXTENSION);
   // }
-  Getgstreport(accountsSchema:any,fromdate:any, todate:any,globalSchema:any,CompanyName:any,BranchCode:any):any {
+  Getgstreport(accountsSchema: any, fromdate: any, todate: any, globalSchema: any, CompanyName: any, BranchCode: any): any {
     try {
       // const params = new HttpParams().set('Branchschema',Branchschema).set('fromdate', fromdate).set('todate', todate);
       // return this._commonservice.getAPI('/ChitTransactions/Getgstreport', params, 'YES');
-      const params = new HttpParams().set('accountsSchema',accountsSchema).set('fromdate', fromdate).set('todate', todate).set('globalSchema',globalSchema).set('CompanyName',CompanyName).set('BranchCode',BranchCode);
+      const params = new HttpParams().set('accountsSchema', accountsSchema).set('fromdate', fromdate).set('todate', todate).set('globalSchema', globalSchema).set('CompanyName', CompanyName).set('BranchCode', BranchCode);
       return this._CommonService.getAPI('/Accounts/Getgstreport', params, 'YES');
     }
-    catch (errormssg:any) {
+    catch (errormssg: any) {
       this._CommonService.showErrorMessage(errormssg);
     }
   }
+
+
+
+
+  downloadKgmsOutwardReportsData(
+    reportName: string,
+    gridData: any[],
+    gridheaders: any[],
+    colWidthHeight: any,
+    pagetype: 'a4' | 'landscape',
+    printorpdf: 'Pdf' | 'Print',
+    fromdate: string,
+    todate: string,
+    betweenorason: string
+  ) {
+
+    const Companyreportdetails = this._CommonService._getCompanyDetails();
+    const address = this._CommonService.getcompanyaddress();
+
+    const doc = new jsPDF({
+      orientation: pagetype === 'landscape' ? 'landscape' : 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const totalPagesExp = '{total_pages_count_string}';
+
+    const today = this._CommonService.pdfProperties("Date");
+
+    const kapil_logo = this._CommonService.getKapilGroupLogo();
+    const currencyformat = this._CommonService.currencysymbol;
+    const rupeeImage = this._CommonService._getRupeeSymbol();
+
+    const lMargin = 15;
+    const rMargin = 15;
+
+    let pdfInMM: number;
+
+    autoTable(doc, {
+
+      head: [gridheaders],
+      body: gridData,
+
+      bodyStyles: {
+        lineColor: [0, 0, 0],
+        textColor: [0, 0, 0]
+      },
+
+      theme: 'grid',
+
+      headStyles: {
+        fillColor: this._CommonService.pdfProperties("Header Color"),
+        halign: this._CommonService.pdfProperties("Header Alignment") as 'center',
+        fontSize: 10
+        // Number(this._CommonService.pdfProperties("Header Fontsize"))
+      },
+
+      styles: {
+        cellPadding: 1,
+        fontSize: 10,
+        // Number(this._CommonService.pdfProperties("Cell Fontsize")),
+        cellWidth: 'wrap',
+        overflow: 'linebreak'
+      },
+
+      margin: { left: 10 },
+
+      columnStyles: colWidthHeight,
+
+      startY: 48,
+
+      showHead: 'everyPage',
+      showFoot: 'lastPage',
+
+      didDrawPage: (data) => {
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+
+        doc.setFont('Times', 'normal');
+
+        if (doc.getNumberOfPages() === 1) {
+
+          doc.setFontSize(15);
+
+          if (pagetype === 'a4') {
+
+            doc.addImage(kapil_logo, 'JPEG', 10, 5, 20, 20);
+
+            doc.setTextColor('black');
+
+            doc.text(
+              Companyreportdetails.companyName,
+              pageWidth / 2,
+              10,
+              { align: 'center' }
+            );
+
+            doc.setFontSize(8);
+
+            const address1 = address.substr(0, 115);
+            const address2 = address.substring(115);
+
+            // doc.text(address1, pageWidth / 2, 15, { align: 'center' });
+            doc.text(Companyreportdetails.registrationAddress, pageWidth / 2, 18, { align: 'center' });
+
+            if (Companyreportdetails.cinNumber) {
+              doc.text(
+                'CIN : ' + Companyreportdetails.cinNumber,
+                pageWidth / 2,
+                22,
+                { align: 'center' }
+              );
+            }
+
+            doc.setFontSize(14);
+
+            doc.text(reportName, pageWidth / 2, 30, { align: 'center' });
+
+            doc.setFontSize(10);
+
+            doc.text(
+              'Branch : ' + Companyreportdetails.branchName,
+              pageWidth - 10,
+              40,
+              { align: 'right' }
+            );
+
+            if (betweenorason === "Between") {
+              doc.text(`Between : ${fromdate} And ${todate}`, 15, 40);
+            }
+
+            if (betweenorason === "As On" && fromdate) {
+              doc.text(`As on : ${fromdate}`, 15, 40);
+            }
+
+            pdfInMM = 233;
+
+            doc.line(
+              10,
+              45,
+              (pdfInMM - lMargin - rMargin),
+              45
+            );
+          }
+
+          if (pagetype === 'landscape') {
+
+            doc.addImage(kapil_logo, 'JPEG', 20, 5, 20, 20);
+
+            doc.text(
+              Companyreportdetails.companyName,
+              pageWidth / 2,
+              10,
+              { align: 'center' }
+            );
+
+            doc.setFontSize(10);
+
+            const address1 = address.substr(0, 150);
+
+            doc.text(Companyreportdetails.registrationAddress, pageWidth / 2, 15, { align: 'center' });
+
+            if (Companyreportdetails.cinNumber) {
+              doc.text(
+                'CIN : ' + Companyreportdetails.cinNumber,
+                pageWidth / 2,
+                20,
+                { align: 'center' }
+              );
+            }
+
+            doc.setFontSize(14);
+
+            doc.text(reportName, pageWidth / 2, 30, { align: 'center' });
+
+            doc.setFontSize(10);
+
+            doc.text(
+              'Branch : ' + Companyreportdetails.branchName,
+              pageWidth - 10,
+              40,
+              { align: 'right' }
+            );
+
+            if (betweenorason === "Between") {
+              doc.text(`Between : ${fromdate} And ${todate}`, 15, 40);
+            }
+
+            if (betweenorason === "As On" && fromdate) {
+              doc.text(`As on : ${fromdate}`, 15, 40);
+            }
+
+            pdfInMM = 315;
+
+            doc.line(
+              10,
+              45,
+              (pdfInMM - lMargin - rMargin),
+              45
+            );
+          }
+
+        } else {
+
+          data.settings.margin.top = 20;
+          data.settings.margin.bottom = 15;
+
+        }
+
+        let page = "Page " + doc.getNumberOfPages();
+
+        if (typeof doc.putTotalPages === 'function') {
+          page += ' of ' + totalPagesExp;
+        }
+
+        doc.line(
+          5,
+          pageHeight - 10,
+          (pdfInMM - lMargin - rMargin),
+          pageHeight - 10
+        );
+
+        doc.setFontSize(10);
+
+        doc.text(
+          "Printed on : " + today,
+          data.settings.margin.left - 5,
+          pageHeight - 5
+        );
+
+        doc.text(
+          page,
+          pageWidth - data.settings.margin.right - 20,
+          pageHeight - 5
+        );
+
+      }
+
+    });
+
+    if (typeof doc.putTotalPages === 'function') {
+      doc.putTotalPages(totalPagesExp);
+    }
+
+    if (printorpdf === "Pdf") {
+      doc.save(reportName + '.pdf');
+    }
+
+    if (printorpdf === "Print") {
+      this._CommonService.setiFrameForPrint(doc);
+    }
+
+  }
+
 
 
 

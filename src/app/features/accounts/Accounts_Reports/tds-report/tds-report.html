@@ -1,1 +1,252 @@
-<p>tds-report works!</p>
+<div class="screen-container">
+    <div class="screen-card">
+
+        <!-- ── Header ─────────────────────────────────────────────────── -->
+        <div class="screen-header">
+            <h2 class="screen-title">Section Wise Report</h2>
+        </div>
+
+        <!-- ── Content ───────────────────────────────────────────────── -->
+        <div class="screen-content">
+            <form [formGroup]="TdsReportForm">
+
+                <!-- ═══ Filter Panel ══════════════════════════════════════ -->
+                <section class="filter-panel">
+
+                    <!-- Row 1 : Section selector -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+
+                                <!-- Section ID -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label required-label">
+                                            Section <span class="required-star">*</span>
+                                        </label>
+                                        <ng-select [items]="tdsSectionData()" bindLabel="sectionId" bindValue="tdsId"
+                                            placeholder="Select" [multiple]="false" [searchable]="true"
+                                            [clearable]="true" dropdownPosition="bottom" formControlName="sectionid"
+                                            (change)="onSectionChange($event)" appendTo="body"
+                                            [ngClass]="{ 'is-invalid': f['sectionid'].errors && submitted() }">
+                                        </ng-select>
+                                        <div class="invalid-feedback d-block"
+                                            *ngIf="submitted() && f['sectionid'].errors?.['required']">
+                                            Section is required
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Section Name (readonly) -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Section Name</label>
+                                        <input type="text" class="form-control readonly-field"
+                                            formControlName="sectionname" readonly />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2 : As On toggle -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check form-check-inline check-btn-secondary">
+                                <input type="checkbox" class="form-check-input" id="pay-date"
+                                    (change)="onAsOnToggle($event)" />
+                                <label for="pay-date" class="form-check-label">As On</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3 : Dates + Summary + Show -->
+                    <div class="row align-items-end">
+
+                        <!-- From Date -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">{{ lblFromDate() }}</label>
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="dpConfig"
+                                    formControlName="fromdate" readonly (keydown)="$event.preventDefault()"
+                                    (bsValueChange)="onFromDateChange($event)" />
+                            </div>
+                        </div>
+
+                        <!-- To Date (conditional) -->
+                        <div class="col-md-3" *ngIf="betweenDate()">
+                            <div class="form-group">
+                                <label class="form-label">To Date</label>
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="dpConfig1"
+                                    formControlName="todate" readonly (keydown)="$event.preventDefault()"
+                                    (bsValueChange)="onToDateChange($event)" />
+                            </div>
+                        </div>
+
+                        <!-- Summary toggle -->
+                        <div class="col-xl-2 col-md-2">
+                            <div class="form-check form-check-inline check-btn-secondary">
+                                <input type="checkbox" class="form-check-input" formControlName="reportType" id="ason"
+                                    (change)="onSummaryToggle($event)" />
+                                <label for="ason" class="form-check-label">Summary</label>
+                            </div>
+                        </div>
+
+                        <!-- Show button -->
+                        <div class="col-md-4">
+                            <div class="btn-group-actions">
+                                <button type="button" class="btn btn-primary btn-show" (click)="Show()"
+                                    [disabled]="loading()">
+                                    <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': loading() }"></i>
+                                    {{ saveButtonLabel() }}
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- No records message -->
+                    <div *ngIf="noDtTable()" class="no-records-msg">
+                        NO RECORDS TO DISPLAY
+                    </div>
+
+                </section>
+                <!-- ═══ /Filter Panel ═════════════════════════════════════ -->
+
+                <!-- ═══ Data Table ════════════════════════════════════════ -->
+                <section class="table-panel mt-3" *ngIf="dtTable()">
+
+                    <!-- Export icons -->
+                    <div class="export-toolbar">
+                        <a (click)="pdfOrPrint('Pdf')" class="export-icon" title="Export PDF">
+                            <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
+                        </a>
+                        <a (click)="pdfOrPrint('Print')" class="export-icon" title="Print">
+                            <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
+                        </a>
+                        <a (click)="export()" class="export-icon" title="Export Excel">
+                            <img src="assets/images/icon-excel.svg" width="18" alt="Excel" />
+                        </a>
+                    </div>
+
+                    <!-- PrimeNG Table -->
+                    <p-table [value]="tdsReportData()" [paginator]="true" [rows]="pageCriteria.pageSize"
+                        [rowsPerPageOptions]="[10, 25, 50, 100]" [responsiveLayout]="'scroll'" [scrollable]="true"
+                        scrollHeight="500px" styleClass="p-datatable-gridlines p-datatable-sm">
+
+                        <!-- Header -->
+                        <ng-template pTemplate="header">
+                            <tr class="tds-thead-row">
+
+                                <th *ngIf="!summary()" class="tds-th tds-th--left" (click)="sortBy('paid_to')">
+                                    Particulars
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('paid_to')"></span>
+                                </th>
+
+                                <th class="tds-th tds-th--left" (click)="sortBy('pannumber')">
+                                    Pan Number
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('pannumber')"></span>
+                                </th>
+
+                                <th *ngIf="!summary()" class="tds-th tds-th--left" (click)="sortBy('panstatus')">
+                                    PAN Status
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('panstatus')"></span>
+                                </th>
+
+                                <th class="tds-th tds-th--left" (click)="sortBy('agentName')">
+                                    Agent Name
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('agentName')"></span>
+                                </th>
+
+                                <th class="tds-th tds-th--left" (click)="sortBy('referalcode')">
+                                    Agent Code
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('referalcode')"></span>
+                                </th>
+
+                                <th *ngIf="!summary()" class="tds-th tds-th--left" (click)="sortBy('transaction_date')">
+                                    Transaction Date
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('transaction_date')"></span>
+                                </th>
+
+                                <th class="tds-th tds-th--right" (click)="sortBy('paidamount')">
+                                    Paid Amount
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('paidamount')"></span>
+                                </th>
+
+                                <th class="tds-th tds-th--right" (click)="sortBy('tdscalculatedamount')">
+                                    TDS Calculated Amount
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('tdscalculatedamount')"></span>
+                                </th>
+
+                                <th class="tds-th tds-th--right" (click)="sortBy('ledgeramount')">
+                                    Amount
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('ledgeramount')"></span>
+                                </th>
+
+                                <th *ngIf="!summary()" class="tds-th tds-th--left" (click)="sortBy('effectedjvid')">
+                                    Effective JV
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('effectedjvid')"></span>
+                                </th>
+
+                                <th *ngIf="!summary()" class="tds-th tds-th--left"
+                                    (click)="sortBy('subscriberbranchname')">
+                                    Subscriber Branch
+                                    <span class="sort-icon" [innerHTML]="getSortIcon('subscriberbranchname')"></span>
+                                </th>
+
+                            </tr>
+                        </ng-template>
+
+                        <!-- Body -->
+                        <ng-template pTemplate="body" let-row>
+                            <tr class="tds-row">
+
+                                <td *ngIf="!summary()" class="tds-td">{{ row.paid_to | json }}</td>
+                                <td class="tds-td">{{ row.pannumber || '--NA--' }}</td>
+                                <td *ngIf="!summary()" class="tds-td">{{ row.panstatus || '--NA--' }}</td>
+                                <td class="tds-td">{{ row.agentName }}</td>
+                                <td class="tds-td">{{ row.referalcode }}</td>
+
+                                <td *ngIf="!summary()" class="tds-td">
+                                    {{ row.transaction_date | date:'dd-MMM-yyyy' }}
+                                </td>
+
+                                <td class="tds-td tds-td--right">
+                                    {{ currencySymbol() }}
+                                    {{ row.paidamount < 0 ? '(' + (getAbsoluteValue(row.paidamount) | number:'1.2-2')
+                                        + ')' : (row.paidamount | number:'1.2-2') }} </td>
+
+                                <td class="tds-td tds-td--right">
+                                    {{ currencySymbol() }}
+                                    {{ row.tdscalculatedamount < 0 ? '(' + (getAbsoluteValue(row.tdscalculatedamount) |
+                                        number:'1.2-2') + ')' : (row.tdscalculatedamount | number:'1.2-2') }} </td>
+
+                                <td class="tds-td tds-td--right">
+                                    {{ currencySymbol() }}
+                                    {{ row.ledgeramount < 0 ? '(' + (getAbsoluteValue(row.ledgeramount) |
+                                        number:'1.2-2') + ')' : (row.ledgeramount | number:'1.2-2') }} </td>
+
+                                <td *ngIf="!summary()" class="tds-td">{{ row.effectedjvid }}</td>
+                                <td *ngIf="!summary()" class="tds-td">{{ row.subscriberbranchname || '--NA--' }}</td>
+
+                            </tr>
+                        </ng-template>
+
+                        <!-- Empty state -->
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td [attr.colspan]="summary() ? 5 : 11" class="tds-empty-cell">
+                                    No data to display
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                </section>
+                <!-- ═══ /Data Table ═══════════════════════════════════════ -->
+
+            </form>
+        </div>
+    </div>
+</div>

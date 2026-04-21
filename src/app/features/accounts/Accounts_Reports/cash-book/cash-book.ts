@@ -10,6 +10,7 @@ import { Companydetails } from "../../../common/company-details/companydetails/c
 
 @Component({
   selector: "app-cash-book",
+  standalone:true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, BsDatepickerModule, TableModule, Companydetails],
   templateUrl: "./cash-book.html",
   styleUrl: "./cash-book.css",

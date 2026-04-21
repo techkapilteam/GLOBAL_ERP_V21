@@ -49,6 +49,7 @@ function dateRangeValidator(group: AbstractControl): ValidationErrors | null {
 }
 @Component({
   selector: "app-account-ledger",
+  standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, BsDatepickerModule, TableModule, Companydetails],
   templateUrl: "./account-ledger.html",
   styleUrl: "./account-ledger.css",
