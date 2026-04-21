@@ -1,0 +1,244 @@
+<div class="shadow-bg-view">
+
+    <!-- ── Main wrapper ─────────────────────────────────────────────────── -->
+    <div class="report-wrapper">
+
+        <div id="template">
+
+            <!-- Export Actions (hidden when cancelled) -->
+            @if (!cancelled()) {
+            <div class="export-actions">
+                <ul class="export-list">
+
+                    <li class="export-item">
+                        <a (click)="pdfOrprint('Pdf')" class="export-icon-link" title="PDF">
+                            <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
+                        </a>
+                    </li>
+
+                    <li class="export-item">
+                        <a (click)="pdfOrprint('Print')" class="export-icon-link" title="Print">
+                            <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+            }
+
+            <!-- Receipt Loop -->
+            <div class="report-container" id="temp-box">
+
+                @for (receiptdata of receiptData(); track receiptdata.receiptid; let i = $index) {
+
+                <div class="receipt-row">
+                    <div class="receipt-col">
+
+                        <div class="receipt-wrapper">
+
+                            <!-- Company Logo -->
+                            <div class="company-logo-wrap">
+                                <img class="logo-img" src="assets/images/kapillogo.png" alt="Company Logo" />
+                            </div>
+
+                            <!-- Company Header -->
+                            <div class="company-header">
+                                <h4 class="company-name">{{ companyName() }}</h4>
+                                <p class="company-address">{{ registrationAddress() }}</p>
+                                <p class="company-cin">CIN : {{ cinNumber() }}</p>
+                            </div>
+
+                            <!-- Print Meta -->
+                            <div class="print-meta-row">
+                                <div class="meta-left">
+                                    <strong>Printed On :</strong>
+                                    {{ printedon() | date:'dd-MMM-yyyy h:mm:ss a' }}
+                                </div>
+                                <div class="meta-right">
+                                    <strong>Branch :</strong>
+                                    {{ branchName() | titlecase }}
+                                </div>
+                            </div>
+
+                            <!-- Receipt Title Banner -->
+                            <div class="receipt-banner">
+                                <h5 class="receipt-title">
+                                    {{ receiptName() }}
+
+                                    @if (receiptdata.gstno) {
+                                    <span class="gst-label">(GST No. : {{ receiptdata.gstno }})</span>
+                                    }
+
+                                    @if (duplicate() === 'Reprint') {
+                                    <span class="duplicate-label">(Duplicate)</span>
+                                    }
+                                </h5>
+                            </div>
+
+                            <!-- Cancelled Watermark -->
+                            @if (cancelled()) {
+                            <div class="cancel-watermark">Cancelled</div>
+                            }
+
+                            <!-- Voucher Body -->
+                            <div class="voucher-body">
+
+                                <!-- Receipt No / Date row -->
+                                <div class="voucher-meta-row">
+                                    <div class="meta-left">
+                                        <strong>Receipt No :</strong>
+                                        {{ receiptdata.receiptid }}
+                                    </div>
+                                    <div class="meta-right">
+                                        <strong>Date :</strong>
+                                        {{ receiptdata.receipt_date | date:'dd-MMM-yyyy' }}
+                                    </div>
+                                </div>
+
+                                <!-- Received from -->
+                                <p class="voucher-field fw-bold">
+                                    Received With Thanks From
+                                    {{ receiptdata.account_name }}
+                                </p>
+
+                                <p class="voucher-towards">Towards</p>
+
+                                <!-- Particulars Table -->
+                                <div class="table-wrapper">
+                                    <table class="receipt-table">
+
+                                        <thead>
+                                            <tr>
+                                                <th class="col-sno">S.No.</th>
+                                                <th class="col-particulars">Particulars</th>
+                                                <th class="col-amount">Amount</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @for (grData of receiptdata.pGeneralReceiptSubDetailsList; track grData; let
+                                            x = $index) {
+                                            <tr>
+                                                <td class="td-center">{{ x + 1 }}</td>
+                                                <td>{{ grData.pAccountname }}</td>
+                                                <td class="td-right">
+                                                    {{ currencySymbol }}
+                                                    {{ grData.pLedgeramount | number:'1.2-2' }}
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr class="tfoot-row">
+                                                <td></td>
+                                                <td class="td-right">
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td class="td-right">
+                                                    <strong>
+                                                        {{ currencySymbol }}
+                                                        {{ getTotalAmount(receiptdata.pGeneralReceiptSubDetailsList) |
+                                                        number:'1.2-2' }}
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+                                </div>
+
+                                <!-- Amount in Words -->
+                                <p class="amount-words">
+                                    <strong>Amount In Words :</strong>
+                                    Rupees
+                                    {{ getTotalAmount(receiptdata.pGeneralReceiptSubDetailsList) | numberToWords |
+                                    titlecase }}
+                                    Only.
+                                </p>
+
+                                <!-- Narration -->
+                                <p class="narration-block">
+                                    <strong>Narration :</strong>
+                                    {{ getNarration(receiptdata.narration) }}
+                                </p>
+
+                                <!-- Mode of Payment -->
+                                <p class="voucher-field">
+                                    <strong>Mode of Payment :</strong>
+
+                                    @if (isCash(receiptdata.modeof_receipt)) {
+                                    <span>CASH</span>
+                                    } @else {
+                                    <span>{{ getPaymentModeLabel(receiptdata.typeofpayment) }}</span>
+                                    }
+
+                                    @if (hasStringRef(receiptdata.reference_number)) {
+                                    @if (isCheque(receiptdata.typeofpayment)) {
+                                    <span>
+                                        (Chq Reference : {{ receiptdata.reference_number }},
+                                        Bank : {{ getBankName(receiptdata.cheque_bank) }})
+                                    </span>
+                                    } @else {
+                                    <span>
+                                        (Ref No : {{ receiptdata.reference_number }},
+                                        Bank : {{ getBankName(receiptdata.cheque_bank) }})
+                                    </span>
+                                    }
+                                    }
+                                </p>
+
+                                <!-- GST -->
+                                @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount) {
+                                <p class="voucher-field">
+                                    <strong>GST (Include) :</strong>
+                                    {{ currencySymbol }}
+                                    {{ receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount | number:'1.2-2' }}
+                                </p>
+                                }
+
+                                <!-- TDS -->
+                                @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount) {
+                                <p class="voucher-field">
+                                    <strong>TDS (Exclude) :</strong>
+                                    {{ currencySymbol }}
+                                    {{ receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount | number:'1.2-2' }}
+                                </p>
+                                }
+
+                                <!-- Signature Row -->
+                                <div class="signature-row">
+
+                                    <div class="signature-col">
+                                        <p class="signature-name">{{ receiptdata.approved_by }}</p>
+                                        <p class="signature-label">(Approved By)</p>
+                                    </div>
+
+                                    <div class="signature-col">
+                                        <p class="signature-name">{{ receiptdata.verified_by }}</p>
+                                        <p class="signature-label">(Verified By)</p>
+                                    </div>
+
+                                    <div class="signature-col">
+                                        <p class="signature-name">{{ username }}</p>
+                                        <p class="signature-label">(Posted By)</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
