@@ -20,7 +20,6 @@ import { ButtonModule } from 'primeng/button';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TableLazyLoadEvent } from 'primeng/table';
 
-import { AccountingMasterService } from '../../../services/accounting-master.service';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { PageCriteria } from '../../../../core/models/pagecriteria';

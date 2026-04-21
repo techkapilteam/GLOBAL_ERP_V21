@@ -30,7 +30,6 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { Address } from '../../../common/address/address/address';
-import { AccountingMasterService } from '../../../services/accounting-master.service';
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 import { AccountsConfig } from '../../../../core/services/accounts/accounts-config';
 
