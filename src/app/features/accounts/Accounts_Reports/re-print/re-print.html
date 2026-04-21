@@ -1,1 +1,201 @@
-<p>re-print works!</p>
+<div class="screen-container">
+  <div class="screen-card">
+
+    <!-- ── Header ──────────────────────────────────────────────────────────── -->
+    <div class="screen-header">
+      <h2 class="screen-title">Re Print</h2>
+    </div>
+
+    <!-- ── Filter Form ──────────────────────────────────────────────────────── -->
+    <div class="section-content filter-section">
+      <form [formGroup]="ReprintRepotForm" autocomplete="off">
+        <div class="row">
+
+          <!-- Transaction Type -->
+          <div class="col-md-3 mb-3">
+            <div class="form-group">
+              <label class="form-label">
+                Transaction Type<span class="required-star">*</span>
+              </label>
+              <ng-select
+                [items]="lstreporttype"
+                formControlName="TransType"
+                bindLabel="reporttype"
+                bindValue="reporttypeid"
+                [multiple]="false"
+                placeholder="Select"
+                [searchable]="true"
+                [clearable]="false"
+                (change)="reportchange_Change($event)"
+                appendTo="body">
+              </ng-select>
+              @if ((f['TransType'].touched || submitted) && f['TransType'].errors?.['required']) {
+                <div class="text-danger mt-1">Transaction Type is required</div>
+              }
+            </div>
+          </div>
+
+          <!-- Transaction No. -->
+          @if (userbranchtxtboxshowhide()) {
+            <div class="col-md-3 mb-3">
+              <div class="form-group">
+                <label class="form-label">
+                  Transaction No.<span class="required-star">*</span>
+                </label>
+                <input type="text" class="form-control" formControlName="Transno" />
+              </div>
+              @if ((f['Transno'].touched || submitted) && f['Transno'].errors?.['required']) {
+                <div class="text-danger mt-1">Transaction No. is required</div>
+              }
+            </div>
+          }
+
+          <!-- PAN No. -->
+          @if (form15UID()) {
+            <div class="col-md-3 mb-3">
+              <div class="form-group">
+                <label class="form-label">PAN No.</label>
+                <input type="text" class="form-control" formControlName="panno" />
+              </div>
+              @if (f['panno'].errors?.['pattern']) {
+                <div class="text-danger mt-1">Invalid PAN format (ABCDE1234F)</div>
+              }
+            </div>
+          }
+
+          <!-- Generate Report Button -->
+          <div class="col-md-3">
+            <div class="btn-generate-wrap">
+              <button
+                type="button"
+                class="btn btn-primary btn-generate"
+                (click)="getduplicateReport()">
+                <img
+                  src="assets/images/icon-check-white.svg"
+                  class="btn-icon"
+                  width="18"
+                  height="18"
+                  alt="check" />
+                &nbsp;Generate Report
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- ── Receipt Grid ─────────────────────────────────────────────────────── -->
+    @if (showhide()) {
+      <div class="section-content grid-section">
+        <div class="row">
+
+          <!-- Search -->
+          <div class="col-md-4 mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search"
+              (keyup)="ReprintdataFilter($any($event.target).value)" />
+          </div>
+
+          <!-- Table -->
+          <div class="col-md-12">
+            <p-table
+              [value]="griddata()"
+              [paginator]="true"
+              [rows]="pageCriteria.pageSize"
+              [rowsPerPageOptions]="[10, 20, 50]"
+              responsiveLayout="scroll">
+
+              <ng-template pTemplate="header">
+                <tr class="tds-table-header-row">
+                  <th class="th-cell th-left">T/R Receipt No.</th>
+                  <th class="th-cell th-left">Receipt Date</th>
+                  <th class="th-cell th-left">Receipt No.</th>
+                  <th class="th-cell th-left">Chit No.</th>
+                  <th class="th-cell th-right">Receipt Amount</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr class="tds-table-body-row">
+
+                  <td class="td-cell">
+                    @if (ReceiptColunmForLegal) {
+                      <a class="bc-2 link-cell" (click)="clickForLegalReceipt(row)">
+                        {{ row.general_receipt_number }}
+                      </a>
+                    } @else {
+                      {{ row.general_receipt_number }}
+                    }
+                  </td>
+
+                  <td class="td-cell">{{ row.receipt_date | date:'dd-MMM-yyyy' }}</td>
+
+                  <td class="td-cell">
+                    @if (row.receipt_number) {
+                      <a class="bc-2 link-cell" (click)="click(row)">
+                        {{ row.receipt_number }}
+                      </a>
+                    }
+                  </td>
+
+                  <td class="td-cell">{{ row.chit_no }}</td>
+
+                  <td class="td-cell td-right">
+                    {{ currencysymbol }} {{ row.total_received_amount | number:'1.2-2' }}
+                  </td>
+
+                </tr>
+              </ng-template>
+
+            </p-table>
+          </div>
+
+        </div>
+      </div>
+    }
+
+    <!-- ── Form 15H Grid ────────────────────────────────────────────────────── -->
+    @if (showForm15HGrid()) {
+      <div class="section-content grid-section">
+        <p-table
+          [value]="form15HGridData()"
+          [paginator]="true"
+          [rows]="pageCriteria.pageSize"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          responsiveLayout="scroll">
+
+          <ng-template pTemplate="header">
+            <tr class="tds-table-header-row">
+              <th class="th-cell th-left">Contact Name</th>
+              <th class="th-cell th-left">Pan No</th>
+              <th class="th-cell th-left">UID No.</th>
+              <th class="th-cell th-left">Tan No</th>
+              <th class="th-cell th-left">Company Name</th>
+              <th class="th-cell th-left">Assessment Year</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr class="tds-table-body-row">
+              <td class="td-cell">{{ row.contactname }}</td>
+              <td class="td-cell">{{ row.subscriberpanno }}</td>
+              <td class="td-cell">
+                <a class="bc-2 link-cell" (click)="onUIDClick(row.uid)">
+                  {{ row.uid }}
+                </a>
+              </td>
+              <td class="td-cell">{{ row.tanno }}</td>
+              <td class="td-cell">{{ row.companyname }}</td>
+              <td class="td-cell">{{ row.assessmentyear }}</td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+    }
+
+  </div>
+</div>
