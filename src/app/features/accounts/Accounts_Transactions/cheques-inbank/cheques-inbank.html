@@ -42,7 +42,6 @@
       </div>
 
       <div class="card-actions">
-        @if (gridData().length > 0) {
         <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="PDF">
           <i class="pi pi-file-pdf"></i> PDF
         </button>
@@ -52,7 +51,6 @@
         <button class="erp-btn btn-white btn-sm" (click)="export()" title="Excel">
           <i class="pi pi-download"></i> Excel
         </button>
-        }
       </div>
     </div>
 
@@ -71,7 +69,6 @@
               (keydown)="$event.preventDefault()" />
           </div>
         </div>
-
         <div class="filter-group">
           <label class="filter-lbl">
             Bank <span class="required">*</span>
@@ -82,11 +79,9 @@
 
         <!-- Balance Info Card -->
         <div class="filter-info-card">
-          @if (banknameshowhide()) {
           <div class="info-header">
             <span class="info-bank-name">{{ bankname }}</span>
           </div>
-          }
           <div class="info-body">
             <h4 class="info-title">Cheques in Bank</h4>
             <div class="info-items">
@@ -140,7 +135,6 @@
 
     <!-- BRS Filter Sections -->
     <form [formGroup]="ChequesInBankForm">
-      @if (brsdateshowhidecleared()) {
       <div class="p-4 brs-section">
         <h3 class="section-title mb-3">Cleared - Date Range Filter</h3>
         <div class="row g-3">
@@ -164,9 +158,7 @@
                   [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom"
                   (keydown)="$event.preventDefault()" />
               </div>
-              @if (validatebrsdateclear()) {
               <div class="erp-field-error">BRS To Date should be greater than From Date</div>
-              }
             </div>
           </div>
           <div class="col-12">
@@ -176,11 +168,9 @@
           </div>
         </div>
       </div>
-      }
     </form>
 
     <form [formGroup]="BrsDateForm">
-      @if (brsdateshowhidereturned()) {
       <div class="p-4 brs-section">
         <h3 class="section-title mb-3">Returned - Date Range Filter</h3>
         <div class="row g-3">
@@ -204,9 +194,7 @@
                   [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom"
                   (keydown)="$event.preventDefault()" />
               </div>
-              @if (validatebrsdatereturn()) {
               <div class="erp-field-error">BRS To Date should be greater than From Date</div>
-              }
             </div>
           </div>
           <div class="col-12">
@@ -216,7 +204,6 @@
           </div>
         </div>
       </div>
-      }
     </form>
 
     <!-- Card Body -->
@@ -226,7 +213,7 @@
       <div class="erp-table-toolbar tbl-toolbar-flush">
         <div class="tb-left">
           <span class="erp-badge badge-primary badge-dot">
-            {{ gridData().length }} records
+            records
           </span>
         </div>
         <div class="tb-right">
@@ -239,7 +226,7 @@
       <!-- DataTable -->
       <div class="tbl-wrap">
         <p-table
-          [value]="gridData()"
+          [value=""
           [paginator]="true"
           [rows]="pageSize"
           [rowsPerPageOptions]="[10, 20, 50]"
@@ -404,7 +391,6 @@
 
           <!-- Footer Total -->
           <ng-template pTemplate="footer">
-            @if (gridData().length > 0) {
             <tr>
               <td colspan="3" class="grid-cell-cell"></td>
               <td class="td-right grid-cell-total">
@@ -412,7 +398,6 @@
               </td>
               <td colspan="9" class="grid-cell-cell"></td>
             </tr>
-            }
           </ng-template>
 
         </p-table>
@@ -426,11 +411,9 @@
         <button (click)="Clear()" class="erp-btn btn-secondary">
           <i class="pi pi-times"></i> Clear
         </button>
-        <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton()">
-          @if (!disablesavebutton()) {
+        <button (click)="Save()" class="erp-btn btn-primary" >
           <i class="pi pi-check"></i>
-          }
-          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
+          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': '' }"></i>
           {{ buttonname }}
         </button>
       </div>
@@ -466,9 +449,8 @@
                    #returnRef 
                    placeholder="Enter amount" />
           </div>
-          @if (returnChargesError()) {
             <div class="erp-field-error">Minimum amount should be ₹{{ minimumReturnCharge }}</div>
-          }
+          
         </div>
       </div>
       <div class="modal-footer">

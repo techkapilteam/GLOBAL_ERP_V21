@@ -1,7 +1,7 @@
 
 import { CommonModule, DatePipe } from '@angular/common';
-import {Component, OnInit, inject, signal, computed, DestroyRef} from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -24,6 +24,7 @@ interface BrsForm {
 
 @Component({
   selector: "app-brs-statements",
+  standalone:true,
   imports: [CommonModule, ReactiveFormsModule, BsDatepickerModule, NgSelectModule, TableModule],
   templateUrl: "./brs-statements.html",
   styleUrl: "./brs-statements.css",
@@ -86,7 +87,7 @@ export class BrsStatements implements OnInit {
   form!: FormGroup<BrsForm>;
 
   constructor() {
-    this.currencySymbol =  "₹";
+    this.currencySymbol = "₹";
     this.pageCriteria = new PageCriteria();
   }
 

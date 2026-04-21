@@ -30,8 +30,8 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { Address } from '../../../common/address/address/address';
-import { AccountingMasterService } from '../../../services/accounting-master.service';
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
+import { AccountsConfig } from '../../../../core/services/accounts/accounts-config';
 
 // ── Typed form shape ──────────────────────────────────────────────────────────
 interface BankMasterFormShape {
@@ -103,7 +103,7 @@ export class BankConfig implements OnInit {
   private readonly router                  = inject(Router);
   private readonly _commonService          = inject(CommonService);
   private readonly datepipe                = inject(DatePipe);
-  private readonly _accountingMasterSvc    = inject(AccountingMasterService);
+  private readonly _accountingMasterSvc    = inject(AccountsConfig);
   private readonly destroyRef              = inject(DestroyRef);
 
   // ── viewChild signal (replaces @ViewChild + setter) ─────────────────────────

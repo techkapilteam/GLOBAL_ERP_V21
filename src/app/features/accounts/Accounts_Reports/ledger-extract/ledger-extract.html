@@ -1,1 +1,80 @@
-<p>ledger-extract works!</p>
+<div class="screen-container">
+    <div class="screen-card">
+
+        <!-- ── Card Header ─────────────────────────────────────── -->
+        <div class="screen-header">
+            <h2 class="screen-title">Ledger Extract</h2>
+        </div>
+
+        <!-- ── Card Body ───────────────────────────────────────── -->
+        <div class="section-content">
+            <div class="col-xs-12 col-sm-12">
+
+                <form name="LedgerExtract" #ledgerForm="ngForm" novalidate>
+                    <fieldset class="filter-fieldset">
+                        <div class="filter-row">
+
+                            <!-- From Date -->
+                            <div class="filter-field">
+                                <label class="field-label">
+                                    From Date <span class="required-star">*</span>
+                                </label>
+                                <input type="text" class="form-control field-input" name="FromDate"
+                                    [(ngModel)]="rc.FromDate" [bsConfig]="dpConfig" bsDatepicker
+                                    placeholder="DD-MMM-YYYY" required #fromDate="ngModel" readonly
+                                    (keydown)="$event.preventDefault()" />
+                                @if ((fromDate.dirty || submitted()) && fromDate.errors?.['required']) {
+                                <small class="error-msg">From Date Required.</small>
+                                }
+                            </div>
+
+                            <!-- To Date -->
+                            <div class="filter-field">
+                                <label class="field-label">
+                                    To Date <span class="required-star">*</span>
+                                </label>
+                                <input type="text" class="form-control field-input" name="ToDate"
+                                    [(ngModel)]="rc.ToDate" [bsConfig]="dpConfig" bsDatepicker placeholder="DD-MMM-YYYY"
+                                    required #toDate="ngModel" readonly (keydown)="$event.preventDefault()" />
+                                @if ((toDate.dirty || submitted()) && toDate.errors?.['required']) {
+                                <small class="error-msg">To Date Required.</small>
+                                }
+                            </div>
+
+                            <!-- Narration checkbox -->
+                            <div class="filter-field filter-field--checkbox">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="checkbox-input" name="Narration"
+                                        [(ngModel)]="rc.Narration" />
+                                    Narration
+                                </label>
+                            </div>
+
+                            <!-- Export Type -->
+                            <div class="filter-field">
+                                <label class="field-label">
+                                    Export Type <span class="required-star">*</span>
+                                </label>
+                                <select class="form-control field-input" name="ExportType" [(ngModel)]="rc.ExportType">
+                                    @for (e of exportTypes; track e.value) {
+                                    <option [value]="e.value">{{ e.label }}</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- Print Button -->
+                            <div class="filter-field filter-field--btn">
+                                <button class="btn-print" type="button" (click)="print()" title="Print / Export">
+                                    <i class="fa fa-print"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
