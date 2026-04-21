@@ -1,100 +1,165 @@
-﻿<div class="module-page">
-    <div class="erp-card">
+<div class="module-page">
 
-        <!-- HEADER -->
-        <div class="card-header">
-            <h2 class="page-title">Journal Voucher View</h2>
-        </div>
-
-        <div class="grid-body">
-
-            <!-- TOOLBAR -->
-            <div class="toolbar">
-                <a routerLink="/dashboard/accounts/accounts-transactions/journal-voucher" class="btn-new">
-                    + New
-                </a>
-
-                <div class="search-container">
-                    <i class="pi pi-search search-icon"></i>
-                    <input type="text" class="erp-input" placeholder="Search..." (keyup)="filterDatatable($event)" />
-                </div>
-            </div>
-
-            <!-- TABLE CARD -->
-            <div class="table-card">
-                <p-table #dt [value]="Journalvoucherlist" dataKey="pjvnumber" [rows]="pageCriteria.pageSize"
-                    [paginator]="false" [totalRecords]="pageCriteria.totalrows" [rowsPerPageOptions]="[10, 20, 50]"
-                    [showCurrentPageReport]="true" scrollable="true" scrollHeight="400px" [resizableColumns]="true"
-                    columnResizeMode="fit" styleClass="p-datatable-sm p-datatable-gridlines">
-
-                    <!-- HEADER -->
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th class="col-actions grid-header-base">Actions</th>
-                            <th pSortableColumn="jvDate" class="col-date grid-header-base grid-header-sortable">
-                                JV Date &nbsp;<i class="pi pi-sort-alt sort-icon"></i>
-                            </th>
-                            <th pSortableColumn="journalVoucherNo" class="col-jvno grid-header-base grid-header-sortable">
-                                Journal Voucher No &nbsp;<i class="pi pi-sort-alt sort-icon"></i>
-                            </th>
-                            <th pSortableColumn="amount" class="col-amount grid-header-base grid-header-sortable grid-header-right">
-                                Amount &nbsp;<i class="pi pi-sort-alt sort-icon"></i>
-                            </th>
-                            <th class="col-narration grid-header-base">Narration</th>
-                        </tr>
-                    </ng-template>
-
-                    <!-- BODY -->
-                    <ng-template pTemplate="body" let-row>
-                        <tr>
-                            <td class="grid-cell-center grid-cell-base">
-                                <button pButton type="button" icon="pi pi-eye"
-                                    class="p-button-text p-button-sm p-button-primary btn-view"
-                                    (click)="viewHandler($event, row)">
-                                </button>
-                            </td>
-
-                            <td class="grid-cell-center grid-cell-base grid-cell-text">
-                                {{ row.jvDate || '--' }}
-                            </td>
-
-                            <td class="grid-cell-center grid-cell-base grid-cell-text">
-                                {{ row.journalVoucherNo || '--' }}
-                            </td>
-
-                            <td class="grid-cell-right grid-cell-base grid-cell-text">
-                                {{ row.amount | currency:'INR':'symbol':'1.2-2' }}
-                            </td>
-
-                            <td class="grid-cell-base grid-cell-text">
-                                {{ row.narration || '-- NA --' }}
-                            </td>
-                        </tr>
-                    </ng-template>
-
-                    <!-- EMPTY -->
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="5" class="grid-cell-empty">No records found</td>
-                        </tr>
-                    </ng-template>
-
-                </p-table>
-            </div>
-
-        </div>
+  <!-- Breadcrumb Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0">
+    <div style="flex: 1;">
+      <nav class="erp-breadcrumb">
+        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Accounts</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Transactions</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item current">Journal Vouchers</span>
+      </nav>
+      <h1 class="page-title">
+        <i class="pi pi-file-edit"></i> Journal Vouchers
+      </h1>
+      <p class="page-subtitle">Create and manage all journal voucher transactions</p>
     </div>
+
+    <a routerLink="/dashboard/accounts/accounts-transactions/journal-voucher"
+       class="erp-btn btn-primary btn-lg"
+       style="margin-top: auto; white-space: nowrap;">
+      <i class="pi pi-plus"></i> New Voucher
+    </a>
+  </div>
+
+  <!-- Main Card -->
+  <div class="erp-card">
+
+    <!-- Card Header with Search -->
+    <div class="card-header">
+      <div class="card-title">
+        <i class="pi pi-list"></i> Journal Voucher Transactions
+      </div>
+
+      <!-- Search in header -->
+      <div class="header-search" style="flex: 1; max-width: 300px;">
+        <div class="erp-input-wrap">
+          <i class="pi pi-search erp-input-icon"></i>
+          <input type="search"
+                 class="erp-input icon-pad"
+                 placeholder="Search vouchers..."
+                 (input)="filterDatatable($event)"
+                 autocomplete="off" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Toolbar -->
+    <div class="erp-table-toolbar tbl-toolbar-flush">
+      <div class="tb-left">
+        <span class="erp-badge badge-primary badge-dot">
+          {{ Journalvoucherlist.length || 0 }} Records
+        </span>
+      </div>
+    </div>
+
+    <!-- DataTable -->
+    <div class="tbl-wrap">
+
+      <p-table
+        #dt
+        [value]="Journalvoucherlist"
+        dataKey="pjvnumber"
+        [rows]="pageCriteria.pageSize"
+        [paginator]="true"
+        [totalRecords]="pageCriteria.totalrows"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        sortMode="single"
+        responsiveLayout="scroll"
+        [scrollable]="true"
+        scrollHeight="400px"
+        [resizableColumns]="true"
+        columnResizeMode="fit"
+        styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+
+        <!-- Header -->
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="th-actions">
+              <div class="th-cell">Actions</div>
+            </th>
+            <th pSortableColumn="jvDate">
+              <div class="th-cell">
+                <i class="pi pi-calendar"></i> JV Date
+                <p-sortIcon field="jvDate" />
+              </div>
+            </th>
+            <th pSortableColumn="journalVoucherNo" class="th-center">
+              <div class="th-cell th-center">
+                <i class="pi pi-hashtag"></i> Journal Voucher No
+                <p-sortIcon field="journalVoucherNo" />
+              </div>
+            </th>
+            <th pSortableColumn="amount" class="th-right">
+              <div class="th-cell th-right">
+                <i class="pi pi-indian-rupee"></i> Amount
+                <p-sortIcon field="amount" />
+              </div>
+            </th>
+            <th>
+              <div class="th-cell">Narration</div>
+            </th>
+          </tr>
+        </ng-template>
+
+        <!-- Body -->
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="td-actions">
+              <button
+                class="erp-btn btn-outline btn-sm btn-icon"
+                title="View"
+                (click)="viewHandler($event, row)">
+                <i class="pi pi-eye"></i>
+              </button>
+            </td>
+
+            <td class="td-date">
+              <div class="td-cell">
+                <i class="pi pi-calendar"></i>
+                {{ row.jvDate || '--' }}
+              </div>
+            </td>
+
+            <td class="td-center">
+              <div class="td-cell td-center">
+                <span class="voucher-no">{{ row.journalVoucherNo || '--' }}</span>
+              </div>
+            </td>
+
+            <td class="td-right">
+              <div class="td-cell td-right amount-cell">
+                {{ row.amount | currency:'INR':'symbol':'1.2-2' }}
+              </div>
+            </td>
+
+            <td>
+              <div class="td-cell">{{ row.narration || '-- NA --' }}</div>
+            </td>
+
+          </tr>
+        </ng-template>
+
+        <!-- Empty Message -->
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">
+              <div class="td-cell" style="text-align:center; padding:40px; color:#8fa0c4;">
+                <i class="pi pi-inbox" style="font-size:32px; margin-bottom:10px; display:block;"></i>
+                <p style="margin:0; font-weight:500;">No journal vouchers found</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+    </div>
+  </div>
+
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-

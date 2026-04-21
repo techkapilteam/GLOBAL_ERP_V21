@@ -17,7 +17,6 @@ import autoTable from 'jspdf-autotable';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
-import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableLazyLoadEvent } from 'primeng/table';
@@ -41,7 +40,6 @@ type AOA = any[][];
     BsDatepickerModule,
     ReactiveFormsModule,
     PaginatorModule,
-    ValidationMessageComponent,
     TableModule,
     CheckboxModule,
     ButtonModule,

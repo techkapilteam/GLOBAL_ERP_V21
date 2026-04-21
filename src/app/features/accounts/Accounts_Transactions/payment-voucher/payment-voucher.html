@@ -1,160 +1,195 @@
-﻿<div class="module-page">
+<div class="module-page">
+
+  <!-- Breadcrumb Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0">
+    <div style="flex: 1;">
+      <nav class="erp-breadcrumb">
+        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Accounts</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Transactions</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item current">Payment Vouchers</span>
+      </nav>
+      <h1 class="page-title">
+        <i class="pi pi-file-edit"></i> Payment Vouchers
+      </h1>
+      <p class="page-subtitle">Create and manage all payment voucher transactions</p>
+    </div>
+
+    <a routerLink="/dashboard/accounts/accounts-transactions/payment-voucher-view"
+       class="erp-btn btn-primary btn-lg"
+       style="margin-top: auto; white-space: nowrap;">
+      <i class="pi pi-plus"></i> New Voucher
+    </a>
+  </div>
+
+  <!-- Main Card -->
   <div class="erp-card">
 
-    <!-- HEADER -->
-    <header class="card-header">
-      <div class="card-title-group">
-        <i class="pi pi-file-edit"></i>
-        <h2 class="card-title">Payment Voucher</h2>
+    <!-- Card Header with Search -->
+    <div class="card-header">
+      <div class="card-title">
+        <i class="pi pi-list"></i> Voucher Transactions
       </div>
-      <span class="erp-badge badge-info">{{ totalRecords() }} Records</span>
-    </header>
 
-    <!-- CONTENT -->
-    <div class="card-body">
-
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <a
-          routerLink="/dashboard/accounts/accounts-transactions/payment-voucher-view"
-          class="erp-btn btn-primary">
-          <i class="pi pi-plus"></i>
-          New Voucher
-        </a>
-
-        <div class="search-container">
-          <i class="pi pi-search"></i>
-          <input
-            type="text"
-            class="erp-input"
-            placeholder="Search vouchersâ€¦"
-            [value]="searchTerm()"
-            (input)="onSearch($any($event.target).value)"
-            autocomplete="off" />
-          @if (searchTerm()) {
-            <button class="search-clear" (click)="onSearch('')" pTooltip="Clear">
-              <i class="pi pi-times"></i>
-            </button>
-          }
+      <!-- Search in header -->
+      <div class="header-search" style="flex: 1; max-width: 300px;">
+        <div class="erp-input-wrap">
+          <i class="pi pi-search erp-input-icon"></i>
+          <input type="search"
+                 class="erp-input icon-pad"
+                 placeholder="Search vouchers..."
+                 [value]="searchTerm()"
+                 (input)="onSearch($any($event.target).value)"
+                 autocomplete="off" />
         </div>
       </div>
 
-      <!-- Table -->
-      <div class="table-wrapper">
+      <div class="card-actions">
+        <button class="erp-btn btn-white btn-sm" (click)="onSearch('')" *ngIf="searchTerm()" title="Clear">
+          <i class="pi pi-times"></i> Clear
+        </button>
+      </div>
+    </div>
 
-        @if (isLoading()) {
-          <div class="skeleton-loader">
-            @for (_ of [1,2,3,4,5]; track $index) {
-              <p-skeleton class="skeleton-row" height="44px" borderRadius="6px" />
-            }
-          </div>
-        } @else {
-          <p-table
-            [value]="gridData()"
-            [paginator]="true"
-            dataKey="paymentId"
-            [rows]="pageCriteria.pageSize"
-            [totalRecords]="totalRecords()"
-            [rowsPerPageOptions]="rowsPerPageOptions"
-            sortMode="single"
-            responsiveLayout="scroll"
-            [showCurrentPageReport]="true"
-            currentPageReportTemplate="Showing {first} â€“ {last} of {totalRecords} entries"
-            styleclass="p-datatable-sm p-datatable-gridlines">
+    <!-- Table Toolbar -->
+    <div class="erp-table-toolbar tbl-toolbar-flush">
+      <div class="tb-left">
+        <span class="erp-badge badge-primary badge-dot">
+          {{ totalRecords() }} Records
+        </span>
+      </div>
+    </div>
 
-            <!-- Header -->
-            <ng-template pTemplate="header">
-              <tr>
-                <th class="col-actions">Actions</th>
-                <th pSortableColumn="paymentDate" class="grid-col">
-                  Payment Date <p-sortIcon field="paymentDate" />
-                </th>
-                <th pSortableColumn="paymentId" class="col">
-                  Voucher No. <p-sortIcon field="paymentId" />
-                </th>
-                <th pSortableColumn="modeOfPayment" class="grid-col">
-                  Payment Details <p-sortIcon field="modeOfPayment" />
-                </th>
-                <th pSortableColumn="bankName" class="grid-col">
-                  Bank Name <p-sortIcon field="bankName" />
-                </th>
-                <th pSortableColumn="totalPaidAmount" class="col">
-                  Paid Amount <p-sortIcon field="totalPaidAmount" />
-                </th>
-              </tr>
-            </ng-template>
+    <!-- DataTable -->
+    <div class="tbl-wrap">
 
-            <!-- Body -->
-            <ng-template pTemplate="body" let-row>
-              <tr class="grid-row">
+      @if (isLoading()) {
+        <div class="skeleton-loader">
+          @for (_ of [1,2,3,4,5]; track $index) {
+            <p-skeleton class="skeleton-row" height="44px" borderRadius="6px" />
+          }
+        </div>
+      } @else {
+        <p-table
+          [value]="gridData()"
+          [paginator]="true"
+          dataKey="paymentId"
+          [rows]="pageCriteria.pageSize"
+          [totalRecords]="totalRecords()"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          sortMode="single"
+          responsiveLayout="scroll"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          styleClass="gr-table p-datatable-sm p-datatable-gridlines">
 
-                <td class="cell">
-                  <button
-                    pButton
-                    type="button"
-                    icon="pi pi-eye"
-                    class="p-button-text p-button-sm"
-                    (click)="openVoucherReport(row)"
-                    pTooltip="View Report"
-                    tooltipPosition="top">
-                  </button>
-                </td>
+          <!-- Header -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="th-actions">
+                <div class="th-cell">Actions</div>
+              </th>
+              <th pSortableColumn="paymentDate">
+                <div class="th-cell">
+                  <i class="pi pi-calendar"></i> Payment Date
+                  <p-sortIcon field="paymentDate" />
+                </div>
+              </th>
+              <th pSortableColumn="paymentId" class="th-center">
+                <div class="th-cell th-center">
+                  <i class="pi pi-hashtag"></i> Voucher No.
+                  <p-sortIcon field="paymentId" />
+                </div>
+              </th>
+              <th pSortableColumn="modeOfPayment">
+                <div class="th-cell">
+                  <i class="pi pi-credit-card"></i> Payment Mode
+                  <p-sortIcon field="modeOfPayment" />
+                </div>
+              </th>
+              <th pSortableColumn="bankName">
+                <div class="th-cell">
+                  <i class="pi pi-building"></i> Bank Name
+                  <p-sortIcon field="bankName" />
+                </div>
+              </th>
+              <th pSortableColumn="totalPaidAmount" class="th-right">
+                <div class="th-cell th-right">
+                  <i class="pi pi-indian-rupee"></i> Paid Amount
+                  <p-sortIcon field="totalPaidAmount" />
+                </div>
+              </th>
+            </tr>
+          </ng-template>
 
-                <td class="grid-cell">
-                  <span class="date">
-                    <i class="pi pi-calendar"></i>
-                    {{ row.paymentDate || '--' }}
-                  </span>
-                </td>
+          <!-- Body -->
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td class="td-actions">
+                <button
+                  class="erp-btn btn-outline btn-sm btn-icon"
+                  title="View"
+                  (click)="openVoucherReport(row)">
+                  <i class="pi pi-eye"></i>
+                </button>
+              </td>
 
-                <td class="cell">
-                  <span class="voucher-id">{{ row.paymentId || '--' }}</span>
-                </td>
+              <td class="td-date">
+                <div class="td-cell">
+                  <i class="pi pi-calendar"></i>
+                  {{ row.paymentDate || '--' }}
+                </div>
+              </td>
 
-                <td class="grid-cell">
+              <td class="td-center">
+                <div class="td-cell td-center">
+                  <span class="voucher-no">{{ row.paymentId || '--' }}</span>
+                </div>
+              </td>
+
+              <td>
+                <div class="td-cell">
                   <p-tag
                     [value]="getPaymentMode(row)"
                     [severity]="getPaymentModeSeverity(row)" />
-                </td>
+                </div>
+              </td>
 
-                <td class="grid-cell">{{ row.bankName || 'â€” NA â€”' }}</td>
+              <td>
+                <div class="td-cell">{{ row.bankName || '-- NA --' }}</div>
+              </td>
 
-                <td class="cell">
-                  <span class="amount-value">{{ formatCurrency(row.totalPaidAmount) }}</span>
-                </td>
+              <td class="td-right">
+                <div class="td-cell td-right amount-cell">
+                  {{ formatCurrency(row.totalPaidAmount) }}
+                </div>
+              </td>
 
-              </tr>
-            </ng-template>
+            </tr>
+          </ng-template>
 
-            <!-- Empty -->
-            <ng-template pTemplate="emptymessage">
-              <tr>
-                <td colspan="6" class="empty">
-                  <i class="pi pi-inbox"></i>
-                  <p class="empty-text">No payment vouchers found</p>
+          <!-- Empty Message -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6">
+                <div class="td-cell" style="text-align:center; padding:40px; color:#8fa0c4;">
+                  <i class="pi pi-inbox" style="font-size:32px; margin-bottom:10px; display:block;"></i>
+                  <p style="margin:0; font-weight:500;">No payment vouchers found</p>
                   @if (searchTerm()) {
-                    <p class="empty-hint">Try clearing the search filter</p>
+                    <p style="margin:5px 0 0 0; font-size:12px;">Try clearing the search filter</p>
                   }
-                </td>
-              </tr>
-            </ng-template>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
 
-          </p-table>
-        }
+        </p-table>
+      }
 
-      </div>
     </div>
   </div>
+
 </div>
-
-
-
-
-
-
-
-
-
-
-
-

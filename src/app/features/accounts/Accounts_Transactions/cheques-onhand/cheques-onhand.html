@@ -1,158 +1,179 @@
 ﻿<!-- cheques-onhand.component.html -->
 <div class="module-page">
-  <div class="grid-card card">
 
-    <!-- Header -->
-    <div class="card-header">
-      <h2 class="header-title">Cheques On Hand</h2>
+  <!-- Breadcrumb Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0">
+    <div style="flex: 1;">
+      <nav class="erp-breadcrumb">
+        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Accounts</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Transactions</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item current">Cheques On Hand</span>
+      </nav>
+      <h1 class="page-title">
+        <i class="pi pi-inbox"></i> Cheques On Hand
+      </h1>
+      <p class="page-subtitle">Track and manage all cheques received and deposited transactions</p>
     </div>
+  </div>
 
-    <!-- Filter Row -->
-    <form [formGroup]="ChequesOnHandForm">
-      <div class="filter-row">
+  <!-- Main Card -->
+  <div class="erp-card">
 
-        <!-- Date -->
-        <div class="filter-col filter-col--sm">
-          <div class="erp-form-group">
-            <label class="erp-label">
-              Date <span class="required-star">*</span>
-            </label>
-            <input class="erp-input" type="text" title="Date" id="ptransactiondate"
-              formControlName="ptransactiondate" readonly [bsConfig]="dpConfig" #dp="bsDatepicker" bsDatepicker
-              placement="bottom" (ngModelChange)="change_date($event)" (keydown)="$event.preventDefault()"
-              [attr.disabled]="!pdatepickerenablestatus() ? true : null" [maxDate]="today2" />
-            <app-validation-message [messgae]="ChequesOnHandValidation()['ptransactiondate']" />
-          </div>
-        </div>
-
-        <!-- Bank -->
-        <div class="filter-col filter-col--md">
-          <div class="erp-form-group">
-            <label class="erp-label">
-              Bank <span class="required-star">*</span>
-            </label>
-            <ng-select [items]="BanksList()" bindLabel="pdepositbankname" bindValue="pbankid" formControlName="bankname"
-              (change)="SelectBank($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true" class="w-100"
-              [ngClass]="{ 'ng-invalid': ChequesOnHandValidation()['bankname'] }" />
-          </div>
-        </div>
-
-        <!-- Balance Info -->
-        <div class="filter-col filter-col--lg">
-          <div class="info-card">
-            @if (banknameshowhide()) {
-            <span class="info-bank-name">{{ bankname() }}</span>
-            <hr class="info-divider" />
-            }
-            <h4 class="info-title">Cheques On Hand</h4>
-            <div class="info-info">
-              <span class="info-item">
-                <b>Balance:</b>
-                <span class="info-value">
-                  {{ bankbalance() | currency: currencySymbol() }} {{ bankbalancetype() }}
-                </span>
-              </span>
-              <span class="info-item">
-                <b>BRS Date:</b>
-                <span class="info-value">{{ brsdate() }}</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
+    <!-- Card Header with Search -->
+    <div class="card-header">
+      <div class="card-title">
+        <i class="pi pi-list"></i> Cheque Transactions
       </div>
-    </form>
 
-    <!-- Search + Export Row -->
-    <div class="toolbar">
-      <div class="search-container">
-        <div class="search-box">
-          <i class="pi pi-search erp-input-icon"></i><input type="search" class="erp-input search-input" placeholder="Search..."
-            (input)="onSearch($any($event.target).value)" />
+      <!-- Search in header -->
+      <div class="header-search" style="flex: 1; max-width: 300px;">
+        <div class="erp-input-wrap">
+          <i class="pi pi-search erp-input-icon"></i>
+          <input type="search"
+                 class="erp-input icon-pad"
+                 placeholder="Search cheques..."
+                 style="font-size: 12px; color: #374151;"
+                 (input)="onSearch($any($event.target).value)" />
         </div>
+      </div>
 
+      <div class="card-actions">
         @if (showicons()) {
-        <div class="export-icons">
-          <a class="export-btn" (click)="pdfOrprint('Pdf')" title="PDF">
-            <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
-          </a>
-          <a class="export-btn" (click)="pdfOrprint('Print')" title="Print">
-            <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
-          </a>
-          <a class="export-btn" (click)="export()" title="Excel">
-            <img src="assets/images/icon-excel.svg" width="18" alt="Excel" />
-          </a>
-        </div>
+        <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="PDF">
+          <i class="pi pi-file-pdf"></i> PDF
+        </button>
+        <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Print')" title="Print">
+          <i class="pi pi-print"></i> Print
+        </button>
+        <button class="erp-btn btn-white btn-sm" (click)="export()" title="Excel">
+          <i class="pi pi-download"></i> Excel
+        </button>
         }
       </div>
     </div>
 
-    <!-- Nav Tabs -->
-    <ul class="nav-tabs-custom">
-
-      <li class="nav-item-custom">
-        <a class="nav-link-custom" [class.active]="selectedTab() === 'all'" (click)="selectTab('all')">
-          All
-          <span class="erp-badge badge--warning">{{ all() || 0 }}</span>
-        </a>
-      </li>
-
-      <li class="nav-item-custom">
-        <a class="nav-link-custom" [class.active]="selectedTab() === 'cheques'" (click)="selectTab('cheques')">
-          Cheques Received
-          <span class="erp-badge badge--secondary">{{ chequesreceived() || 0 }}</span>
-        </a>
-      </li>
-
-      <li class="nav-item-custom">
-        <a class="nav-link-custom" [class.active]="selectedTab() === 'online'" (click)="selectTab('online')">
-          Online Receipts
-          <span class="erp-badge badge--primary">{{ onlinereceipts() || 0 }}</span>
-        </a>
-      </li>
-
-      <li class="nav-item-custom">
-        <a class="nav-link-custom" [class.active]="selectedTab() === 'deposited'" (click)="selectTab('deposited')">
-          Deposited
-          <span class="erp-badge badge--success">{{ deposited() || 0 }}</span>
-        </a>
-      </li>
-
-      <li class="nav-item-custom">
-        <a class="nav-link-custom" [class.active]="selectedTab() === 'cancelled'" (click)="selectTab('cancelled')">
-          Cancelled
-          <span class="erp-badge badge--danger">{{ cancelled() || 0 }}</span>
-        </a>
-      </li>
-
-    </ul>
-
-    <!-- BRS Deposited Date Range -->
+    <!-- Filter Bar -->
     <form [formGroup]="ChequesOnHandForm">
-      @if (brsdateshowhidedeposited()) {
-      <div class="brs-date-row">
-        <div class="brs-date-col">
-          <div class="erp-form-group">
-            <label class="erp-label">BRS From Date</label>
-            <input class="erp-input form-control--sm" type="text" formControlName="pfrombrsdate"
-              [bsConfig]="brsfromConfig" #dpFrom="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-              (keydown)="$event.preventDefault()" />
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-lbl">
+            Date <span class="required">*</span>
+          </label>
+          <div class="erp-input-wrap erp-date-wrap">
+            <i class="pi pi-calendar erp-input-icon"></i>
+            <input class="erp-input icon-pad" type="text" title="Date" id="ptransactiondate"
+              formControlName="ptransactiondate" readonly [bsConfig]="dpConfig" #dp="bsDatepicker" bsDatepicker
+              placement="bottom" (ngModelChange)="change_date($event)" (keydown)="$event.preventDefault()"
+              [attr.disabled]="!pdatepickerenablestatus() ? true : null" [maxDate]="today2" />
+          </div>
+          <app-validation-message [messgae]="ChequesOnHandValidation()['ptransactiondate']" />
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-lbl">
+            Bank <span class="required">*</span>
+          </label>
+          <ng-select [items]="BanksList()" bindLabel="pdepositbankname" bindValue="pbankid" formControlName="bankname"
+            (change)="SelectBank($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true"
+            [ngClass]="{ 'ng-invalid': ChequesOnHandValidation()['bankname'] }" />
+          <app-validation-message [messgae]="ChequesOnHandValidation()['bankname']" />
+        </div>
+
+        <!-- Balance Info Card -->
+        <div class="filter-info-card">
+          @if (banknameshowhide()) {
+          <div class="info-header">
+            <span class="info-bank-name">{{ bankname() }}</span>
+          </div>
+          }
+          <div class="info-body">
+            <h4 class="info-title">Balance Status</h4>
+            <div class="info-items">
+              <span class="info-item">
+                <b>Balance:</b>
+                <span class="info-value">
+                  {{ bankbalance() | currency: currencySymbol() }} <small>{{ bankbalancetype() }}</small>
+                </span>
+              </span>
+              <span class="info-item">
+                <b>BRS Date:</b>
+                <span class="info-value">{{ brsdate() || '--' }}</span>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="brs-date-col">
-          <div class="erp-form-group">
-            <label class="erp-label">BRS To Date</label>
-            <div class="brs-to-row">
-              <input class="erp-input form-control--sm" type="text" formControlName="ptobrsdate"
-                [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-                (keydown)="$event.preventDefault()" />
-              <button type="button" class="erp-btn btn--primary btn--show" (click)="ShowBrsDeposit()">
-                Show
-              </button>
+      </div>
+    </form>
+
+    <!-- Status Tabs (Horizontal) -->
+    <div class="tabs-section">
+      <div class="tabs-nav">
+        <button class="tab-item" [class.active]="selectedTab() === 'all'" (click)="selectTab('all')">
+          <span class="tab-label">All</span>
+          <span class="erp-badge badge-warning">{{ all() || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="selectedTab() === 'cheques'" (click)="selectTab('cheques')">
+          <span class="tab-label">Cheques Received</span>
+          <span class="erp-badge badge-secondary">{{ chequesreceived() || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="selectedTab() === 'online'" (click)="selectTab('online')">
+          <span class="tab-label">Online Receipts</span>
+          <span class="erp-badge badge-primary">{{ onlinereceipts() || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="selectedTab() === 'deposited'" (click)="selectTab('deposited')">
+          <span class="tab-label">Deposited</span>
+          <span class="erp-badge badge-success">{{ deposited() || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="selectedTab() === 'cancelled'" (click)="selectTab('cancelled')">
+          <span class="tab-label">Cancelled</span>
+          <span class="erp-badge badge-danger">{{ cancelled() || 0 }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BRS Filter Sections -->
+    <form [formGroup]="ChequesOnHandForm">
+      @if (brsdateshowhidedeposited()) {
+      <div class="p-4 brs-section">
+        <h3 class="section-title mb-3">Deposited - Date Range Filter</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS From Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="pfrombrsdate"
+                  [bsConfig]="brsfromConfig" #dpFrom="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
+                  (keydown)="$event.preventDefault()" />
+              </div>
             </div>
-            @if (validatebrsdatedeposit()) {
-            <div class="error-msg">Brs To Date Should Be Greater Than From Date</div>
-            }
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS To Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="ptobrsdate"
+                  [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+              @if (validatebrsdatedeposit()) {
+              <div class="erp-field-error">BRS To Date should be greater than From Date</div>
+              }
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="button" class="erp-btn btn-primary btn-sm" (click)="ShowBrsDeposit()">
+              <i class="pi pi-search"></i> Show
+            </button>
           </div>
         </div>
       </div>
@@ -161,169 +182,318 @@
 
     <form [formGroup]="BrsDateForm">
       @if (brsdateshowhidecancelled()) {
-      <div class="brs-date-row">
-        <div class="brs-date-col">
-          <div class="erp-form-group">
-            <label class="erp-label">BRS From Date</label>
-            <input class="erp-input form-control--sm" type="text" formControlName="frombrsdate" readonly
-              [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-              (keydown)="$event.preventDefault()" />
-          </div>
-        </div>
-        <div class="brs-date-col">
-          <div class="erp-form-group">
-            <label class="erp-label">BRS To Date</label>
-            <div class="brs-to-row">
-              <input class="erp-input form-control--sm" type="text" formControlName="tobrsdate" readonly
-                [bsConfig]="brstoConfig" #dp="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-                (keydown)="$event.preventDefault()" />
-              <button type="button" class="erp-btn btn--primary btn--show" (click)="ShowBrsCancel()">
-                Show
-              </button>
+      <div class="p-4 brs-section">
+        <h3 class="section-title mb-3">Cancelled - Date Range Filter</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS From Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="frombrsdate" readonly
+                  [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
+                  (keydown)="$event.preventDefault()" />
+              </div>
             </div>
-            @if (validatebrsdatecancel()) {
-            <div class="error-msg">Brs To Date Should Be Greater Than From Date</div>
-            }
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS To Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="tobrsdate" readonly
+                  [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+              @if (validatebrsdatecancel()) {
+              <div class="erp-field-error">BRS To Date should be greater than From Date</div>
+              }
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="button" class="erp-btn btn-primary btn-sm" (click)="ShowBrsCancel()">
+              <i class="pi pi-search"></i> Show
+            </button>
           </div>
         </div>
       </div>
       }
     </form>
 
-    <!-- Data Table -->
-    <div class="table-wrapper">
-      <p-table #dt [value]="gridData()" [lazy]="true" (onLazyLoad)="setPage($event)"
-        [paginator]="!isCleared() && page().totalElements > 0" [rows]="pageCriteria.pageSize"
-        [totalRecords]="page().totalElements" [first]="pageCriteria.offset * pageCriteria.pageSize" [scrollable]="true"
-        scrollHeight="500px" [resizableColumns]="true" columnResizeMode="fit" sortField="preceiptdate" [sortOrder]="1"
-        [showCurrentPageReport]="!isCleared() && page().totalElements > 0"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        styleClass="p-datatable-sm p-datatable-gridlines">
+    <!-- Card Body -->
+    <div class="card-body p-0">
 
-        <ng-template pTemplate="header">
-          <tr>
-            @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <th pFrozenColumn class="grid-header-action">Deposit</th>
-            <th pFrozenColumn class="grid-header-action">Cancel</th>
-            }
-            <th class="grid-header-cell">Cheque/Reference No.</th>
-            <th class="grid-header-cell">Branch Name</th>
-            <th class="grid-header-cell grid-header-cell--right">Amount</th>
-            <th class="grid-header-cell">Party</th>
-            <th class="grid-header-cell">Receipt Date</th>
-            <th class="grid-header-cell">Cheque Date</th>
-            @if (status() === 'deposited') {
-            <th class="grid-header-cell">Deposited Date</th>
-            }
-            @if (status() === 'cancelled') {
-            <th class="grid-header-cell">Cancelled Date</th>
-            }
-            <th class="grid-header-cell">Receipt No</th>
-            <th class="grid-header-cell">Transaction Mode</th>
-            <th class="grid-header-cell">Cheque Bank Name</th>
-            @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <th class="grid-header-cell">Self Cheque</th>
-            <th class="grid-header-cell">Chit Status</th>
-            <th class="grid-header-cell">Deposited Bank</th>
-            }
-          </tr>
-        </ng-template>
+      <!-- Table Toolbar -->
+      <div class="erp-table-toolbar tbl-toolbar-flush">
+        <div class="tb-left">
+          <span class="erp-badge badge-primary badge-dot">
+            {{ gridData().length }} records
+          </span>
+        </div>
+        <div class="tb-right">
+          <span class="text-muted text-small">
+            Currency: <strong class="text-primary">{{ currencySymbol() }}</strong>
+          </span>
+        </div>
+      </div>
 
-        <ng-template pTemplate="body" let-row>
-          <tr>
-            @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <td pFrozenColumn class="grid-cell-action">
-              <p-checkbox [(ngModel)]="row.pdepositstatus" binary="true" (onChange)="onDepositChange($event, row)" />
-            </td>
-            <td pFrozenColumn class="grid-cell-action">
-              <p-checkbox [(ngModel)]="row.pcancelstatus" binary="true" (onChange)="onCancelChange($event, row)" />
-            </td>
-            }
-            <td class="grid-cell-cell grid-cell-center">{{ row.pChequenumber || '--NA--' }}</td>
-            <td class="grid-cell-cell">{{ row.pbranchname || '--NA--' }}</td>
-            <td class="grid-cell-cell grid-cell-right">{{ row.ptotalreceivedamount | currency: currencySymbol() }}</td>
-            <td class="grid-cell-cell">{{ row.ppartyname || '--NA--' }}</td>
-            <td class="grid-cell-cell">{{ row.preceiptdate ? (row.preceiptdate | date) : '--NA--' }}</td>
-            <td class="grid-cell-cell">{{ row.pchequedate ? (row.pchequedate | date) : '--NA--' }}</td>
-            @if (status() === 'deposited') {
-            <td class="grid-cell-cell">{{ row.pdepositeddate ? (row.pdepositeddate | date) : '--NA--' }}</td>
-            }
-            @if (status() === 'cancelled') {
-            <td class="grid-cell-cell">{{ row.pdepositeddate ? (row.pdepositeddate | date) : '--NA--' }}</td>
-            }
-            <td class="grid-cell-cell">{{ row.receiptnumbers || '--NA--' }}</td>
-            <td class="grid-cell-cell">{{ row.ptypeofpayment || '--NA--' }}</td>
-            <td class="grid-cell-cell">{{ row.cheque_bank || '--NA--' }}</td>
-            @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <td class="grid-cell-cell grid-cell-center">
-              {{ row.selfchequestatus === true ? 'Yes' : row.selfchequestatus === false ? 'No' : '--NA--' }}
-            </td>
-            <td class="grid-cell-cell">{{ row.chitstatus || '--NA--' }}</td>
-            <td class="grid-cell-cell">{{ row.pdepositedBankName || '--NA--' }}</td>
-            }
-          </tr>
-        </ng-template>
+      <!-- DataTable -->
+      <div class="tbl-wrap">
+        <p-table #dt [value]="gridData()" [lazy]="true" (onLazyLoad)="setPage($event)"
+          [paginator]="!isCleared() && page().totalElements > 0" [rows]="pageCriteria.pageSize"
+          [totalRecords]="page().totalElements" [first]="pageCriteria.offset * pageCriteria.pageSize" [scrollable]="true"
+          scrollHeight="500px" [resizableColumns]="true" columnResizeMode="fit" sortField="preceiptdate" [sortOrder]="1"
+          [showCurrentPageReport]="!isCleared() && page().totalElements > 0"
+          currentPageReportTemplate="Showing {first}–{last} of {totalRecords} entries"
+          styleClass="gr-table p-datatable-sm p-datatable-gridlines">
 
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="10" class="grid-cell-empty">No data to display</td>
-          </tr>
-        </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              @if (status() !== 'deposited' && status() !== 'cancelled') {
+              <th class="th-actions">Actions</th>
+              }
+              <th class="th-center">
+                <div class="th-cell" style="justify-content:center">
+                  <i class="pi pi-hashtag"></i>
+                  Cheque/Reference No.
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Branch Name
+                </div>
+              </th>
+              <th class="th-right">
+                <div class="th-cell" style="justify-content:flex-end">
+                  <i class="pi pi-indian-rupee"></i>
+                  Amount
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-user"></i>
+                  Party
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-calendar"></i>
+                  Receipt Date
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-calendar"></i>
+                  Cheque Date
+                </div>
+              </th>
+              @if (status() === 'deposited') {
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-check-circle"></i>
+                  Deposited Date
+                </div>
+              </th>
+              }
+              @if (status() === 'cancelled') {
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-times-circle"></i>
+                  Cancelled Date
+                </div>
+              </th>
+              }
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-file"></i>
+                  Receipt No
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-credit-card"></i>
+                  Transaction Mode
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Cheque Bank Name
+                </div>
+              </th>
+              @if (status() !== 'deposited' && status() !== 'cancelled') {
+              <th class="th-center">
+                <div class="th-cell" style="justify-content:center">
+                  <i class="pi pi-check"></i>
+                  Self Cheque
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-info-circle"></i>
+                  Chit Status
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Deposited Bank
+                </div>
+              </th>
+              }
+            </tr>
+          </ng-template>
 
-        <ng-template pTemplate="footer">
-          @if (gridData().length > 0) {
-          <tr>
-            @if (status() !== 'deposited' && status() !== 'cancelled') {
-            <td colspan="4" class="grid-cell-cell"></td>
-            <td class="grid-cell-cell grid-cell-right grid-cell-total">{{ amounttotal() | currency: currencySymbol(): '' }}</td>
-            <td colspan="10" class="grid-cell-cell"></td>
-            } @else {
-            <td colspan="2" class="grid-cell-cell"></td>
-            <td class="grid-cell-cell grid-cell-right grid-cell-total">{{ amounttotal() | currency: currencySymbol(): '' }}</td>
-            <td colspan="8" class="grid-cell-cell"></td>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              @if (status() !== 'deposited' && status() !== 'cancelled') {
+              <td class="td-actions">
+                <div class="action-group">
+                  <button class="erp-btn btn-outline btn-sm btn-icon" 
+                          (click)="onDepositChange($event, row)"
+                          title="Deposit">
+                    <i class="pi pi-download"></i>
+                  </button>
+                  <button class="erp-btn btn-outline btn-sm btn-icon" 
+                          (click)="onCancelChange($event, row)"
+                          title="Cancel">
+                    <i class="pi pi-times"></i>
+                  </button>
+                </div>
+              </td>
+              }
+              <td class="td-center">
+                <span class="cheque-ref">{{ row.pChequenumber || '--' }}</span>
+              </td>
+              <td>{{ row.pbranchname || '--' }}</td>
+              <td class="td-right">
+                <div class="amount-cell">
+                  <span class="amt-sym">{{ currencySymbol() }}</span>
+                  <span class="amt-num">{{ row.ptotalreceivedamount | number:'1.2-2' }}</span>
+                </div>
+              </td>
+              <td>{{ row.ppartyname || '--' }}</td>
+              <td>
+                <div class="td-date">
+                  <i class="pi pi-calendar-clock"></i>
+                  {{ row.preceiptdate ? (row.preceiptdate | date: 'dd-MMM-yyyy') : '--' }}
+                </div>
+              </td>
+              <td>
+                <div class="td-date">
+                  <i class="pi pi-calendar-clock"></i>
+                  {{ row.pchequedate ? (row.pchequedate | date: 'dd-MMM-yyyy') : '--' }}
+                </div>
+              </td>
+              @if (status() === 'deposited') {
+              <td>{{ row.pdepositeddate ? (row.pdepositeddate | date: 'dd-MMM-yyyy') : '--' }}</td>
+              }
+              @if (status() === 'cancelled') {
+              <td>{{ row.pdepositeddate ? (row.pdepositeddate | date: 'dd-MMM-yyyy') : '--' }}</td>
+              }
+              <td>
+                <span class="receipt-no">#{{ row.receiptnumbers || '--' }}</span>
+              </td>
+              <td>
+                <span class="erp-badge badge-info">{{ row.ptypeofpayment || '--' }}</span>
+              </td>
+              <td>{{ row.cheque_bank || '--' }}</td>
+              @if (status() !== 'deposited' && status() !== 'cancelled') {
+              <td class="td-center">
+                {{ row.selfchequestatus === true ? 'Yes' : row.selfchequestatus === false ? 'No' : '--' }}
+              </td>
+              <td>{{ row.chitstatus || '--' }}</td>
+              <td>{{ row.pdepositedBankName || '--' }}</td>
+              }
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="10" class="p-4">
+                <div style="text-align: center; color: #94a3b8; padding: 20px;">
+                  <i class="pi pi-inbox" style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
+                  <p style="margin: 0; font-size: 14px;">No cheques found</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="footer">
+            @if (gridData().length > 0) {
+            <tr>
+              <td colspan="4" class="grid-cell-cell"></td>
+              <td class="td-right grid-cell-total">
+                <strong>{{ amounttotal() | currency: currencySymbol(): '' }}</strong>
+              </td>
+              <td colspan="6" class="grid-cell-cell"></td>
+            </tr>
             }
-          </tr>
-          }
-        </ng-template>
+          </ng-template>
 
-      </p-table>
+        </p-table>
+      </div>
+
     </div>
 
     <!-- Action Buttons -->
-    <div class="d-flex gap-2 p-3">
-      <a (click)="Clear()" class="erp-btn btn--dark">
-        <img src="assets/images/icon-cancel-white.svg" width="16" height="16" alt="Clear" />
-        Clear
-      </a>
-      <button (click)="Save()" class="erp-btn btn--primary" [disabled]="disablesavebutton()">
-        @if (!disablesavebutton()) {
-        <img src="assets/images/icon-check-white.svg" width="16" height="16" alt="Save" />
-        }
-        <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
-        {{ buttonname() }}
-      </button>
+    <div class="card-footer">
+      <div class="d-flex gap-2 flex-wrap">
+        <button (click)="Clear()" class="erp-btn btn-secondary">
+          <i class="pi pi-times"></i> Clear
+        </button>
+        <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton()">
+          @if (!disablesavebutton()) {
+          <i class="pi pi-check"></i>
+          }
+          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
+          {{ buttonname() }}
+        </button>
+      </div>
     </div>
 
   </div>
+
 </div>
 
 <!-- Cancel Charges Modal -->
-<div class="modal right slideInRight" id="add-detail" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog--right">
-    <div class="modal-content model-cst">
+<div class="erp-modal" id="add-detail" [class.modal-show]="false" tabindex="-1" role="dialog">
+  <div class="modal-overlay" (click)="CancelChargesOk('')"></div>
+  <div class="modal-dialog modal-dialog-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Cancel Charges</h3>
+        <button type="button" class="btn-close" (click)="CancelChargesOk('')">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
       <div class="modal-body">
-        <button type="button" class="erp-btn btn-ghost" data-dismiss="modal">&times;</button>
-        <div class="erp-form-group">
-          <label>Enter The Cancel Amount Charges For The Cheque: {{ chequenumber() }}</label>
-          <input type="text" class="erp-input form-control--right" name="cancelcharges" maxlength="3"
-            id="cancelcharges" #ref appNumbersonly appMycurrencyFormatter />
+        <div class="erp-form-group mb-4">
+          <label class="erp-label">
+            Enter Cancel Amount Charges For Cheque: <strong>{{ chequenumber() }}</strong>
+          </label>
+          <div class="erp-input-wrap">
+            <i class="pi pi-indian-rupee erp-input-icon"></i>
+            <input type="text" 
+                   class="erp-input icon-pad" 
+                   name="cancelcharges" 
+                   maxlength="3"
+                   id="cancelcharges" 
+                   #ref 
+                   appNumbersonly 
+                   appMycurrencyFormatter 
+                   placeholder="Enter amount" />
+          </div>
         </div>
-        <div class="modal-footer-custom">
-          <a (click)="CancelChargesOk(ref.value)" class="erp-btn btn--primary">
-            <img src="assets/images/icon-check-white.svg" width="16" height="16" alt="Ok" />
-            Ok
-          </a>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="erp-btn btn-secondary" (click)="CancelChargesOk('')">
+          <i class="pi pi-times"></i> Close
+        </button>
+        <button type="button" class="erp-btn btn-primary" (click)="CancelChargesOk(ref.value)">
+          <i class="pi pi-check"></i> Confirm
+        </button>
       </div>
     </div>
   </div>

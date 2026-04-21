@@ -1,212 +1,218 @@
-﻿<div class="page-wrapper">
-    <div class="erp-card">
+﻿<div class="module-page">
 
-        <!-- HEADER -->
-        <div class="card-header">
-            <div class="header-accent"></div>
-            <h2 class="header-title">Petty Cash Receipt Cancel</h2>
-        </div>
-
-        <div class="card-body">
-            <form [formGroup]="PettyCashCancel" autocomplete="off">
-
-                <!-- Search Receipt Section -->
-                <div class="section-card">
-                    <p class="section-title">Search Receipt</p>
-                    <div class="row align-items-end">
-
-                        <div class="col-md-4">
-                            <div class="erp-form-group">
-                                <label class="erp-label">
-                                    Receipt No. <span class="required-star">*</span>
-                                </label>
-                                <ng-select [items]="receiptdata()" bindLabel="payment_number"
-                                    bindValue="tbl_trans_pettycash_voucher_id" formControlName="receiptid"
-                                    [searchable]="true" [clearable]="true" (change)="getreceiptdata($event)">
-                                </ng-select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <button type="button" (click)="showdata()" class="erp-btn btn-secondary btn-sm">
-                                <span class="erp-btn btn-icon">âŠ•</span> Show
-                            </button>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="erp-form-group">
-                                <label class="erp-label">
-                                    Date <span class="required-star">*</span>
-                                </label>
-                                <input class="erp-input" type="text" bsDatepicker [bsConfig]="pDobConfig"
-                                    formControlName="ppaymentdate" />
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Receipt Details Section -->
-                @if (show()) {
-                <div class="section-card">
-                    <p class="section-title">Receipt Details</p>
-
-                    <!-- Info Row -->
-                    <div class="info-row">
-                        <div class="info-left">
-                            <div class="info-item">
-                                <span class="info-label">Credit To :</span>
-                                <span class="info-value">{{ creditto() }}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Received From :</span>
-                                <span class="info-value">{{ receivedfrom() }}</span>
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Receipt Date :</span>
-                            <span class="info-value">{{ receiptdate() | date:'dd-MMM-yyyy' }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Details Table -->
-                    <p-table [value]="lstdetails()" [paginator]="true" [rows]="pageCriteria().pageSize"
-                        [totalRecords]="pageCriteria().totalrows" (onPage)="onPrimePageChange($event)"
-                        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" scrollHeight="400px">
-
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th class="table-header-cell table-sno">S.No</th>
-                                <th class="table-header-cell">Particulars</th>
-                                <th class="table-header-cell table-amount">Amount</th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                            <tr class="table-body-row">
-                                <td class="table-cell">
-                                    {{ pageCriteria().offset * pageCriteria().pageSize + rowIndex + 1 }}
-                                </td>
-                                <td class="table-cell">{{ rowData.pAccountname }}</td>
-                                <td class="table-cell table-cell-right">
-                                    {{ currencysymbol }} {{ rowData.pLedgeramount | number:'1.2-2' }}
-                                </td>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td colspan="3" class="table-empty">No payment details found</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-
-                    <!-- Total Amount -->
-                    <div class="total-row">
-                        <span class="total-label">Total Amount :</span>
-                        <span class="total-value">
-                            {{ currencysymbol }} {{ showtotalamount() | number:'1.2-2' }}
-                        </span>
-                    </div>
-
-                    <!-- Summary Row -->
-                    <div class="summary-row">
-                        <div class="summary-item summary-narration">
-                            <span class="info-label">Narration :</span>
-                            <span class="info-value narration-text">{{ narration() }}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="info-label">Mode of Transaction :</span>
-                            <span class="info-value">{{ pmodofPayment() }}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="info-label">Done By :</span>
-                            <span class="info-value">{{ doneby() }}</span>
-                        </div>
-                    </div>
-                </div>
-                }
-
-                <!-- Cancellation Details Section -->
-                @if (show()) {
-                <div class="section-card">
-                    <p class="section-title">Cancellation Details</p>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="erp-form-group">
-                                <label class="erp-label">
-                                    Reason <span class="required-star">*</span>
-                                </label>
-                                <textarea class="erp-input textarea-control"
-                                    [class.ng-invalid]="pettycashValidation()['cancellationreason']" rows="3"
-                                    formControlName="cancellationreason" maxlength="250"
-                                    placeholder="Enter cancellation reason...">
-                  </textarea>
-                                @if (pettycashValidation()['cancellationreason']) {
-                                <div class="invalid-feedback">{{ pettycashValidation()['cancellationreason'] }}</div>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="erp-form-group">
-                                <label class="erp-label">
-                                    Authorised By <span class="required-star">*</span>
-                                </label>
-                                <ng-select [items]="(authorizedbylist$ | async) ?? []" bindLabel="subintroducedname"
-                                    bindValue="subintroducedid" formControlName="autorizedcontactid"
-                                    [typeahead]="contactSearchevent" [multiple]="false" [searchable]="true"
-                                    [clearable]="true" (change)="subIntroducedGridRowSelect($event)"
-                                    placeholder="Select"
-                                    [class.ng-invalid]="pettycashValidation()['autorizedcontactid']">
-
-                                    <ng-template ng-header-tmp>
-                                        <div class="ng-select-header-row">
-                                            <span class="col-3 ng-select-header-col">Code</span>
-                                            <span class="col-3 ng-select-header-col">Contact Name</span>
-                                            <span class="col-3 ng-select-header-col text-center">Mobile No.</span>
-                                            <span class="col-3 ng-select-header-col">Email Id</span>
-                                        </div>
-                                    </ng-template>
-
-                                    <ng-template ng-option-tmp let-item="item">
-                                        <div class="ng-select-option-row">
-                                            <span class="col-3 ng-select-option-col">{{ item.subintroducedcode }}</span>
-                                            <span class="col-3 ng-select-option-col">{{ item.subintroducedname }}</span>
-                                            <span class="col-3 ng-select-option-col text-center">{{
-                                                item.subintroducedmobilenumber }}</span>
-                                            <span class="col-3 ng-select-option-col">{{ item.subintroducedemailid
-                                                }}</span>
-                                        </div>
-                                    </ng-template>
-
-                                </ng-select>
-                                @if (pettycashValidation()['autorizedcontactid']) {
-                                <div class="invalid-feedback">{{ pettycashValidation()['autorizedcontactid'] }}</div>
-                                }
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                }
-
-                <!-- Footer Action Buttons -->
-                <div class="d-flex gap-2 justify-end p-4">
-                    <button type="button" (click)="clear()" class="btn-cancel">
-                        âœ– Cancel
-                    </button>
-                    <button type="button" (click)="Save()" [disabled]="disablesavebutton()" class="btn-save"
-                        [class.btn-loading]="disablesavebutton()">
-                        <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
-                        {{ ButtonType() }}
-                    </button>
-                </div>
-
-            </form>
-        </div>
+  <!-- Breadcrumb Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0">
+    <div style="flex: 1;">
+      <nav class="erp-breadcrumb">
+        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Accounts</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Transactions</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item current">Petty Cash Receipt Cancel</span>
+      </nav>
+      <h1 class="page-title">
+        <i class="pi pi-file-excel"></i> Petty Cash Receipt Cancel
+      </h1>
+      <p class="page-subtitle">Cancel and reverse petty cash receipt transactions</p>
     </div>
+
+    <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view"
+       class="erp-btn btn-white btn-sm"
+       style="margin-top: auto; white-space: nowrap;">
+      <i class="pi pi-arrow-left"></i> Back
+    </a>
+  </div>
+
+  <!-- Main Card -->
+  <div class="erp-card">
+
+    <!-- Card Header -->
+    <div class="card-header">
+      <h2 class="card-title"><i class="pi pi-file-excel"></i> Cancel Receipt</h2>
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body">
+      <form [formGroup]="PettyCashCancel" autocomplete="off">
+
+        <!-- SEARCH SECTION -->
+        <div class="p-4">
+          <h3 class="section-title mb-3">Search Receipt</h3>
+          <div class="row g-3">
+
+            <!-- Receipt No -->
+            <div class="col-md-4">
+              <div class="erp-form-group">
+                <label class="erp-label" for="receiptid">Receipt No. <span class="required">*</span></label>
+                <ng-select
+                  id="receiptid"
+                  [items]="receiptdata()"
+                  bindLabel="payment_number"
+                  bindValue="tbl_trans_pettycash_voucher_id"
+                  formControlName="receiptid"
+                  [searchable]="true"
+                  [clearable]="true"
+                  placeholder="Select"
+                  (change)="getreceiptdata($event)"
+                  [class.ng-invalid]="
+                    PettyCashCancel.get('receiptid')?.invalid &&
+                    (PettyCashCancel.get('receiptid')?.touched ||
+                      PettyCashCancel.get('receiptid')?.dirty)
+                  "></ng-select>
+                @if (PettyCashCancel.get('receiptid')?.errors?.['required']) {
+                  <span class="erp-field-error">Receipt No. is required</span>
+                }
+              </div>
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-4">
+              <div class="erp-form-group">
+                <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
+                <div class="erp-input-wrap erp-date-wrap">
+                  <i class="pi pi-calendar erp-input-icon"></i>
+                  <input
+                    type="text"
+                    id="ppaymentdate"
+                    class="erp-input icon-pad"
+                    formControlName="ppaymentdate"
+                    readonly
+                    bsDatepicker
+                    [bsConfig]="pDobConfig"
+                    (keydown)="$event.preventDefault()"
+                    (paste)="$event.preventDefault()" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Show Button -->
+            <div class="col-md-4">
+              <div class="erp-form-group d-flex align-items-end">
+                <button type="button" (click)="showdata()" class="erp-btn btn-primary btn-sm" style="margin-top: 24px;">
+                  <i class="pi pi-search"></i> Show
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RECEIPT DETAILS SECTION -->
+        @if (show()) {
+          <div class="p-4">
+            <h3 class="section-title mb-3">Receipt Details</h3>
+
+            <!-- Receipt Meta Information -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <div class="erp-info-group">
+                  <label class="erp-label-info">Credit To:</label>
+                  <span class="erp-value-info">{{ creditto() || '--' }}</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="erp-info-group">
+                  <label class="erp-label-info">Received From:</label>
+                  <span class="erp-value-info">{{ receivedfrom() || '--' }}</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="erp-info-group">
+                  <label class="erp-label-info">Receipt Date:</label>
+                  <span class="erp-value-info">{{ (receiptdate() | date:'dd-MMM-yyyy') || '--' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Details Table -->
+            <div class="tbl-wrap">
+              <p-table
+                [value]="lstdetails()"
+                [paginator]="true"
+                [rows]="pageCriteria().pageSize"
+                [totalRecords]="pageCriteria().totalrows"
+                (onPage)="onPrimePageChange($event)"
+                styleClass="gr-table p-datatable-sm p-datatable-gridlines"
+                [scrollable]="true"
+                scrollHeight="400px">
+
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th class="th-actions" style="width: 60px;">S.No</th>
+                    <th class="th-cell">
+                      <div class="th-cell">
+                        <i class="pi pi-align-left"></i>
+                        Particulars
+                      </div>
+                    </th>
+                    <th class="th-right" style="width: 150px;">
+                      <div class="th-cell" style="justify-content:flex-end">
+                        <i class="pi pi-indian-rupee"></i>
+                        Amount
+                      </div>
+                    </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                  <tr>
+                    <td class="td-center">
+                      {{ pageCriteria().offset * pageCriteria().pageSize + rowIndex + 1 }}
+                    </td>
+                    <td class="td-cell">{{ rowData.pAccountname }}</td>
+                    <td class="td-right">
+                      <span class="amount-cell">{{ currencysymbol }} {{ rowData.pLedgeramount | number:'1.2-2' }}</span>
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="3" class="p-4">
+                      <div style="text-align: center; color: #94a3b8; padding: 20px;">
+                        <i class="pi pi-inbox" style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
+                        <p style="margin: 0; font-size: 14px;">No payment details found</p>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+
+              </p-table>
+            </div>
+          </div>
+
+          <!-- NOTES/REMARKS SECTION -->
+          <div class="p-4">
+            <div class="erp-form-group">
+              <label class="erp-label" for="remarks">Cancel Remarks</label>
+              <textarea
+                id="remarks"
+                class="erp-textarea"
+                placeholder="Enter reason for cancellation"
+                formControlName="remarks"
+                rows="3"></textarea>
+            </div>
+          </div>
+        }
+
+      </form>
+    </div>
+
+    <!-- Card Footer -->
+    @if (show()) {
+      <div class="card-footer">
+        <button type="button" class="erp-btn btn-outline btn-sm" (click)="clear()">
+          <i class="pi pi-times"></i> Cancel
+        </button>
+        <button type="button" class="erp-btn btn-danger btn-sm" (click)="Save()">
+          <i class="pi pi-trash"></i> Cancel Receipt
+        </button>
+      </div>
+    }
+
+  </div>
 </div>
 
 

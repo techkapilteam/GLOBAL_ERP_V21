@@ -27,7 +27,7 @@
       <!-- â”€â”€ DATE â”€â”€ -->
       <div class="p-4">
         <div class="row g-3">
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label" for="preceiptdate">Date <span class="required">*</span></label>
               <div class="erp-input-wrap erp-date-wrap">
@@ -76,7 +76,7 @@
         @if (walletshowhide()) {
           <div class="mt-3">
             <div class="row g-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Select Wallet <span class="required">*</span></label>
                   <select class="erp-input">
@@ -86,13 +86,13 @@
                   </select>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Reference No. <span class="required">*</span></label>
                   <input class="erp-input" type="text" placeholder="Reference No">
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Transaction Date <span class="required">*</span></label>
                   <div class="erp-input-wrap erp-date-wrap">
@@ -129,7 +129,7 @@
           <!-- â”€â”€ Cheque â”€â”€ -->
           @if (chequeshowhide()) {
             <div class="row g-3 mt-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Bank Name <span class="required">*</span></label>
                   <ng-select
@@ -148,7 +148,7 @@
                 </div>
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Branch Name <span class="required">*</span></label>
                   <input
@@ -167,7 +167,7 @@
                 </div>
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Account Number <span class="required">*</span></label>
                   <input
@@ -186,7 +186,7 @@
                 </div>
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
                   <label class="erp-label">Cheque No. <span class="required">*</span></label>
                   <input
@@ -238,7 +238,7 @@
           <!-- â”€â”€ Online â”€â”€ -->
           @if (onlineshowhide()) {
             <div class="row g-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Bank Name <span class="required">*</span></label>
                 <ng-select
                   [items]="banklist()"
@@ -251,7 +251,7 @@
                 </ng-select>
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Type Of Payment <span class="required">*</span></label>
                 <ng-select
                   [items]="typeofpaymentlist()"
@@ -265,7 +265,7 @@
               </div>
 
               @if (showupi()) {
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <label class="erp-label">UPI <span class="required">*</span></label>
                   <ng-select
                     [items]="upinameslist()"
@@ -278,7 +278,7 @@
                 </div>
               }
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Reference No. <span class="required">*</span></label>
                 <input
                   class="erp-input"
@@ -290,7 +290,7 @@
                   [ngClass]="{'ng-invalid': getValidationMsg('pChequenumber')}">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Transaction Date <span class="required">*</span></label>
                 <div class="erp-input-wrap erp-date-wrap">
                   <i class="pi pi-calendar erp-input-icon"></i>
@@ -325,7 +325,7 @@
             </div>
 
             <div class="d-flex gap-2 flex-wrap mb-3">
-              <span class="erp-badge badge-primary">
+              <span class="erp-value-pill">
                 <span hidden></span>
                 Bank Book - {{ getSafeBalance(bankbookBalance()) }}
               </span>
@@ -339,7 +339,7 @@
           <!-- â”€â”€ Debit Card â”€â”€ -->
           @if (debitShowhide()) {
             <div class="row g-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Debit Card <span class="required">*</span></label>
                 <input
                   class="erp-input"
@@ -351,7 +351,7 @@
                   [ngClass]="{'ng-invalid': getValidationMsg('pCardNumber')}">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Bank / Financial Services</label>
                 <input
                   class="erp-input"
@@ -362,7 +362,7 @@
                   (blur)="BankNameChange()">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Reference No. <span class="required">*</span></label>
                 <input
                   class="erp-input"
@@ -374,7 +374,7 @@
                   [ngClass]="{'ng-invalid': getValidationMsg('pChequenumber')}">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Deposited Bank Name <span class="required">*</span></label>
                 <ng-select
                   [items]="banklist1()"
@@ -391,7 +391,7 @@
             </div>
 
             <div class="d-flex gap-2 flex-wrap mb-3">
-              <span class="erp-badge badge-primary">
+              <span class="erp-value-pill">
                 <span hidden></span>
                 Bank Book - {{ getSafeBalance(bankbookBalance()) }}
               </span>
@@ -405,7 +405,7 @@
           <!-- â”€â”€ Credit Card â”€â”€ -->
           @if (creditShowhide()) {
             <div class="row g-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Credit Card <span class="required">*</span></label>
                 <input
                   class="erp-input"
@@ -417,7 +417,7 @@
                   [ngClass]="{'ng-invalid': getValidationMsg('pCardNumber')}">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Bank / Financial Services <span class="required">*</span></label>
                 <input
                   class="erp-input"
@@ -429,7 +429,7 @@
                   [ngClass]="{'ng-invalid': getValidationMsg('pbankname')}">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Reference No. <span class="required">*</span></label>
                 <input
                   class="erp-input"
@@ -441,7 +441,7 @@
                   [ngClass]="{'ng-invalid': getValidationMsg('pChequenumber')}">
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Deposited Bank Name <span class="required">*</span></label>
                 <ng-select
                   [items]="banklist1()"
@@ -458,7 +458,7 @@
             </div>
 
             <div class="d-flex gap-2 flex-wrap mb-3">
-              <span class="erp-badge badge-primary">
+              <span class="erp-value-pill">
                 <span hidden></span>
                 Bank Book - {{ getSafeBalance(bankbookBalance()) }}
               </span>
@@ -477,7 +477,7 @@
 
         <!-- Party + Ledger -->
         <div class="row g-3 mb-3">
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <div class="d-flex gap-2 align-items-end">
               <div class="erp-flex-1">
                 <label class="erp-label">Party <span class="required">*</span></label>
@@ -530,7 +530,7 @@
         <!-- SubLedger + Amount -->
         <div class="row mb-3" formGroupName="preceiptslist">
           @if (showsubledger()) {
-            <div class="col-6">
+            <div class="col-12 col-md-6">
               <div class="d-flex gap-2 align-items-end">
                 <div class="erp-flex-1">
                   <label class="erp-label">Sub Ledger <span class="required">*</span></label>
@@ -554,7 +554,7 @@
             </div>
           }
 
-          <div [class]="showsubledger() ? 'col-md-6' : 'col-md-6 offset-md-6'">
+          <div [class]="showsubledger() ? 'col-12 col-md-6' : 'col-12 col-md-6 offset-md-6'">
             <label class="erp-label">Amount Received <span class="required">*</span></label>
             <input
               class="erp-input"
@@ -593,7 +593,7 @@
 
           @if (showtds()) {
             <div class="row g-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Section <span class="required">*</span></label>
                 <ng-select
                   [items]="tdssectionlist()"
@@ -611,7 +611,7 @@
                 }
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">Percentage <span class="required">*</span></label>
                 <ng-select
                   [items]="tdspercentagelist()"
@@ -630,9 +630,9 @@
                 }
               </div>
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">TDS Amount</label>
-                <div class="erp-badge badge-success">
+                <div class="erp-value-pill">
                   <span>{{ currencySymbol }} {{ GeneralReceiptForm.get('ptdsamount')?.value | number:'1.0-0' }}</span>
                 </div>
               </div>
@@ -658,7 +658,7 @@
 
           @if (showgst()) {
             <div class="row g-3 mb-3">
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">State <span class="required">*</span></label>
                 @if (statelist().length === 1) {
                   <input
@@ -681,7 +681,7 @@
               </div>
 
               @if (showgstno()) {
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <label class="erp-label">GST No.</label>
                   <input
                     type="text"
@@ -693,7 +693,7 @@
                 </div>
               }
 
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <label class="erp-label">GST (%) <span class="required">*</span></label>
                 <ng-select
                   [items]="gstlist()"
@@ -713,7 +713,7 @@
               @if (showgstamount()) {
                 <div class="col-md-6 mb-2">
                   <label class="erp-label">GST Amount</label>
-                  <div class="erp-badge badge-primary">
+                  <div class="erp-value-pill">
                     <span>{{ currencySymbol }} {{ GeneralReceiptForm.get('preceiptslist.pgstamount')?.value || 0 | number:'1.0-0' }}</span>
                   </div>
                 </div>
@@ -721,7 +721,7 @@
               @if (showigst()) {
                 <div class="col-md-6 mb-2">
                   <label class="erp-label">IGST ({{ GeneralReceiptForm.get('preceiptslist.pigstpercentage')?.value }}%)</label>
-                  <div class="erp-badge badge-success">
+                  <div class="erp-value-pill">
                     <span>{{ currencySymbol }} {{ GeneralReceiptForm.get('preceiptslist.pigstamount')?.value || 0 | number:'1.0-0' }}</span>
                   </div>
                 </div>
@@ -729,7 +729,7 @@
               @if (showcgst()) {
                 <div class="col-md-6 mb-2">
                   <label class="erp-label">CGST ({{ GeneralReceiptForm.get('preceiptslist.pcgstpercentage')?.value }}%)</label>
-                  <div class="erp-badge badge-success">
+                  <div class="erp-value-pill">
                     <span>{{ currencySymbol }} {{ GeneralReceiptForm.get('preceiptslist.pcgstamount')?.value || 0 | number:'1.0-0' }}</span>
                   </div>
                 </div>
@@ -737,7 +737,7 @@
               @if (showsgst()) {
                 <div class="col-md-6 mb-2">
                   <label class="erp-label">SGST ({{ GeneralReceiptForm.get('preceiptslist.psgstpercentage')?.value }}%)</label>
-                  <div class="erp-badge badge-success">
+                  <div class="erp-value-pill">
                     <span>{{ currencySymbol }} {{ GeneralReceiptForm.get('preceiptslist.psgstamount')?.value || 0 | number:'1.0-0' }}</span>
                   </div>
                 </div>
@@ -745,7 +745,7 @@
               @if (showutgst()) {
                 <div class="col-md-6 mb-2">
                   <label class="erp-label">UTGST ({{ GeneralReceiptForm.get('preceiptslist.putgstpercentage')?.value }}%)</label>
-                  <div class="erp-badge badge-success">
+                  <div class="erp-value-pill">
                     <span>{{ currencySymbol }} {{ GeneralReceiptForm.get('preceiptslist.putgstamount')?.value || 0 | number:'1.0-0' }}</span>
                   </div>
                 </div>
@@ -842,7 +842,7 @@
         <div class="row g-3">
 
           <!-- Journal Entry -->
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             @if (gridshowhide()) {
               <div class="grn-journal-wrapper">
                 <p-table
@@ -874,7 +874,7 @@
           </div>
 
           <!-- Narration -->
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">Narration <span class="required">*</span></label>
               <textarea
@@ -894,7 +894,7 @@
           </div>
 
           <!-- Upload Attachment -->
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">Upload Attachment</label>
               <div class="erp-file-upload">
@@ -938,14 +938,3 @@
     </form>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-

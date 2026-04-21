@@ -1487,7 +1487,7 @@ input {
 :host ::ng-deep .content-area .table-header,
 :host ::ng-deep .content-area .widget-header,
 :host ::ng-deep .content-area .section-header {
-  background: linear-gradient(135deg, var(--accent), var(--accent));
+     background: linear-gradient(135deg, #ffffff83, var(--accent));
   color: #fff !important;
 }
 
@@ -1507,7 +1507,8 @@ input {
 :host ::ng-deep .content-area .p-button,
 :host ::ng-deep .content-area .new-receipt-btn,
 :host ::ng-deep .content-area .primary-action-btn,
-:host ::ng-deep .content-area .btn-primary {
+:host ::ng-deep .content-area .btn-primary, 
+:host ::ng-deep .content-area .tab-item.active {
   background: linear-gradient(135deg, var(--primary-dark), var(--primary)) !important;
   border-color: transparent !important;
   color: #fff !important;
