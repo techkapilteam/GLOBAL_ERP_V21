@@ -25,7 +25,6 @@ export interface Receipt {
   standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule, TableModule, TooltipModule, DecimalPipe],
   templateUrl: './general-receipt.html',
-  styleUrl: './general-receipt.css',
 })
 
 export class GeneralReceipt implements OnInit {

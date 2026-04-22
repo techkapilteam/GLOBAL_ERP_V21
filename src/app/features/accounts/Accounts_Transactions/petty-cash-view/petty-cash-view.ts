@@ -22,7 +22,6 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
     DecimalPipe,
   ],
   templateUrl: './petty-cash-view.html',
-  styleUrl: './petty-cash-view.css',
 })
 export class PettyCashView implements OnInit, OnDestroy {
 

@@ -12,7 +12,6 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   standalone: true,
   imports: [TableModule, CurrencyPipe, RouterLink, ButtonModule],
   templateUrl: './journal-voucher-view.html',
-  styleUrl: './journal-voucher-view.css',
 })
 export class JournalVoucherView implements OnInit {
 

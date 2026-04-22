@@ -1,449 +1,465 @@
- <form [formGroup]="ChequesInBankForm">
-  <div class="card-wrapper">
+<!-- cheques-inbank.component.html -->
+<div class="module-page">
 
-    <!-- Header -->
-    <div class="screen-header">
-      <h2 class="screen-title">Cheques In Bank</h2>
+  <!-- Breadcrumb Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0">
+    <div style="flex: 1;">
+      <nav class="erp-breadcrumb">
+        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Accounts</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Transactions</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item current">Cheques in Bank</span>
+      </nav>
+      <h1 class="page-title">
+        <i class="pi pi-inbox"></i> Cheques in Bank
+      </h1>
+      <p class="page-subtitle">Track and manage all cheques deposited in bank transactions</p>
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div class="erp-card">
+
+    <!-- Card Header with Search -->
+    <div class="card-header">
+      <div class="card-title">
+        <i class="pi pi-list"></i> Cheques in Bank Transactions
+      </div>
+
+      <!-- Search in header -->
+      <div class="header-search" style="flex: 1; max-width: 300px;">
+        <div class="erp-input-wrap">
+          <i class="pi pi-search erp-input-icon"></i>
+          <input type="search"
+                 class="erp-input icon-pad"
+                 placeholder="Search cheques..."
+                 style="font-size: 12px; color: #374151;"
+                 (input)="onSearch($any($event.target).value)" />
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="PDF">
+          <i class="pi pi-file-pdf"></i> PDF
+        </button>
+        <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Print')" title="Print">
+          <i class="pi pi-print"></i> Print
+        </button>
+        <button class="erp-btn btn-white btn-sm" (click)="export()" title="Excel">
+          <i class="pi pi-download"></i> Excel
+        </button>
+      </div>
     </div>
 
-    <div class="screen-content">
-
-      <!-- Top filter row -->
-      <div class="filter-bar row align-items-start">
-
-        <!-- Transaction Date -->
-        @if (tabsShowOrHideBasedOnfromFormName) {
-          <div class="col-md-2 col-xl-2">
-            <div class="form-group mb-0">
-              <label class="form-label required-label">
-                Transaction Date <span class="required-star">*</span>
-              </label>
-              <fieldset [disabled]="!disabletransactiondate">
-                <input class="form-control form-control-sm"
-                       type="text" title="ptransactiondate" id="ptransactiondate"
-                       formControlName="ptransactiondate"
-                       [bsConfig]="ptransactiondateConfig"
-                       #dp="bsDatepicker" readonly bsDatepicker placement="bottom"
-                       [ngClass]="{ 'is-invalid': ChequesInBankValidation.ptransactiondate }">
-              </fieldset>
-              <app-validation-message [messgae]="ChequesInBankValidation?.ptransactiondate" />
-            </div>
-          </div>
-
-          <!-- Cheque Clear Date -->
-          <div class="col-md-2 col-xl-2">
-            <div class="form-group mb-0">
-              <label class="form-label required-label">
-                Cheque Clear Date <span class="required-star">*</span>
-              </label>
-              <input class="form-control form-control-sm"
-                     type="text" title="pchequecleardate" id="pchequecleardate"
-                     formControlName="pchequecleardate"
-                     [bsConfig]="pchequecleardateConfig"
-                     #dp="bsDatepicker" readonly bsDatepicker placement="bottom"
-                     [ngClass]="{ 'is-invalid': ChequesInBankValidation.pchequecleardate }"
-                     (bsValueChange)="change_date($event)"
-                     [isDisabled]="true"
-                     (keydown)="$event.preventDefault()">
-            </div>
-          </div>
-        }
-
-        <!-- Bank Dropdown -->
-        <div class="col-md-3 col-xl-3">
-          <div class="form-group mb-0">
-            <label class="form-label">Bank <span class="required-star">*</span></label>
-            <ng-select [items]="BanksList"
-                       bindLabel="pbankname"
-                       placeholder="Select"
-                       formControlName="bankname"
-                       [ngClass]="{ 'is-invalid': ChequesInBankValidation.bankname }"
-                       (change)="SelectBank($event)"
-                       [clearable]="true">
-            </ng-select>
-            <div class="text-danger">
-              <app-validation-message [messgae]="ChequesInBankValidation?.bankname" />
-            </div>
+    <!-- Filter Bar -->
+    <form [formGroup]="ChequesInBankForm">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-lbl">
+            Transaction Date <span class="required">*</span>
+          </label>
+          <div class="erp-input-wrap erp-date-wrap">
+            <i class="pi pi-calendar erp-input-icon"></i>
+            <input class="erp-input icon-pad" type="text" title="ptransactiondate" id="ptransactiondate"
+              formControlName="ptransactiondate" [bsConfig]="ptransactiondateConfig" #dp="bsDatepicker" readonly
+              bsDatepicker placement="bottom"
+              (keydown)="$event.preventDefault()" />
           </div>
         </div>
-
-        <!-- Bank Balance Info -->
-        <div class="col-md-5 col-xl-5">
-          <div class="balance-card">
-            @if (banknameshowhide && bankname) {
-              <span class="bank-name-display">{{ bankname }}</span>
-            }
-            <h4 class="balance-title">Cheques in Bank</h4>
-            <div class="balance-row">
-              <label class="balance-label">Balance:</label>
-              <label class="balance-value">
-                @if (bankbalancetype === 'Dr') {
-                  {{ bankbalance | currency: currencyCode:'symbol':'1.2-2' }} {{ bankbalancetype }}
-                }
-                @if (bankbalancetype === 'Cr') {
-                  {{ bankbalance | currency: currencyCode:'symbol':'1.2-2' }} {{ bankbalancetype }}
-                }
-                @if (bankbalancetype === '') {
-                  {{ currencySymbol }} 0.00
-                }
-              </label>
-              <label class="brs-label ms-3">BRS Date:</label>
-              <label class="balance-value">{{ brsdate }}</label>
-            </div>
-          </div>
+        <div class="filter-group">
+          <label class="filter-lbl">
+            Bank <span class="required">*</span>
+          </label>
+          <ng-select [items]="BanksList" bindLabel="pbankname" bindValue="pbankid" formControlName="bankname"
+            placeholder="Select" [closeOnSelect]="true" [clearable]="true" />
         </div>
-      </div><!-- /filter-bar -->
 
-      <!-- Search + Actions -->
-      <div class="mt-4 pt-3 section-divider">
-        <div class="row align-items-center mb-0">
-
-          <!-- Search input -->
-          <div class="col-md-4 col-xl-4 mb-3">
-            <div class="search-wrapper">
-              <span class="search-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg>
+        <!-- Balance Info Card -->
+        <div class="filter-info-card">
+          <div class="info-header">
+            <span class="info-bank-name">{{ bankname }}</span>
+          </div>
+          <div class="info-body">
+            <h4 class="info-title">Cheques in Bank</h4>
+            <div class="info-items">
+              <span class="info-item">
+                <b>Balance:</b>
+                <span class="info-value">
+                  {{ bankbalance | currency: currencySymbol }} <small>{{ bankbalancetype }}</small>
+                </span>
               </span>
-              <input type="text" formControlName="searchtext"
-                     #search id="searchtext" class="form-control search-input"
-                     placeholder="Search"
-                     (paste)="onPaste($event)"
-                     (keydown.enter)="showSearchText('search')">
+              <span class="info-item">
+                <b>BRS Date:</b>
+                <span class="info-value">{{ brsdate || '--' }}</span>
+              </span>
             </div>
           </div>
+        </div>
+      </div>
+    </form>
 
-          <!-- Search button -->
-          <div class="col-md-2 col-xl-2 mb-3">
-            <button (click)="showSearchText('search')"
-                    class="btn btn-primary btn-sm btn-search"
-                    [disabled]="searchloading()">
-              Search
+    <!-- Status Tabs (Horizontal) -->
+    <div class="tabs-section">
+      <div class="tabs-nav">
+        @if (tabsShowOrHideBasedOnfromFormName) {
+        <button class="tab-item" [class.active]="activeTab === 'all'" (click)="All(); activeTab = 'all'">
+          <span class="tab-label">All</span>
+          <span class="erp-badge badge-warning">{{ all || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="activeTab === 'chequesdeposited'" (click)="ChequesDeposited(); activeTab = 'chequesdeposited'">
+          <span class="tab-label">Cheques Deposited</span>
+          <span class="erp-badge badge-secondary">{{ chequesdeposited || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="activeTab === 'onlinereceipts'" (click)="OnlineReceipts(); activeTab = 'onlinereceipts'">
+          <span class="tab-label">Online Receipts</span>
+          <span class="erp-badge badge-primary">{{ onlinereceipts || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="activeTab === 'cleared'" (click)="Cleared(); activeTab = 'cleared'">
+          <span class="tab-label">Cleared</span>
+          <span class="erp-badge badge-success">{{ cleared || 0 }}</span>
+        </button>
+
+        <button class="tab-item" [class.active]="activeTab === 'returned'" (click)="Returned(); activeTab = 'returned'">
+          <span class="tab-label">Returned</span>
+          <span class="erp-badge badge-danger">{{ returned || 0 }}</span>
+        </button>
+        }
+      </div>
+    </div>
+
+    <!-- BRS Filter Sections -->
+    <form [formGroup]="ChequesInBankForm">
+      <div class="p-4 brs-section">
+        <h3 class="section-title mb-3">Cleared - Date Range Filter</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS From Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="pfrombrsdate"
+                  [bsConfig]="brsfromConfig" #dpFrom="bsDatepicker" bsDatepicker placement="bottom"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS To Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="ptobrsdate"
+                  [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+              <div class="erp-field-error">BRS To Date should be greater than From Date</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="button" class="erp-btn btn-primary btn-sm" (click)="ShowBrsClear()">
+              <i class="pi pi-search"></i> Show
             </button>
           </div>
-
-          <!-- Export icons -->
-          <div class="col-md-6 col-xl-6 mb-3">
-            @if (gridData.length > 0) {
-              <div class="export-icons d-flex justify-content-end">
-                <ul class="icon-list">
-                  <li>
-                    <img src="assets/images/pdf-icon-blue.svg" width="18" title="PDF"
-                         class="export-icon" (click)="pdfOrprint('Pdf')" />
-                  </li>
-                  <li>
-                    <img src="assets/images/print-icon-blue.svg" width="18" title="Print"
-                         class="export-icon" (click)="pdfOrprint('Print')" />
-                  </li>
-                  <li>
-                    <img src="assets/images/icon-excel.svg" width="18" title="Excel"
-                         class="export-icon" (click)="export()" />
-                  </li>
-                </ul>
-              </div>
-            }
-          </div>
-
-          <!-- Status Tabs -->
-          @if (tabsShowOrHideBasedOnfromFormName) {
-            <ul class="nav-tabs-custom">
-
-              <li class="nav-tab-item">
-                <a id="allcss" href="#" class="nav-tab-link"
-                   [class.active]="selectedTab === 'all'"
-                   (click)="selectedTab='all'; All(); $event.preventDefault()">
-                  All
-                  <span class="badge badge-warning">{{ all || 0 }}</span>
-                </a>
-              </li>
-
-              <li class="nav-tab-item">
-                <a id="chequesdepositedcss" href="#" class="nav-tab-link"
-                   [class.active]="selectedTab === 'chequesDeposited'"
-                   (click)="selectedTab='chequesDeposited'; ChequesDeposited(); $event.preventDefault()">
-                  Cheques Deposited
-                  <span class="badge badge-secondary">{{ chequesdeposited || 0 }}</span>
-                </a>
-              </li>
-
-              <li class="nav-tab-item">
-                <a id="onlinereceiptscss" href="#" class="nav-tab-link"
-                   [class.active]="selectedTab === 'onlinereceipts'"
-                   (click)="selectedTab='onlinereceipts'; OnlineReceipts(); $event.preventDefault()">
-                  Online Receipts
-                  <span class="badge badge-primary">{{ onlinereceipts || 0 }}</span>
-                </a>
-              </li>
-
-              <li class="nav-tab-item">
-                <a id="clearedcss" href="#" class="nav-tab-link"
-                   [class.active]="selectedTab === 'cleared'"
-                   (click)="selectedTab='cleared'; Cleared(); $event.preventDefault()">
-                  Cleared
-                  <span class="badge badge-success">{{ cleared || 0 }}</span>
-                </a>
-              </li>
-
-              <li class="nav-tab-item">
-                <a id="returnedcss" href="#" class="nav-tab-link"
-                   [class.active]="selectedTab === 'returned'"
-                   (click)="selectedTab='returned'; Returned(); $event.preventDefault()">
-                  Returned
-                  <span class="badge badge-danger">{{ returned || 0 }}</span>
-                </a>
-              </li>
-
-            </ul>
-          }
-
-          <!-- BRS Date Filter (Cleared) -->
-          @if (brsdateshowhidecleared) {
-            <div class="row mb-3 align-items-start brs-date-row">
-              <div class="col-md-3 col-xl-3">
-                <div class="form-group mb-0">
-                  <label class="form-label">BRS From Date</label>
-                  <input class="form-control form-control-sm"
-                         type="text" formControlName="pfrombrsdate"
-                         title="frombrsdate" placeholder="Select From Date"
-                         readonly [bsConfig]="brsfromConfig" #dp="bsDatepicker"
-                         bsDatepicker placement="bottom"
-                         (keydown)="$event.preventDefault()"
-                         (paste)="$event.preventDefault()"
-                         (bsValueChange)="onBrsFromDateChange($event)">
-                </div>
-              </div>
-              <div class="col-md-4 col-xl-4">
-                <div class="form-group mb-0">
-                  <label class="form-label">BRS To Date</label>
-                  <div class="d-flex align-items-center gap-2">
-                    <input class="form-control form-control-sm"
-                           type="text" formControlName="ptobrsdate"
-                           title="tobrsdate" placeholder="Select To Date"
-                           readonly [bsConfig]="brstoConfig" #dp="bsDatepicker"
-                           bsDatepicker placement="bottom"
-                           (keydown)="$event.preventDefault()"
-                           (paste)="$event.preventDefault()"
-                           (bsValueChange)="onBrsToDateChange($event)">
-                    <a (click)="ShowBrsClear()" class="btn btn-primary btn-sm btn-show" role="tab">Show</a>
-                  </div>
-                  @if (validatebrsdateclear) {
-                    <div class="brs-error">Brs To Date Should Be Greater Than From Date</div>
-                  }
-                </div>
-              </div>
-            </div>
-          }
-
-          <!-- BRS Date Filter (Returned) -->
-          <form [formGroup]="BrsDateForm" class="w-100">
-            @if (brsdateshowhidereturned) {
-              <div class="row mb-3 align-items-start brs-date-row">
-                <div class="col-md-3 col-xl-3">
-                  <div class="form-group mb-0">
-                    <label class="form-label">BRS From Date</label>
-                    <input class="form-control form-control-sm"
-                           type="text" placeholder="Select From Date" readonly
-                           bsDatepicker [bsConfig]="brsfromConfig" formControlName="frombrsdate"
-                           (keydown)="$event.preventDefault()"
-                           (paste)="$event.preventDefault()">
-                  </div>
-                </div>
-                <div class="col-md-4 col-xl-4">
-                  <div class="form-group mb-0">
-                    <label class="form-label">BRS To Date</label>
-                    <div class="d-flex align-items-center gap-2">
-                      <input class="form-control form-control-sm"
-                             type="text" placeholder="Select To Date" readonly
-                             bsDatepicker [bsConfig]="brstoConfig" formControlName="tobrsdate"
-                             (keydown)="$event.preventDefault()"
-                             (paste)="$event.preventDefault()">
-                      <button type="button" class="btn btn-primary btn-sm btn-show"
-                              (click)="ShowBrsReturn()">Show</button>
-                    </div>
-                    @if (validatebrsdatereturn) {
-                      <div class="brs-error">BRS To Date Should Be Greater Than From Date</div>
-                    }
-                  </div>
-                </div>
-              </div>
-            }
-          </form>
-
-          <!-- Data Table -->
-          <div class="col-md-12 col-xl-12 mt-2">
-            <p-table #dt [value]="gridData"
-                     [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-                     [scrollable]="true" scrollHeight="500px"
-                     [resizableColumns]="true" columnResizeMode="fit"
-                     [showCurrentPageReport]="true"
-                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                     styleClass="p-datatable-sm p-datatable-gridlines">
-
-              <ng-template pTemplate="header">
-                <tr>
-                  @if (!showhidegridcolumns) {
-                    <th class="th-cell th-checkbox">
-                      <input type="checkbox" [checked]="preferdrows" (change)="selectAllClear($event)" />
-                    </th>
-                    <th class="th-cell">Clear</th>
-                  }
-                  @if (!showhidegridcolumns2) {
-                    <th class="th-cell">Return</th>
-                  }
-                  @if (!showhidegridcolumns) {
-                    <th class="th-cell">Reference No</th>
-                  }
-                  <th class="th-cell">Cheque/Reference No.</th>
-                  <th class="th-cell">Branch Name</th>
-                  <th class="th-cell">Amount</th>
-                  <th class="th-cell">Party</th>
-                  <th class="th-cell">Receipt Date</th>
-                  <th class="th-cell">Deposited Date</th>
-                  @if (!hiddendate) {
-                    <th class="th-cell">{{ datetitle }}</th>
-                  }
-                  <th class="th-cell">Receipt Id</th>
-                  <th class="th-cell">Transaction Mode</th>
-                  <th class="th-cell">Cheque Bank Name</th>
-                  <th class="th-cell">Cheque Branch Name</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-                <tr>
-                  @if (!showhidegridcolumns) {
-                    <td class="td-center td-muted"></td>
-                    <td class="td-center">
-                      <input type="checkbox"
-                             [(ngModel)]="row.pdepositstatus"
-                             [ngModelOptions]="{standalone: true}"
-                             (change)="onRowClearCheck($event, row)" />
-                    </td>
-                  }
-                  @if (!showhidegridcolumns2) {
-                    <td class="td-center">
-                      <input type="checkbox"
-                             [(ngModel)]="row.preturnstatus"
-                             [ngModelOptions]="{standalone: true}"
-                             (change)="CheckedReturn($event, row)" />
-                    </td>
-                  }
-                  @if (!showhidegridcolumns) {
-                    <td class="td-center">
-                      <input class="form-control form-control-sm ref-input"
-                             type="text" maxlength="15"
-                             [id]="'preferencetext' + rowIndex"
-                             [(ngModel)]="row.preferencetext"
-                             [ngModelOptions]="{standalone: true}"
-                             (keyup)="checkDuplicateValueslatest($event, rowIndex, row)" />
-                    </td>
-                  }
-                  <td class="td-center">{{ row.pChequenumber ? row.pChequenumber : '--NA--' }}</td>
-                  <td class="td-left">{{ row.pbranchname ? row.pbranchname : '--NA--' }}</td>
-                  <td class="td-right">
-                    {{ row.ptotalreceivedamount != null
-                       ? (row.ptotalreceivedamount | currency:currencyCode:'symbol':'1.2-2')
-                       : (currencySymbol + ' 0.00') }}
-                  </td>
-                  <td class="td-left">{{ row.ppartyname ? row.ppartyname : '--NA--' }}</td>
-                  <td class="td-center">{{ row.preceiptdate ? (row.preceiptdate | date:'dd-MM-yyyy') : '--NA--' }}</td>
-                  <td class="td-center">{{ row.pdepositeddate ? (row.pdepositeddate | date:'dd-MM-yyyy') : '--NA--' }}</td>
-                  @if (!hiddendate) {
-                    <td class="td-center">{{ row.pCleardate ? (row.pCleardate | date:'dd-MMM-yyyy') : '--NA--' }}</td>
-                  }
-                  <td class="td-center">{{ row.preceiptid ? row.preceiptid : '--NA--' }}</td>
-                  <td class="td-center">{{ row.ptypeofpayment ? row.ptypeofpayment : '--NA--' }}</td>
-                  <td class="td-left">{{ row.cheque_bank ? row.cheque_bank : '--NA--' }}</td>
-                  <td class="td-left">{{ row.receipt_branch_name ? row.receipt_branch_name : '--NA--' }}</td>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td [attr.colspan]="15" class="td-empty">No records found.</td>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="footer">
-                <tr>
-                  @if (!showhidegridcolumns)  { <td class="tf-cell"></td> <td class="tf-cell"></td> }
-                  @if (!showhidegridcolumns2) { <td class="tf-cell"></td> }
-                  @if (!showhidegridcolumns)  { <td class="tf-cell"></td> }
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell tf-amount">
-                    {{ getCurrentPageTotal(dt) | currency:currencyCode:'symbol':'1.2-2' }}
-                  </td>
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell"></td>
-                  @if (!hiddendate) { <td class="tf-cell"></td> }
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell"></td>
-                  <td class="tf-cell"></td>
-                </tr>
-              </ng-template>
-
-            </p-table>
-          </div>
-
-          <!-- Save / Clear Buttons -->
-          @if (saveshowhide) {
-            <div class="action-buttons col-md-12">
-              <a (click)="Clear()" class="btn btn-dark btn-action" role="tab">
-                <img src="assets/images/icon-cancel-white.svg" class="btn-icon" width="16" height="16">
-                Clear
-              </a>
-              <button (click)="Save()" class="btn btn-primary btn-action ms-3"
-                      [disabled]="disablesavebutton">
-                @if (!disablesavebutton) {
-                  <img src="assets/images/icon-check-white.svg" class="btn-icon" width="16" height="16">
-                }
-                @if (disablesavebutton) {
-                  <i class="fa fa-spin fa-spinner btn-spinner"></i>
-                }
-                {{ buttonname }}
-              </button>
-            </div>
-          }
-
         </div>
-      </div><!-- /section-divider -->
+      </div>
+    </form>
 
-    </div><!-- /screen-content -->
-  </div><!-- /card-wrapper -->
-</form>
+    <form [formGroup]="BrsDateForm">
+      <div class="p-4 brs-section">
+        <h3 class="section-title mb-3">Returned - Date Range Filter</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS From Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="frombrsdate" readonly
+                  [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">BRS To Date</label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <input class="erp-input icon-pad" type="text" formControlName="tobrsdate" readonly
+                  [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom"
+                  (keydown)="$event.preventDefault()" />
+              </div>
+              <div class="erp-field-error">BRS To Date should be greater than From Date</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="button" class="erp-btn btn-primary btn-sm" (click)="ShowBrsReturn()">
+              <i class="pi pi-search"></i> Show
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Card Body -->
+    <div class="card-body p-0">
+
+      <!-- Table Toolbar -->
+      <div class="erp-table-toolbar tbl-toolbar-flush">
+        <div class="tb-left">
+          <span class="erp-badge badge-primary badge-dot">
+            records
+          </span>
+        </div>
+        <div class="tb-right">
+          <span class="text-muted text-small">
+            Currency: <strong class="text-primary">{{ currencySymbol }}</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- DataTable -->
+      <div class="tbl-wrap">
+        <p-table
+          [value]="gridData"
+          [paginator]="true"
+          [rows]="pageSize"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [scrollable]="true"
+          scrollHeight="500px"
+          responsiveLayout="scroll"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+
+          <!-- Header -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="th-actions">Actions</th>
+              <th class="th-center">
+                <div class="th-cell" style="justify-content:center">
+                  <i class="pi pi-hashtag"></i>
+                  Cheque/Reference No.
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Branch Name
+                </div>
+              </th>
+              <th class="th-right">
+                <div class="th-cell" style="justify-content:flex-end">
+                  <i class="pi pi-indian-rupee"></i>
+                  Amount
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-user"></i>
+                  Party
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-calendar"></i>
+                  Receipt Date
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-calendar"></i>
+                  Deposited Date
+                </div>
+              </th>
+              @if (status === 'cleared') {
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-check-circle"></i>
+                  Clear Date
+                </div>
+              </th>
+              }
+              @if (status === 'returned') {
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-times-circle"></i>
+                  Returned Date
+                </div>
+              </th>
+              }
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-file"></i>
+                  Receipt ID
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-credit-card"></i>
+                  Transaction Mode
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Cheque Bank Name
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Cheque Branch Name
+                </div>
+              </th>
+            </tr>
+          </ng-template>
+
+          <!-- Body -->
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td class="td-actions">
+                <div class="action-group">
+                  @if (status !== 'cleared' && status !== 'returned') {
+                    <button class="erp-btn btn-outline btn-sm btn-icon" 
+                            title="Clear">
+                      <i class="pi pi-check"></i>
+                    </button>
+                    <button class="erp-btn btn-outline btn-sm btn-icon" 
+                            title="Return">
+                      <i class="pi pi-times"></i>
+                    </button>
+                  }
+                </div>
+              </td>
+              <td class="td-center">
+                <span class="cheque-ref">{{ row.pChequenumber || '--' }}</span>
+              </td>
+              <td>{{ row.pbranchname || '--' }}</td>
+              <td class="td-right">
+                <div class="amount-cell">
+                  <span class="amt-sym">{{ currencySymbol }}</span>
+                  <span class="amt-num">{{ row.ptotalreceivedamount | number:'1.2-2' }}</span>
+                </div>
+              </td>
+              <td>{{ row.ppartyname || '--' }}</td>
+              <td>
+                <div class="td-date">
+                  <i class="pi pi-calendar-clock"></i>
+                  {{ row.preceiptdate ? (row.preceiptdate | date: 'dd-MMM-yyyy') : '--' }}
+                </div>
+              </td>
+              <td>
+                <div class="td-date">
+                  <i class="pi pi-calendar-clock"></i>
+                  {{ row.pdepositeddate ? (row.pdepositeddate | date: 'dd-MMM-yyyy') : '--' }}
+                </div>
+              </td>
+              @if (status === 'cleared') {
+              <td>{{ row.pCleardate ? (row.pCleardate | date: 'dd-MMM-yyyy') : '--' }}</td>
+              }
+              @if (status === 'returned') {
+              <td>{{ row.returneddate ? (row.returneddate | date: 'dd-MMM-yyyy') : '--' }}</td>
+              }
+              <td>
+                <span class="receipt-no">#{{ row.preceiptid || '--' }}</span>
+              </td>
+              <td>
+                <span class="erp-badge badge-info">{{ row.ptypeofpayment || '--' }}</span>
+              </td>
+              <td>{{ row.cheque_bank || '--' }}</td>
+              <td>{{ row.receipt_branch_name || '--' }}</td>
+            </tr>
+          </ng-template>
+
+          <!-- Empty Message -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="13" class="p-4">
+                <div style="text-align: center; color: #94a3b8; padding: 20px;">
+                  <i class="pi pi-inbox" style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
+                  <p style="margin: 0; font-size: 14px;">No cheques found</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <!-- Footer Total -->
+          <ng-template pTemplate="footer">
+            <tr>
+              <td colspan="3" class="grid-cell-cell"></td>
+              <td class="td-right grid-cell-total">
+                <strong>{{ amounttotal | currency: currencySymbol: '' }}</strong>
+              </td>
+              <td colspan="9" class="grid-cell-cell"></td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+
+    </div>
+
+    <!-- Card Footer -->
+    <div class="card-footer">
+      <div class="d-flex gap-2 flex-wrap">
+        <button (click)="Clear()" class="erp-btn btn-secondary">
+          <i class="pi pi-times"></i> Clear
+        </button>
+        <button (click)="Save()" class="erp-btn btn-primary" >
+          <i class="pi pi-check"></i>
+          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': '' }"></i>
+          {{ buttonname }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
 
 <!-- Return Charges Modal -->
-<div class="modal right slideInRight" id="add-detail" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-right">
-    <div class="modal-content modal-cst">
+<div class="erp-modal" id="return-charges-modal" [class.modal-show]="false" tabindex="-1" role="dialog">
+  <div class="modal-overlay" (click)="closeReturnModal()"></div>
+  <div class="modal-dialog modal-dialog-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Return Charges</h3>
+        <button type="button" class="btn-close" (click)="closeReturnModal()">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
       <div class="modal-body">
-        <button type="button" class="close modal-close" data-dismiss="modal"
-                (click)="closeReturnModal()">&times;</button>
-        <div class="form-group">
-          <label class="form-label">
-            Enter The Return Amount Charges For The Cheque: {{ chequenumber }}
+        <div class="erp-form-group mb-4">
+          <label class="erp-label">
+            Enter Return Amount Charges For Cheque: <strong>{{ chequenumber }}</strong>
           </label>
-          <input type="text" class="form-control text-end"
-                 name="cancelcharges" maxlength="6"
-                 id="cancelcharges" #cancelRef
-                 (input)="returnCharges_Change($event)"
-                 appNumbersonly appMycurrencyFormatter>
-          @if (returnChargesError) {
-            <div class="return-charge-error">
-              ⚠ Minimum amount should be ₹{{ minimumReturnCharge || 250 }}
-            </div>
-          }
+          <div class="erp-input-wrap">
+            <i class="pi pi-indian-rupee erp-input-icon"></i>
+            <input type="text" 
+                   class="erp-input icon-pad" 
+                   name="returncharges" 
+                   maxlength="6"
+                   id="returncharges" 
+                   #returnRef 
+                   placeholder="Enter amount" />
+          </div>
+            <div class="erp-field-error">Minimum amount should be ₹{{ minimumReturnCharge }}</div>
+          
         </div>
-        <div class="d-flex justify-content-end mt-4">
-          <a (click)="CancelChargesOk(cancelRef.value)" class="btn btn-primary btn-sm" role="tab">
-            <img src="assets/images/icon-check-white.svg" class="btn-icon" width="20" height="20">
-            Ok
-          </a>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="erp-btn btn-secondary" (click)="closeReturnModal()">
+          <i class="pi pi-times"></i> Close
+        </button>
+        <button type="button" class="erp-btn btn-primary" (click)="closeReturnModal()">
+          <i class="pi pi-check"></i> Confirm
+        </button>
       </div>
     </div>
   </div>

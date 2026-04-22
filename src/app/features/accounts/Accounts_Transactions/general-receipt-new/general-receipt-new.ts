@@ -84,7 +84,6 @@ function percentageValidator(c: AbstractControl): ValidationErrors | null {
     MessageModule
   ],
   templateUrl: './general-receipt-new.html',
-  styleUrl: './general-receipt-new.css',
 })
 export class GeneralReceiptNew implements OnInit {
 

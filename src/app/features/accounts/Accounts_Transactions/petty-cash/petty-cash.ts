@@ -44,7 +44,6 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     PaginatorModule,
   ],
   templateUrl: './petty-cash.html',
-  styleUrl: './petty-cash.css',
   providers: [DatePipe],
 })
 export class PettyCash implements OnInit {

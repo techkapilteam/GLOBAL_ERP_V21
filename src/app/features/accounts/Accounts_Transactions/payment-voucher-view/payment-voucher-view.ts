@@ -37,7 +37,6 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
 @Component({
   selector: 'app-payment-voucher-view',
   templateUrl: './payment-voucher-view.html',
-  styleUrls: ['./payment-voucher-view.css'],
   standalone: true,
   imports: [
     CommonModule,

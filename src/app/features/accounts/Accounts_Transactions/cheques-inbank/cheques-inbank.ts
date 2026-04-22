@@ -17,9 +17,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NumberToWordsPipe } from '../../../../shared/pipes/number-to-words-pipe';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { CommonService } from '../../../../core/services/Common/common.service';
@@ -35,12 +34,14 @@ type AOA = any[][];
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule,
     BsDatepickerModule,
-    PaginatorModule, ValidationMessageComponent,
-    TableModule, CheckboxModule, ButtonModule,
-    InputTextModule
+    ReactiveFormsModule,
+    PaginatorModule,
+    TableModule,
+    CheckboxModule,
+    ButtonModule,
+    InputTextModule,
   ],
   templateUrl: './cheques-inbank.html',
-  styleUrls: ['./cheques-inbank.css'],
   providers: [DatePipe, NumberToWordsPipe, CurrencyPipe],
 })
 
