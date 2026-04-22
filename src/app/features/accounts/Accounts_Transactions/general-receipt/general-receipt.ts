@@ -25,7 +25,6 @@ export interface Receipt {
   standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule, TableModule, TooltipModule, DecimalPipe],
   templateUrl: './general-receipt.html',
-  styleUrl: './general-receipt.css',
 })
 
 export class GeneralReceipt implements OnInit {
@@ -117,10 +116,12 @@ export class GeneralReceipt implements OnInit {
     if (!row?.receipt_number) return;
     const receipt = btoa(`${row.receipt_number},General Receipt`);
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/GeneralReceiptReport', receipt])
+      this.router.createUrlTree(['/general-receipt', receipt])
     );
     window.open(url, '_blank');
   }
+
+
 
   // ── Display Helpers ──────────────────────────────────────────────────────
   getPaymentLabel(row: Receipt): string {

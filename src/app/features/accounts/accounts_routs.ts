@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { GeneralReceipt } from './Accounts_Reports/general-receipt/general-receipt';
 
 export const accountsRoutes: Routes = [
   // ✅ ACCOUNTS CONFIG
@@ -255,19 +256,6 @@ export const accountsRoutes: Routes = [
             .then(m => m.TrialBalance)
       },
 
-
-
-
-
-
-
-      {
-        path: 'general-receipt/:id',
-        loadComponent: () =>
-          import('./Accounts_Reports/general-receipt/general-receipt')
-            .then(m => m.GeneralReceipt)
-      },
-
       {
         path: 'journal-voucher/:id',
         loadComponent: () =>
@@ -282,9 +270,4 @@ export const accountsRoutes: Routes = [
       }
     ]
   },
-
-
-
-
-
 ];

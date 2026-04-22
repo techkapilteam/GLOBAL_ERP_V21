@@ -55,7 +55,6 @@ interface PageState {
   ],
   providers: [CurrencyPipe, DatePipe],
   templateUrl: './payment-voucher.html',
-  styleUrls: ['./payment-voucher.css'],
 })
 export class PaymentVoucher implements OnInit {
 
@@ -139,10 +138,11 @@ export class PaymentVoucher implements OnInit {
 
   // ── Navigation ────────────────────────────────────────────────────────────
   openVoucherReport(row: VoucherRow): void {
+    debugger;
     if (!row?.paymentId) return;
     const receipt = btoa(`${row.paymentId},Payment Voucher`);
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/PaymentVoucherReport', receipt])
+      this.router.createUrlTree(['/PaymentVoucher', receipt])
     );
     window.open(url, '_blank');
   }

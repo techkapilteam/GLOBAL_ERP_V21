@@ -16,7 +16,6 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
   selector: "app-pettycash-receipt-cancel",
   imports: [CommonModule, BsDatepickerModule, ReactiveFormsModule, FormsModule, NgSelectModule, TableModule],
   templateUrl: "./pettycash-receipt-cancel.html",
-  styleUrl: "./pettycash-receipt-cancel.css",
 })
 
 export class PettycashReceiptCancel implements OnInit {

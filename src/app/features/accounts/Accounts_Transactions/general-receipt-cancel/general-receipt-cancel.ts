@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule, AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,9 +18,8 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
 @Component({
   selector: "app-general-receipt-cancel",
   standalone: true,
-  imports: [CommonModule, AsyncPipe, DatePipe, DecimalPipe, NgSelectModule, FormsModule, ReactiveFormsModule, BsDatepickerModule, TableModule, ButtonModule, InputTextModule],
+  imports: [CommonModule, DatePipe, DecimalPipe, NgSelectModule, FormsModule, ReactiveFormsModule, BsDatepickerModule, TableModule, ButtonModule, InputTextModule],
   templateUrl: "./general-receipt-cancel.html",
-  styleUrl: "./general-receipt-cancel.css",
 })
 
 export class GeneralReceiptCancel implements OnInit {

@@ -24,7 +24,6 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     RouterModule,
   ],
   templateUrl: './journal-voucher.html',
-  styleUrl: './journal-voucher.css',
   providers: [CurrencyPipe],
 })
 export class JournalVoucher implements OnInit {
@@ -1095,6 +1094,7 @@ export class JournalVoucher implements OnInit {
   // Validation before save
   // ══════════════════════════════════════════════════════════════════════════
   validatesaveJournalVoucher(): boolean {
+    debugger
     const dateOk   = this.paymentVoucherForm.get('pjvdate')?.valid;
     const narratOk = this.paymentVoucherForm.get('pnarration')?.valid;
 
@@ -1115,6 +1115,7 @@ export class JournalVoucher implements OnInit {
   // Save
   // ══════════════════════════════════════════════════════════════════════════
   saveJournalVoucher(): void {
+    debugger
     if (!this.validatesaveJournalVoucher()) return;
     if (!confirm('Do You Want to Save ?')) return;
 
@@ -1190,7 +1191,7 @@ export class JournalVoucher implements OnInit {
               this.clearPaymentVoucher();
               const receipt = btoa(`${res.voucherNo},Journal Voucher`);
               const url     = this.router.serializeUrl(
-                this.router.createUrlTree(['/JournalVoucherReport', receipt]),
+                this.router.createUrlTree(['/journal-voucher', receipt]),
               );
               window.open(url, '_blank');
             }

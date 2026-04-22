@@ -92,6 +92,38 @@ export class MainLayoutComponent implements OnInit {
     this.navigationService.selectedScreen$.subscribe((screen: Screen | null) => {
       this.selectedScreen = screen;
     });
+
+    // Set General Receipt as default selection
+    this.setDefaultSelection();
+  }
+
+  private setDefaultSelection(): void {
+    // Find Accounts module
+    const accountsModule = this.modules.find(m => m.id === 'accounts');
+    if (!accountsModule) return;
+
+    // Find Accounts Transactions sub-module
+    const transactionsSubModule = accountsModule.subModules.find(
+      s => s.id === 'accounts-transactions'
+    );
+    if (!transactionsSubModule) return;
+
+    // Find General Receipt screen
+    const generalReceiptScreen = transactionsSubModule.screens.find(
+      s => s.id === 'general-receipt'
+    );
+    if (!generalReceiptScreen) return;
+
+    // Select module, sub-module, and screen
+    this.navigationService.selectModule(accountsModule);
+    this.navigationService.selectSubModule(transactionsSubModule);
+    this.navigationService.selectScreen(generalReceiptScreen);
+
+    // Expand the sub-module in the sidebar
+    this.expandedSubModules.add(transactionsSubModule.id);
+
+    // Navigate to the General Receipt route
+    this.router.navigate([generalReceiptScreen.route]);
   }
 
   setTheme(themeId: string): void {

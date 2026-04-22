@@ -31,7 +31,6 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     
   ],
   templateUrl: './tds-jv.html',
-  styleUrl: './tds-jv.css',
   providers: [DatePipe],
 })
 export class TdsJv implements OnInit {

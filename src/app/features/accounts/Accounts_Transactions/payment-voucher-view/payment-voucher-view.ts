@@ -37,7 +37,6 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
 @Component({
   selector: 'app-payment-voucher-view',
   templateUrl: './payment-voucher-view.html',
-  styleUrls: ['./payment-voucher-view.css'],
   standalone: true,
   imports: [
     CommonModule,
@@ -1660,6 +1659,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   }
 
   savePaymentVoucher(): void {
+    debugger
     this.disableSaveButton.set(true);
     this.saveButtonLabel.set('Processing');
 
@@ -1757,7 +1757,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
                 this.clearPaymentVoucher();
                 const receipt = btoa(res.voucherNo + ',' + 'Payment Voucher');
                 const url = this.router.serializeUrl(
-                  this.router.createUrlTree(['/PaymentVoucherReport', receipt])
+                  this.router.createUrlTree(['/payment-voucher', receipt])
                 );
                 window.open(url, '_blank');
                 this.commonService.showSuccessMessage();

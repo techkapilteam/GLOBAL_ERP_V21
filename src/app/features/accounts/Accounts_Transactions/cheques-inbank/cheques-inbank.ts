@@ -35,12 +35,14 @@ type AOA = any[][];
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule,
     BsDatepickerModule,
-    PaginatorModule, ValidationMessageComponent,
-    TableModule, CheckboxModule, ButtonModule,
-    InputTextModule
+    ReactiveFormsModule,
+    PaginatorModule,
+    TableModule,
+    CheckboxModule,
+    ButtonModule,
+    InputTextModule,
   ],
   templateUrl: './cheques-inbank.html',
-  styleUrls: ['./cheques-inbank.css'],
   providers: [DatePipe, NumberToWordsPipe, CurrencyPipe],
 })
 

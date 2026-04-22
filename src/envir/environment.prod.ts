@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://globalacc-api.kapilit.com/api'  // Replace with your actual API URL
+  apiUrl: 'https://localhost:5001/api'  // Replace with your actual API URL
 };
