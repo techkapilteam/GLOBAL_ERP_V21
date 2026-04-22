@@ -4,6 +4,8 @@ import { authGuard, guestGuard } from './core/guards/auth.guard';
 import { MainLayoutComponent } from './shared/main-layout/main-layout.component/main-layout.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component/dashboard.component';
 import { GeneralReceipt } from './features/accounts/Accounts_Reports/general-receipt/general-receipt';
+import { PaymentVoucher } from './features/accounts/Accounts_Reports/payment-voucher/payment-voucher';
+import { JournalVoucher } from './features/accounts/Accounts_Reports/journal-voucher/journal-voucher';
 
 export const routes: Routes = [
   {
@@ -31,6 +33,14 @@ export const routes: Routes = [
   {
     path: 'general-receipt/:id',
     component: GeneralReceipt
+  },
+  {
+    path: 'payment-voucher/:id',
+    component: PaymentVoucher
+  },
+  {
+    path: 'journal-voucher/:id',
+    component: JournalVoucher
   },
   {
     path: '',

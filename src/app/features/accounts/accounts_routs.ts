@@ -256,18 +256,7 @@ export const accountsRoutes: Routes = [
             .then(m => m.TrialBalance)
       },
 
-      {
-        path: 'journal-voucher/:id',
-        loadComponent: () =>
-          import('./Accounts_Reports/journal-voucher/journal-voucher')
-            .then(m => m.JournalVoucher)
-      },
-      {
-        path: 'payment-voucher/:id',
-        loadComponent: () =>
-          import('./Accounts_Reports/payment-voucher/payment-voucher')
-            .then(m => m.PaymentVoucher)
-      }
+     
     ]
   },
 ];
