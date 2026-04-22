@@ -35,6 +35,8 @@ import { AccountsConfig } from '../../../../core/services/accounts/accounts-conf
 
 // ── Typed form shape ──────────────────────────────────────────────────────────
 interface BankMasterFormShape {
+  modeOfReceipt: FormControl<string | null>;
+  bankDetailsType: FormControl<string | null>;
   bankType: FormControl<string>;
   pCreatedby: FormControl<number>;
   pBankdate: FormControl<Date | null>;
@@ -211,6 +213,8 @@ export class BankConfig implements OnInit {
   // ── Form Construction ────────────────────────────────────────────────────────
   private buildForm(): void {
     this.bankmasterform = this.fb.group({
+      modeOfReceipt:          [null as string | null],
+      bankDetailsType:        [null as string | null],
       bankType:               ['', Validators.required],
       pCreatedby:             [this._commonService.getCreatedBy()],
       pBankdate:              [null as Date | null],

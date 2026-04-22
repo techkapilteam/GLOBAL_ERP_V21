@@ -476,12 +476,84 @@ input {
   }
 
   &.active {
-    background: var(--module-active-bg);
+    background: var(--sidebar-active);
     border-color: transparent;
     color: var(--text-white);
     box-shadow: var(--shadow-md);
   }
 }
+
+
+
+// * ════════════════════════════════════════════════════════════════════════
+//    Radio Buttons as Toggle/Button Style
+// ════════════════════════════════════════════════════════════════════════ */
+
+// .erp-radio-btn-group {
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 8px;
+//   align-items: center;
+// }
+
+// .erp-radio-btn {
+//   display: inline-flex;
+//   position: relative;
+
+//   input[type='radio'] {
+//     position: absolute;
+//     opacity: 0;
+//     width: 0;
+//     height: 0;
+//     cursor: pointer;
+//   }
+
+//   .btn-label {
+//     display: inline-flex;
+//     align-items: center;
+//     justify-content: center;
+//     gap: 8px;
+//     padding: 8px 16px;
+//     border-radius: 10px;
+//     border: 1.5px solid #e2e8f0;
+//     background: #fff;
+//     font-size: 13px;
+//     font-weight: 500;
+//     color: #374151;
+//     cursor: pointer;
+//     transition: all 0.18s ease;
+//     user-select: none;
+//     white-space: nowrap;
+//     min-height: 38px;
+//     min-width: fit-content;
+
+//     i {
+//       font-size: 14px;
+//     }
+//   }
+
+//   input:checked + .btn-label {
+//     background: var(--topbar-bg);
+//     border-color: var(--clr-p2, #0891b2);
+//     color: #fff;
+//     font-weight: 600;
+//     box-shadow: 0 4px 12px rgba(8,145,178,0.3);
+//     transform: translateY(-2px);
+//   }
+
+//   input:not(:checked) + .btn-label {
+//     &:hover {
+//       border-color: var(--clr-p3, #06b6d4);
+//       background: #f8fbfd;
+//       color: var(--clr-p2, #0891b2);
+//     }
+//   }
+
+//   &:active .btn-label {
+//     transform: translateY(0);
+//   }
+// }
+
 
 .tab-icon {
   font-size: 0.95rem;
@@ -1515,6 +1587,20 @@ input {
   box-shadow: var(--shadow-sm) !important;
 }
 
+:host ::ng-deep .content-area .erp-radio-btn:has(input[type='radio']:checked) {
+  background: var(--module-active-bg) !important;
+  color: var(--clr-p1, #0c4a6e) !important;
+}
+
+:host ::ng-deep .content-area .erp-radio-btn input:checked + .btn-label {
+  background: var(--module-active-bg) !important;
+  color: var(--clr-p1, #0c4a6e) !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--clr-p2, #0891b2) 12%, transparent),
+              0 12px 26px rgba(15, 23, 42, 0.08) !important;
+  transform: none !important;
+}
+
 :host ::ng-deep .content-area .erp-btn.btn-secondary,
 :host ::ng-deep .content-area .erp-btn.btn-outline,
 :host ::ng-deep .content-area .secondary-action-btn,
@@ -1674,3 +1760,4 @@ input {
     font-size: 16px;
   }
 }
+
