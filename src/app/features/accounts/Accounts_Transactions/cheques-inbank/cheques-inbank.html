@@ -1,4 +1,6 @@
 <!-- cheques-inbank.component.html -->
+    <form [formGroup]="ChequesInBankForm">
+
 <div class="module-page">
 
   <!-- Breadcrumb Section -->
@@ -42,6 +44,7 @@
       </div>
 
       <div class="card-actions">
+        @if (gridData.length > 0) {
         <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="PDF">
           <i class="pi pi-file-pdf"></i> PDF
         </button>
@@ -51,11 +54,11 @@
         <button class="erp-btn btn-white btn-sm" (click)="export()" title="Excel">
           <i class="pi pi-download"></i> Excel
         </button>
+      }
       </div>
     </div>
 
     <!-- Filter Bar -->
-    <form [formGroup]="ChequesInBankForm">
       <div class="filter-bar">
         <div class="filter-group">
           <label class="filter-lbl">
@@ -80,15 +83,26 @@
         <!-- Balance Info Card -->
         <div class="filter-info-card">
           <div class="info-header">
+            @if (banknameshowhide && bankname) {
             <span class="info-bank-name">{{ bankname }}</span>
+            }
           </div>
           <div class="info-body">
             <h4 class="info-title">Cheques in Bank</h4>
             <div class="info-items">
               <span class="info-item">
                 <b>Balance:</b>
+                 
                 <span class="info-value">
-                  {{ bankbalance | currency: currencySymbol }} <small>{{ bankbalancetype }}</small>
+                  @if (bankbalancetype === 'Dr') {
+                  {{ bankbalance | currency: currencyCode:'symbol':'1.2-2' }} {{ bankbalancetype }}
+                }
+                @if (bankbalancetype === 'Cr') {
+                  {{ bankbalance | currency: currencyCode:'symbol':'1.2-2' }} {{ bankbalancetype }}
+                }
+                @if (bankbalancetype === '') {
+                  {{ currencySymbol }} 0.00
+                }<small>{{ bankbalancetype }}</small>
                 </span>
               </span>
               <span class="info-item">
@@ -99,33 +113,32 @@
           </div>
         </div>
       </div>
-    </form>
 
     <!-- Status Tabs (Horizontal) -->
     <div class="tabs-section">
       <div class="tabs-nav">
         @if (tabsShowOrHideBasedOnfromFormName) {
-        <button class="tab-item" [class.active]="activeTab === 'all'" (click)="All(); activeTab = 'all'">
+        <button class="tab-item" [class.active]="selectedTab === 'all'" (click)="All(); selectedTab = 'all'">
           <span class="tab-label">All</span>
           <span class="erp-badge badge-warning">{{ all || 0 }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab === 'chequesdeposited'" (click)="ChequesDeposited(); activeTab = 'chequesdeposited'">
+        <button class="tab-item" [class.active]="selectedTab === 'chequesdeposited'" (click)="ChequesDeposited(); selectedTab = 'chequesdeposited'">
           <span class="tab-label">Cheques Deposited</span>
           <span class="erp-badge badge-secondary">{{ chequesdeposited || 0 }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab === 'onlinereceipts'" (click)="OnlineReceipts(); activeTab = 'onlinereceipts'">
+        <button class="tab-item" [class.active]="selectedTab === 'onlinereceipts'" (click)="OnlineReceipts(); selectedTab = 'onlinereceipts'">
           <span class="tab-label">Online Receipts</span>
           <span class="erp-badge badge-primary">{{ onlinereceipts || 0 }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab === 'cleared'" (click)="Cleared(); activeTab = 'cleared'">
+        <button class="tab-item" [class.active]="selectedTab === 'cleared'" (click)="Cleared(); selectedTab = 'cleared'">
           <span class="tab-label">Cleared</span>
           <span class="erp-badge badge-success">{{ cleared || 0 }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab === 'returned'" (click)="Returned(); activeTab = 'returned'">
+        <button class="tab-item" [class.active]="selectedTab === 'returned'" (click)="Returned(); selectedTab = 'returned'">
           <span class="tab-label">Returned</span>
           <span class="erp-badge badge-danger">{{ returned || 0 }}</span>
         </button>
@@ -134,7 +147,7 @@
     </div>
 
     <!-- BRS Filter Sections -->
-    <form [formGroup]="ChequesInBankForm">
+    @if (brsdateshowhidecleared) {
       <div class="p-4 brs-section">
         <h3 class="section-title mb-3">Cleared - Date Range Filter</h3>
         <div class="row g-3">
@@ -158,7 +171,9 @@
                   [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom"
                   (keydown)="$event.preventDefault()" />
               </div>
+               @if (validatebrsdateclear) {
               <div class="erp-field-error">BRS To Date should be greater than From Date</div>
+               }
             </div>
           </div>
           <div class="col-12">
@@ -168,9 +183,10 @@
           </div>
         </div>
       </div>
-    </form>
+    }
 
     <form [formGroup]="BrsDateForm">
+       @if (brsdateshowhidereturned) {
       <div class="p-4 brs-section">
         <h3 class="section-title mb-3">Returned - Date Range Filter</h3>
         <div class="row g-3">
@@ -194,7 +210,9 @@
                   [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom"
                   (keydown)="$event.preventDefault()" />
               </div>
+               @if (validatebrsdatereturn) {
               <div class="erp-field-error">BRS To Date should be greater than From Date</div>
+               }
             </div>
           </div>
           <div class="col-12">
@@ -204,6 +222,7 @@
           </div>
         </div>
       </div>
+    }
     </form>
 
     <!-- Card Body -->
@@ -239,7 +258,7 @@
 
           <!-- Header -->
           <ng-template pTemplate="header">
-            <tr>
+            <!-- <tr>
               <th class="th-actions">Actions</th>
               <th class="th-center">
                 <div class="th-cell" style="justify-content:center">
@@ -317,7 +336,34 @@
                   Cheque Branch Name
                 </div>
               </th>
-            </tr>
+            </tr> -->
+            <tr>
+                  @if (!showhidegridcolumns) {
+                    <th class="th-cell th-checkbox">
+                      <input type="checkbox" [checked]="preferdrows" (change)="selectAllClear($event)" />
+                    </th>
+                    <th class="th-cell">Clear</th>
+                  }
+                  @if (!showhidegridcolumns2) {
+                    <th class="th-cell">Return</th>
+                  }
+                  @if (!showhidegridcolumns) {
+                    <th class="th-cell">Reference No</th>
+                  }
+                  <th class="th-cell">Cheque/Reference No.</th>
+                  <th class="th-cell">Branch Name</th>
+                  <th class="th-cell">Amount</th>
+                  <th class="th-cell">Party</th>
+                  <th class="th-cell">Receipt Date</th>
+                  <th class="th-cell">Deposited Date</th>
+                  @if (!hiddendate) {
+                    <th class="th-cell">{{ datetitle }}</th>
+                  }
+                  <th class="th-cell">Receipt Id</th>
+                  <th class="th-cell">Transaction Mode</th>
+                  <th class="th-cell">Cheque Bank Name</th>
+                  <th class="th-cell">Cheque Branch Name</th>
+                </tr>
           </ng-template>
 
           <!-- Body -->
@@ -422,6 +468,7 @@
   </div>
 
 </div>
+</form>
 
 <!-- Return Charges Modal -->
 <div class="erp-modal" id="return-charges-modal" [class.modal-show]="false" tabindex="-1" role="dialog">
