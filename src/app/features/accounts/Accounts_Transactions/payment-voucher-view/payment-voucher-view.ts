@@ -1758,7 +1758,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
                 this.clearPaymentVoucher();
                 const receipt = btoa(res.voucherNo + ',' + 'Payment Voucher');
                 const url = this.router.serializeUrl(
-                  this.router.createUrlTree(['/PaymentVoucherReport', receipt])
+                  this.router.createUrlTree(['/payment-voucher', receipt])
                 );
                 window.open(url, '_blank');
                 this.commonService.showSuccessMessage();

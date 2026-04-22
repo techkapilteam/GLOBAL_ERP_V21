@@ -96,6 +96,7 @@ export class NavigationService {
               icon: '📊',
               screens: [
                 { id: 'account-ledger', name: 'Account Ledger', route: '/dashboard/accounts/accounts-reports/account-ledger' },
+                
                 { id: 'cash-book', name: 'Cash Book', route: '/dashboard/accounts/accounts-reports/cash-book' },
                 { id: 'bank-book', name: 'Bank Book', route: '/dashboard/accounts/accounts-reports/bank-book' },
                 { id: 'day-book', name: 'Day Book', route: '/dashboard/accounts/accounts-reports/day-book' },

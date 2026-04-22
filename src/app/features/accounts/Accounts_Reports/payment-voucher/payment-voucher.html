@@ -1,0 +1,288 @@
+<div class="shadow-bg-view">
+
+    <div class="report-wrapper">
+
+        <div id="template">
+
+            <!-- Export Actions -->
+            <div class="export-actions">
+                <ul class="export-list">
+
+                    <li class="export-item">
+                        <a (click)="pdfOrPrint('Pdf')" class="export-icon-link" title="Download PDF">
+                            <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
+                        </a>
+                    </li>
+
+                    <li class="export-item">
+                        <a (click)="pdfOrPrint('Print')" class="export-icon-link" title="Print">
+                            <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- Main Container -->
+            <div class="report-container" id="temp-box">
+
+                <div class="report-inner">
+
+                    <div class="report-card">
+
+                        <!-- Company Header -->
+                        <div class="company-header">
+
+                            <div class="company-logo">
+                                <img class="logo-img" src="assets/images/kapillogo.png" alt="Company Logo" />
+                            </div>
+
+                            <div class="company-info">
+                                <div class="company-title-block">
+
+                                    <h2 class="company-name">
+                                        {{ companyName() }}
+                                    </h2>
+
+                                    <p class="company-address">
+                                        {{ registrationAddress() }}
+                                    </p>
+
+                                    @if (cinNumber()) {
+                                    <p class="company-cin">
+                                        CIN : {{ cinNumber() }}
+                                    </p>
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Print Meta Row -->
+                        <div class="print-meta-row">
+
+                            <p class="print-meta-text">
+                                Printed On :
+                                {{ todaydate() | date:'dd-MMM-yyyy h:mm:ss a' }}
+                            </p>
+
+                            <p class="print-meta-text">
+                                Branch :
+                                {{ branchName() | titlecase }}
+                            </p>
+
+                        </div>
+
+                        <!-- Payment Vouchers Loop -->
+                        @for (paymentData of tempPaymentData(); track paymentData.ppaymentid) {
+
+                        <!-- Receipt Title Banner -->
+                        <div class="receipt-banner">
+                            <p class="receipt-title">
+                                {{ receiptName() }}
+                                @if (duplicate() === 'Reprint') {
+                                <span class="duplicate-label">(Duplicate)</span>
+                                }
+                            </p>
+                        </div>
+
+                        <!-- Voucher Body -->
+                        <div class="voucher-body">
+
+                            <div class="voucher-date-row">
+                                <span class="voucher-date-label">
+                                    Date :
+                                    {{ paymentData?.ppaymentdate | date:'dd-MMM-yyyy' }}
+                                </span>
+                            </div>
+
+                            <p class="voucher-field">
+                                <span class="field-label">Voucher No :</span>
+                                {{ paymentData?.ppaymentid }}
+                            </p>
+
+                            <p class="voucher-field">
+                                <span class="field-label">Paid To :</span>
+                                {{ paymentData?.pcontactname }}
+                            </p>
+
+                            <p class="voucher-field">
+                                <span class="field-label">Towards :</span>
+                                @if (!showGrid()) {
+                                {{ paymentData?.parentaccountname }}
+                                }
+                            </p>
+
+                            @if (!showGrid()) {
+                            <p class="voucher-field">
+                                <span class="field-label">Amount :</span>
+                                {{ currencysymbol }}
+                                {{ paymentData?.transaction_amount | number:'1.2-2' }}
+                            </p>
+                            }
+
+                            <!-- Grid Table -->
+                            @if (showGrid()) {
+                            <div class="table-wrapper">
+                                <table class="receipt-table">
+
+                                    <thead>
+                                        <tr>
+                                            <th class="col-sno">S.No</th>
+                                            <th class="col-particulars">Particulars</th>
+                                            <th class="col-amount">Amount</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @for (subItem of paymentData?.ppaymentslist; track subItem; let i = $index) {
+
+                                        <tr>
+                                            <td class="td-center">{{ i + 1 }}</td>
+                                            <td>{{ subItem?.pAccountname }}</td>
+                                            <td class="td-right">
+                                                {{ currencysymbol }}
+                                                {{ subItem?.pLedgeramount | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+
+                                        <!-- GST / TDS rows for same item -->
+                                        @if (subItem?.state_code?.toString() === Gstinn()) {
+
+                                        @if (subItem?.pcgstamount && subItem?.pcgstamount !== 0) {
+                                        <tr>
+                                            <td class="td-center">{{ i + 2 }}</td>
+                                            <td>P-SGST (Exclude)</td>
+                                            <td class="td-right">
+                                                -{{ currencysymbol }}
+                                                {{ (subItem?.pcgstamount / 2) | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="td-center">{{ i + 3 }}</td>
+                                            <td>P-CGST (Exclude)</td>
+                                            <td class="td-right">
+                                                -{{ currencysymbol }}
+                                                {{ (subItem?.pcgstamount / 2) | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                        }
+
+                                        } @else {
+
+                                        @if (subItem?.pigstamount && subItem?.pigstamount !== 0) {
+                                        <tr>
+                                            <td class="td-center">{{ i + 2 }}</td>
+                                            <td>P-IGST (Exclude)</td>
+                                            <td class="td-right">
+                                                -{{ currencysymbol }}
+                                                {{ subItem?.pigstamount | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                        } @else if (subItem?.pcgstamount && subItem?.pcgstamount !== 0) {
+                                        <tr>
+                                            <td class="td-center">{{ i + 2 }}</td>
+                                            <td>P-IGST (Exclude)</td>
+                                            <td class="td-right">
+                                                -{{ currencysymbol }}
+                                                {{ subItem?.pcgstamount | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                        }
+
+                                        }
+
+                                        @if (subItem?.ptdsamount && subItem?.ptdsamount !== 0) {
+                                        <tr>
+                                            <td class="td-center">
+                                                {{ i + 1 +
+                                                (subItem?.state_code?.toString() === Gstinn()
+                                                ? ((subItem?.pcgstamount && subItem?.pcgstamount !== 0) ? 2 : 0)
+                                                : ((subItem?.pigstamount && subItem?.pigstamount !== 0) ||
+                                                (subItem?.pcgstamount && subItem?.pcgstamount !== 0) ? 1 : 0)
+                                                ) + 1
+                                                }}
+                                            </td>
+                                            <td>TDS (Include)</td>
+                                            <td class="td-right td-danger">
+                                                -({{ currencysymbol }}
+                                                {{ subItem?.ptdsamount | number:'1.2-2' }})
+                                            </td>
+                                        </tr>
+                                        }
+
+                                        }
+
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr class="tfoot-row">
+                                            <td></td>
+                                            <td class="td-right fw-bold">Total</td>
+                                            <td class="td-right fw-bold">
+                                                {{ currencysymbol }}
+                                                {{ paymentData?.totvalue | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+                            </div>
+                            }
+
+                            <!-- Amount in Words -->
+                            <p class="amount-words">
+                                <strong>Amount In Words :</strong>
+                                Rupees
+                                {{ paymentData?.totvalue | numberToWords | titlecase }}
+                                Only.
+                            </p>
+
+                            <!-- Narration -->
+                            @if (paymentData?.pnarration) {
+                            <p class="narration-block">
+                                <strong>Narration :</strong>
+                                {{ paymentData?.pnarration }}
+                            </p>
+                            }
+
+                            <!-- Signature Row -->
+                            <div class="signature-row">
+
+                                <div class="signature-col">
+                                    <input readonly class="signature-input" />
+                                </div>
+
+                                <div class="signature-col">
+                                    <p class="signature-label">(Approved By)</p>
+                                </div>
+
+                                <div class="signature-col">
+                                    <p class="signature-label">(Verified By)</p>
+                                </div>
+
+                                <div class="signature-col">
+                                    <label class="signature-name">{{ username }}</label>
+                                    <p class="signature-label">(Posted By)</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

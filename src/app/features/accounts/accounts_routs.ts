@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { GeneralReceipt } from './Accounts_Reports/general-receipt/general-receipt';
 
 export const accountsRoutes: Routes = [
   // ✅ ACCOUNTS CONFIG
@@ -131,133 +132,142 @@ export const accountsRoutes: Routes = [
 
 
   // ✅ ACCOUNTS REPORTS
-{
-  path: 'accounts-reports',
-  children: [
-    {
-      path: 'account-ledger',
-      loadComponent: () =>
-        import('./Accounts_Reports/account-ledger/account-ledger')
-          .then(m => m.AccountLedger)
-    },
-    {
-      path: 'account-summary',
-      loadComponent: () =>
-        import('./Accounts_Reports/account-summary/account-summary')
-          .then(m => m.AccountSummary)
-    },
-    {
-      path: 'bank-book',
-      loadComponent: () =>
-        import('./Accounts_Reports/bank-book/bank-book')
-          .then(m => m.BankBook)
-    },
-    {
-      path: 'bank-entries',
-      loadComponent: () =>
-        import('./Accounts_Reports/bank-entries/bank-entries')
-          .then(m => m.BankEntries)
-    },
-    {
-      path: 'brs',
-      loadComponent: () =>
-        import('./Accounts_Reports/brs/brs')
-          .then(m => m.Brs)
-    },
-    {
-      path: 'brs-statements',
-      loadComponent: () =>
-        import('./Accounts_Reports/brs-statements/brs-statements')
-          .then(m => m.BrsStatements)
-    },
-    {
-      path: 'cash-book',
-      loadComponent: () =>
-        import('./Accounts_Reports/cash-book/cash-book')
-          .then(m => m.CashBook)
-    },
-    {
-      path: 'cheque-cancel',
-      loadComponent: () =>
-        import('./Accounts_Reports/cheque-cancel/cheque-cancel')
-          .then(m => m.ChequeCancel)
-    },
-    {
-      path: 'cheque-enquiry',
-      loadComponent: () =>
-        import('./Accounts_Reports/cheque-enquiry/cheque-enquiry')
-          .then(m => m.ChequeEnquiry)
-    },
-    {
-      path: 'cheque-return',
-      loadComponent: () =>
-        import('./Accounts_Reports/cheque-return/cheque-return')
-          .then(m => m.ChequeReturn)
-    },
-    {
-      path: 'comparison-tb',
-      loadComponent: () =>
-        import('./Accounts_Reports/comparison-tb/comparison-tb')
-          .then(m => m.ComparisonTb)
-    },
-    {
-      path: 'day-book',
-      loadComponent: () =>
-        import('./Accounts_Reports/day-book/day-book')
-          .then(m => m.DayBook)
-    },
-    {
-      path: 'gst-report',
-      loadComponent: () =>
-        import('./Accounts_Reports/gst-report/gst-report')
-          .then(m => m.GstReport)
-    },
-    {
-      path: 'issued-cheque',
-      loadComponent: () =>
-        import('./Accounts_Reports/issued-cheque/issued-cheque')
-          .then(m => m.IssuedCheque)
-    },
-    {
-      path: 'jv-list',
-      loadComponent: () =>
-        import('./Accounts_Reports/jv-list/jv-list')
-          .then(m => m.JvList)
-    },
-    {
-      path: 'ledger-extract',
-      loadComponent: () =>
-        import('./Accounts_Reports/ledger-extract/ledger-extract')
-          .then(m => m.LedgerExtract)
-    },
-    {
-      path: 're-print',
-      loadComponent: () =>
-        import('./Accounts_Reports/re-print/re-print')
-          .then(m => m.RePrint)
-    },
-    {
-      path: 'schedule-tb',
-      loadComponent: () =>
-        import('./Accounts_Reports/schedule-tb/schedule-tb')
-          .then(m => m.ScheduleTb)
-    },
-    {
-      path: 'tds-report',
-      loadComponent: () =>
-        import('./Accounts_Reports/tds-report/tds-report')
-          .then(m => m.TdsReport)
-    },
-    {
-      path: 'trial-balance',
-      loadComponent: () =>
-        import('./Accounts_Reports/trial-balance/trial-balance')
-          .then(m => m.TrialBalance)
-    }
-  ]
-}
+  {
+    path: 'accounts-reports',
+    children: [
+      {
+        path: 'account-ledger',
+        loadComponent: () =>
+          import('./Accounts_Reports/account-ledger/account-ledger')
+            .then(m => m.AccountLedger)
+      },
+      {
+        path: 'account-summary',
+        loadComponent: () =>
+          import('./Accounts_Reports/account-summary/account-summary')
+            .then(m => m.AccountSummary)
+      },
+      {
+        path: 'bank-book',
+        loadComponent: () =>
+          import('./Accounts_Reports/bank-book/bank-book')
+            .then(m => m.BankBook)
+      },
+      {
+        path: 'bank-entries',
+        loadComponent: () =>
+          import('./Accounts_Reports/bank-entries/bank-entries')
+            .then(m => m.BankEntries)
+      },
+      {
+        path: 'brs',
+        loadComponent: () =>
+          import('./Accounts_Reports/brs/brs')
+            .then(m => m.Brs)
+      },
+      {
+        path: 'brs-statements',
+        loadComponent: () =>
+          import('./Accounts_Reports/brs-statements/brs-statements')
+            .then(m => m.BrsStatements)
+      },
+      {
+        path: 'cash-book',
+        loadComponent: () =>
+          import('./Accounts_Reports/cash-book/cash-book')
+            .then(m => m.CashBook)
+      },
+      {
+        path: 'cheque-cancel',
+        loadComponent: () =>
+          import('./Accounts_Reports/cheque-cancel/cheque-cancel')
+            .then(m => m.ChequeCancel)
+      },
+      {
+        path: 'cheque-enquiry',
+        loadComponent: () =>
+          import('./Accounts_Reports/cheque-enquiry/cheque-enquiry')
+            .then(m => m.ChequeEnquiry)
+      },
+      {
+        path: 'cheque-return',
+        loadComponent: () =>
+          import('./Accounts_Reports/cheque-return/cheque-return')
+            .then(m => m.ChequeReturn)
+      },
+      {
+        path: 'comparison-tb',
+        loadComponent: () =>
+          import('./Accounts_Reports/comparison-tb/comparison-tb')
+            .then(m => m.ComparisonTb)
+      },
+      {
+        path: 'day-book',
+        loadComponent: () =>
+          import('./Accounts_Reports/day-book/day-book')
+            .then(m => m.DayBook)
+      },
+      {
+        path: 'gst-report',
+        loadComponent: () =>
+          import('./Accounts_Reports/gst-report/gst-report')
+            .then(m => m.GstReport)
+      },
+      {
+        path: 'issued-cheque',
+        loadComponent: () =>
+          import('./Accounts_Reports/issued-cheque/issued-cheque')
+            .then(m => m.IssuedCheque)
+      },
+      {
+        path: 'jv-list',
+        loadComponent: () =>
+          import('./Accounts_Reports/jv-list/jv-list')
+            .then(m => m.JvList)
+      },
+      {
+        path: 'ledger-extract',
+        loadComponent: () =>
+          import('./Accounts_Reports/ledger-extract/ledger-extract')
+            .then(m => m.LedgerExtract)
+      },
+      {
+        path: 're-print',
+        loadComponent: () =>
+          import('./Accounts_Reports/re-print/re-print')
+            .then(m => m.RePrint)
+      },
+      {
+        path: 'schedule-tb',
+        loadComponent: () =>
+          import('./Accounts_Reports/schedule-tb/schedule-tb')
+            .then(m => m.ScheduleTb)
+      },
+      {
+        path: 'tds-report',
+        loadComponent: () =>
+          import('./Accounts_Reports/tds-report/tds-report')
+            .then(m => m.TdsReport)
+      },
+      {
+        path: 'trial-balance',
+        loadComponent: () =>
+          import('./Accounts_Reports/trial-balance/trial-balance')
+            .then(m => m.TrialBalance)
+      },
 
-
-
-
+      {
+        path: 'journal-voucher/:id',
+        loadComponent: () =>
+          import('./Accounts_Reports/journal-voucher/journal-voucher')
+            .then(m => m.JournalVoucher)
+      },
+      {
+        path: 'payment-voucher/:id',
+        loadComponent: () =>
+          import('./Accounts_Reports/payment-voucher/payment-voucher')
+            .then(m => m.PaymentVoucher)
+      }
+    ]
+  },
 ];
