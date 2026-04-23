@@ -273,33 +273,55 @@
 
           <!-- Header -->
           <ng-template pTemplate="header">
+              
             <tr>
-              @if (!showhidegridcolumns) {
-                <th class="th-cell th-checkbox">
-                  <input type="checkbox" [checked]="preferdrows" (change)="selectAllClear($event)" />
-                </th>
-                <th class="th-cell">Clear</th>
-              }
-              @if (!showhidegridcolumns2) {
-                <th class="th-cell">Return</th>
-              }
-              @if (!showhidegridcolumns) {
-                <th class="th-cell">Reference No</th>
-              }
-              <th class="th-cell">Cheque/Reference No.</th>
-              <th class="th-cell">Branch Name</th>
-              <th class="th-cell">Amount</th>
-              <th class="th-cell">Party</th>
-              <th class="th-cell">Receipt Date</th>
-              <th class="th-cell">Deposited Date</th>
-              @if (!hiddendate) {
-                <th class="th-cell">{{ datetitle ?? '' }}</th>
-              }
-              <th class="th-cell">Receipt Id</th>
-              <th class="th-cell">Transaction Mode</th>
-              <th class="th-cell">Cheque Bank Name</th>
-              <th class="th-cell">Cheque Branch Name</th>
-            </tr>
+                  @if (!showhidegridcolumns) {
+                    <th class="th-checkbox">
+                      <div class="th-cell">
+                      <input type="checkbox" [checked]="preferdrows" (change)="selectAllClear($event)" />
+                      </div>
+                    </th>
+                    <th>
+                      <div class="th-cell">
+                      Clear
+                      </div>
+                    </th>
+                  }
+                  @if (!showhidegridcolumns2) {
+                    <th>
+                      <div class="th-cell">
+                        Return
+                      </div>
+                    </th>
+                  }
+                  @if (!showhidegridcolumns) {
+                    <th>
+                      <div class="th-cell">
+                      Reference No
+                      </div>
+                    </th>
+                  }
+                
+
+                  <th>
+                    <div class="th-cell">
+                      Cheque/Reference No.
+                    </div>
+                    </th>
+
+                  <th><div class="th-cell">Branch Name</div></th>
+                  <th><div class="th-cell">Amount</div></th>
+                  <th><div class="th-cell">Party</div></th>
+                  <th><div class="th-cell">Receipt Date</div></th>
+                  <th><div class="th-cell">Deposited Date</div></th>
+                  @if (!hiddendate) {
+                    <th><div class="th-cell">{{ datetitle }}</div></th>
+                  }
+                  <th><div class="th-cell">Receipt Id</div></th>
+                  <th><div class="th-cell">Transaction Mode</div></th>
+                  <th><div class="th-cell">Cheque Bank Name</div></th>
+                  <th><div class="th-cell">Cheque Branch Name</div></th>
+                </tr>
           </ng-template>
 
           <!-- Body -->
