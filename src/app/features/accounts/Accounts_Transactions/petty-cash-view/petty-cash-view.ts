@@ -154,7 +154,7 @@ export class PettyCashView implements OnInit, OnDestroy {
     if (!row?.paymentId) return;
     const receipt = btoa(`${row.paymentId},Petty Cash`);
     const url     = this.router.serializeUrl(
-      this.router.createUrlTree(['/PaymentVoucherReport', receipt]),
+      this.router.createUrlTree(['/payment-voucher', receipt]),
     );
     window.open(url, '_blank');
   }
