@@ -104,6 +104,7 @@ export class BankConfigView implements OnInit {
 
   // ── Search / Filter ───────────────────────────────────────────────────
   filterDatatable(event: Event): void {
+    debugger;
     const filter = (event.target as HTMLInputElement).value?.toLowerCase() ?? '';
 
     if (!filter) {

@@ -62,12 +62,14 @@
             <label class="erp-radio">
               <input type="radio" name="pmodofpayment" formControlName="pmodofpayment" value="CASH"
                 (change)="modeofPaymentChange()" />
-              Cash - {{ currencySymbol }} {{ cashBalance }}
+              <!-- Cash - {{ currencySymbol }} {{ cashBalance }} -->
+              Cash - {{ currencySymbol || '' }} {{ cashBalance || '' }}
             </label>
             <label class="erp-radio">
               <input type="radio" name="pmodofpayment" formControlName="pmodofpayment" value="BANK"
                 (change)="modeofPaymentChange()" />
-              Bank - {{ currencySymbol }} {{ bankBalance }}
+              <!-- Bank - {{ currencySymbol }} {{ bankBalance }} -->
+              Bank - {{ currencySymbol || '' }} {{ bankBalance || '' }}
             </label>
           </div>
           <app-validation-message [messgae]="formValidationMessages['pmodofpayment']"></app-validation-message>
