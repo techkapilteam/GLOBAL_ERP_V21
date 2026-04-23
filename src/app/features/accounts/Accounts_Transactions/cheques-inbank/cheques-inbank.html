@@ -329,22 +329,37 @@
           <ng-template pTemplate="body" let-row>
             @if (row) {
               <tr>
+                @if (!showhidegridcolumns) {
+                <td class="td-actions"></td>
+                }
+                @if (status !== 'cleared' && status !== 'returned') {
                 <td class="td-actions">
                   <div class="action-group">
-                    @if (status !== 'cleared' && status !== 'returned') {
+                    
                       <button class="erp-btn btn-outline btn-sm btn-icon"
                               (click)="CheckedClear($event, row)"
                               title="Clear">
                         <i class="pi pi-check"></i>
                       </button>
+                  </div>
+                </td>
+              }
+                @if (status !== 'cleared' && status !== 'returned') {
+                <td class="td-actions">
+                  <div class="action-group">      
                       <button class="erp-btn btn-outline btn-sm btn-icon"
                               (click)="CheckedReturn($event, row)"
                               title="Return">
                         <i class="pi pi-times"></i>
                       </button>
-                    }
                   </div>
                 </td>
+              }
+                @if (!showhidegridcolumns) {
+                <td class="td-center">
+                  <input class="erp-input erp-input--amount" type="text" />
+                </td>
+              }
                 <td class="td-center">
                   <span class="cheque-ref">{{ row?.pChequenumber || '--' }}</span>
                 </td>
