@@ -14,7 +14,7 @@ import { AccountsConfig } from '../../../../core/services/accounts/accounts-conf
   selector: "app-bank-config-view",
   imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterModule, TableModule, ButtonModule],
   templateUrl: "./bank-config-view.html",
-  styleUrl: "./bank-config-view.css",
+  
 })
 
 export class BankConfigView implements OnInit {

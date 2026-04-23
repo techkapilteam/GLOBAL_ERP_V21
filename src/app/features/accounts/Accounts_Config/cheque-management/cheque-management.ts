@@ -56,7 +56,6 @@ export interface ChequeRow {
     NgSelectModule,
   ],
   templateUrl: './cheque-management.html',
-  styleUrl: './cheque-management.css',
 })
 export class ChequeManagement implements OnInit, OnDestroy {
   // ── Services ──────────────────────────────────────────────────────────────

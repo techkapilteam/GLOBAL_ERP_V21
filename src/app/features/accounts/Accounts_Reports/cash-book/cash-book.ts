@@ -4,19 +4,22 @@ import { CommonService } from "../../../../core/services/Common/common.service";
 import { CommonModule, DatePipe } from "@angular/common";
 import { Router } from "@angular/router";
 import { AccountsReports } from "../../../../core/services/accounts/accounts-reports";
-import { BsDatepickerConfig, BsDatepickerModule } from "ngx-bootstrap/datepicker";
+
 import { TableModule } from "primeng/table";
 import { Companydetails } from "../../../common/company-details/companydetails/companydetails";
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: "app-cash-book",
   standalone:true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, BsDatepickerModule, TableModule, Companydetails],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DatePickerModule, TableModule, Companydetails],
   templateUrl: "./cash-book.html",
   styleUrl: "./cash-book.css",
 })
 
 export class CashBook implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ──────────────────────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -37,14 +40,14 @@ export class CashBook implements OnInit {
   readonly endDate = signal<Date | null>(null);
 
   // Datepicker configs as signals so template reacts to minDate/maxDate updates
-  readonly dpConfig = signal<Partial<BsDatepickerConfig>>({
+  readonly dpConfig = signal<any>({
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass: 'theme-dark-blue',
     showWeekNumbers: false,
     maxDate: new Date()
   });
 
-  readonly dpConfig1 = signal<Partial<BsDatepickerConfig>>({
+  readonly dpConfig1 = signal<any>({
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass: 'theme-dark-blue',
     showWeekNumbers: false,

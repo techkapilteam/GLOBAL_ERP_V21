@@ -9,7 +9,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,6 +19,7 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { AccountLedger } from '../account-ledger/account-ledger';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-brs',
@@ -27,7 +28,7 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
     CommonModule,
     ReactiveFormsModule,
     
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     Companydetails,
     NgSelectModule
@@ -37,6 +38,8 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   providers: [DatePipe]
 })
 export class Brs implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ──────────────────────────────────────────────────────────────────────
   private datePipe      = inject(DatePipe);
@@ -79,8 +82,8 @@ export class Brs implements OnInit {
   pageCriteria = new PageCriteria();
 
   // ── Datepicker configs ───────────────────────────────────────────────────────
-  dpConfig:  Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig:  any = {};
+  dpConfig1: any = {};
 
   // ── Form ─────────────────────────────────────────────────────────────────────
   BRStatmentForm!: FormGroup;

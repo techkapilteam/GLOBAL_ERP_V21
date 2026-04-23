@@ -1,6 +1,6 @@
 <div class="screen-container">
 
-  <!-- ═══════════════════════ HEADER CARD ═══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• HEADER CARD â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="screen-card">
     <div class="screen-header">
       <h2 class="screen-title">GST Receipts and Payments</h2>
@@ -60,10 +60,7 @@
               <label class="form-label required-field">
                 Month<span class="required-asterisk">*</span>
               </label>
-              <input class="form-control" bsDatepicker
-                     (keydown)="$event.preventDefault()"
-                     [bsConfig]="{ dateInputFormat: 'MMM-YYYY', minMode: 'month', containerClass: 'theme-dark-blue' }"
-                     formControlName="month" readonly>
+              <p-datepicker formControlName="month" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
             </div>
           }
 
@@ -71,11 +68,7 @@
           @if (showPayments()) {
             <div class="col-md-3">
               <label class="form-label required-field">From Date</label>
-              <input type="text" class="form-control" formControlName="fromdate"
-                     bsDatepicker [bsConfig]="dpConfig" placement="bottom" readonly
-                     (keydown)="$event.preventDefault()"
-                     (bsValueChange)="onToDateChange($event)"
-                     [ngClass]="{ 'is-invalid': submitted && GstReportForm.controls['fromdate'].invalid }">
+              <p-datepicker formControlName="fromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
               @if (submitted && GstReportForm.controls['fromdate'].errors?.['required']) {
                 <div class="invalid-feedback">From Date is required</div>
               }
@@ -84,11 +77,7 @@
             <!-- To Date (Payments only) -->
             <div class="col-md-3">
               <label class="form-label required-field">To Date</label>
-              <input type="text" class="form-control" formControlName="todate"
-                     bsDatepicker [bsConfig]="dpConfig1" placement="bottom" readonly
-                     (keydown)="$event.preventDefault()"
-                     (bsValueChange)="onFromDateChange($event)"
-                     [ngClass]="{ 'is-invalid': submitted && GstReportForm.controls['todate'].invalid }">
+              <p-datepicker formControlName="todate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
               @if (submitted && GstReportForm.controls['todate'].errors?.['required']) {
                 <div class="invalid-feedback">To Date is required</div>
               }
@@ -111,7 +100,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════ REPORT EXPORT ICONS ═══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• REPORT EXPORT ICONS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   @if (showHideGstReport()) {
     <div class="section-content mt-2">
       <div class="col-md-12 col-xl-12">
@@ -131,7 +120,7 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════ REPORT TABLE ═══════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• REPORT TABLE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="card shadow-sm mt-4">
       <div class="card-body p-0">
         <p-table
@@ -234,7 +223,7 @@
     </div>
   }
 
-  <!-- ═══════════════════════ SUMMARY EXPORT + TABLE ═══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SUMMARY EXPORT + TABLE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   @if (showHideGstSummary()) {
     <div class="card-body p-0">
       <div class="col-md-12 col-xl-12">
@@ -304,7 +293,7 @@
     </div>
   }
 
-  <!-- ═══════════════════════ PAYMENTS TABLE ═══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PAYMENTS TABLE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="card shadow-sm mt-4">
     <div class="card-body p-0">
       <div class="col-md-12 col-xl-12">

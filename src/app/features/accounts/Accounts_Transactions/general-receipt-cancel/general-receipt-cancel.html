@@ -1,21 +1,12 @@
 <div class="module-page">
 
-  <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0">
-    <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Transactions</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">General Receipt Cancel</span>
-      </nav>
+  <!-- Header Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
+    <div>
       <h1 class="page-title">
-        <i class="pi pi-file-pdf"></i> General Receipt Cancel
+        <i class="pi pi-times-circle"></i> Cancel General Receipt
       </h1>
-      <p class="page-subtitle">Cancel and reverse general receipt transactions</p>
+      <p class="page-subtitle">Void or cancel general receipt transactions and reverse entries</p>
     </div>
 
     <a routerLink="/dashboard/accounts/accounts-transactions/general-receipt-view"
@@ -40,10 +31,10 @@
         <!-- SEARCH SECTION -->
         <div class="p-4">
           <h3 class="section-title mb-3">Search Receipt</h3>
-          <div class="row g-3">
+          <div class="row g-2">
 
             <!-- Receipt No -->
-            <div class="col-md-4">
+            <div class="col-12 col-md-6">
               <div class="erp-form-group">
                 <label class="erp-label" for="receiptid">Receipt No. <span class="required">*</span></label>
                 <ng-select
@@ -69,27 +60,18 @@
             </div>
 
             <!-- Date -->
-            <div class="col-md-4">
+            <div class="col-12 col-md-6">
               <div class="erp-form-group">
                 <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
                 <div class="erp-input-wrap erp-date-wrap">
                   <i class="pi pi-calendar erp-input-icon"></i>
-                  <input
-                    type="text"
-                    id="ppaymentdate"
-                    class="erp-input icon-pad"
-                    formControlName="ppaymentdate"
-                    readonly
-                    bsDatepicker
-                    [bsConfig]="dpConfig"
-                    (keydown)="$event.preventDefault()"
-                    (paste)="$event.preventDefault()" />
+                  <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 </div>
               </div>
             </div>
 
             <!-- Show Button -->
-            <div class="col-md-4">
+            <div class="col-12 col-md-6">
               <div class="erp-form-group d-flex align-items-end">
                 <button type="button" (click)="Show()" class="erp-btn btn-primary btn-sm" style="margin-top: 24px;">
                   <i class="pi pi-search"></i> Show
@@ -106,14 +88,14 @@
             <h3 class="section-title mb-3">Receipt Details</h3>
 
             <!-- Receipt Meta Information -->
-            <div class="row g-3 mb-4">
-              <div class="col-md-6">
+            <div class="row g-2 mb-4">
+              <div class="col-12 col-md-6">
                 <div class="erp-info-group">
                   <label class="erp-label-info">Received From:</label>
                   <span class="erp-value-info">{{ receivedfrom() || '--' }}</span>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-12 col-md-6">
                 <div class="erp-info-group">
                   <label class="erp-label-info">Receipt Date:</label>
                   <span class="erp-value-info">{{ receiptdate() | date:'dd-MMM-yyyy' }}</span>
@@ -209,3 +191,4 @@
 
   </div>
 </div>
+

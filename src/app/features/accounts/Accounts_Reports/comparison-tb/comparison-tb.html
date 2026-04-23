@@ -1,4 +1,4 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
     <!-- Header -->
@@ -15,21 +15,9 @@
 
               <!-- From Date -->
               <div class="filter-col filter-col--md">
-                <div class="form-group">
+                <div class="erp-form-group">
                   <label class="form-label required-field">From Date</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    [class.is-invalid]="submitted && ComparisionTBForm.controls['fromDate'].invalid"
-                    formControlName="fromDate"
-                    placeholder="Select From Date"
-                    bsDatepicker
-                    [bsConfig]="dpConfig"
-                    placement="bottom"
-                    readonly
-                    (keydown)="$event.preventDefault()"
-                    (bsValueChange)="onFromDateChange($event)"
-                  />
+                  <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="Select From Date" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                   @if (submitted && ComparisionTBForm.controls['fromDate'].errors?.['required']) {
                     <div class="invalid-feedback">From Date is required</div>
                   }
@@ -38,21 +26,9 @@
 
               <!-- To Date -->
               <div class="filter-col filter-col--md">
-                <div class="form-group">
+                <div class="erp-form-group">
                   <label class="form-label required-field">To Date</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    [class.is-invalid]="submitted && ComparisionTBForm.controls['toDate'].invalid"
-                    formControlName="toDate"
-                    placeholder="Select To Date"
-                    bsDatepicker
-                    [bsConfig]="dpConfig1"
-                    placement="bottom"
-                    readonly
-                    (keydown)="$event.preventDefault()"
-                    (bsValueChange)="onFromDateBound($event)"
-                  />
+                  <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="Select To Date" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                   @if (submitted && ComparisionTBForm.controls['toDate'].errors?.['required']) {
                     <div class="invalid-feedback">To Date is required</div>
                   }

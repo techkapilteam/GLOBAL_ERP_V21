@@ -1,4 +1,4 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
     <!-- Header -->
@@ -12,9 +12,9 @@
         <div class="row filter-row">
 
           <!-- Bank Name -->
-          <div class="col-md-3 filter-col">
-            <div class="form-group">
-              <label class="form-label">
+          <div class="col-12 col-md-6 filter-col">
+            <div class="erp-form-group">
+              <label class="erp-label">
                 Bank Name <span class="required-asterisk">*</span>
               </label>
               <ng-select
@@ -39,8 +39,8 @@
           </div>
 
           <!-- Cheques Info Checkbox -->
-          <div class="col-md-2 filter-col">
-            <div class="form-group">
+          <div class="col-12 col-md-6 filter-col">
+            <div class="erp-form-group">
               <div class="checkbox-wrap">
                 <input
                   class="form-check-input check-box"
@@ -58,22 +58,11 @@
           <!-- From Date (cheques info ON) -->
           @if (chequesInfo()) {
             <div class="col-md-2 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   From Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="fromDate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onFromDateChange($event)"
-                  [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
-                />
+                <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
                   From Date is required
                 </div>
@@ -81,23 +70,12 @@
             </div>
 
             <!-- To Date (cheques info ON) -->
-            <div class="col-md-2 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+            <div class="col-12 col-md-6 filter-col">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   To Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="toDate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig1"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onToDateChange($event)"
-                  [ngClass]="{ 'is-invalid': submitted && f['toDate'].invalid }"
-                />
+                <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['toDate'].errors?.['required']">
                   To Date is required
                 </div>
@@ -107,22 +85,12 @@
 
           <!-- As on Date (cheques info OFF) -->
           @if (!chequesInfo()) {
-            <div class="col-md-2 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+            <div class="col-12 col-md-6 filter-col">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   As on Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="fromDate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
-                />
+                <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
                   As on Date is required
                 </div>
@@ -131,7 +99,7 @@
           }
 
           <!-- Generate Button -->
-          <div class="col-md-2 filter-col btn-col">
+          <div class="col-12 col-md-6 filter-col btn-col">
             <button type="submit" class="btn btn-primary btn-generate">
               <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18" alt="generate" />
               {{ savebutton }}

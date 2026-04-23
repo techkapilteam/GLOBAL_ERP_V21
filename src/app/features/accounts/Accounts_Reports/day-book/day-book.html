@@ -1,4 +1,4 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
     <!-- Header -->
@@ -30,21 +30,11 @@
           <!-- Single Date (checkbox checked) -->
           @if (dte) {
             <div class="col-xl-2 col-md-3 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="dfromdate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  [ngClass]="{ 'is-invalid': submitted && f['dfromdate'].invalid }"
-                />
+                <p-datepicker formControlName="dfromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['dfromdate'].errors?.['required']">
                   Date is required
                 </div>
@@ -55,22 +45,11 @@
           <!-- From Date (checkbox unchecked) -->
           @if (!dte) {
             <div class="col-xl-2 col-md-3 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   From Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="dfromdate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onFromDateChange($event)"
-                  [ngClass]="{ 'is-invalid': submitted && f['dfromdate'].invalid }"
-                />
+                <p-datepicker formControlName="dfromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['dfromdate'].errors?.['required']">
                   From Date is required
                 </div>
@@ -79,22 +58,11 @@
 
             <!-- To Date -->
             <div class="col-xl-2 col-md-3 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   To Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="dtodate"
-                  bsDatepicker
-                  [bsConfig]="dppConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onToDateChange($event)"
-                  [ngClass]="{ 'is-invalid': submitted && f['dtodate'].invalid }"
-                />
+                <p-datepicker formControlName="dtodate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['dtodate'].errors?.['required']">
                   To Date is required
                 </div>
@@ -103,7 +71,7 @@
           }
 
           <!-- Generate Report Button -->
-          <div class="col-xl-3 col-md-3 filter-col btn-col">
+            <div class="col-12 col-md-6 filter-col btn-col">
             <button
               type="button"
               class="btn btn-primary btn-action"
@@ -248,7 +216,7 @@
                   @if (row.prcptdebitamount) {
                     <span class="amt-receipt">{{ currencysymbol }} {{ row.prcptdebitamount | number:'1.2-2' }}</span>
                   } @else {
-                    <span class="td-empty">—</span>
+                    <span class="td-empty">Ã¢â‚¬â€</span>
                   }
                 </td>
                 <td class="td-left td-text">{{ row.ptransactionno }}</td>
@@ -258,7 +226,7 @@
                   @if (row.pcreditamount) {
                     <span class="amt-payment">{{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}</span>
                   } @else {
-                    <span class="td-empty">—</span>
+                    <span class="td-empty">Ã¢â‚¬â€</span>
                   }
                 </td>
               </tr>
@@ -315,25 +283,25 @@
                 <td class="td-left td-text">{{ row.paccountname }}</td>
                 <td class="td-right td-neutral">
                   @if (row.popeningbal) { {{ currencysymbol }} {{ row.popeningbal }} }
-                  @else { <span class="td-empty">—</span> }
+                  @else { <span class="td-empty">Ã¢â‚¬â€</span> }
                 </td>
                 <td class="td-right">
                   @if (row.pdebitamount) {
                     <span class="amt-receipt">{{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }}</span>
                   } @else {
-                    <span class="td-empty">—</span>
+                    <span class="td-empty">Ã¢â‚¬â€</span>
                   }
                 </td>
                 <td class="td-right">
                   @if (row.pcreditamount) {
                     <span class="amt-payment">{{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}</span>
                   } @else {
-                    <span class="td-empty">—</span>
+                    <span class="td-empty">Ã¢â‚¬â€</span>
                   }
                 </td>
                 <td class="td-right td-closing">
                   @if (row.pclosingbal) { {{ currencysymbol }} {{ row.pclosingbal }} }
-                  @else { <span class="td-empty">—</span> }
+                  @else { <span class="td-empty">Ã¢â‚¬â€</span> }
                 </td>
               </tr>
             </ng-template>

@@ -20,10 +20,7 @@ import {
   DatePipe,
   DecimalPipe,
 } from '@angular/common';
-import {
-  BsDatepickerConfig,
-  BsDatepickerModule,
-} from 'ngx-bootstrap/datepicker';
+
 import { Router, RouterModule } from '@angular/router';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -33,6 +30,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-payment-voucher-view',
@@ -42,7 +40,7 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
     CommonModule,
     ReactiveFormsModule,
     
-    BsDatepickerModule,
+    DatePickerModule,
     CurrencyPipe,
     NgSelectModule,
     TableModule,
@@ -53,6 +51,8 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
   providers: [DecimalPipe, CurrencyPipe, DatePipe],
 })
 export class PaymentVoucherView implements OnInit, OnDestroy {
+  pDatepickerMaxDate: Date = new Date();
+
   // ─── Injected Services ────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
   private readonly zone = inject(NgZone);
@@ -142,7 +142,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   groups: any[] = [];
 
   // ─── Datepicker Config ───────────────────────────────────────────────────
-  readonly ppaymentdateConfig: Partial<BsDatepickerConfig> = {
+  readonly ppaymentdateConfig: any = {
     maxDate: new Date(),
     containerClass: 'theme-dark-blue',
     dateInputFormat: 'DD-MMM-YYYY',

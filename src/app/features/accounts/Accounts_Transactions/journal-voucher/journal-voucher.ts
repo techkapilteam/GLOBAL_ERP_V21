@@ -4,11 +4,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-journal-voucher',
@@ -17,7 +18,7 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     CommonModule,
     ReactiveFormsModule,
     NgSelectModule,
-    BsDatepickerModule,
+    DatePickerModule,
     ButtonModule,
     TableModule,
     CurrencyPipe,
@@ -27,6 +28,8 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
   providers: [CurrencyPipe],
 })
 export class JournalVoucher implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI via inject() ────────────────────────────────────────────────────────
   private readonly fb                = inject(FormBuilder);
@@ -114,7 +117,7 @@ export class JournalVoucher implements OnInit {
   // ── Form ───────────────────────────────────────────────────────────────────
   paymentVoucherForm!: FormGroup;
 
-  readonly ppaymentdateConfig: Partial<BsDatepickerConfig> = {
+  readonly ppaymentdateConfig: any = {
     maxDate: new Date(),
     containerClass: 'theme-dark-blue',
     dateInputFormat: 'DD-MMM-YYYY',

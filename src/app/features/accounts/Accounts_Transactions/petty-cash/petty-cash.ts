@@ -18,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -27,6 +27,7 @@ import { PaginatorModule } from 'primeng/paginator';
 
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-petty-cash',
@@ -36,7 +37,7 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     ButtonModule,
     InputTextModule,
@@ -47,6 +48,8 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
   providers: [DatePipe],
 })
 export class PettyCash implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI via inject() ──────────────────────────────────────────────────────
   private readonly fb                     = inject(FormBuilder);
@@ -141,7 +144,7 @@ export class PettyCash implements OnInit {
 
   readonly gstnopattern = '^(0[1-9]|[1-2][0-9]|3[0-9])([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}([a-zA-Z0-9]){1}([a-zA-Z]){1}([a-zA-Z0-9]){1}?';
 
-  readonly ppaymentdateConfig: Partial<BsDatepickerConfig> = {
+  readonly ppaymentdateConfig: any = {
     dateInputFormat:  'DD-MMM-YYYY',
     containerClass:   'theme-dark-blue',
     showWeekNumbers:  false,

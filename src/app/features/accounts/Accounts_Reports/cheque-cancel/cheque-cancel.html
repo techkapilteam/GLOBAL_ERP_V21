@@ -1,4 +1,4 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
     <div class="screen-header">
@@ -12,39 +12,17 @@
           <form [formGroup]="FrmChequeCancel" autocomplete="off">
             <div class="filter-row">
 
-              <div class="form-group">
+              <div class="erp-form-group">
                 <label class="form-label required-field">From Date</label>
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="fromdate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onFromDateChange($event)"
-                  [class.is-invalid]="submitted && FrmChequeCancel.controls['fromdate'].invalid"
-                />
+                <p-datepicker formControlName="fromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control form-control-sm w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 @if (submitted && FrmChequeCancel.controls['fromdate'].errors?.['required']) {
                   <div class="invalid-feedback">From Date is required</div>
                 }
               </div>
 
-              <div class="form-group">
+              <div class="erp-form-group">
                 <label class="form-label required-field">To Date</label>
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="todate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig1"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onToDateChange($event)"
-                  [class.is-invalid]="submitted && FrmChequeCancel.controls['todate'].invalid"
-                />
+                <p-datepicker formControlName="todate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control form-control-sm w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 @if (submitted && FrmChequeCancel.controls['todate'].errors?.['required']) {
                   <div class="invalid-feedback">To Date is required</div>
                 }

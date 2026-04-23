@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
@@ -6,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 
@@ -23,7 +25,7 @@ export interface Receipt {
 @Component({
   selector: 'app-general-receipt',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, TableModule, TooltipModule, DecimalPipe],
+  imports: [CommonModule, RouterModule, ButtonModule, TableModule, TooltipModule, DecimalPipe, DatePickerModule, FormsModule],
   templateUrl: './general-receipt.html',
 })
 
@@ -38,6 +40,8 @@ export class GeneralReceipt implements OnInit {
   searchText = signal<string>('');
   loading = signal<boolean>(false);
   pageSize = signal<number>(10);
+  fromDate = signal<Date | null>(null);
+  toDate = signal<Date | null>(null);
 
   readonly currencySymbol = this.cs.currencysymbol || '₹';
 

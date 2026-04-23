@@ -15,12 +15,9 @@
                         <!-- From Date -->
                         <div class="filter-field">
                             <label class="field-label required-field">
-                                From Date <span class="required-star">*</span>
+                                From Date <span class="required">*</span>
                             </label>
-                            <input type="text" class="form-control field-input" formControlName="fromDate" bsDatepicker
-                                [bsConfig]="dpConfig()" placement="bottom" readonly (keydown)="$event.preventDefault()"
-                                (bsValueChange)="onFromDateChange($event)"
-                                [ngClass]="{ 'is-invalid': submitted() && cashBookForm.controls['fromDate'].invalid }" />
+                            <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control field-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                             @if (submitted() && cashBookForm.controls['fromDate'].errors?.['required']) {
                             <div class="invalid-feedback">From Date is required</div>
                             }
@@ -29,12 +26,9 @@
                         <!-- To Date -->
                         <div class="filter-field">
                             <label class="field-label required-field">
-                                To Date <span class="required-star">*</span>
+                                To Date <span class="required">*</span>
                             </label>
-                            <input type="text" class="form-control field-input" formControlName="toDate" bsDatepicker
-                                [bsConfig]="dpConfig1()" placement="bottom" readonly (keydown)="$event.preventDefault()"
-                                (bsValueChange)="onToDateChange($event)"
-                                [ngClass]="{ 'is-invalid': submitted() && cashBookForm.controls['toDate'].invalid }" />
+                            <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control field-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                             @if (submitted() && cashBookForm.controls['toDate'].errors?.['required']) {
                             <div class="invalid-feedback">To Date is required</div>
                             }
@@ -174,14 +168,14 @@
                                         @if (row.pdebitamount) {
                                         {{ currencySymbol }} {{ row.pdebitamount | number:'1.2-2' }}
                                         } @else {
-                                        <span class="na-text">—</span>
+                                        <span class="na-text">â€”</span>
                                         }
                                     </td>
                                     <td class="td-number td-debit">
                                         @if (row.pcreditamount) {
                                         {{ currencySymbol }} {{ row.pcreditamount | number:'1.2-2' }}
                                         } @else {
-                                        <span class="na-text">—</span>
+                                        <span class="na-text">â€”</span>
                                         }
                                     </td>
                                     <td class="td-number td-balance">

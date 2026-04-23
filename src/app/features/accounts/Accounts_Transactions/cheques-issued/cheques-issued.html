@@ -2,17 +2,8 @@
 <div class="module-page">
 
   <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0">
-    <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Transactions</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">Cheques Issued</span>
-      </nav>
+  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
+    <div>
       <h1 class="page-title">
         <i class="pi pi-list"></i> Cheques Issued
       </h1>
@@ -69,9 +60,7 @@
           </label>
           <div class="erp-input-wrap erp-date-wrap">
             <i class="pi pi-calendar erp-input-icon"></i>
-            <input class="erp-input icon-pad" type="text" title="Date" id="ptransactiondate"
-              formControlName="ptransactiondate" readonly [bsConfig]="dpConfig" #dp="bsDatepicker" bsDatepicker
-              placement="bottom" (keydown)="$event.preventDefault()" />
+            <p-datepicker formControlName="ptransactiondate" id="ptransactiondate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
           </div>
         </div>
 
@@ -79,7 +68,7 @@
           <label class="filter-lbl">
             Bank <span class="required">*</span>
           </label>
-          <ng-select [items]="bankList()" bindLabel="pbankname" bindValue="pbankid" formControlName="bankname"
+          <ng-select appendTo="body" [items]="bankList()" bindLabel="pbankname" bindValue="pbankid" formControlName="bankname"
             (change)="onBankChange($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true" />
         </div>
 

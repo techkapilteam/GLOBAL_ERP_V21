@@ -20,12 +20,10 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { NgSelectModule } from '@ng-select/ng-select';
-import {
-  BsDatepickerConfig,
-  BsDatepickerModule,
-} from 'ngx-bootstrap/datepicker';
+
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsConfig } from '../../../../core/services/accounts/accounts-config';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
@@ -75,7 +73,7 @@ export type SaveType = 'Active' | 'InActive';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     ButtonModule,
     NgSelectModule,
@@ -86,6 +84,8 @@ export type SaveType = 'Active' | 'InActive';
   providers: [DatePipe],
 })
 export class ChequeManagementnew implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ─── Angular 21: inject() instead of constructor injection ─────────────────
   private readonly fb             = inject(FormBuilder);
@@ -96,7 +96,7 @@ export class ChequeManagementnew implements OnInit {
   private readonly accountingMasterService = inject(AccountsConfig);
 
   // ─── Datepicker Config ───────────────────────────────────────────────────────
-  readonly currentdate: Partial<BsDatepickerConfig> = {
+  readonly currentdate: any = {
     maxDate: new Date(),
     containerClass: 'theme-dark-blue',
     dateInputFormat: 'DD-MM-YYYY',
@@ -217,15 +217,28 @@ export class ChequeManagementnew implements OnInit {
   }
 
   // ─── Bank Selection ──────────────────────────────────────────────────────────
-  onBankChange(event: BankDetail | null): void {
-    if (!event) {
+  onBankChange(selectedBankName: string | null): void {
+    if (!selectedBankName) {
       this._recordid.set('');
       this._selectedbank.set('');
+      this.chequemanagementform.controls['pBankId'].setValue('');
       return;
     }
-    this._recordid.set(event.bankAccountId);
-    this._selectedbank.set(event.bankName);
-    this.chequemanagementform.controls['pBankId'].setValue(event.bankAccountId);
+
+    const selectedBank = this.bankdetails().find(
+      (bank) => bank.bankName === selectedBankName
+    );
+
+    if (!selectedBank) {
+      this._recordid.set('');
+      this._selectedbank.set(selectedBankName);
+      this.chequemanagementform.controls['pBankId'].setValue('');
+      return;
+    }
+
+    this._recordid.set(selectedBank.bankAccountId);
+    this._selectedbank.set(selectedBank.bankName);
+    this.chequemanagementform.controls['pBankId'].setValue(selectedBank.bankAccountId);
     this.gridData.set([]);
   }
 
@@ -352,6 +365,8 @@ export class ChequeManagementnew implements OnInit {
     // Restore bank values after reset
     this.chequemanagementform.controls['pBankId'].setValue(savedBankId, { emitEvent: false });
     this.chequemanagementform.controls['bankName'].setValue(savedBankName, { emitEvent: false });
+    this.chequemanagementform.controls['pBankdate'].setValue(new Date(), { emitEvent: false });
+    this.chequemanagementform.controls['pChequeGenerateDate'].setValue(new Date(), { emitEvent: false });
   }
 
   // ─── Remove Row ──────────────────────────────────────────────────────────────
@@ -447,6 +462,8 @@ export class ChequeManagementnew implements OnInit {
     this._recordid.set('');
     this._selectedbank.set('');
     this.chequemanagementvalidations = {};
+    this.chequemanagementform.controls['pBankdate'].setValue(new Date(), { emitEvent: false });
+    this.chequemanagementform.controls['pChequeGenerateDate'].setValue(new Date(), { emitEvent: false });
   }
 
   // ─── Trigger all validation messages ────────────────────────────────────────

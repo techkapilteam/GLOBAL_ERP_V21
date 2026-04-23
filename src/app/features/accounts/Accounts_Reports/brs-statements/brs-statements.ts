@@ -3,12 +3,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 type BankType = 'CREDIT' | 'DEBIT';
@@ -25,12 +26,14 @@ interface BrsForm {
 @Component({
   selector: "app-brs-statements",
   standalone:true,
-  imports: [CommonModule, ReactiveFormsModule, BsDatepickerModule, NgSelectModule, TableModule],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, NgSelectModule, TableModule],
   templateUrl: "./brs-statements.html",
   styleUrl: "./brs-statements.css",
 })
 
 export class BrsStatements implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── inject() replaces constructor DI ─────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -82,8 +85,8 @@ export class BrsStatements implements OnInit {
   selectedbank = '';
   startDate = '';
   endDate = '';
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
   form!: FormGroup<BrsForm>;
 
   constructor() {
@@ -127,7 +130,7 @@ export class BrsStatements implements OnInit {
 
   // ── Date pickers ──────────────────────────────────────────────────────
   private initDatePickers(): void {
-    const base: Partial<BsDatepickerConfig> = {
+    const base: any = {
       dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue',
       showWeekNumbers: false, maxDate: new Date()
     };

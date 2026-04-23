@@ -2,12 +2,12 @@
 <div class="screen-container">
   <div class="screen-card">
 
-    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <!-- â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
     <div class="screen-header">
       <h2 class="screen-title">Account Ledger</h2>
     </div>
 
-    <!-- ── Form Section ───────────────────────────────────────────────────── -->
+    <!-- â”€â”€ Form Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
     <div class="screen-content">
       <div class="form-wrapper">
         <form [formGroup]="form" autocomplete="off" novalidate>
@@ -53,18 +53,7 @@
             <!-- From Date -->
             <div class="field-group">
               <label class="field-label required">From Date</label>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="fromDate"
-                bsDatepicker
-                [bsConfig]="dpConfig"
-                placement="bottom"
-                readonly
-                (keydown)="$event.preventDefault()"
-                (bsValueChange)="onFromDateChange($event)"
-                [class.is-invalid]="submitted() && form.controls['fromDate'].invalid"
-              />
+              <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
               @if (submitted() && form.controls['fromDate'].errors?.['required']) {
                 <span class="error-msg">From Date is required</span>
               }
@@ -73,18 +62,7 @@
             <!-- To Date -->
             <div class="field-group">
               <label class="field-label required">To Date</label>
-              <input
-                type="text"
-                class="form-control"
-                formControlName="toDate"
-                bsDatepicker
-                [bsConfig]="dpConfig1"
-                placement="bottom"
-                readonly
-                (keydown)="$event.preventDefault()"
-                (bsValueChange)="onToDateChange($event)"
-                [class.is-invalid]="submitted() && form.controls['toDate'].invalid"
-              />
+              <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
               @if (submitted() && form.controls['toDate'].errors?.['required']) {
                 <span class="error-msg">To Date is required</span>
               }
@@ -135,7 +113,7 @@
         </form>
       </div>
 
-      <!-- ── Report Section ────────────────────────────────────────────────── -->
+      <!-- â”€â”€ Report Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
       @if (showReport()) {
         <div class="report-card">
 

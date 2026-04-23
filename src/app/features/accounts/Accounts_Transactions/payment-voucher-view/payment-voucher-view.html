@@ -1,17 +1,8 @@
 <div class="module-page">
 
-  <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0">
+  <!-- Header Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
     <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Transactions</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">Payment Vouchers</span>
-      </nav>
       <h1 class="page-title">
         <i class="pi pi-file-edit"></i> Payment Voucher New
       </h1>
@@ -39,23 +30,13 @@
 
         <!-- DATE SECTION -->
         <div class="p-4">
-          <div class="row g-3">
+          <div class="row g-2">
             <div class="col-12 col-md-6">
               <div class="erp-form-group">
                 <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
                 <div class="erp-input-wrap erp-date-wrap">
                   <i class="pi pi-calendar erp-input-icon"></i>
-                  <input
-                    type="text"
-                    id="ppaymentdate"
-                    class="erp-input icon-pad"
-                    [class.erp-input--invalid]="formValidationMessages['ppaymentdate']"
-                    readonly
-                    [bsConfig]="ppaymentdateConfig"
-                    bsDatepicker
-                    placement="bottom"
-                    formControlName="ppaymentdate"
-                    [disabled]="!disableTransactionDate()" />
+                  <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [disabled]="!disableTransactionDate()" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 </div>
                 <app-validation-message [messgae]="formValidationMessages['ppaymentdate']"></app-validation-message>
               </div>
@@ -113,14 +94,14 @@
                 </div>
               }
 
-              <div class="row g-3">
+              <div class="row g-2">
 
                 <!-- Bank Name -->
                 @if (showBankCard()) {
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="bankName" title="Bank Name">Bank Name</label>
-                      <ng-select
+                      <ng-select appendTo="body"
                         [items]="banklist"
                         formControlName="pbankname"
                         bindLabel="pbankname"
@@ -146,12 +127,12 @@
 
                 <!-- Debit / Credit Card -->
                 @if (!showBankCard()) {
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="pCardNumber" [title]="displayCardName">
                         {{ displayCardName }}
                       </label>
-                      <ng-select
+                      <ng-select appendTo="body"
                         [items]="debitCardList"
                         formControlName="pCardNumber"
                         bindLabel="pCardNumber"
@@ -175,7 +156,7 @@
 
                 <!-- Type of Payment -->
                 @if (showTypeofPayment()) {
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="ptypeofpayment" title="Type of Payment">
                         Type of Payment
@@ -198,7 +179,7 @@
 
                 <!-- Branch Name -->
                 @if (showBranch()) {
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="pbranchname" title="Branch Name">
                         Branch Name
@@ -226,7 +207,7 @@
 
                 <!-- Bank / Financial Services -->
                 @if (showFinancial()) {
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="pbankname" title="Bank / Financial Services">
                         Bank / Financial Services
@@ -242,7 +223,7 @@
 
                 <!-- UPI Name -->
                 @if (showUpi()) {
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="pUpiname" title="UPI">UPI</label>
                       <select
@@ -261,7 +242,7 @@
                   </div>
 
                   <!-- UPI ID -->
-                  <div class="col-md-3">
+                  <div class="col-12 col-md-6">
                     <div class="erp-form-group">
                       <label class="erp-label" id="pUpiid" title="UPI ID">UPI ID</label>
                       <select
@@ -281,14 +262,14 @@
                 }
 
                 <!-- Cheque / Reference No -->
-                <div class="col-md-3">
+                <div class="col-12 col-md-6">
                   <div class="erp-form-group">
                     <label class="erp-label" id="pChequenumber" [title]="displayChequeNo">
                       {{ displayChequeNo }}
                     </label>
 
                     @if (showChequeNo()) {
-                      <ng-select
+                      <ng-select appendTo="body"
                         formControlName="pChequenumber"
                         [items]="chequeNumbersList"
                         bindLabel="pChequenumber"
@@ -357,7 +338,7 @@
         <div class="p-4">
           <h3 class="section-title mb-3">Payment Details</h3>
           
-          <div class="row g-4" formGroupName="ppaymentsslistcontrols">
+          <div class="row g-2" formGroupName="ppaymentsslistcontrols">
 
             <!-- LEFT COLUMN -->
             <div class="col-md-6 col-lg-4">
@@ -367,7 +348,7 @@
                 <label class="erp-label" id="ppartyid" title="Party">
                   Party <span class="required">*</span>
                 </label>
-                <ng-select
+                <ng-select appendTo="body"
                   id="ppartyname"
                   title="Party"
                   [items]="partyList"
@@ -397,7 +378,7 @@
                 <label class="erp-label" id="pledgerid" title="Ledger">
                   Ledger <span class="required">*</span>
                 </label>
-                <ng-select
+                <ng-select appendTo="body"
                   id="pledgername"
                   title="Ledger"
                   [items]="ledgerAccountsList"
@@ -433,7 +414,7 @@
                   <label class="erp-label" id="psubledgername" title="Sub Ledger">
                     Sub Ledger <span class="required">*</span>
                   </label>
-                  <ng-select
+                  <ng-select appendTo="body"
                     title="Sub Ledger"
                     [items]="subLedgerAccountsList"
                     formControlName="psubledgerid"
@@ -508,12 +489,12 @@
                 @if (showGst()) {
                   <div class="row g-2">
                     <!-- State -->
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                       <div class="erp-form-group">
                         <label class="erp-label" id="pState" title="State">
                           State <span class="required">*</span>
                         </label>
-                        <ng-select
+                        <ng-select appendTo="body"
                           title="State"
                           formControlName="pStateId"
                           [items]="stateList"
@@ -527,7 +508,7 @@
 
                     <!-- GST No -->
                     @if (showGstNo()) {
-                      <div class="col-md-4">
+                      <div class="col-12 col-md-6">
                         <div class="erp-form-group">
                           <label class="erp-label" id="pgstno" title="GST No.">GST No.</label>
                           <input
@@ -546,12 +527,12 @@
                     }
 
                     <!-- GST % -->
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-6">
                       <div class="erp-form-group">
                         <label class="erp-label" id="pgstpercentage" title="GST(%)">
                           GST (%) <span class="required">*</span>
                         </label>
-                        <ng-select
+                        <ng-select appendTo="body"
                           title="GST(%)"
                           formControlName="pgstpercentage"
                           (change)="gst_Change($event)"
@@ -643,12 +624,12 @@
                 @if (showTds()) {
                   <div class="row g-2">
                     <!-- Section -->
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-6">
                       <div class="erp-form-group">
                         <label class="erp-label">
                           Section <span class="required">*</span>
                         </label>
-                        <ng-select
+                        <ng-select appendTo="body"
                           formControlName="pTdsSection"
                           [items]="tdsSectionList"
                           bindLabel="pTdsSection"
@@ -662,12 +643,12 @@
                     </div>
 
                     <!-- Percentage -->
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-6">
                       <div class="erp-form-group">
                         <label class="erp-label">
                           Percentage <span class="required">*</span>
                         </label>
-                        <ng-select
+                        <ng-select appendTo="body"
                           formControlName="pTdsPercentage"
                           [items]="tdsPercentageList"
                           bindLabel="pTdsPercentage"
@@ -681,7 +662,7 @@
                     </div>
 
                     <!-- TDS Amount -->
-                    <div class="col-md-4">
+                    <div class="col-12 col-md-6">
                       <div class="erp-form-group">
                         <label class="erp-label">Amount</label>
                         <label class="erp-input erp-input--readonly" id="ptdsamount" title="TDS Amount"
@@ -835,10 +816,10 @@
         <div class="p-4">
           <h3 class="section-title mb-3">Journal Entry & Narration</h3>
           
-          <div class="row g-4">
+          <div class="row g-2">
 
             <!-- Journal Entry Table -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
               <div class="tbl-wrap">
                 <p-table
                   [value]="partyjournalentrylist"
@@ -895,7 +876,7 @@
             </div>
 
             <!-- Narration + Upload -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
               <!-- Narration -->
               <div class="erp-form-group">
@@ -984,3 +965,4 @@
   </div>
 
 </div>
+

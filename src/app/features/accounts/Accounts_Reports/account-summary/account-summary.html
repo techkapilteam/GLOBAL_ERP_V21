@@ -1,4 +1,4 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
     <!-- Header -->
@@ -25,23 +25,12 @@
 
           <!-- From Date / Date Field -->
           <div class="filter-col filter-col--sm">
-            <div class="form-group">
-              <label class="form-label">
+            <div class="erp-form-group">
+              <label class="erp-label">
                 {{ accountSummaryForm.get('asOn')?.value ? 'Date' : 'From Date' }}
-                <span class="required-star">*</span>
+                <span class="required">*</span>
               </label>
-              <input
-                type="text"
-                class="form-control"
-                [class.is-invalid]="submitted && accountSummaryForm.controls['fromDate'].invalid"
-                formControlName="fromDate"
-                bsDatepicker
-                [bsConfig]="dpConfig"
-                placement="bottom"
-                readonly
-                (keydown)="$event.preventDefault()"
-                (bsValueChange)="onFromDateChange($event)"
-              />
+              <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
               @if (submitted && accountSummaryForm.controls['fromDate'].errors?.['required']) {
                 <div class="invalid-feedback">
                   {{ accountSummaryForm.get('asOn')?.value ? 'Date' : 'From Date' }} is required
@@ -53,22 +42,11 @@
           <!-- To Date Field -->
           @if (!selectedDateMode()) {
             <div class="filter-col filter-col--sm">
-              <div class="form-group">
-                <label class="form-label">
-                  To Date <span class="required-star">*</span>
+              <div class="erp-form-group">
+                <label class="erp-label">
+                  To Date <span class="required">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [class.is-invalid]="submitted && accountSummaryForm.controls['toDate'].invalid"
-                  formControlName="toDate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig1"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onToDateChange($event)"
-                />
+                <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 @if (submitted && accountSummaryForm.controls['toDate'].errors?.['required']) {
                   <div class="invalid-feedback">To Date is required</div>
                 }
@@ -78,9 +56,9 @@
 
           <!-- Ledger Multi Select -->
           <div class="filter-col filter-col--md">
-            <div class="form-group">
-              <label class="form-label">
-                Ledger <span class="required-star">*</span>
+            <div class="erp-form-group">
+              <label class="erp-label">
+                Ledger <span class="required">*</span>
               </label>
               <p-multiSelect
                 [options]="ledgerList()"

@@ -1,110 +1,127 @@
-<form [formGroup]="addressForm">
-    <div class="address-grid">
+﻿<form [formGroup]="addressForm">
+    <div class="p-4">
+        <h3 class="section-title mb-2">Address Information</h3>
+        <div class="row g-2">
 
-        <!-- Address Line 1 -->
-        <div class="form-group">
-            <label class="form-label" id="paddress1" title="Address Line 1">
-                Address Line 1 <span class="required-star">*</span>
-            </label>
-            <input type="text" formControlName="paddress1" class="form-control" maxlength="150" appAddressformat
-                [class.is-invalid]="errorOf('paddress1')" />
-            @if (errorOf('paddress1')) {
-            <div class="field-error">{{ errorOf('paddress1') }}</div>
-            }
+            <!-- Address Line 1 -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="paddress1" title="Address Line 1">
+                        Address Line 1 <span class="required">*</span>
+                    </label>
+                    <input type="text" formControlName="paddress1" class="erp-input" maxlength="150" appAddressformat
+                        [class.is-invalid]="errorOf('paddress1')" />
+                    @if (errorOf('paddress1')) {
+                    <div class="erp-field-error">{{ errorOf('paddress1') }}</div>
+                    }
+                </div>
+            </div>
+
+            <!-- Address Line 2 -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="paddress2" title="Address Line 2">
+                        Address Line 2
+                    </label>
+                    <input type="text" formControlName="paddress2" class="erp-input" maxlength="150" appAddressformat
+                        [class.is-invalid]="errorOf('paddress2')" />
+                    @if (errorOf('paddress2')) {
+                    <div class="erp-field-error">{{ errorOf('paddress2') }}</div>
+                    }
+                </div>
+            </div>
+
+            <!-- City / Village -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="pcity" title="City / Village">
+                        City / Village
+                    </label>
+                    <input type="text" formControlName="pcity" class="erp-input" maxlength="75" appAddressformat
+                        [class.is-invalid]="errorOf('pcity')" />
+                    @if (errorOf('pcity')) {
+                    <div class="erp-field-error">{{ errorOf('pcity') }}</div>
+                    }
+                </div>
+            </div>
+
+            <!-- Country -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="pCountry" title="Country">
+                        Country <span class="required">*</span>
+                    </label>
+                    <select class="erp-input" formControlName="pCountryId" [class.is-invalid]="errorOf('pCountry')"
+                        (change)="pCountry_Change($event)">
+                        <option value="">Select</option>
+                        @for (country of countryDetails(); track country.tbl_mst_country_id) {
+                        <option [value]="country.tbl_mst_country_id">
+                            {{ country.country_name }}
+                        </option>
+                        }
+                    </select>
+                    @if (errorOf('pCountry')) {
+                    <div class="erp-field-error">{{ errorOf('pCountry') }}</div>
+                    }
+                </div>
+            </div>
+
+            <!-- State -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="pState" title="State">
+                        State <span class="required">*</span>
+                    </label>
+                    <select class="erp-input" formControlName="pStateId" [class.is-invalid]="errorOf('pState')"
+                        (change)="pState_Change($event)">
+                        <option value="">Select</option>
+                        @for (state of stateDetails(); track state.tbl_mst_state_id) {
+                        <option [value]="state.tbl_mst_state_id">
+                            {{ state.state_name }}
+                        </option>
+                        }
+                    </select>
+                    @if (errorOf('pState')) {
+                    <div class="erp-field-error">{{ errorOf('pState') }}</div>
+                    }
+                </div>
+            </div>
+
+            <!-- District -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="pDistrict" title="District">
+                        District <span class="required">*</span>
+                    </label>
+                    <select class="erp-input" formControlName="pDistrictId" [class.is-invalid]="errorOf('pDistrict')"
+                        (change)="pDistrict_Change($event)">
+                        <option value="">Select</option>
+                        @for (district of districtDetails(); track district.tbl_mst_district_id) {
+                        <option [value]="district.tbl_mst_district_id">
+                            {{ district.district_name }}
+                        </option>
+                        }
+                    </select>
+                    @if (errorOf('pDistrict')) {
+                    <div class="erp-field-error">{{ errorOf('pDistrict') }}</div>
+                    }
+                </div>
+            </div>
+
+            <!-- Pincode -->
+            <div class="col-12 col-md-6">
+                <div class="erp-form-group">
+                    <label class="erp-label" id="Pincode" title="Pincode">
+                        Pincode <span class="required">*</span>
+                    </label>
+                    <input type="text" formControlName="Pincode" class="erp-input" appNumbersonly minlength="6" maxlength="6"
+                        (keypress)="allowOnlyNumbers($event)" [class.is-invalid]="errorOf('Pincode')" />
+                    @if (errorOf('Pincode')) {
+                    <div class="erp-field-error">{{ errorOf('Pincode') }}</div>
+                    }
+                </div>
+            </div>
+
         </div>
-
-        <!-- Address Line 2 -->
-        <div class="form-group">
-            <label class="form-label" id="paddress2" title="Address Line 2">
-                Address Line 2
-            </label>
-            <input type="text" formControlName="paddress2" class="form-control" maxlength="150" appAddressformat
-                [class.is-invalid]="errorOf('paddress2')" />
-            @if (errorOf('paddress2')) {
-            <div class="field-error">{{ errorOf('paddress2') }}</div>
-            }
-        </div>
-
-        <!-- City / Village -->
-        <div class="form-group">
-            <label class="form-label" id="pcity" title="City / Village">
-                City / Village
-            </label>
-            <input type="text" formControlName="pcity" class="form-control" maxlength="75" appAddressformat
-                [class.is-invalid]="errorOf('pcity')" />
-            @if (errorOf('pcity')) {
-            <div class="field-error">{{ errorOf('pcity') }}</div>
-            }
-        </div>
-
-        <!-- Country -->
-        <div class="form-group">
-            <label class="form-label" id="pCountry" title="Country">
-                Country <span class="required-star">*</span>
-            </label>
-            <select class="form-select" formControlName="pCountryId" [class.is-invalid]="errorOf('pCountry')"
-                (change)="pCountry_Change($event)">
-                <option value="">Select</option>
-                @for (country of countryDetails(); track country.tbl_mst_country_id) {
-                <option [value]="country.tbl_mst_country_id">
-                    {{ country.country_name }}
-                </option>
-                }
-            </select>
-            @if (errorOf('pCountry')) {
-            <div class="field-error">{{ errorOf('pCountry') }}</div>
-            }
-        </div>
-
-        <!-- State -->
-        <div class="form-group">
-            <label class="form-label" id="pState" title="State">
-                State <span class="required-star">*</span>
-            </label>
-            <select class="form-select" formControlName="pStateId" [class.is-invalid]="errorOf('pState')"
-                (change)="pState_Change($event)">
-                <option value="">Select</option>
-                @for (state of stateDetails(); track state.tbl_mst_state_id) {
-                <option [value]="state.tbl_mst_state_id">
-                    {{ state.state_name }}
-                </option>
-                }
-            </select>
-            @if (errorOf('pState')) {
-            <div class="field-error">{{ errorOf('pState') }}</div>
-            }
-        </div>
-
-        <!-- District -->
-        <div class="form-group">
-            <label class="form-label" id="pDistrict" title="District">
-                District <span class="required-star">*</span>
-            </label>
-            <select class="form-select" formControlName="pDistrictId" [class.is-invalid]="errorOf('pDistrict')"
-                (change)="pDistrict_Change($event)">
-                <option value="">Select</option>
-                @for (district of districtDetails(); track district.tbl_mst_district_id) {
-                <option [value]="district.tbl_mst_district_id">
-                    {{ district.district_name }}
-                </option>
-                }
-            </select>
-            @if (errorOf('pDistrict')) {
-            <div class="field-error">{{ errorOf('pDistrict') }}</div>
-            }
-        </div>
-
-        <!-- Pincode -->
-        <div class="form-group">
-            <label class="form-label" id="Pincode" title="Pincode">
-                Pincode <span class="required-star">*</span>
-            </label>
-            <input type="text" formControlName="Pincode" class="form-control" appNumbersonly minlength="6" maxlength="6"
-                (keypress)="allowOnlyNumbers($event)" [class.is-invalid]="errorOf('Pincode')" />
-            @if (errorOf('Pincode')) {
-            <div class="field-error">{{ errorOf('Pincode') }}</div>
-            }
-        </div>
-
     </div>
 </form>

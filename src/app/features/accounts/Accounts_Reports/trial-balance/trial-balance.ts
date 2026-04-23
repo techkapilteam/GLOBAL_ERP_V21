@@ -1,11 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { Table, TableModule } from 'primeng/table';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-trial-balance',
@@ -13,7 +14,7 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     
     TableModule,
     Companydetails
@@ -23,6 +24,8 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
   styleUrl: './trial-balance.css'
 })
 export class TrialBalance implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Injected Services ───────────────────────────────────────
   private readonly fb               = inject(FormBuilder);
@@ -56,8 +59,8 @@ export class TrialBalance implements OnInit {
 
   private trialBalanceRaw: any[] = [];
 
-  dpConfig: Partial<BsDatepickerConfig>  = {};
-  dppConfig: Partial<BsDatepickerConfig> = {};
+  dpConfig: any  = {};
+  dppConfig: any = {};
 
   @ViewChild('dt') table!: Table;
 

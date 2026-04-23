@@ -31,14 +31,14 @@
           </div>
         </div>
 
-        <!-- ── ISSUED ─────────────────────────────────────────────────────── -->
+        <!-- â”€â”€ ISSUED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         @if (showIssuedCheques()) {
           <div class="mt-3">
 
             <!-- Search row -->
             <div class="row mb-3">
               <div class="col-md-6">
-                <input type="search" class="form-control"
+                <input type="search" class="erp-input"
                        placeholder="Search by Cheque / Reference No (min 3 chars)"
                        (input)="onSearchForCheque($any($event.target).value)" />
               </div>
@@ -160,14 +160,14 @@
           </div>
         }
 
-        <!-- ── RECEIVED ───────────────────────────────────────────────────── -->
+        <!-- â”€â”€ RECEIVED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         @if (showReceivedCheques()) {
           <div class="mt-3">
 
             <!-- Search + Export row -->
             <div class="row mb-3 align-items-center">
               <div class="col-md-6">
-                <input type="search" class="form-control"
+                <input type="search" class="erp-input"
                        placeholder="Search by Cheque / Reference No (min 3 chars)"
                        (input)="onSearchForChequeReceived($any($event.target).value)" />
               </div>

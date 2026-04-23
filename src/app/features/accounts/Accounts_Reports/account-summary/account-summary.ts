@@ -8,13 +8,14 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
@@ -23,7 +24,7 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     FormsModule,
     TableModule,
     ButtonModule,
@@ -35,6 +36,8 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
   styleUrl: './account-summary.css'
 })
 export class AccountSummary implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Injected Services ───────────────────────────────────────
   private readonly fb             = inject(FormBuilder);
@@ -67,13 +70,13 @@ export class AccountSummary implements OnInit {
 
   private rawData: any[] = [];
 
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass: 'theme-dark-blue',
     maxDate: new Date()
   };
 
-  dpConfig1: Partial<BsDatepickerConfig> = {
+  dpConfig1: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass: 'theme-dark-blue',
     maxDate: new Date()

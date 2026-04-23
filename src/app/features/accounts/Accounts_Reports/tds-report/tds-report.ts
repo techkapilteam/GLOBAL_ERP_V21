@@ -2,24 +2,27 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal, computed, effect } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
   selector: "app-tds-report",
   standalone:true,
-  imports: [BsDatepickerModule, CommonModule, ReactiveFormsModule, TableModule, NgSelectModule],
+  imports: [DatePickerModule, CommonModule, ReactiveFormsModule, TableModule, NgSelectModule],
   templateUrl: "./tds-report.html",
   styleUrl: "./tds-report.css",
   host: { ngSkipHydration: '' }
 })
 
 export class TdsReport implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Injected services ────────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -30,8 +33,8 @@ export class TdsReport implements OnInit {
   private readonly reportService = inject(AccountsReports);
 
   // ── Datepicker configs ───────────────────────────────────────────────────────
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   // ── Page model ───────────────────────────────────────────────────────────────
   pageCriteria: PageCriteria = new PageCriteria();
@@ -97,7 +100,7 @@ export class TdsReport implements OnInit {
 
   // ── Initializers ─────────────────────────────────────────────────────────────
   private initializeDatePicker(): void {
-    const base: Partial<BsDatepickerConfig> = {
+    const base: any = {
       dateInputFormat: 'DD-MMM-YYYY',
       showWeekNumbers: false,
       containerClass: 'theme-dark-blue',

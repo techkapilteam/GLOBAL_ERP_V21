@@ -1,18 +1,9 @@
-﻿<!-- cheques-onhand.component.html -->
+<!-- cheques-onhand.component.html -->
 <div class="module-page">
 
   <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0">
-    <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Transactions</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">Cheques On Hand</span>
-      </nav>
+  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
+    <div>
       <h1 class="page-title">
         <i class="pi pi-inbox"></i> Cheques On Hand
       </h1>
@@ -65,10 +56,7 @@
           </label>
           <div class="erp-input-wrap erp-date-wrap">
             <i class="pi pi-calendar erp-input-icon"></i>
-            <input class="erp-input icon-pad" type="text" title="Date" id="ptransactiondate"
-              formControlName="ptransactiondate" readonly [bsConfig]="dpConfig" #dp="bsDatepicker" bsDatepicker
-              placement="bottom" (ngModelChange)="change_date($event)" (keydown)="$event.preventDefault()"
-              [attr.disabled]="!pdatepickerenablestatus() ? true : null" [maxDate]="today2" />
+            <p-datepicker formControlName="ptransactiondate" [maxDate]="today2" id="ptransactiondate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
           </div>
           <app-validation-message [messgae]="ChequesOnHandValidation()['ptransactiondate']" />
         </div>
@@ -77,7 +65,7 @@
           <label class="filter-lbl">
             Bank <span class="required">*</span>
           </label>
-          <ng-select [items]="BanksList()" bindLabel="pdepositbankname" bindValue="pbankid" formControlName="bankname"
+          <ng-select appendTo="body" [items]="BanksList()" bindLabel="pdepositbankname" bindValue="pbankid" formControlName="bankname"
             (change)="SelectBank($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true"
             [ngClass]="{ 'ng-invalid': ChequesOnHandValidation()['bankname'] }" />
           <app-validation-message [messgae]="ChequesOnHandValidation()['bankname']" />
@@ -144,15 +132,13 @@
       @if (brsdateshowhidedeposited()) {
       <div class="p-4 brs-section">
         <h3 class="section-title mb-3">Deposited - Date Range Filter</h3>
-        <div class="row g-3">
+        <div class="row g-2">
           <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">BRS From Date</label>
               <div class="erp-input-wrap erp-date-wrap">
                 <i class="pi pi-calendar erp-input-icon"></i>
-                <input class="erp-input icon-pad" type="text" formControlName="pfrombrsdate"
-                  [bsConfig]="brsfromConfig" #dpFrom="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-                  (keydown)="$event.preventDefault()" />
+                <p-datepicker formControlName="pfrombrsdate" [maxDate]="today2" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
               </div>
             </div>
           </div>
@@ -161,9 +147,7 @@
               <label class="erp-label">BRS To Date</label>
               <div class="erp-input-wrap erp-date-wrap">
                 <i class="pi pi-calendar erp-input-icon"></i>
-                <input class="erp-input icon-pad" type="text" formControlName="ptobrsdate"
-                  [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-                  (keydown)="$event.preventDefault()" />
+                <p-datepicker formControlName="ptobrsdate" [maxDate]="today2" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
               </div>
               @if (validatebrsdatedeposit()) {
               <div class="erp-field-error">BRS To Date should be greater than From Date</div>
@@ -184,15 +168,13 @@
       @if (brsdateshowhidecancelled()) {
       <div class="p-4 brs-section">
         <h3 class="section-title mb-3">Cancelled - Date Range Filter</h3>
-        <div class="row g-3">
+        <div class="row g-2">
           <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">BRS From Date</label>
               <div class="erp-input-wrap erp-date-wrap">
                 <i class="pi pi-calendar erp-input-icon"></i>
-                <input class="erp-input icon-pad" type="text" formControlName="frombrsdate" readonly
-                  [bsConfig]="brsfromConfig" #dp="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-                  (keydown)="$event.preventDefault()" />
+                <p-datepicker formControlName="frombrsdate" [maxDate]="today2" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
               </div>
             </div>
           </div>
@@ -201,9 +183,7 @@
               <label class="erp-label">BRS To Date</label>
               <div class="erp-input-wrap erp-date-wrap">
                 <i class="pi pi-calendar erp-input-icon"></i>
-                <input class="erp-input icon-pad" type="text" formControlName="tobrsdate" readonly
-                  [bsConfig]="brstoConfig" #dpTo="bsDatepicker" bsDatepicker placement="bottom" [maxDate]="today2"
-                  (keydown)="$event.preventDefault()" />
+                <p-datepicker formControlName="tobrsdate" [maxDate]="today2" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
               </div>
               @if (validatebrsdatecancel()) {
               <div class="erp-field-error">BRS To Date should be greater than From Date</div>
@@ -498,6 +478,7 @@
     </div>
   </div>
 </div>
+
 
 
 

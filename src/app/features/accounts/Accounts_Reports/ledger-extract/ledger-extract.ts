@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { CommonService } from '../../../../core/services/Common/common.service';
+import { DatePickerModule } from 'primeng/datepicker';
 
 interface LedgerRow {
   transDate: string;
@@ -27,12 +28,14 @@ interface LedgerRow {
 @Component({
   selector: "app-ledger-extract",
   standalone:true,
-  imports: [CommonModule, FormsModule, BsDatepickerModule],
+  imports: [CommonModule, FormsModule, DatePickerModule],
   templateUrl: "./ledger-extract.html",
   styleUrl: "./ledger-extract.css",
 })
 
 export class LedgerExtract implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Dependencies via inject() ─────────────────────────────────────────────
   private readonly http = inject(HttpClient);
@@ -55,7 +58,7 @@ export class LedgerExtract implements OnInit {
     { value: 'EXCEL', label: 'EXCEL' },
   ];
 
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     containerClass: 'theme-dark-blue',
     dateInputFormat: 'DD-MMM-YYYY',
     maxDate: new Date(),

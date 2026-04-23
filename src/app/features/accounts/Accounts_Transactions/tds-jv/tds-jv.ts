@@ -10,7 +10,7 @@ import {
 import { NgSelectModule } from '@ng-select/ng-select';
 // NgSelectModule kept in imports array in case other parts of the app use it,
 // but the TDS JV form now uses native <select> elements to avoid display bugs.
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 
 
@@ -18,6 +18,7 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-tds-jv',
@@ -26,7 +27,7 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     CommonModule,
     ReactiveFormsModule,
     NgSelectModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     
   ],
@@ -69,7 +70,7 @@ export class TdsJv implements OnInit {
   savebutton1   = 'Show';
 
   // ── Date helpers ─────────────────────────────────────────────────────────
-  public dpConfig1: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  public dpConfig1: any = {};
   today    = '';
   splidate: string[] = [];
   MonthName   = '';

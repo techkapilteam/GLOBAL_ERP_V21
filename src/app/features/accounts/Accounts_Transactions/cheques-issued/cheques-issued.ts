@@ -2,7 +2,7 @@ import { Component, Input, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import * as XLSX from 'xlsx';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 type AOA = any[][];
@@ -63,7 +64,7 @@ type ActiveTabType =
 @Component({
   selector: "app-cheques-issued",
   imports: [ CommonModule, CurrencyPipe, NgSelectModule, TableModule, CheckboxModule,
-    FormsModule, ReactiveFormsModule, BsDatepickerModule],
+    FormsModule, ReactiveFormsModule, DatePickerModule],
   templateUrl: "./cheques-issued.html",
 })
 
@@ -163,9 +164,9 @@ export class ChequesIssued implements OnInit {
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName = 'AutoBrs.xlsx';
   Exceldata: any[] = [];
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  brsfromConfig: Partial<BsDatepickerConfig> = {};
-  brstoConfig: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  brsfromConfig: any = {};
+  brstoConfig: any = {};
   today = new Date();
   clearMinToDate = new Date(1900, 0, 1);
   returnMinToDate = new Date(1900, 0, 1);
