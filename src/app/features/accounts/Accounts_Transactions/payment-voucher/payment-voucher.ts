@@ -142,7 +142,7 @@ export class PaymentVoucher implements OnInit {
     if (!row?.paymentId) return;
     const receipt = btoa(`${row.paymentId},Payment Voucher`);
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/PaymentVoucher', receipt])
+      this.router.createUrlTree(['/payment-voucher', receipt])
     );
     window.open(url, '_blank');
   }

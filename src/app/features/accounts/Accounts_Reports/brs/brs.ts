@@ -32,7 +32,7 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
     Companydetails,
     NgSelectModule
   ],
-  templateUrl: './brs.html',
+  templateUrl:'./brs.html',
   styleUrl: './brs.css',
   providers: [DatePipe]
 })
@@ -215,7 +215,7 @@ export class Brs implements OnInit {
     this.loading.set(true);
     this.isLoading.set(true);
     this.showhide.set(false);
-    this.savebutton.set('Processing');
+    // this.savebutton.set('Processing');
     this.startDate  = new Date(this.BRStatmentForm.value.fromDate);
 
     const fromDate       = this.commonService.getFormatDateNormal(this.BRStatmentForm.value.fromDate) ?? '';
@@ -237,7 +237,7 @@ export class Brs implements OnInit {
             this.show.set(true);
             this.loading.set(false);
             this.isLoading.set(false);
-            this.savebutton.set('Generate Report');
+            // this.savebutton.set('Generate Report');
 
             const selectedBank = this.bankData().find(b => b.bankAccountId == _pBankAccountId);
             this.bankname = selectedBank?.bankName ?? '';
@@ -280,7 +280,7 @@ export class Brs implements OnInit {
         .pipe(finalize(() => {
           this.loading.set(false);
           this.isLoading.set(false);
-          this.savebutton.set('Generate Report');            
+          // this.savebutton.set('Generate Report');            
             this.cdr.detectChanges();
         }))
         .subscribe({

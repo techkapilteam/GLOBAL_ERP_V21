@@ -103,7 +103,7 @@ export class JournalVoucherView implements OnInit {
   viewHandler(event: any, row: any): void {
     const receipt = btoa(row.journalVoucherNo + ',' + 'Journal Voucher');
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/JournalVoucherReport', receipt])
+      this.router.createUrlTree(['/journal-voucher', receipt])
     );
     window.open(url, '_blank');
   }
