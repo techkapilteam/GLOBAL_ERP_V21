@@ -173,13 +173,13 @@ export class CashBook implements OnInit {
     let receiptName = '';
 
     if (transNo.startsWith('RCQ_') || transNo.startsWith('GR_') || transNo.startsWith('R_')) {
-      route = '/GeneralReceiptReport';
+      route = '/general-receipt';
       receiptName = 'General Receipt';
     } else if (transNo.startsWith('MV_')) {
-      route = '/PaymentVoucherReport';
+      route = '/payment-voucher';
       receiptName = 'Bank Payment';
     } else if (transNo.startsWith('JV_')) {
-      route = '/JournalVoucherReport';
+      route = '/journal-voucher';
       receiptName = 'Journal Voucher';
     }
 

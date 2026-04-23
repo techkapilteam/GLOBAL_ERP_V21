@@ -1750,6 +1750,8 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
           // .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (res: any) => {
+              console.log(res,"res");
+              
               if (res.success === true) {
                 this.jsonDataItem = res;
                 this.disableSaveButton.set(false);
