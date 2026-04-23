@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -45,6 +45,7 @@ export class Brs implements OnInit {
   private commonService = inject(CommonService);
   private bankBookService = inject(AccountsReports);
   private brstatement   = inject(AccountsReports);
+  private cdr             = inject(ChangeDetectorRef);
 
   @ViewChild('myTable') table: any;
 
@@ -56,11 +57,12 @@ export class Brs implements OnInit {
   readonly chequesInfo = signal(false);
   readonly bankData   = signal<any[]>([]);
   readonly gridView   = signal<any[]>([]);
+  readonly savebutton  = signal('Generate Report');  
 
   // ── State ────────────────────────────────────────────────────────────────────
   submitted    = false;
   printedDate  = true;
-  savebutton   = 'Generate Report';
+  // savebutton   = 'Generate Report';
   currencysymbol: any;
   bankname     = '';
   roleid       = '';
@@ -213,7 +215,7 @@ export class Brs implements OnInit {
     this.loading.set(true);
     this.isLoading.set(true);
     this.showhide.set(false);
-    this.savebutton = 'Processing';
+    this.savebutton.set('Processing');
     this.startDate  = new Date(this.BRStatmentForm.value.fromDate);
 
     const fromDate       = this.commonService.getFormatDateNormal(this.BRStatmentForm.value.fromDate) ?? '';
@@ -235,7 +237,7 @@ export class Brs implements OnInit {
             this.show.set(true);
             this.loading.set(false);
             this.isLoading.set(false);
-            this.savebutton = 'Generate Report';
+            this.savebutton.set('Generate Report');
 
             const selectedBank = this.bankData().find(b => b.bankAccountId == _pBankAccountId);
             this.bankname = selectedBank?.bankName ?? '';
@@ -255,6 +257,7 @@ export class Brs implements OnInit {
               + this.CHEQUESISSUEDBUTNOTCLEARED;
 
             this.BRStatmentForm.patchValue({ pbankbalance: this.Balanceasperbankbook });
+            this.cdr.detectChanges();
           },
           error: (err: any) => {
             this.commonService.showErrorMessage(err);
@@ -277,7 +280,8 @@ export class Brs implements OnInit {
         .pipe(finalize(() => {
           this.loading.set(false);
           this.isLoading.set(false);
-          this.savebutton = 'Generate Report';
+          this.savebutton.set('Generate Report');            
+            this.cdr.detectChanges();
         }))
         .subscribe({
           next: (res: any[]) => {

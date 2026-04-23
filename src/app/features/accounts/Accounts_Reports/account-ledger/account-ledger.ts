@@ -346,6 +346,10 @@ export class AccountLedger implements OnInit {
 
   formatDate(date: Date | string | null): string {
     if (!date) return '';
+    if (typeof date === 'string') {
+    const [day, month, year] = date.split('/');
+    date = new Date(+year, +month - 1, +day);
+  }
     return this.datePipe.transform(date, 'dd-MMM-yyyy') ?? '';
   }
 
