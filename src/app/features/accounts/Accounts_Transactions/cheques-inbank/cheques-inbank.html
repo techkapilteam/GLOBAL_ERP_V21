@@ -258,111 +258,54 @@
 
           <!-- Header -->
           <ng-template pTemplate="header">
-            <!-- <tr>
-              <th class="th-actions">Actions</th>
-              <th class="th-center">
-                <div class="th-cell" style="justify-content:center">
-                  <i class="pi pi-hashtag"></i>
-                  Cheque/Reference No.
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-building"></i>
-                  Branch Name
-                </div>
-              </th>
-              <th class="th-right">
-                <div class="th-cell" style="justify-content:flex-end">
-                  <i class="pi pi-indian-rupee"></i>
-                  Amount
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-user"></i>
-                  Party
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-calendar"></i>
-                  Receipt Date
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-calendar"></i>
-                  Deposited Date
-                </div>
-              </th>
-              @if (status === 'cleared') {
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-check-circle"></i>
-                  Clear Date
-                </div>
-              </th>
-              }
-              @if (status === 'returned') {
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-times-circle"></i>
-                  Returned Date
-                </div>
-              </th>
-              }
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-file"></i>
-                  Receipt ID
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-credit-card"></i>
-                  Transaction Mode
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-building"></i>
-                  Cheque Bank Name
-                </div>
-              </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-building"></i>
-                  Cheque Branch Name
-                </div>
-              </th>
-            </tr> -->
+              
             <tr>
                   @if (!showhidegridcolumns) {
-                    <th class="th-cell th-checkbox">
+                    <th class="th-checkbox">
+                      <div class="th-cell">
                       <input type="checkbox" [checked]="preferdrows" (change)="selectAllClear($event)" />
+                      </div>
                     </th>
-                    <th class="th-cell">Clear</th>
+                    <th>
+                      <div class="th-cell">
+                      Clear
+                      </div>
+                    </th>
                   }
                   @if (!showhidegridcolumns2) {
-                    <th class="th-cell">Return</th>
+                    <th>
+                      <div class="th-cell">
+                        Return
+                      </div>
+                    </th>
                   }
                   @if (!showhidegridcolumns) {
-                    <th class="th-cell">Reference No</th>
+                    <th>
+                      <div class="th-cell">
+                      Reference No
+                      </div>
+                    </th>
                   }
-                  <th class="th-cell">Cheque/Reference No.</th>
-                  <th class="th-cell">Branch Name</th>
-                  <th class="th-cell">Amount</th>
-                  <th class="th-cell">Party</th>
-                  <th class="th-cell">Receipt Date</th>
-                  <th class="th-cell">Deposited Date</th>
+                
+
+                  <th>
+                    <div class="th-cell">
+                      Cheque/Reference No.
+                    </div>
+                    </th>
+
+                  <th><div class="th-cell">Branch Name</div></th>
+                  <th><div class="th-cell">Amount</div></th>
+                  <th><div class="th-cell">Party</div></th>
+                  <th><div class="th-cell">Receipt Date</div></th>
+                  <th><div class="th-cell">Deposited Date</div></th>
                   @if (!hiddendate) {
-                    <th class="th-cell">{{ datetitle }}</th>
+                    <th><div class="th-cell">{{ datetitle }}</div></th>
                   }
-                  <th class="th-cell">Receipt Id</th>
-                  <th class="th-cell">Transaction Mode</th>
-                  <th class="th-cell">Cheque Bank Name</th>
-                  <th class="th-cell">Cheque Branch Name</th>
+                  <th><div class="th-cell">Receipt Id</div></th>
+                  <th><div class="th-cell">Transaction Mode</div></th>
+                  <th><div class="th-cell">Cheque Bank Name</div></th>
+                  <th><div class="th-cell">Cheque Branch Name</div></th>
                 </tr>
           </ng-template>
 
