@@ -45,7 +45,7 @@
                 <div class="erp-input-wrap erp-date-wrap">
                   <i class="pi pi-calendar erp-input-icon"></i>
                   <input type="text" id="ppaymentdate" class="erp-input icon-pad"
-                    [class.erp-input--invalid]="formValidationMessages['ppaymentdate']" readonly
+                    [class.erp-input--invalid]="formValidationMessages['ppaymentdate']" [readonly]="true"
                     [bsConfig]="ppaymentdateConfig" bsDatepicker placement="bottom" formControlName="ppaymentdate"
                     [disabled]="!disableTransactionDate()" />
                 </div>

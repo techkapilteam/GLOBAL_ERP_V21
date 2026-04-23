@@ -200,7 +200,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
     this.paymentVoucherForm = this.fb.group({
       ppaymentid: [''],
       schemaname: [this.commonService.getschemaname()],
-      ppaymentdate: [{ value: '', disabled: true }, Validators.required],
+      ppaymentdate: ['',{disabled: true }, Validators.required],
       ptotalpaidamount: [''],
       pnarration: ['', Validators.required],
       pmodofpayment: ['CASH'],
