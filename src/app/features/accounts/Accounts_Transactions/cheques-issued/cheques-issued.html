@@ -18,12 +18,12 @@
       </h1>
       <p class="page-subtitle">Track and manage all issued cheques and online payments</p>
     </div>
-
+    <!-- 
     <a routerLink="/dashboard/accounts/accounts-transactions/cheques-issued-new"
        class="erp-btn btn-primary btn-lg"
        style="margin-top: auto; white-space: nowrap;">
       <i class="pi pi-plus"></i> New Cheque
-    </a>
+    </a> -->
   </div>
 
   <!-- Main Card -->
@@ -39,11 +39,8 @@
       <div class="header-search" style="flex: 1; max-width: 300px;">
         <div class="erp-input-wrap">
           <i class="pi pi-search erp-input-icon"></i>
-          <input type="search"
-                 class="erp-input icon-pad"
-                 placeholder="Search cheques..."
-                 style="font-size: 12px; color: #374151;"
-                 (input)="onSearch($any($event.target).value)" />
+          <input type="search" class="erp-input icon-pad" placeholder="Search cheques..."
+            style="font-size: 12px; color: #374151;" (input)="onSearch($any($event.target).value)" />
         </div>
       </div>
 
@@ -84,12 +81,19 @@
         </div>
 
         <!-- Balance Info Card -->
-        <div class="filter-info-card">
+        <!-- <div class="filter-info-card">
           @if (banknameshowhide()) {
           <div class="info-header">
             <span class="info-bank-name">{{ bankname() }}</span>
           </div>
-          }
+          } -->
+          <!-- Balance Info Card -->
+<div class="filter-info-card">
+  @if (banknameshowhide() && bankname) {
+  <div class="info-header">
+    <span class="info-bank-name">{{ bankname || '' }}</span>
+  </div>
+  }
           <div class="info-body">
             <h4 class="info-title">Bank Balance</h4>
             <div class="info-items">
@@ -118,38 +122,45 @@
           <span class="erp-badge badge-warning">{{ all() }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab() === 'chequesissued'" (click)="ChequesIssued(); activeTab.set('chequesissued')">
+        <button class="tab-item" [class.active]="activeTab() === 'chequesissued'"
+          (click)="ChequesIssued(); activeTab.set('chequesissued')">
           <span class="tab-label">Cheques Issued</span>
           <span class="erp-badge badge-secondary">{{ chequesissued() }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab() === 'onlinepayment'" (click)="OnlinePayments(); activeTab.set('onlinepayment')">
+        <button class="tab-item" [class.active]="activeTab() === 'onlinepayment'"
+          (click)="OnlinePayments(); activeTab.set('onlinepayment')">
           <span class="tab-label">Online Payments</span>
           <span class="erp-badge badge-primary">{{ onlinepayments() }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab() === 'cleared'" (click)="Cleared(); activeTab.set('cleared')">
+        <button class="tab-item" [class.active]="activeTab() === 'cleared'"
+          (click)="Cleared(); activeTab.set('cleared')">
           <span class="tab-label">Cleared</span>
           <span class="erp-badge badge-success">{{ cleared() }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab() === 'returned'" (click)="Returned(); activeTab.set('returned')">
+        <button class="tab-item" [class.active]="activeTab() === 'returned'"
+          (click)="Returned(); activeTab.set('returned')">
           <span class="tab-label">Returned</span>
           <span class="erp-badge badge-danger">{{ returned() }}</span>
         </button>
 
-        <button class="tab-item" [class.active]="activeTab() === 'cancelled'" (click)="Cancelled(); activeTab.set('cancelled')">
+        <button class="tab-item" [class.active]="activeTab() === 'cancelled'"
+          (click)="Cancelled(); activeTab.set('cancelled')">
           <span class="tab-label">Cancelled</span>
           <span class="erp-badge badge-neutral">{{ cancelled() }}</span>
         </button>
 
         @if (boolforAutoBrs()) {
-          <button class="tab-item" [class.active]="activeTab() === 'bankfileupload'" (click)="BankUploadExcel(); activeTab.set('bankfileupload')">
-            <span class="tab-label">Bank File Upload</span>
-          </button>
-          <button class="tab-item" [class.active]="activeTab() === 'autobrs'" (click)="AutoBrs(); activeTab.set('autobrs')">
-            <span class="tab-label">Auto BRS</span>
-          </button>
+        <button class="tab-item" [class.active]="activeTab() === 'bankfileupload'"
+          (click)="BankUploadExcel(); activeTab.set('bankfileupload')">
+          <span class="tab-label">Bank File Upload</span>
+        </button>
+        <button class="tab-item" [class.active]="activeTab() === 'autobrs'"
+          (click)="AutoBrs(); activeTab.set('autobrs')">
+          <span class="tab-label">Auto BRS</span>
+        </button>
         }
         }
       </div>
@@ -174,16 +185,9 @@
 
       <!-- DataTable -->
       <div class="tbl-wrap">
-        <p-table
-          [value]="gridData()"
-          [paginator]="true"
-          [rows]="pageCriteria().pageSize"
-          [rowsPerPageOptions]="[10, 20, 50]"
-          [scrollable]="true"
-          scrollHeight="500px"
-          responsiveLayout="scroll"
-          [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        <p-table [value]="gridData()" [paginator]="true" [rows]="pageCriteria().pageSize"
+          [rowsPerPageOptions]="[10, 20, 50]" [scrollable]="true" scrollHeight="500px" responsiveLayout="scroll"
+          [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           styleClass="gr-table p-datatable-sm p-datatable-gridlines">
 
           <!-- Header -->
@@ -241,50 +245,45 @@
               <td class="td-actions">
                 <div class="action-group">
                   @if (!showhidegridcolumns()) {
-                    <button class="erp-btn btn-outline btn-sm btn-icon" 
-                            title="Clear">
-                      <i class="pi pi-check"></i>
-                    </button>
-                    @if (status() !== 'autobrs') {
-                      <button class="erp-btn btn-outline btn-sm btn-icon" 
-                              title="Return">
-                        <i class="pi pi-arrow-left"></i>
-                      </button>
-                      <button class="erp-btn btn-outline btn-sm btn-icon" 
-                              title="Cancel">
-                        <i class="pi pi-times"></i>
-                      </button>
-                    }
+                  <button class="erp-btn btn-outline btn-sm btn-icon" title="Clear">
+                    <i class="pi pi-check"></i>
+                  </button>
+                  @if (status() !== 'autobrs') {
+                  <button class="erp-btn btn-outline btn-sm btn-icon" title="Return">
+                    <i class="pi pi-arrow-left"></i>
+                  </button>
+                  <button class="erp-btn btn-outline btn-sm btn-icon" title="Cancel">
+                    <i class="pi pi-times"></i>
+                  </button>
+                  }
                   }
                 </div>
               </td>
               <td class="td-center">
-                <span class="cheque-ref">{{ row.pchequenumber || row.preferencenumber || '--' }}</span>
+                <span class="cheque-ref">{{ row.pChequenumber || row.preferencenumber || '--' }}</span>
               </td>
-              <td>{{ row.partyname || '--' }}</td>
+              <td>{{ row.ppartyname || row.partyname || row.pBankName || '--' }}</td>
               <td>
                 <div class="td-date">
                   <i class="pi pi-calendar-clock"></i>
-                  {{ row.ppaymentdate ? (row.ppaymentdate | date: 'dd-MMM-yyyy') : '--' }}
+                  {{ row.preceiptdate ? (row.preceiptdate | date: 'dd-MMM-yyyy') : '--' }}
                 </div>
               </td>
-              <td>{{ row.ppaymentid || '--' }}</td>
+              <td>{{ row.preceiptid || '--' }}</td>
               <td class="td-right">
                 <div class="amount-cell">
                   <span class="amt-sym">{{ currencySymbol() }}</span>
-                  <span class="amt-num">{{ row.pamount | number:'1.2-2' }}</span>
+                  <span class="amt-num">{{ row.ptotalreceivedamount | number:'1.2-2' }}</span>
                 </div>
               </td>
               <td>
-                <span class="erp-badge"
-                      [class.badge-success]="row.status === 'Cleared'"
-                      [class.badge-warning]="row.status === 'Returned'"
-                      [class.badge-danger]="row.status === 'Cancelled'"
-                      [class.badge-info]="row.status !== 'Cleared' && row.status !== 'Returned' && row.status !== 'Cancelled'">
-                  {{ row.status }}
+                <span class="erp-badge" [class.badge-success]="row.status === 'Cleared'"
+                  [class.badge-warning]="row.status === 'Returned'" [class.badge-danger]="row.status === 'Cancelled'"
+                  [class.badge-info]="row.status !== 'Cleared' && row.status !== 'Returned' && row.status !== 'Cancelled'">
+                  {{ row.pchequestatus }}
                 </span>
               </td>
-              <td>{{ row.ptransactionmode || '--' }}</td>
+              <td>{{ row.ptypeofpayment || '--' }}</td>
             </tr>
           </ng-template>
 
