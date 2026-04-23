@@ -1747,7 +1747,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
 
         this.accountingTxService
           .savePaymentVoucher(payload)
-          .pipe(takeUntil(this.destroy$))
+          // .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (res: any) => {
               if (res.success === true) {
