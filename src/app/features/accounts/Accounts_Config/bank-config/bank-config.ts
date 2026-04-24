@@ -437,17 +437,31 @@ export class BankConfig implements OnInit {
   lettersOnly(event: any): void {
     event.target.value = event.target.value.replace(/[^a-zA-Z ]/g, '');
   }
+//it working but nam e and accont number not coming together in account name
+  // allowNumbersOnly1(event: any): void {
+  //   event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  //   const accountNumber = event.target.value;
+  //   this.bankmasterform.get('pAccountnumber')?.setValue(accountNumber);
 
-  allowNumbersOnly1(event: any): void {
-    event.target.value = event.target.value.replace(/[^0-9]/g, '');
-    const accountNumber = event.target.value;
-    this.bankmasterform.get('pAccountnumber')?.setValue(accountNumber);
+  //   const bankName = this.bankmasterform.get('bankName')?.value || '';
+  //   if (bankName) {
+  //     this.bankmasterform.get('account_name')?.setValue(`${accountNumber}@${bankName}`);
+  //   }
+  // }
 
-    const bankName = this.bankmasterform.get('bankName')?.value || '';
-    if (bankName) {
-      this.bankmasterform.get('account_name')?.setValue(`${accountNumber}@${bankName}`);
-    }
+  allowNumbersOnly1(event: any) {
+  event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  const accountNumber = event.target.value;
+  this.bankmasterform.get('pAccountnumber')?.setValue(accountNumber);
+
+  // ✅ bankName@accountNumber
+  const bankName = this.bankname || this.bankmasterform.get('bankName')?.value || '';
+  if (bankName && accountNumber) {
+    this.bankmasterform.get('account_name')?.setValue(`${bankName}@${accountNumber}`);
+  } else if (bankName) {
+    this.bankmasterform.get('account_name')?.setValue(bankName);
   }
+}
 
   allowNumbersOnly(event: KeyboardEvent): void {
     const charCode = event.which || event.keyCode;
@@ -538,16 +552,33 @@ export class BankConfig implements OnInit {
   }
 
   // ── Bank name change ─────────────────────────────────────────────────────────
-  onChange(event: any): void {
-    this.bankname = event.bankName;
-    const bankid  = event.bankId;
-    const accountNumber = this.bankmasterform.get('pAccountnumber')?.value || '';
+  // onChange(event: any): void {
+  //   this.bankname = event.bankName;
+  //   const bankid  = event.bankId;
+  //   const accountNumber = this.bankmasterform.get('pAccountnumber')?.value || '';
 
-    this.bankmasterform.get('account_name')?.setValue(
-      accountNumber ? `${this.bankname}@${accountNumber}` : `${this.bankname}@`
-    );
-    this.bankmasterform.get('pBankID')?.setValue(bankid);
-  }
+  //   this.bankmasterform.get('account_name')?.setValue(
+  //     accountNumber ? `${this.bankname}@${accountNumber}` : `${this.bankname}@`
+  //   );
+  //   this.bankmasterform.get('pBankID')?.setValue(bankid);
+  // }
+
+  onChange(event: any) {
+  this.bankname = event.bankName;
+  let bankid = event.bankId;
+
+  const accountNumber = this.bankmasterform.get('pAccountnumber')?.value || '';
+
+  // ✅ Only set account_name if accountNumber exists, else just bankName
+  const accountNameValue = accountNumber
+    ? `${this.bankname}@${accountNumber}`
+    : this.bankname;
+
+  this.bankmasterform.get('account_name')?.setValue(accountNameValue);
+  this.bankmasterform.get('pBankID')?.setValue(bankid);
+}
+
+
 
   // ── UPI grid ─────────────────────────────────────────────────────────────────
   addtogrid(): void {
