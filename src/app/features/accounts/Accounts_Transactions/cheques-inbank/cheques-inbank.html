@@ -60,22 +60,21 @@
                 inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
             </div>
           </div>
-          <div class="filter-group">
+          <!-- <div class="filter-group">
             <label class="filter-lbl">
               Bank <span class="required">*</span>
             </label>
             <ng-select appendTo="body" [items]="BanksList" bindLabel="pbankname" bindValue="pbankid"
               formControlName="bankname" placeholder="Select" [closeOnSelect]="true" [clearable]="true" />
-          </div>
-        </div>
-        <div class="filter-group">
+          </div> -->
+          <div class="filter-group">
           <label class="filter-lbl">
             Bank <span class="required">*</span>
           </label>
           <ng-select [items]="BanksList || []" bindLabel="pbankname" bindValue="pbankid" formControlName="bankname"
             placeholder="Select" [closeOnSelect]="true" [clearable]="true" (change)="SelectBank($event)" />
         </div>
-
+        </div>
         <!-- Balance Info Card -->
         <div class="filter-info-card">
           <div class="info-header">
@@ -186,6 +185,7 @@
 
         <!-- BRS Filter Sections - Returned -->
         <div [formGroup]="BrsDateForm">
+          @if(brsdateshowhidereturned) {
           <div class="p-4 brs-section">
             <h3 class="section-title mb-3">Returned - Date Range Filter</h3>
             <div class="row g-2">
@@ -218,6 +218,7 @@
               </div>
             </div>
           </div>
+        }
         </div>
 
         <!-- Card Body -->
@@ -429,7 +430,7 @@
             </button>
             <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton">
               <i class="pi pi-check"></i>
-              {{ buttonname ?? 'Save' }}
+              {{ buttonname }}
             </button>
           </div>
         </div>

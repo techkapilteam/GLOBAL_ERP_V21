@@ -92,7 +92,6 @@ interface BankMasterFormShape {
     BsDatepickerModule,
     DatePickerModule,
     TableModule,
-    ValidationMessageComponent,
     Address,
     NgSelectModule,
     ButtonModule,

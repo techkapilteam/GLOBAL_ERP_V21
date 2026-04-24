@@ -240,7 +240,7 @@ export class Brs implements OnInit {
             this.show.set(true);
             this.loading.set(false);
             this.isLoading.set(false);
-            // this.savebutton.set('Generate Report');
+            this.savebutton.set('Generate Report');
 
             const selectedBank = this.bankData().find(b => b.bankAccountId == _pBankAccountId);
             this.bankname = selectedBank?.bankName ?? '';
@@ -283,7 +283,7 @@ export class Brs implements OnInit {
         .pipe(finalize(() => {
           this.loading.set(false);
           this.isLoading.set(false);
-          // this.savebutton.set('Generate Report');            
+          this.savebutton.set('Generate Report');            
           this.cdr.detectChanges();
         }))
         .subscribe({
