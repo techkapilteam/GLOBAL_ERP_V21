@@ -1419,6 +1419,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { DatePickerModule } from 'primeng/datepicker';
+import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 
 @Component({
   selector: 'app-petty-cash',
@@ -1434,6 +1435,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     InputTextModule,
     NgSelectModule,
     PaginatorModule,
+    ValidationMessageComponent,
   ],
   templateUrl: './petty-cash.html',
   providers: [DatePipe],
@@ -2221,8 +2223,7 @@ export class PettyCash implements OnInit {
   }
 
 
-  tdsSection_Change(event: Event): void {
-    const section = (event.target as HTMLSelectElement).value;
+  tdsSection_Change(section: any): void {
     this.tdspercentagelist = [];
     this.pc.get('pTdsPercentage')?.setValue('');
     if (section) this.getTdsPercentage(section);

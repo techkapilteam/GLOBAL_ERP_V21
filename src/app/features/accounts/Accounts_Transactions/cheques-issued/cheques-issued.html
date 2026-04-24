@@ -2,19 +2,13 @@
 <div class="module-page">
 
   <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
+  <div class="d-flex justify-between align-center gap-4 mb-2 p-4">
     <div>
       <h1 class="page-title">
         <i class="pi pi-list"></i> Cheques Issued
       </h1>
       <p class="page-subtitle">Track and manage all issued cheques and online payments</p>
     </div>
-    <!-- 
-    <a routerLink="/dashboard/accounts/accounts-transactions/cheques-issued-new"
-       class="erp-btn btn-primary btn-lg"
-       style="margin-top: auto; white-space: nowrap;">
-      <i class="pi pi-plus"></i> New Cheque
-    </a> -->
   </div>
 
   <!-- Main Card -->
@@ -27,11 +21,11 @@
       </div>
 
       <!-- Search in header -->
-      <div class="header-search" style="flex: 1; max-width: 300px;">
+      <div class="header-search">
         <div class="erp-input-wrap">
           <i class="pi pi-search erp-input-icon"></i>
           <input type="search" class="erp-input icon-pad" placeholder="Search cheques..."
-            style="font-size: 12px; color: #374151;" (input)="onSearch($any($event.target).value)" />
+            (input)="onSearch($any($event.target).value)" />
         </div>
       </div>
 
@@ -50,14 +44,16 @@
 
     <!-- Filter Bar -->
     <form [formGroup]="ChequesIssuedForm">
-      <div class="filter-bar">
+      <div class="filter-bar stable-layout">
         <div class="filter-group">
           <label class="filter-lbl">
             Date <span class="required">*</span>
           </label>
           <div class="erp-input-wrap erp-date-wrap">
             <i class="pi pi-calendar erp-input-icon"></i>
-            <p-datepicker formControlName="ptransactiondate" id="ptransactiondate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
+            <p-datepicker formControlName="ptransactiondate" id="ptransactiondate" dateFormat="dd-M-yy"
+              placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
+              inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
           </div>
         </div>
 
@@ -65,31 +61,23 @@
           <label class="filter-lbl">
             Bank <span class="required">*</span>
           </label>
-          <ng-select appendTo="body" [items]="bankList()" bindLabel="pbankname" bindValue="pbankid" formControlName="bankname"
-            (change)="onBankChange($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true" />
+          <ng-select appendTo="body" [items]="bankList()" bindLabel="pbankname" bindValue="pbankid"
+            formControlName="bankname" (change)="onBankChange($event)" placeholder="Select" [closeOnSelect]="true"
+            [clearable]="true" />
         </div>
 
-        <!-- Balance Info Card -->
-        <!-- <div class="filter-info-card">
-          @if (banknameshowhide()) {
+        <!-- Balance Info Card (Reserved space) -->
+        <div class="filter-info-card" [style.visibility]="banknameshowhide() ? 'visible' : 'hidden'">
           <div class="info-header">
-            <span class="info-bank-name">{{ bankname() }}</span>
+            <span class="info-bank-name">{{ bankname || 'Select a Bank' }}</span>
           </div>
-          } -->
-          <!-- Balance Info Card -->
-<div class="filter-info-card">
-  @if (banknameshowhide() && bankname) {
-  <div class="info-header">
-    <span class="info-bank-name">{{ bankname || '' }}</span>
-  </div>
-  }
           <div class="info-body">
             <h4 class="info-title">Bank Balance</h4>
             <div class="info-items">
               <span class="info-item">
                 <b>Balance:</b>
                 <span class="info-value">
-                  {{ bankbalance() | currency: currencySymbol() }} <small>{{ bankbalancetype() }}</small>
+                  {{ (bankbalance() | currency: currencySymbol()) || '0.00' }} <small>{{ bankbalancetype() }}</small>
                 </span>
               </span>
               <span class="info-item">
@@ -114,7 +102,7 @@
         <button class="tab-item" [class.active]="activeTab() === 'chequesissued'"
           (click)="ChequesIssued(); activeTab.set('chequesissued')">
           <span class="tab-label">Cheques Issued</span>
-          <span class="erp-badge badge-secondary">{{ chequesissued() }}</span>
+          <span class="erp-badge badge-neutral">{{ chequesissued() }}</span>
         </button>
 
         <button class="tab-item" [class.active]="activeTab() === 'onlinepayment'"
@@ -182,48 +170,29 @@
           <!-- Header -->
           <ng-template pTemplate="header">
             <tr>
-              <th class="th-actions">Actions</th>
-              <th class="th-center">
-                <div class="th-cell" style="justify-content:center">
-                  <i class="pi pi-hashtag"></i>
+              <th style="width: 150px;">Actions</th>
+              <th style="min-width: 180px;" class="th-center">
+                <div class="th-cell">
                   Cheque/Reference No.
                 </div>
               </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-user"></i>
-                  Party
-                </div>
+              <th style="min-width: 200px;">
+                <div class="th-cell">Party</div>
               </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-calendar"></i>
-                  Payment Date
-                </div>
+              <th style="min-width: 140px;">
+                <div class="th-cell">Payment Date</div>
               </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-file"></i>
-                  Payment ID
-                </div>
+              <th style="min-width: 120px;">
+                <div class="th-cell">Payment ID</div>
               </th>
-              <th class="th-right">
-                <div class="th-cell" style="justify-content:flex-end">
-                  <i class="pi pi-indian-rupee"></i>
-                  Amount
-                </div>
+              <th style="min-width: 140px;" class="th-right">
+                <div class="th-cell">Amount</div>
               </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-info-circle"></i>
-                  Status
-                </div>
+              <th style="min-width: 120px;">
+                <div class="th-cell">Status</div>
               </th>
-              <th>
-                <div class="th-cell">
-                  <i class="pi pi-credit-card"></i>
-                  Transaction Mode
-                </div>
+              <th style="min-width: 160px;">
+                <div class="th-cell">Transaction Mode</div>
               </th>
             </tr>
           </ng-template>
@@ -249,40 +218,44 @@
                 </div>
               </td>
               <td class="td-center">
-                <span class="cheque-ref">{{ row.pChequenumber || row.preferencenumber || '--' }}</span>
+                <span class="receipt-no">{{ row.pChequenumber || row.preferencenumber || '--' }}</span>
               </td>
               <td>{{ row.ppartyname || row.partyname || row.pBankName || '--' }}</td>
               <td>
                 <div class="td-date">
-                  <i class="pi pi-calendar-clock"></i>
+                  <i class="pi pi-calendar text-muted"></i>
                   {{ row.preceiptdate ? (row.preceiptdate | date: 'dd-MMM-yyyy') : '--' }}
                 </div>
               </td>
-              <td>{{ row.preceiptid || '--' }}</td>
+              <td>
+                <span class="receipt-no">#{{ row.preceiptid || '--' }}</span>
+              </td>
               <td class="td-right">
                 <div class="amount-cell">
                   <span class="amt-sym">{{ currencySymbol() }}</span>
-                  <span class="amt-num">{{ row.ptotalreceivedamount | number:'1.2-2' }}</span>
+                  <span class="amt-num">{{ (row.ptotalreceivedamount || 0) | number:'1.2-2' }}</span>
                 </div>
               </td>
               <td>
                 <span class="erp-badge" [class.badge-success]="row.status === 'Cleared'"
                   [class.badge-warning]="row.status === 'Returned'" [class.badge-danger]="row.status === 'Cancelled'"
                   [class.badge-info]="row.status !== 'Cleared' && row.status !== 'Returned' && row.status !== 'Cancelled'">
-                  {{ row.pchequestatus }}
+                  {{ row.pchequestatus || '--' }}
                 </span>
               </td>
-              <td>{{ row.ptypeofpayment || '--' }}</td>
+              <td>
+                <span class="erp-badge badge-neutral">{{ row.ptypeofpayment || '--' }}</span>
+              </td>
             </tr>
           </ng-template>
 
           <!-- Empty Message -->
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="8" class="p-4">
-                <div style="text-align: center; color: #94a3b8; padding: 20px;">
-                  <i class="pi pi-inbox" style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
-                  <p style="margin: 0; font-size: 14px;">No cheques found</p>
+              <td colspan="8" class="p-5">
+                <div class="text-center text-muted">
+                  <i class="pi pi-inbox fs-2 mb-2 d-block"></i>
+                  <p>No cheques found for the selected criteria</p>
                 </div>
               </td>
             </tr>
@@ -294,19 +267,18 @@
     </div>
 
     <!-- Card Footer -->
-    <div class="card-footer">
-      <div class="d-flex gap-2 flex-wrap">
-        <button (click)="Clear()" class="erp-btn btn-secondary">
-          <i class="pi pi-times"></i> Clear
-        </button>
-        <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton()">
-          @if (!disablesavebutton()) {
-          <i class="pi pi-check"></i>
-          }
-          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
-          {{ buttonname() }}
-        </button>
-      </div>
+    <div class="card-footer d-flex justify-end gap-2">
+      <button (click)="Clear()" class="erp-btn btn-secondary">
+        <i class="pi pi-refresh"></i> Reset
+      </button>
+      <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton()">
+        @if (disablesavebutton()) {
+        <i class="pi pi-spin pi-spinner mr-2"></i>
+        } @else {
+        <i class="pi pi-save"></i>
+        }
+        {{ buttonname() }}
+      </button>
     </div>
 
   </div>

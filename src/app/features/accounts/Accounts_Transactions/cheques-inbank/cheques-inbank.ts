@@ -39,6 +39,7 @@ type AOA = any[][];
     CheckboxModule,
     ButtonModule,
     InputTextModule,
+    ValidationMessageComponent,
   ],
   templateUrl: './cheques-inbank.html',
   providers: [DatePipe, NumberToWordsPipe, CurrencyPipe],
@@ -915,9 +916,10 @@ export class ChequesInbank implements OnInit {
   }
 
   CheckedReturn(event: any, data: any) {
+    const isChecked = event.checked ?? event.target?.checked ?? false;
     const gridtemp = this.gridData.filter(a => a?.preceiptid == data.preceiptid);
     this.PopupData = data;
-    if (event.target.checked) {
+    if (isChecked) {
       const depositedDateStr = gridtemp[0]?.pdepositeddate;
       const receiptdate = depositedDateStr ? this._commonService.getDateObjectFromDataBase(depositedDateStr) : null;
       const chequecleardate = this.ChequesInBankForm?.get('pchequecleardate')?.value;
@@ -941,13 +943,15 @@ export class ChequesInbank implements OnInit {
   }
 
   CheckedClear(event: any, data: any) {
+    const isChecked = event.checked ?? event.target?.checked ?? false;
     const gridtemp = this.gridData.filter(a => a?.preceiptid == data.preceiptid);
-    if (event.target.checked) {
+    if (isChecked) {
       const receiptdate = gridtemp[0]?.pdepositeddate
         ? this._commonService.getDateObjectFromDataBase(gridtemp[0].pdepositeddate) : null;
       const chequecleardate = this.ChequesInBankForm?.get('pchequecleardate')?.value;
       if (receiptdate && chequecleardate && new Date(chequecleardate).getTime() < new Date(receiptdate).getTime()) {
-        event.target.checked = false;
+        if (event.target) event.target.checked = false;
+        data.pdepositstatus = false;
         this._commonService.showWarningMessage('Cheque Clear Date Should be Greater than or Equal to Deposited Date');
       } else {
         if (parseInt(this.roleid, 10) !== 2) {

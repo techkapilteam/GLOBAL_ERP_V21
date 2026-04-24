@@ -1,26 +1,18 @@
 <div class="module-page">
 
-  <!-- Header Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
-    <div>
-      <h1 class="page-title">
-        <i class="pi pi-times-circle"></i> Cancel Petty Cash Receipt
-      </h1>
-      <p class="page-subtitle">Void or cancel petty cash receipt transactions and reverse accounting entries</p>
-    </div>
-
-    <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm"
-      style="margin-top: auto; white-space: nowrap;">
-      <i class="pi pi-arrow-left"></i> Back
-    </a>
-  </div>
-
   <!-- Main Card -->
   <div class="erp-card">
 
     <!-- Card Header -->
     <div class="card-header">
-      <h2 class="card-title"><i class="pi pi-file-excel"></i> Cancel Receipt</h2>
+      <div class="d-flex flex-column">
+        <h2 class="card-title"><i class="pi pi-times-circle"></i> Cancel Petty Cash Receipt</h2>
+        <p class="card-subtitle p-4">Void or cancel petty cash receipt transactions and reverse entries</p>
+      </div>
+      <span class="erp-spacer"></span>
+      <!-- <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm">
+        <i class="pi pi-arrow-left"></i> Back
+      </a> -->
     </div>
 
     <!-- Card Body -->
@@ -51,21 +43,19 @@
 
             <!-- Date -->
             <div class="col-12 col-md-6">
-              <div class="erp-form-group">
-                <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
-                <div class="erp-input-wrap erp-date-wrap">
-                  <i class="pi pi-calendar erp-input-icon"></i>
-                  <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
-                    placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                    inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+              <div class="erp-input-btn-group">
+                <div class="flex-grow-1">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
+                    <div class="erp-input-wrap erp-date-wrap">
+                      <i class="pi pi-calendar erp-input-icon"></i>
+                      <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
+                        placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
+                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <!-- Show Button -->
-            <div class="col-12 col-md-6">
-              <div class="erp-form-group d-flex align-items-end">
-                <button type="button" (click)="showdata()" class="erp-btn btn-primary btn-sm" style="margin-top: 24px;">
+                <button type="button" (click)="showdata()" class="erp-btn btn-primary btn-md">
                   <i class="pi pi-search"></i> Show
                 </button>
               </div>

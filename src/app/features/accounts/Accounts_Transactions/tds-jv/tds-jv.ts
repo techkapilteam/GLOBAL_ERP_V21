@@ -8,11 +8,7 @@ import {
 } from '@angular/forms';
 
 import { NgSelectModule } from '@ng-select/ng-select';
-// NgSelectModule kept in imports array in case other parts of the app use it,
-// but the TDS JV form now uses native <select> elements to avoid display bugs.
-
 import { TableModule } from 'primeng/table';
-
 
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
@@ -188,17 +184,14 @@ export class TdsJv implements OnInit {
 
   // ── Events ────────────────────────────────────────────────────────────────
 
-  creditLedger_change(event: Event): void {
-    const val = (event.target as HTMLSelectElement).value;
+  creditLedger_change(val: any): void {
     if (val) {
       this.tdsJvDetailsForm.controls['CreditLedger'].setErrors(null);
       this.tdsJvDetailsForm.controls['CreditLedger'].markAsUntouched();
     }
   }
 
-  // Native <select> fires a DOM Event — read .target.value
-  click_jvtype(event: Event): void {
-    const val = (event.target as HTMLSelectElement).value;
+  click_jvtype(val: any): void {
     if (!val) {
       this.tdsJvDetailsGrid = [];
     } else {
@@ -209,13 +202,11 @@ export class TdsJv implements OnInit {
     }
   }
 
-  // Native handler for Year <select>
-  CalendarYear_change_native(event: Event): void {
-    const selectedId = (event.target as HTMLSelectElement).value;
+  CalendarYear_change_native(selectedId: any): void {
     this.pmonth = this.notselected;
     this.cmonth = this.notselected;
     this.MonthName = '';
-    this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue('');
+    this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue(null);
 
     if (selectedId) {
       const found = this.calendarYearData.find(
@@ -255,9 +246,7 @@ export class TdsJv implements OnInit {
     this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue(null);
   }
 
-  // Native handler for Month <select>
-  CalendarYearMOnth_change_native(event: Event): void {
-    const selectedId = (event.target as HTMLSelectElement).value;
+  CalendarYearMOnth_change_native(selectedId: any): void {
     if (selectedId) {
       const found = this.calendarMonthData.find(
         (m: any) => String(m.calendarPeriodDetailsId) === String(selectedId)
@@ -350,13 +339,10 @@ export class TdsJv implements OnInit {
     this.dataisempty       = false;
     this.tdsJvDetailsGrid  = [];
 
-    const rawCredit    = this.tdsJvDetailsForm.controls['CreditLedger'].value;
-    const rawDebit     = this.tdsJvDetailsForm.controls['DebitLedger'].value;
-    // native <select> always stores a plain string value
-    const creditledger = rawCredit || '';
-    const debitledger  = rawDebit  || '';
-    const selectedMonth = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
-    const monthYear    = (this.MonthName || selectedMonth || '').toString().toUpperCase();
+    const creditledger    = this.tdsJvDetailsForm.controls['CreditLedger'].value || '';
+    const debitledger     = this.tdsJvDetailsForm.controls['DebitLedger'].value  || '';
+    const selectedMonth    = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
+    const monthYear       = (this.MonthName || selectedMonth || '').toString().toUpperCase();
 
     if (!debitledger) {
       this._commonService.showWarningMessage('Please select Debit Ledger');

@@ -46,7 +46,7 @@
 
     <!-- Filter Bar -->
     <form [formGroup]="ChequesOnHandForm">
-      <div class="filter-bar">
+      <div class="filter-bar stable-layout">
         <div class="filter-group">
           <label class="filter-lbl">
             Date <span class="required">*</span>
@@ -70,20 +70,18 @@
           <app-validation-message [messgae]="ChequesOnHandValidation()['bankname']" />
         </div>
 
-        <!-- Balance Info Card -->
-        <div class="filter-info-card">
-          @if (banknameshowhide()) {
+        <!-- Balance Info Card (Reserved space) -->
+        <div class="filter-info-card" [style.visibility]="banknameshowhide() ? 'visible' : 'hidden'">
           <div class="info-header">
-            <span class="info-bank-name">{{ bankname() }}</span>
+            <span class="info-bank-name">{{ bankname() || 'Select a Bank' }}</span>
           </div>
-          }
           <div class="info-body">
             <h4 class="info-title">Balance Status</h4>
             <div class="info-items">
               <span class="info-item">
                 <b>Balance:</b>
                 <span class="info-value">
-                  {{ bankbalance() | currency: currencySymbol() }} <small>{{ bankbalancetype() }}</small>
+                  {{ (bankbalance() | currency: currencySymbol()) || '0.00' }} <small>{{ bankbalancetype() }}</small>
                 </span>
               </span>
               <span class="info-item">
@@ -554,13 +552,13 @@
           <ng-template pTemplate="body" let-row>
             <tr>
               @if (status() !== 'deposited' && status() !== 'cancelled') {
-              <td pFrozenColumn>
-                <input type="checkbox" [checked]="row.pdepositstatus"
-                  (change)="onDepositChange({ checked: $any($event.target).checked }, row)" />
+              <td pFrozenColumn class="td-center">
+                <p-checkbox [(ngModel)]="row.pdepositstatus" [binary]="true"
+                  (onChange)="onDepositChange($event, row)"></p-checkbox>
               </td>
-              <td pFrozenColumn>
-                <input type="checkbox" [checked]="row.pcancelstatus"
-                  (change)="onCancelChange({ checked: $any($event.target).checked }, row)" />
+              <td pFrozenColumn class="td-center">
+                <p-checkbox [(ngModel)]="row.pcancelstatus" [binary]="true"
+                  (onChange)="onCancelChange($event, row)"></p-checkbox>
               </td>
               }
               <td>{{ row.pChequenumber || '--NA--' }}</td>

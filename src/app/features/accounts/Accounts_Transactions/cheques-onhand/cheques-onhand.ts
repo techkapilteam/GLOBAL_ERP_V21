@@ -3569,18 +3569,14 @@ export class ChequesOnhand implements OnInit {
   }
 
   onDepositChange(event: any, row: any) {
-    debugger
     if (event.checked) {
-      this.checked = event.checked;
       row.pcancelstatus = false;
     }
     this.checkedDeposit(event, row);
   }
 
   onCancelChange(event: any, row: any) {
-    debugger
     if (event.checked) {
-      this.checked = event.checked;
       row.pdepositstatus = false;
     }
     this.checkedCancel(event, row);
