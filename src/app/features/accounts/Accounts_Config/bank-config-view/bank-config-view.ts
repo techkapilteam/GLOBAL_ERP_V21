@@ -97,6 +97,7 @@ export class BankConfigView implements OnInit {
   }
 
   editHandler(row: any): void {
+    debugger;
     this.router.navigate(['/dashboard/accounts/accounts-config/bank-config']);
     this.accountingMasterService.newformstatus('edit');
     this.accountingMasterService.GetBankDetails1(row.tbl_mst_bank_configuration_id, row);

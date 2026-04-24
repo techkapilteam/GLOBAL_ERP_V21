@@ -32,6 +32,7 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { Address } from '../../../common/address/address/address';
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 import { AccountsConfig } from '../../../../core/services/accounts/accounts-config';
+import { from } from 'rxjs';
 
 // ── Typed form shape ──────────────────────────────────────────────────────────
 interface BankMasterFormShape {
@@ -300,6 +301,7 @@ export class BankConfig implements OnInit {
 
   // ── Edit mode initialisation ─────────────────────────────────────────────────
   private checkEditMode(): void {
+    debugger;
     const type = this._accountingMasterSvc.newstatus();
     this.buttonType.set(type);
 
@@ -328,9 +330,15 @@ export class BankConfig implements OnInit {
   }
 
   private populateFormForEdit(): void {
+    debugger;
     const d    = this.datatobind[0];
     const det  = this.bankdetails;
     const form = this.bankmasterform;
+    console.log("d",d);
+    console.log("det",det); 
+    console.log("from",form);
+    
+    
 
     // Bank date
     form.controls['pBankdate'].setValue(
@@ -362,7 +370,8 @@ export class BankConfig implements OnInit {
       pRecordid:        d.pRecordid,
       pAccountnumber:   d.pAccountnumber || '',
       pIfsccode:        d.pIfsccode,
-      account_name:     d.pAccountnumber,
+      account_name:     d.pAccountname,
+      // account_name:     d.pAccountnumber,
       ptypeofoperation: 'UPDATE',
       pOverdraft:       d.pOverdraft ? d.pOverdraft.toFixed(2) : '',
       pAcctountype:     d.pAcctountype,

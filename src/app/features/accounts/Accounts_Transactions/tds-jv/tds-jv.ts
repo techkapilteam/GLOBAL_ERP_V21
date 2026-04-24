@@ -152,7 +152,9 @@ export class TdsJv implements OnInit {
       this._commonService.getschemaname(),
     ).subscribe({
       next: (json: any) => {
-        if (json != null) { this.tdsledgeraccountslist = json; }
+        if (json != null) {
+           this.tdsledgeraccountslist = json; 
+          }
       },
       error: (error: any) => this._commonService.showErrorMessage(error),
     });
@@ -197,6 +199,7 @@ export class TdsJv implements OnInit {
 
   // Native <select> fires a DOM Event — read .target.value
   click_jvtype(event: Event): void {
+    debugger;
     const val = (event.target as HTMLSelectElement).value;
     if (!val) {
       this.tdsJvDetailsGrid = [];
