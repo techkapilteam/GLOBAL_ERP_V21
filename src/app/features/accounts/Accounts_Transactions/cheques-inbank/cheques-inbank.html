@@ -56,7 +56,13 @@
               inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
           </div>
         </div>
-
+        <!-- <div class="filter-group">
+            <label class="filter-lbl">
+              Bank <span class="required">*</span>
+            </label>
+            <ng-select appendTo="body" [items]="BanksList" bindLabel="pbankname" bindValue="pbankid"
+              formControlName="bankname" placeholder="Select" [closeOnSelect]="true" [clearable]="true" />
+          </div> -->
         <div class="filter-group">
           <label class="filter-lbl">
             Bank <span class="required">*</span>

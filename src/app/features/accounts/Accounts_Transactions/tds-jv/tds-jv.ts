@@ -82,6 +82,9 @@ export class TdsJv implements OnInit {
   pmonth: any;
   selected    = 'btn btn-primary text-white';
   notselected = 'btn btn-default border';
+  minDate: any;
+  maxDate: any;
+  
 
   constructor(
     private _FormBuilder: FormBuilder,
@@ -120,6 +123,8 @@ export class TdsJv implements OnInit {
     this.BlurEventAllControll(this.tdsJvDetailsForm);
 
     this.jvdetailslist = this._commonService.hrmsjvtypes;
+    this.minDate = new Date();
+    this.maxDate = new Date();
     this.tdsJvDetailsForm.controls['preceiptdate'].setValue(new Date());
   }
 
