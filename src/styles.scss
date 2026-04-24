@@ -580,6 +580,22 @@ a {
   }
 }
 
+.ng-select.ng-select-single .ng-select-container {
+  height: 42px !important;
+
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+  position: absolute;
+  /* left: 0; */
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0px;
+  padding: 0px 6px;
+  top: 0;
+
+}
+
 /* Collapsible Section */
 .collapsible-section {
   margin-bottom: 0;
@@ -2767,7 +2783,7 @@ input[type='datetime-local'].erp-input {
 .p-multiselect,
 .p-password input {
   border-radius: 14px !important;
-  border: 1.5px solid var(--fp-border, #dbe8f9) !important;
+  border: 1.5px solid #ddd !important;
   box-shadow: none !important;
 }
 
