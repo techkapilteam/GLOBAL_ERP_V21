@@ -1,12 +1,7 @@
 
-import {
-  Component, OnInit, Input, inject, signal, DestroyRef
-} from '@angular/core';
+import { Component, OnInit, Input, inject, signal, DestroyRef, ChangeDetectorRef, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import {
-  FormBuilder, FormGroup, FormsModule,
-  ReactiveFormsModule, Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
@@ -17,13 +12,15 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
 import { NumberToWordsPipe } from '../../../../shared/pipes/number-to-words-pipe';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { DatePickerModule } from 'primeng/datepicker';
+
 
 
 declare var $: any;
@@ -32,6 +29,7 @@ type AOA = any[][];
 @Component({
   selector: 'app-cheques-in-bank',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule,
     DatePickerModule,
@@ -60,20 +58,25 @@ export class ChequesInbank implements OnInit {
   private readonly _noticeservice = inject(AccountsTransactions);
   private readonly numbertowords = inject(NumberToWordsPipe);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly ngZone = inject(NgZone);
+  private _safeMarkCheck(): void {
+    setTimeout(() => this.cdr.markForCheck());
+  }
 
-  // ── Inputs ─────────────────────────────────────────────────────────
+
   @Input() fromFormName: any;
 
-  // ── Signals ────────────────────────────────────────────────────────
+
   gridLoading = signal(false);
   searchloading = signal(false);
 
-  // ── Forms ──────────────────────────────────────────────────────────
+
   ChequesInBankForm!: FormGroup;
   BrsDateForm!: FormGroup;
   ChequesInBankValidation: any = {};
 
-  // ── State ──────────────────────────────────────────────────────────
+
   currencyCode = 'INR';
   readonly printedOn: string = new Date().toISOString();
   rowHeight: number | 'auto' = 50;
@@ -90,6 +93,7 @@ export class ChequesInbank implements OnInit {
   ChequesInBankData: any[] = [];
   _countData: any = {};
   gridData: any[] = [];
+  filteredData: any[] = [];
   gridDatatemp: any[] = [];
   ChequesClearReturnData: any[] = [];
   DataForSaving: any[] = [];
@@ -172,9 +176,26 @@ export class ChequesInbank implements OnInit {
     if (this._commonService.comapnydetails != null)
       this.disabletransactiondate = this._commonService.comapnydetails.pdatepickerenablestatus;
   }
+  //  Add this method inside ChequesInbank class (anywhere before ngOnInit)
+  private debugApiParams(): void {
+    console.log('Schema:', this._commonService.getschemaname());
+    console.log('Branch Schema:', this._commonService.getbranchname());
+    console.log('Company Code:', this._commonService.getCompanyCode());
+    console.log('Branch Code:', this._commonService.getBranchCode());
+    console.log('Currency Symbol:', this._commonService.currencysymbol);
+  }
+
 
   ngOnInit(): void {
-    this.GetBankList();
+    console.log('Session:', {
+      branchname: sessionStorage.getItem('branchname'),
+      schemaname: sessionStorage.getItem('schemaname'),
+      companyCode: sessionStorage.getItem('companyCode'),
+      branchCode: sessionStorage.getItem('branchCode')
+    });
+
+    this.debugApiParams();
+
     this.showicons = true;
     this.rowHeight = Number(this.page?.rowHeight) || 50;
     this.pageSetUp();
@@ -226,12 +247,13 @@ export class ChequesInbank implements OnInit {
       this.selectedTab = 'onlinereceipts';
     }
 
+    this.GetBankList();
     this.GetBankBalance(this.bankid);
     this.getChequeReturnCharges();
     this.BlurEventAllControll(this.ChequesInBankForm);
   }
 
-  // ── Pagination ─────────────────────────────────────────────────────
+  // ── Pagination  
   private pageSetUp() {
     this.page.offset = 0; this.page.pageNumber = 1;
     this.page.size = this._commonService.pageSize || 10;
@@ -299,16 +321,25 @@ export class ChequesInbank implements OnInit {
     return pageData.reduce((sum: number, c: any) => sum + (c.ptotalreceivedamount || 0), 0);
   }
 
-  // ── Bank ───────────────────────────────────────────────────────────
+
   GetBankList() {
     const BranchSchema = this._commonService.getbranchname();
     const GlobalSchema = this._commonService.getschemaname();
     const CompanyCode = this._commonService.getCompanyCode();
     const BranchCode = this._commonService.getBranchCode();
+
+    console.log('GetBankList Params:', { BranchSchema, GlobalSchema, CompanyCode, BranchCode }); // ✅ check values
+
     this._accountingtransaction.GetBankntList(BranchSchema, GlobalSchema, CompanyCode, BranchCode)
       .subscribe({
-        next: (res: any) => { this.BanksList = res?.banklist || []; this.GetBankBalance(this.bankid); },
-        error: (err: any) => { this._commonService.showErrorMessage(err); this.BanksList = []; }
+        next: (res: any) => {
+          this.BanksList = res?.banklist || [];
+          this.GetBankBalance(this.bankid);
+        },
+        error: (err: any) => {
+          setTimeout(() => this._commonService.showErrorMessage(err));
+          this.BanksList = [];
+        }
       });
   }
 
@@ -344,7 +375,8 @@ export class ChequesInbank implements OnInit {
               this.bankbalancedetails = {}; this.bankbalance = 0; this.bankbalancetype = ''; this.brsdate = '';
             }
           },
-          error: (err: any) => this._commonService.showErrorMessage(err)
+          //error: (err: any) => this._commonService.showErrorMessage(err)
+          error: (err: any) => setTimeout(() => this._commonService.showErrorMessage(err))
         });
     } catch (e: any) { this._commonService.showErrorMessage(e?.message || e); }
   }
@@ -373,7 +405,7 @@ export class ChequesInbank implements OnInit {
     this.GetChequesInBankforSearchDeposit(this.bankid, this.startindex, this.endindex, '');
   }
 
-  // ── Count badges ───────────────────────────────────────────────────
+  // ── Count badges  
   CountOfRecords() {
     this.all = this._countData['total_count'] || 0;
     this.onlinereceipts = this._countData['others_count'] || 0;
@@ -393,7 +425,7 @@ export class ChequesInbank implements OnInit {
     this.returned = cr.filter((d: any) => d.pchequestatus === 'R').length;
   }
 
-  // ── Tab filters ────────────────────────────────────────────────────
+  // ── Tab filters  
   private _applyTabFilter() {
     if (this.status === 'all') this.All1();
     else if (this.status === 'chequesdeposited') this.ChequesDeposited1();
@@ -525,15 +557,19 @@ export class ChequesInbank implements OnInit {
     this.saveshowhide = false; this.hiddendate = false;
   }
 
-  // ── Data Fetch ─────────────────────────────────────────────────────
+
+
   GetChequesInBankforSearchDeposit(bankid: any, startindex: any, endindex: any, searchText: any) {
     this.gridLoading.set(true);
-    const apiMode = (['CLEAR', 'RETURN', 'ONLINE-AUTO', 'CHEQUE', 'ONLINE'].includes(this.modeofreceipt)) ? this.modeofreceipt : 'ALL';
+
+    const apiMode = (['CLEAR', 'RETURN', 'ONLINE-AUTO', 'CHEQUE', 'ONLINE']
+      .includes(this.modeofreceipt)) ? this.modeofreceipt : 'ALL';
 
     const data$ = this._accountingtransaction.GetChequesInBankData(
       bankid, this._commonService.getschemaname(), this._commonService.getbranchname(),
       0, 99999, apiMode, searchText || '',
       this._commonService.getCompanyCode(), this._commonService.getBranchCode());
+
     const count$ = this._accountingtransaction.GetChequesRowCount(
       bankid, this._commonService.getschemaname(), this._commonService.getbranchname(),
       '', 'CHEQUESINBANK', apiMode,
@@ -541,7 +577,6 @@ export class ChequesInbank implements OnInit {
 
     forkJoin([data$, count$]).subscribe({
       next: (data: any) => {
-        this.gridLoading.set(false);
         this.ChequesInBankData = data[0]?.pchequesOnHandlist || [];
         const rawList = data[0]?.pchequesclearreturnlist;
         this.ChequesClearReturnData = Array.isArray(rawList)
@@ -553,49 +588,88 @@ export class ChequesInbank implements OnInit {
           : this.ChequesInBankData.filter((d: any) => d?.pdepositbankid == this.bankid).length;
         this.page.totalPages = Math.ceil(this.page.totalElements / (this.page.size || 10));
         this._applyTabFilter();
+        setTimeout(() => {
+          this.gridLoading.set(false);
+          this.cdr.markForCheck();
+        });
       },
-      error: (err: any) => { this.gridLoading.set(false); this._commonService.showErrorMessage(err); }
+      error: (err: any) => {
+        setTimeout(() => {
+          this.gridLoading.set(false);
+          this.cdr.markForCheck();
+          this._commonService.showErrorMessage(err);
+        });
+      }
     });
   }
 
+
   GetChequesInBank_load(bankid: any, modeofreceipt: string = this.modeofreceipt) {
-    this.modeofreceipt = modeofreceipt; this.gridLoading.set(true); this.brsdateshowhidecleared = false;
-    const apiMode = (['CLEAR', 'RETURN', 'ONLINE-AUTO'].includes(modeofreceipt)) ? modeofreceipt : 'ALL';
+    this.modeofreceipt = modeofreceipt;
+    this.gridLoading.set(true);
+    this.brsdateshowhidecleared = false;
+    const apiMode = (['CLEAR', 'RETURN', 'ONLINE-AUTO']
+      .includes(modeofreceipt)) ? modeofreceipt : 'ALL';
+
     this._accountingtransaction.GetChequesInBankData(
       bankid, this._commonService.getschemaname(), this._commonService.getbranchname(),
       0, 99999, apiMode, '', this._commonService.getCompanyCode(), this._commonService.getBranchCode()
     ).subscribe({
       next: (data: any) => {
-        this.gridLoading.set(false);
         this.ChequesInBankData = data?.pchequesOnHandlist || [];
         const rawList = data?.pchequesclearreturnlist;
         this.ChequesClearReturnData = Array.isArray(rawList)
           ? (Array.isArray(rawList[0]) ? rawList[0] : rawList) : [];
         this._applyTabFilter();
+        setTimeout(() => {
+          this.gridLoading.set(false);
+          this.cdr.markForCheck();
+        });
       },
-      error: (err: any) => { this.gridLoading.set(false); this._commonService.showErrorMessage(err); }
+      error: (err: any) => {
+        setTimeout(() => {
+          this.gridLoading.set(false);
+          this.cdr.markForCheck();
+          this._commonService.showErrorMessage(err);
+        });
+      }
     });
   }
 
+
+
   GetChequesInBank(bankid: any, startindex: any, endindex: any, searchText: string) {
     this.gridLoading.set(true);
-    const apiMode = (['CLEAR', 'RETURN', 'ONLINE-AUTO'].includes(this.modeofreceipt)) ? this.modeofreceipt : 'ALL';
+    const apiMode = (['CLEAR', 'RETURN', 'ONLINE-AUTO']
+      .includes(this.modeofreceipt)) ? this.modeofreceipt : 'ALL';
+
     this._accountingtransaction.GetChequesInBankData(
       bankid, this._commonService.getschemaname(), this._commonService.getbranchname(),
-      0, 99999, apiMode, searchText || '', this._commonService.getCompanyCode(), this._commonService.getBranchCode()
+      0, 99999, apiMode, searchText || '',
+      this._commonService.getCompanyCode(), this._commonService.getBranchCode()
     ).subscribe({
       next: (data: any) => {
-        this.gridLoading.set(false);
         this.ChequesInBankData = data?.pchequesOnHandlist || [];
         const rawList = data?.pchequesclearreturnlist;
         this.ChequesClearReturnData = Array.isArray(rawList)
           ? (Array.isArray(rawList[0]) ? rawList[0] : rawList) : [];
         this._applyTabFilter();
         this.PreDefinedAutoBrsArrayData = [...this.gridData];
+        setTimeout(() => {
+          this.gridLoading.set(false);
+          this.cdr.markForCheck();
+        });
       },
-      error: (err: any) => { this.gridLoading.set(false); this._commonService.showErrorMessage(err); }
+      error: (err: any) => {
+        setTimeout(() => {
+          this.gridLoading.set(false);
+          this.cdr.markForCheck();
+          this._commonService.showErrorMessage(err);
+        });
+      }
     });
   }
+
 
   GetDataOnBrsDates(frombrsdate: any, tobrsdate: any, bankid: any) {
     const data$ = this._accountingtransaction.DataFromBrsDatesChequesInBank(
@@ -606,51 +680,57 @@ export class ChequesInbank implements OnInit {
       this.bankid, this._commonService.getschemaname(), this._commonService.getbranchname(),
       this._searchText, 'CHEQUESINBANK', this.modeofreceipt,
       this._commonService.getCompanyCode(), this._commonService.getBranchCode());
-    forkJoin(data$, count$).subscribe(clearreturndata => {
-      const kk: any[] = [];
-      this.ChequesClearReturnDataBasedOnBrs = clearreturndata[0]['pchequesclearreturnlist'];
-      for (const item of this.ChequesClearReturnDataBasedOnBrs) {
-        if (this.status === 'cleared' && item.pchequestatus === 'Y') kk.push(item);
-        if (this.status === 'returned' && item.pchequestatus === 'R') kk.push(item);
-      }
-      this._countData = clearreturndata[1]; this.CountOfRecords();
-      this.gridData = kk;
-      this.amounttotal = kk.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
-      this.gridData.forEach(d => {
-        d.preceiptdate = this._commonService.getFormatDateGlobal(d?.preceiptdate);
-        d.pdepositeddate = this._commonService.getFormatDateGlobal(d?.pdepositeddate);
-        d.pCleardate = this._commonService.getFormatDateGlobal(d?.pCleardate);
-      });
-      const key = this.status === 'cleared' ? 'clear_count' : 'return_count';
-      this.totalElements = this.page.totalElements = this._countData[key];
-      if (this.page.totalElements > 10)
-        this.page.totalPages = parseInt((this.page.totalElements / 10).toString()) + 1;
-    }, error => this._commonService.showErrorMessage(error));
+    forkJoin(data$, count$).subscribe(
+      clearreturndata => {
+        const kk: any[] = [];
+        this.ChequesClearReturnDataBasedOnBrs = clearreturndata[0]['pchequesclearreturnlist'];
+        for (const item of this.ChequesClearReturnDataBasedOnBrs) {
+          if (this.status === 'cleared' && item.pchequestatus === 'Y') kk.push(item);
+          if (this.status === 'returned' && item.pchequestatus === 'R') kk.push(item);
+        }
+        this._countData = clearreturndata[1];
+        this.CountOfRecords();
+        this.gridData = kk;
+        this.amounttotal = kk.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
+        this.gridData.forEach(d => {
+          d.preceiptdate = this._commonService.getFormatDateGlobal(d?.preceiptdate);
+          d.pdepositeddate = this._commonService.getFormatDateGlobal(d?.pdepositeddate);
+          d.pCleardate = this._commonService.getFormatDateGlobal(d?.pCleardate);
+        });
+        const key = this.status === 'cleared' ? 'clear_count' : 'return_count';
+        this.totalElements = this.page.totalElements = this._countData[key];
+        if (this.page.totalElements > 10)
+          this.page.totalPages = parseInt((this.page.totalElements / 10).toString()) + 1;
+      },
+      error => setTimeout(() => this._commonService.showErrorMessage(error))
+    );
   }
+
 
   GetDataOnBrsDates1(frombrsdate: any, tobrsdate: any, bankid: any) {
     this._accountingtransaction.DataFromBrsDatesChequesInBank(
       frombrsdate, tobrsdate, bankid, this.modeofreceipt, '0',
       this.startindex, this.endindex,
       this._commonService.getCompanyCode(), this._commonService.getBranchCode(), this._commonService.getschemaname()
-    ).subscribe(clearreturndata => {
-      const kk: any[] = [];
-      this.ChequesClearReturnDataBasedOnBrs = clearreturndata['pchequesclearreturnlist'];
-      for (const item of this.ChequesClearReturnDataBasedOnBrs) {
-        if (this.status === 'cleared' && item.pchequestatus === 'Y') kk.push(item);
-        if (this.status === 'returned' && item.pchequestatus === 'R') kk.push(item);
-      }
-      this.gridData = kk;
-      this.amounttotal = kk.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
-      this.gridData.forEach(d => {
-        d.preceiptdate = this._commonService.getFormatDateGlobal(d.preceiptdate);
-        d.pdepositeddate = this._commonService.getFormatDateGlobal(d.pdepositeddate);
-        d.pCleardate = this._commonService.getFormatDateGlobal(d.pCleardate);
-      });
-    }, error => this._commonService.showErrorMessage(error));
+    ).subscribe(
+      clearreturndata => {
+        const kk: any[] = [];
+        this.ChequesClearReturnDataBasedOnBrs = clearreturndata['pchequesclearreturnlist'];
+        for (const item of this.ChequesClearReturnDataBasedOnBrs) {
+          if (this.status === 'cleared' && item.pchequestatus === 'Y') kk.push(item);
+          if (this.status === 'returned' && item.pchequestatus === 'R') kk.push(item);
+        }
+        this.gridData = kk;
+        this.amounttotal = kk.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
+        this.gridData.forEach(d => {
+          d.preceiptdate = this._commonService.getFormatDateGlobal(d.preceiptdate);
+          d.pdepositeddate = this._commonService.getFormatDateGlobal(d.pdepositeddate);
+          d.pCleardate = this._commonService.getFormatDateGlobal(d.pCleardate);
+        });
+      },
+      error => setTimeout(() => this._commonService.showErrorMessage(error))
+    );
   }
-
-  // ── BRS Dates ──────────────────────────────────────────────────────
   OnBrsDateChanges(fromdate: any, todate: any) { this.validate = fromdate > todate; }
 
   onBrsFromDateChange(event: Date): void {
@@ -691,7 +771,7 @@ export class ChequesInbank implements OnInit {
     } else { this._commonService.showWarningMessage('select fromdate and todate'); }
   }
 
-  // ── Search ─────────────────────────────────────────────────────────
+  // ── Search  
   showSearchText(_event: any) {
     const searchText = this.ChequesInBankForm.controls['searchtext'].value?.toString().trim() || '';
     this._searchText = searchText;
@@ -744,9 +824,12 @@ export class ChequesInbank implements OnInit {
     }, 0);
   }
 
+
+
   onSearch(event: any) {
     const searchText = (event || '').toString().trim().replace(/\s+/g, '');
     this._searchText = searchText;
+
     if (this.fromFormName === 'fromChequesStatusInformationForm') {
       if (searchText) {
         const lastChar = searchText.substr(searchText.length - 1);
@@ -756,31 +839,61 @@ export class ChequesInbank implements OnInit {
           this.displayGridDataBasedOnFormTemp.map((x: any) => ({
             ...x, pChequenumber: x.pChequenumber?.toString().replace(/\s+/g, '')
           })), searchText, col);
-      } else { this.displayGridDataBasedOnForm = this.displayGridDataBasedOnFormTemp; }
+      } else {
+        this.displayGridDataBasedOnForm = this.displayGridDataBasedOnFormTemp;
+      }
       this.pageCriteria.totalrows = this.displayGridDataBasedOnForm.length;
       this.pageCriteria.TotalPages = this.pageCriteria.totalrows > 10
         ? Math.ceil(this.pageCriteria.totalrows / 10) : 1;
       this.pageCriteria.currentPageRows = this.displayGridDataBasedOnForm.length < this.pageCriteria.pageSize
         ? this.displayGridDataBasedOnForm.length : this.pageCriteria.pageSize;
     } else {
-      const len: any = this._commonService.searchfilterlength;
-      if (searchText && searchText.length > len) {
-        this.pageSetUp();
-        if (this.status === 'cleared') this.Cleared();
-        else if (this.status === 'returned') this.Returned();
-        else if (this.status === 'onlinereceipts') this.OnlineReceipts();
-        else if (this.status === 'chequesdeposited') this.ChequesDeposited();
-        else if (this.status === 'all') this.All();
-        else this.GetChequesInBank_load(this.bankid);
-      } else {
-        if (!searchText) {
-          this.pageSetUp(); this.modeofreceipt = 'ALL';
-          this.status = 'onlinereceipts'; this.selectedTab = 'onlinereceipts';
-          this.GetChequesInBank_load(this.bankid);
+      if (searchText) {
+        //  Filter from in-memory data (no API call)
+        const filterFn = (item: any) =>
+          Object.values(item).some(val =>
+            val?.toString().toLowerCase().includes(searchText.toLowerCase())
+          );
+
+        const bankFilter = (d: any) => this.bankid == 0 || d?.pdepositbankid == this.bankid;
+
+        const filteredOnHand = this.ChequesInBankData.filter(filterFn).filter(bankFilter);
+        const filteredClearReturn = this.ChequesClearReturnData.filter(filterFn).filter(bankFilter);
+
+        //  Update badge counts based on filtered data
+        this.all = filteredOnHand.length;
+        this.chequesdeposited = filteredOnHand.filter((d: any) => d.ptypeofpayment === 'CHEQUE').length;
+        this.onlinereceipts = filteredOnHand.filter((d: any) => d.ptypeofpayment !== 'CHEQUE').length;
+        this.cleared = filteredClearReturn.filter((d: any) => d.pchequestatus === 'Y').length;
+        this.returned = filteredClearReturn.filter((d: any) => d.pchequestatus === 'R').length;
+
+        //  Filter grid based on current active tab
+        if (this.status === 'all') {
+          this.gridData = JSON.parse(JSON.stringify(filteredOnHand));
+        } else if (this.status === 'chequesdeposited') {
+          this.gridData = JSON.parse(JSON.stringify(filteredOnHand.filter((d: any) => d.ptypeofpayment === 'CHEQUE')));
+        } else if (this.status === 'onlinereceipts') {
+          this.gridData = JSON.parse(JSON.stringify(filteredOnHand.filter((d: any) => d.ptypeofpayment !== 'CHEQUE')));
+        } else if (this.status === 'cleared') {
+          this.gridData = JSON.parse(JSON.stringify(filteredClearReturn.filter((d: any) => d.pchequestatus === 'Y')));
+        } else if (this.status === 'returned') {
+          this.gridData = JSON.parse(JSON.stringify(filteredClearReturn.filter((d: any) => d.pchequestatus === 'R')));
         }
-        this.gridData = this.gridDatatemp;
+
+        this.gridDatatemp = [...this.gridData];
+        this.amounttotal = this.gridData.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
+        this.page.totalElements = this.gridData.length;
+        this.page.totalPages = Math.ceil(this.gridData.length / (this.page.size || 10));
+        this.cdr.markForCheck(); //  trigger OnPush re-render
+      } else {
+
+        this._recalculateCountsForBank();
+        this._applyTabFilter();
+        this.amounttotal = this.gridData.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
+        this.page.totalElements = this.gridData.length;
+        this.page.totalPages = Math.ceil(this.gridData.length / (this.page.size || 10));
+        this.cdr.markForCheck();
       }
-      this.amounttotal = parseFloat(this.gridData.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0));
     }
   }
 
@@ -790,7 +903,7 @@ export class ChequesInbank implements OnInit {
     }
   }
 
-  // ── Row checks ─────────────────────────────────────────────────────
+
   onRowClearCheck(event: any, row: any) {
     if (event.target.checked) {
       row.pdepositstatus = true; row.pchequestatus = 'Y'; row.preturnstatus = false;
@@ -878,7 +991,7 @@ export class ChequesInbank implements OnInit {
     this.gridData = [...this.gridData];
   }
 
-  // ── Modal ──────────────────────────────────────────────────────────
+  // ── Modal 
   CancelChargesOk(_event: any) {
     const inputEl = document.getElementById('cancelcharges') as HTMLInputElement;
     const rawValue = inputEl?.value.replace(/,/g, '').trim() || '0';
@@ -927,13 +1040,12 @@ export class ChequesInbank implements OnInit {
       },
       error: (error: any) => {
         this.chequereturncharges = this.minimumReturnCharge = this.returnChargesInputValue = 250;
-        this._commonService.showErrorMessage(error);
+        setTimeout(() => this._commonService.showErrorMessage(error));
       }
     });
   }
-
-  // ── Save / Clear ───────────────────────────────────────────────────
   validateSave(): boolean {
+    debugger
     let isvalid = this.checkValidations(this.ChequesInBankForm, true);
     const chequecleardate = this.ChequesInBankForm?.get('pchequecleardate')?.value;
     const transactiondate = this.ChequesInBankForm?.get('ptransactiondate')?.value;
@@ -956,7 +1068,70 @@ export class ChequesInbank implements OnInit {
     return isvalid;
   }
 
+  // Save() {
+  //   this.DataForSaving = [];
+  //   if (this.status === 'autobrs') {
+  //     this.DataForSaving = this.autoBrsData;
+  //     if (this.DataForSaving.length) {
+  //       if (confirm('Do you want to save ?')) {
+  //         this.gridLoading.set(true);
+  //         this._prepareSaveItems(this.DataForSaving, true);
+  //         this.ChequesInBankForm.controls['pchequesOnHandlist'].setValue(this.DataForSaving);
+  //         const payload = this._buildSavePayload();
+  //         this._accountingtransaction.SaveChequesInBank(payload).subscribe(
+  //           (res: any) => {
+  //             if (res[0] === true) { this.gridLoading.set(false); this._commonService.showSuccessMessage(); this.Clear(); this.autoBrsData = []; }
+  //             this.disablesavebutton = false; this.buttonname = 'Save';
+  //           },
+  //           error => { this.gridLoading.set(false); this._commonService.showErrorMessage(error); this.disablesavebutton = false; this.buttonname = 'Save'; }
+  //         );
+  //       } else { this.gridLoading.set(false); }
+  //     } else { this.disablesavebutton = false; this.buttonname = 'Save'; this._commonService.showWarningMessage('Select atleast one record '); }
+  //   } else {
+  //     if (this.validateSave()) {
+  //       this.disablesavebutton = true; this.buttonname = 'Processing';
+  //       this.DataForSaving = this.gridData.filter(i => i.pchequestatus === 'Y' || i.pchequestatus === 'R');
+  //       if (this.DataForSaving.length) {
+  //         this._prepareSaveItems(this.DataForSaving, false);
+  //         this.ChequesInBankForm.get('pchequesOnHandlist')?.setValue(this.DataForSaving);
+  //         const payload = this._buildSavePayload();
+  //         this._accountingtransaction.SaveChequesInBank(payload).subscribe(data => {
+  //           console.log('Full Save Response:', data);
+  //           if (data) {
+  //             const receipt = data.o_common_receipt_no;
+  //             if (receipt && receipt.split('$')[0] === 'R') {
+  //               const mo = data.o_return_receipts;
+  //               const encodedMo = encodeURIComponent(mo);
+  //               this._noticeservice.GetChequeReturnInvoice(
+  //                 this._commonService.getschemaname(), this._commonService.getbranchname(),
+  //                 this._commonService.getCompanyCode(), this._commonService.getBranchCode(), encodedMo
+  //               ).subscribe((res: any) => {
+  //                 if (res?.length > 0) {
+  //                   this.previewdetails = res;
+  //                   for (const p of this.previewdetails) {
+  //                     p.paddress = p.paddress.split(',');
+  //                     if (JSON.stringify(p.incidentalcharges) === '{}' || isNullOrEmptyString(p.incidentalcharges)) p.incidentalcharges = 0;
+  //                   }
+  //                   this.pdfContentData();
+  //                 }
+  //               });
+  //               this._noticeservice.GetChequeReturnVoucher(
+  //                 this._commonService.getschemaname(), this._commonService.getbranchname(),
+  //                 this._commonService.getCompanyCode(), this._commonService.getBranchCode(), encodedMo
+  //               ).subscribe({ next: (res: any) => { if (res?.length > 0) { this.chequerwturnvoucherdetails = res; this.chequereturnvoucherpdf(); } }, error: (err: any) => this._commonService.showErrorMessage(err) });
+  //             }
+  //             this._commonService.showSuccessMessage(); this.Clear();
+  //             this.status = 'returned'; this.selectedTab = 'returned'; this.modeofreceipt = 'RETURN'; this.Returned();
+  //           }
+  //           this.disablesavebutton = false; this.buttonname = 'Save';
+  //         }, error => { this._commonService.showErrorMessage(error); this.disablesavebutton = false; this.buttonname = 'Save'; });
+  //       } else { this.disablesavebutton = false; this.buttonname = 'Save'; this._commonService.showWarningMessage('Select atleast one record '); }
+  //     }
+  //   }
+  // }
+
   Save() {
+    debugger
     this.DataForSaving = [];
     if (this.status === 'autobrs') {
       this.DataForSaving = this.autoBrsData;
@@ -968,52 +1143,94 @@ export class ChequesInbank implements OnInit {
           const payload = this._buildSavePayload();
           this._accountingtransaction.SaveChequesInBank(payload).subscribe(
             (res: any) => {
-              if (res[0] === true) { this.gridLoading.set(false); this._commonService.showSuccessMessage(); this.Clear(); this.autoBrsData = []; }
-              this.disablesavebutton = false; this.buttonname = 'Save';
+              if (res[0] === true) {
+                this.gridLoading.set(false);
+                setTimeout(() => this._commonService.showSuccessMessage());
+                this.Clear();
+                this.autoBrsData = [];
+              }
+              this.disablesavebutton = false;
+              this.buttonname = 'Save';
             },
-            error => { this.gridLoading.set(false); this._commonService.showErrorMessage(error); this.disablesavebutton = false; this.buttonname = 'Save'; }
+            error => {
+              this.gridLoading.set(false);
+              setTimeout(() => this._commonService.showErrorMessage(error));
+              this.disablesavebutton = false;
+              this.buttonname = 'Save';
+            }
           );
-        } else { this.gridLoading.set(false); }
-      } else { this.disablesavebutton = false; this.buttonname = 'Save'; this._commonService.showWarningMessage('Select atleast one record '); }
+        } else {
+          this.gridLoading.set(false);
+        }
+      } else {
+        this.disablesavebutton = false;
+        this.buttonname = 'Save';
+        setTimeout(() => this._commonService.showWarningMessage('Select atleast one record '));
+      }
     } else {
       if (this.validateSave()) {
-        this.disablesavebutton = true; this.buttonname = 'Processing';
+        this.disablesavebutton = true;
+        this.buttonname = 'Processing';
         this.DataForSaving = this.gridData.filter(i => i.pchequestatus === 'Y' || i.pchequestatus === 'R');
         if (this.DataForSaving.length) {
           this._prepareSaveItems(this.DataForSaving, false);
           this.ChequesInBankForm.get('pchequesOnHandlist')?.setValue(this.DataForSaving);
           const payload = this._buildSavePayload();
-          this._accountingtransaction.SaveChequesInBank(payload).subscribe(data => {
-            console.log('Full Save Response:', data);
-            if (data) {
-              const receipt = data.o_common_receipt_no;
-              if (receipt && receipt.split('$')[0] === 'R') {
-                const mo = data.o_return_receipts;
-                const encodedMo = encodeURIComponent(mo);
-                this._noticeservice.GetChequeReturnInvoice(
-                  this._commonService.getschemaname(), this._commonService.getbranchname(),
-                  this._commonService.getCompanyCode(), this._commonService.getBranchCode(), encodedMo
-                ).subscribe((res: any) => {
-                  if (res?.length > 0) {
-                    this.previewdetails = res;
-                    for (const p of this.previewdetails) {
-                      p.paddress = p.paddress.split(',');
-                      if (JSON.stringify(p.incidentalcharges) === '{}' || isNullOrEmptyString(p.incidentalcharges)) p.incidentalcharges = 0;
+          this._accountingtransaction.SaveChequesInBank(payload).subscribe(
+            data => {
+              console.log('Full Save Response:', data);
+              if (data) {
+                const receipt = data.o_common_receipt_no;
+                if (receipt && receipt.split('$')[0] === 'R') {
+                  const mo = data.o_return_receipts;
+                  const encodedMo = encodeURIComponent(mo);
+                  this._noticeservice.GetChequeReturnInvoice(
+                    this._commonService.getschemaname(), this._commonService.getbranchname(),
+                    this._commonService.getCompanyCode(), this._commonService.getBranchCode(), encodedMo
+                  ).subscribe((res: any) => {
+                    if (res?.length > 0) {
+                      this.previewdetails = res;
+                      for (const p of this.previewdetails) {
+                        p.paddress = p.paddress.split(',');
+                        if (JSON.stringify(p.incidentalcharges) === '{}' || isNullOrEmptyString(p.incidentalcharges)) p.incidentalcharges = 0;
+                      }
+                      this.pdfContentData();
                     }
-                    this.pdfContentData();
-                  }
-                });
-                this._noticeservice.GetChequeReturnVoucher(
-                  this._commonService.getschemaname(), this._commonService.getbranchname(),
-                  this._commonService.getCompanyCode(), this._commonService.getBranchCode(), encodedMo
-                ).subscribe({ next: (res: any) => { if (res?.length > 0) { this.chequerwturnvoucherdetails = res; this.chequereturnvoucherpdf(); } }, error: (err: any) => this._commonService.showErrorMessage(err) });
+                  });
+                  this._noticeservice.GetChequeReturnVoucher(
+                    this._commonService.getschemaname(), this._commonService.getbranchname(),
+                    this._commonService.getCompanyCode(), this._commonService.getBranchCode(), encodedMo
+                  ).subscribe({
+                    next: (res: any) => {
+                      if (res?.length > 0) {
+                        this.chequerwturnvoucherdetails = res;
+                        this.chequereturnvoucherpdf();
+                      }
+                    },
+                    error: (err: any) => setTimeout(() => this._commonService.showErrorMessage(err))
+                  });
+                }
+                setTimeout(() => this._commonService.showSuccessMessage());
+                this.Clear();
+                this.status = 'returned';
+                this.selectedTab = 'returned';
+                this.modeofreceipt = 'RETURN';
+                this.Returned();
               }
-              this._commonService.showSuccessMessage(); this.Clear();
-              this.status = 'returned'; this.selectedTab = 'returned'; this.modeofreceipt = 'RETURN'; this.Returned();
+              this.disablesavebutton = false;
+              this.buttonname = 'Save';
+            },
+            error => {
+              setTimeout(() => this._commonService.showErrorMessage(error));
+              this.disablesavebutton = false;
+              this.buttonname = 'Save';
             }
-            this.disablesavebutton = false; this.buttonname = 'Save';
-          }, error => { this._commonService.showErrorMessage(error); this.disablesavebutton = false; this.buttonname = 'Save'; });
-        } else { this.disablesavebutton = false; this.buttonname = 'Save'; this._commonService.showWarningMessage('Select atleast one record '); }
+          );
+        } else {
+          this.disablesavebutton = false;
+          this.buttonname = 'Save';
+          setTimeout(() => this._commonService.showWarningMessage('Select atleast one record '));
+        }
       }
     }
   }
@@ -1055,7 +1272,7 @@ export class ChequesInbank implements OnInit {
     this.pageSetUp(); this.GetBankBalance(this.bankid);
   }
 
-  // ── Duplicate / Validation helpers ─────────────────────────────────
+  // ── Duplicate / Validation helpers  
   checkDuplicateValueslatest(event: any, rowIndex: any, row: any) {
     const value = event.target.value.trim();
     if (!value) { row.preferencetext = ''; this.gridData = [...this.gridData]; return; }
@@ -1136,7 +1353,7 @@ export class ChequesInbank implements OnInit {
     } catch (e) { this.showErrorMessage('e'); return false; }
   }
 
-  // ── Grid status view ───────────────────────────────────────────────
+  // ── Grid status view 
   chequesStatusInfoGrid() {
     const grid: any[] = [];
     for (const d of this.ChequesInBankData) {
@@ -1157,7 +1374,7 @@ export class ChequesInbank implements OnInit {
     this.pageCriteria.currentPageRows = grid.length < this.pageCriteria.pageSize ? grid.length : this.pageCriteria.pageSize;
   }
 
-  // ── Export / Print ─────────────────────────────────────────────────
+  // ── Export / Print  
   pdfOrprint(printorpdf: any) {
     if (!this.gridData?.length) { this._commonService.showWarningMessage('No data available'); return; }
     this.Totlaamount = 0;
@@ -1222,7 +1439,7 @@ export class ChequesInbank implements OnInit {
     });
   }
 
-  // ── PDF generation ─────────────────────────────────────────────────
+  // ── PDF generation  
   pdfContentData() {
     if (!this.previewdetails.length) return;
     const lMargin = 15, rMargin = 15;
@@ -1283,7 +1500,7 @@ export class ChequesInbank implements OnInit {
       doc.text('Bank             : ' + obj.pcreditaccountname + '', 15, 62);
       doc.rect(15, 135, 30, 12, 'S');
       doc.text('Manager' + '', 55, 145); doc.text('Accounts Officer' + '', 110, 145); doc.text('Cashier' + '', 180, 145);
-       doc.text('Amount In Words :  Rupees ' + this.titleCase(this.numbertowords.transform(obj.ptotalreceivedamount)) + ' Only.', 15, 125);
+      doc.text('Amount In Words :  Rupees ' + this.titleCase(this.numbertowords.transform(obj.ptotalreceivedamount)) + ' Only.', 15, 125);
       const bodygrid: any[] = [
         ['Cheque No.', obj.preferencenumber],
         ['Cheque Date', this._commonService.getFormatDateGlobal(obj.pchequedate)],
@@ -1308,7 +1525,7 @@ export class ChequesInbank implements OnInit {
     return str.toLowerCase().split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.substring(1)).join(' ');
   }
 
-  // ── AutoBRS ────────────────────────────────────────────────────────
+  // ── AutoBRS  
   AutoBrs() {
     if (this.ChequesInBankForm.controls['bankname'].value) {
       this.status = 'autobrs'; this.modeofreceipt = 'ONLINE-AUTO';
@@ -1343,6 +1560,35 @@ export class ChequesInbank implements OnInit {
     XLSX.writeFile(wb, this.fileName);
   }
 
+  // saveAutoBrs() {
+  //   let valid = false; let items: any[] = [];
+  //   if (this.auto_brs_type_name === 'Upload') {
+  //     valid = Array.isArray(this.PreDefinedAutoBrsArrayData) && this.PreDefinedAutoBrsArrayData.length > 0;
+  //     items = JSON.parse(JSON.stringify(this.PreDefinedAutoBrsArrayData));
+  //   } else if (this.auto_brs_type_name === 'Pending') {
+  //     items = JSON.parse(JSON.stringify(this.PreDefinedAutoBrsArrayData.filter((x: any) => x.check)));
+  //     valid = items.length > 0;
+  //   }
+  //   if (valid) {
+  //     if (confirm('Do you want to save ?')) {
+  //       items.forEach((el: any) => {
+  //         el.transactiondate = this._commonService.getFormatDateNormal(el.transactiondate);
+  //         el.ptranstype = el.preceiptype; el.preceiptype = el.uploadtype;
+  //       });
+  //       const newobj = { pchequesOnHandlist: items, schemaname: this._commonService.getschemaname(), auto_brs_type_name: this.auto_brs_type_name };
+  //       this.saveAutoBrsBool = true;
+  //       this._accountingtransaction.SaveAutoBrsdataupload(JSON.stringify(newobj)).subscribe(
+  //         (res: any) => {
+  //           this.saveAutoBrsBool = false;
+  //           if (res) { this._commonService.showSuccessMessage(); this.PreDefinedAutoBrsArrayData = []; }
+  //           else this._commonService.showWarningMessage('Not Saved!!');
+  //         },
+  //         (error: any) => { this._commonService.showErrorMessage(error); this.saveAutoBrsBool = false; }
+  //       );
+  //     }
+  //   } else { this._commonService.showWarningMessage('No Data to Save'); }
+  // }
+
   saveAutoBrs() {
     let valid = false; let items: any[] = [];
     if (this.auto_brs_type_name === 'Upload') {
@@ -1363,13 +1609,22 @@ export class ChequesInbank implements OnInit {
         this._accountingtransaction.SaveAutoBrsdataupload(JSON.stringify(newobj)).subscribe(
           (res: any) => {
             this.saveAutoBrsBool = false;
-            if (res) { this._commonService.showSuccessMessage(); this.PreDefinedAutoBrsArrayData = []; }
-            else this._commonService.showWarningMessage('Not Saved!!');
+            if (res) {
+              setTimeout(() => this._commonService.showSuccessMessage());
+              this.PreDefinedAutoBrsArrayData = [];
+            } else {
+              setTimeout(() => this._commonService.showWarningMessage('Not Saved!!'));
+            }
           },
-          (error: any) => { this._commonService.showErrorMessage(error); this.saveAutoBrsBool = false; }
+          (error: any) => {
+            setTimeout(() => this._commonService.showErrorMessage(error));
+            this.saveAutoBrsBool = false;
+          }
         );
       }
-    } else { this._commonService.showWarningMessage('No Data to Save'); }
+    } else {
+      setTimeout(() => this._commonService.showWarningMessage('No Data to Save'));
+    }
   }
 
   auto_brs_typeChange(event: any) { this.PreDefinedAutoBrsArrayData = []; this.auto_brs_type_name = event; }
@@ -1388,7 +1643,8 @@ export class ChequesInbank implements OnInit {
         }));
         this.PreDefinedAutoBrsArrayData = [...this.PreDefinedAutoBrsArrayData];
       },
-      error: (error: any) => this._commonService.showErrorMessage(error)
+      //error: (error: any) => this._commonService.showErrorMessage(error)
+      error: (error: any) => setTimeout(() => this._commonService.showErrorMessage(error))
     });
   }
 
@@ -1438,5 +1694,6 @@ export class ChequesInbank implements OnInit {
 
 function isNullOrEmptyString(incidentalcharges: any): boolean {
   throw new Error('Function not implemented.');
+
 }
 

@@ -94,7 +94,7 @@ export class MainLayoutComponent implements OnInit {
     });
 
     // Set General Receipt as default selection
-    this.setDefaultSelection();
+    // this.setDefaultSelection();
   }
 
   private setDefaultSelection(): void {

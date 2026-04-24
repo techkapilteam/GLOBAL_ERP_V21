@@ -9,9 +9,8 @@
       <p class="page-subtitle">Void or cancel petty cash receipt transactions and reverse accounting entries</p>
     </div>
 
-    <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view"
-       class="erp-btn btn-white btn-sm"
-       style="margin-top: auto; white-space: nowrap;">
+    <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm"
+      style="margin-top: auto; white-space: nowrap;">
       <i class="pi pi-arrow-left"></i> Back
     </a>
   </div>
@@ -37,23 +36,15 @@
             <div class="col-12 col-md-6">
               <div class="erp-form-group">
                 <label class="erp-label" for="receiptid">Receipt No. <span class="required">*</span></label>
-                <ng-select appendTo="body"
-                  id="receiptid"
-                  [items]="receiptdata()"
-                  bindLabel="payment_number"
-                  bindValue="tbl_trans_pettycash_voucher_id"
-                  formControlName="receiptid"
-                  [searchable]="true"
-                  [clearable]="true"
-                  placeholder="Select"
-                  (change)="getreceiptdata($event)"
-                  [class.ng-invalid]="
+                <ng-select appendTo="body" id="receiptid" [items]="receiptdata()" bindLabel="payment_number"
+                  bindValue="tbl_trans_pettycash_voucher_id" formControlName="receiptid" [searchable]="true"
+                  [clearable]="true" placeholder="Select" (change)="getreceiptdata($event)" [class.ng-invalid]="
                     PettyCashCancel.get('receiptid')?.invalid &&
                     (PettyCashCancel.get('receiptid')?.touched ||
                       PettyCashCancel.get('receiptid')?.dirty)
                   "></ng-select>
                 @if (PettyCashCancel.get('receiptid')?.errors?.['required']) {
-                  <span class="erp-field-error">Receipt No. is required</span>
+                <span class="erp-field-error">Receipt No. is required</span>
                 }
               </div>
             </div>
@@ -64,7 +55,9 @@
                 <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
                 <div class="erp-input-wrap erp-date-wrap">
                   <i class="pi pi-calendar erp-input-icon"></i>
-                  <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                  <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
+                    placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
+                    inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 </div>
               </div>
             </div>
@@ -83,100 +76,103 @@
 
         <!-- RECEIPT DETAILS SECTION -->
         @if (show()) {
-          <div class="p-4">
-            <h3 class="section-title mb-3">Receipt Details</h3>
+        <div class="p-4">
+          <h3 class="section-title mb-3">Receipt Details</h3>
 
-            <!-- Receipt Meta Information -->
-            <div class="row g-2 mb-4">
-              <div class="col-12 col-md-6">
-                <div class="erp-info-group">
-                  <label class="erp-label-info">Credit To:</label>
-                  <span class="erp-value-info">{{ creditto() || '--' }}</span>
-                </div>
-              </div>
-              <div class="col-12 col-md-6">
-                <div class="erp-info-group">
-                  <label class="erp-label-info">Received From:</label>
-                  <span class="erp-value-info">{{ receivedfrom() || '--' }}</span>
-                </div>
-              </div>
-              <div class="col-12 col-md-6">
-                <div class="erp-info-group">
-                  <label class="erp-label-info">Receipt Date:</label>
-                  <span class="erp-value-info">{{ (receiptdate() | date:'dd-MMM-yyyy') || '--' }}</span>
-                </div>
+          <!-- Receipt Meta Information -->
+          <div class="row g-2 mb-4">
+            <div class="col-12 col-md-6">
+              <div class="erp-info-group">
+                <label class="erp-label-info">Credit To:</label>
+                <span class="erp-value-info">{{ creditto() || '--' }}</span>
               </div>
             </div>
-
-            <!-- Details Table -->
-            <div class="tbl-wrap">
-              <p-table
-                [value]="lstdetails()"
-                [paginator]="true"
-                [rows]="pageCriteria().pageSize"
-                [totalRecords]="pageCriteria().totalrows"
-                (onPage)="onPrimePageChange($event)"
-                styleClass="gr-table p-datatable-sm p-datatable-gridlines"
-                [scrollable]="true"
-                scrollHeight="400px">
-
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th class="th-actions" style="width: 60px;">S.No</th>
-                    <th class="th-cell">
-                      <div class="th-cell">
-                        <i class="pi pi-align-left"></i>
-                        Particulars
-                      </div>
-                    </th>
-                    <th class="th-right" style="width: 150px;">
-                      <div class="th-cell" style="justify-content:flex-end">
-                        <i class="pi pi-indian-rupee"></i>
-                        Amount
-                      </div>
-                    </th>
-                  </tr>
-                </ng-template>
-
-                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                  <tr>
-                    <td class="td-center">
-                      {{ pageCriteria().offset * pageCriteria().pageSize + rowIndex + 1 }}
-                    </td>
-                    <td class="td-cell">{{ rowData.pAccountname }}</td>
-                    <td class="td-right">
-                      <span class="amount-cell">{{ currencysymbol }} {{ rowData.pLedgeramount | number:'1.2-2' }}</span>
-                    </td>
-                  </tr>
-                </ng-template>
-
-                <ng-template pTemplate="emptymessage">
-                  <tr>
-                    <td colspan="3" class="p-4">
-                      <div style="text-align: center; color: #94a3b8; padding: 20px;">
-                        <i class="pi pi-inbox" style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
-                        <p style="margin: 0; font-size: 14px;">No payment details found</p>
-                      </div>
-                    </td>
-                  </tr>
-                </ng-template>
-
-              </p-table>
+            <div class="col-12 col-md-6">
+              <div class="erp-info-group">
+                <label class="erp-label-info">Received From:</label>
+                <span class="erp-value-info">{{ receivedfrom() || '--' }}</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="erp-info-group">
+                <label class="erp-label-info">Receipt Date:</label>
+                <span class="erp-value-info">{{ (receiptdate() | date:'dd-MMM-yyyy') || '--' }}</span>
+              </div>
             </div>
           </div>
-
-          <!-- NOTES/REMARKS SECTION -->
-          <div class="p-4">
-            <div class="erp-form-group">
-              <label class="erp-label" for="remarks">Cancel Remarks</label>
-              <textarea
-                id="remarks"
-                class="erp-textarea"
-                placeholder="Enter reason for cancellation"
-                formControlName="remarks"
-                rows="3"></textarea>
+          <div class="col-md-4">
+            <div class="erp-info-group">
+              <label class="erp-label-info">Received From:</label>
+              <span class="erp-value-info">{{ receivedfrom() || '--' }}</span>
             </div>
           </div>
+          <div class="col-md-4">
+            <div class="erp-info-group">
+              <label class="erp-label-info">Receipt Date:</label>
+              <span class="erp-value-info">{{ (receiptdate() | date:'dd-MMM-yyyy') || '--' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Table -->
+        <div class="tbl-wrap">
+          <p-table [value]="lstdetails()" [paginator]="true" [rows]="pageCriteria().pageSize"
+            [totalRecords]="pageCriteria().totalrows" (onPage)="onPrimePageChange($event)"
+            styleClass="gr-table p-datatable-sm p-datatable-gridlines" [scrollable]="true" scrollHeight="400px">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="th-actions" style="width: 60px;">S.No</th>
+                <th class="th-cell">
+                  <div class="th-cell">
+                    <i class="pi pi-align-left"></i>
+                    Particulars
+                  </div>
+                </th>
+                <th class="th-right" style="width: 150px;">
+                  <div class="th-cell" style="justify-content:flex-end">
+                    <i class="pi pi-indian-rupee"></i>
+                    Amount
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+              <tr>
+                <td class="td-center">
+                  {{ pageCriteria().offset * pageCriteria().pageSize + rowIndex + 1 }}
+                </td>
+                <td class="td-cell">{{ rowData.pAccountname }}</td>
+                <td class="td-right">
+                  <span class="amount-cell">{{ currencysymbol }} {{ rowData.pLedgeramount | number:'1.2-2' }}</span>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" class="p-4">
+                  <div style="text-align: center; color: #94a3b8; padding: 20px;">
+                    <i class="pi pi-inbox"
+                      style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
+                    <p style="margin: 0; font-size: 14px;">No payment details found</p>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+        </div>
+
+        <!-- NOTES/REMARKS SECTION -->
+        <div class="p-4">
+          <div class="erp-form-group">
+            <label class="erp-label" for="remarks">Cancel Remarks</label>
+            <textarea id="remarks" class="erp-textarea" placeholder="Enter reason for cancellation"
+              formControlName="remarks" rows="3"></textarea>
+          </div>
+        </div>
         }
 
       </form>
@@ -184,30 +180,14 @@
 
     <!-- Card Footer -->
     @if (show()) {
-      <div class="card-footer">
-        <button type="button" class="erp-btn btn-outline btn-sm" (click)="clear()">
-          <i class="pi pi-times"></i> Cancel
-        </button>
-        <button type="button" class="erp-btn btn-danger btn-sm" (click)="Save()">
-          <i class="pi pi-trash"></i> Cancel Receipt
-        </button>
-      </div>
+    <div class="card-footer">
+      <button type="button" class="erp-btn btn-outline btn-sm" (click)="clear()">
+        <i class="pi pi-times"></i> Cancel
+      </button>
+      <button type="button" class="erp-btn btn-danger btn-sm" (click)="Save()">
+        <i class="pi pi-trash"></i> Cancel Receipt
+      </button>
+    </div>
     }
 
   </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

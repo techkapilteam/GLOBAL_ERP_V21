@@ -14,7 +14,7 @@ import { AccountsConfig } from '../../../../core/services/accounts/accounts-conf
   selector: "app-bank-config-view",
   imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterModule, TableModule, ButtonModule],
   templateUrl: "./bank-config-view.html",
-  
+
 })
 
 export class BankConfigView implements OnInit {
@@ -104,6 +104,7 @@ export class BankConfigView implements OnInit {
 
   // ── Search / Filter ───────────────────────────────────────────────────
   filterDatatable(event: Event): void {
+    debugger;
     const filter = (event.target as HTMLInputElement).value?.toLowerCase() ?? '';
 
     if (!filter) {

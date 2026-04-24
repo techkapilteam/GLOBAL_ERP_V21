@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { Table, TableModule } from 'primeng/table';
@@ -33,7 +33,8 @@ export class JournalVoucherView implements OnInit {
   constructor(
     private _commonService: CommonService,
     private _AccountingTransactionsService: AccountsTransactions,
-    private router: Router
+    private router: Router,
+     private cdr: ChangeDetectorRef 
   ) {
     this.pageCriteria = new PageCriteria();
   }
@@ -51,10 +52,13 @@ export class JournalVoucherView implements OnInit {
       this._commonService.getBranchCode()
     ).subscribe({
       next: (json: any) => {
+        console.log(json,"json");
+        
         if (json != null) {
           this.gridData = json;
           this.gridView = json;
-          this.Journalvoucherlist = this.gridData;
+          // this.Journalvoucherlist = this.gridData;
+              this.Journalvoucherlist = [...this.gridData]; 
 
           this.pageCriteria.totalrows = this.gridData.length;
           this.pageCriteria.TotalPages = 1;
@@ -69,8 +73,10 @@ export class JournalVoucherView implements OnInit {
               ? this.gridData.length
               : this.pageSize;
 
-          this.filteredData = this.gridView;
+          // this.filteredData = this.gridView;
+           this.filteredData = [...this.gridView];
           this.columnsWithSearch = Object.keys(this.gridView[0]);
+           this.cdr.detectChanges();   
         }
       },
       error: (error) => {
@@ -97,7 +103,7 @@ export class JournalVoucherView implements OnInit {
   viewHandler(event: any, row: any): void {
     const receipt = btoa(row.journalVoucherNo + ',' + 'Journal Voucher');
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/JournalVoucherReport', receipt])
+      this.router.createUrlTree(['/journal-voucher', receipt])
     );
     window.open(url, '_blank');
   }

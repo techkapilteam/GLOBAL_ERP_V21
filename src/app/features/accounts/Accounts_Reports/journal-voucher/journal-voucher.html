@@ -1,0 +1,177 @@
+<div class="shadow-bg-view">
+
+  <div class="report-wrapper">
+
+    <div id="template">
+
+      <!-- ── Export Actions ───────────────────────────────────────────── -->
+      <div class="export-actions">
+        <ul class="export-list">
+
+          <li class="export-item">
+            <a (click)="pdfOrprint('Pdf')" class="export-icon-link" title="PDF">
+              <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
+            </a>
+          </li>
+
+          <li class="export-item">
+            <a (click)="pdfOrprint('Print')" class="export-icon-link" title="Print">
+              <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ── Main Container ───────────────────────────────────────────── -->
+      <div class="report-container" id="temp-box">
+
+        <div class="report-row">
+          <div class="report-col">
+            <div class="report-card">
+
+              <!-- Company Logo -->
+              <div class="company-logo-wrap">
+                <img class="logo-img" src="assets/images/kapillogo.png" alt="Company Logo" />
+              </div>
+
+              <!-- Company Header -->
+              <div class="company-header">
+                <h2 class="company-name">{{ companyName() }}</h2>
+                <p class="company-address">{{ registrationAddress() }}</p>
+                <p class="company-cin">CIN : {{ cinNumber() }}</p>
+              </div>
+
+              <!-- Print Meta -->
+              <div class="print-meta-row">
+                <p class="meta-text">
+                  Printed On :
+                  {{ todaydate() | date:'dd-MMM-yyyy h:mm:ss a' }}
+                </p>
+                <p class="meta-text meta-text--right">
+                  Branch : {{ branchName() | titlecase }}
+                </p>
+              </div>
+
+              <!-- Receipt Title Banner -->
+              <div class="receipt-banner-outer">
+                <div class="receipt-banner">
+                  <p class="receipt-title">
+                    {{ receiptName() }}
+                    @if (duplicate() === 'Reprint') {
+                      <span class="duplicate-label">(Duplicate)</span>
+                    }
+                  </p>
+                </div>
+              </div>
+
+              <!-- Voucher Body -->
+              <div class="voucher-body">
+
+                <!-- JV No / Date -->
+                <div class="voucher-meta-row">
+                  <span class="meta-jvno">JV No. : {{ pJvnumber() }}</span>
+                  <span class="meta-jvdate fw-bold">
+                    Date : {{ pJvDate() | date:'dd-MMM-yyyy' }}
+                  </span>
+                </div>
+
+                <!-- Particulars Table -->
+                <div class="table-wrapper">
+                  <table class="receipt-table">
+
+                    <thead>
+                      <tr>
+                        <th class="col-sno">S.No.</th>
+                        <th class="col-particulars">Particulars</th>
+                        <th class="col-amount">Debit Amount</th>
+                        <th class="col-amount">Credit Amount</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                      @for (jvData of journalVoucherData(); track jvData; let i = $index) {
+                        <tr>
+                          <td class="td-center">{{ i + 1 }}</td>
+                          <td>{{ jvData.pParticulars }}</td>
+
+                          <td class="td-right fw-bold">
+                            @if (jvData.pDebitamount !== 0) {
+                              {{ currencySymbol }}
+                              {{ jvData.pDebitamount.toFixed(2) | number:'1.2-2' }}
+                            }
+                          </td>
+
+                          <td class="td-right fw-bold">
+                            @if (jvData.pCreditAmount !== 0) {
+                              {{ currencySymbol }}
+                              {{ jvData.pCreditAmount.toFixed(2) | number:'1.2-2' }}
+                            }
+                          </td>
+                        </tr>
+                      }
+
+                      <!-- Totals Row -->
+                      <tr class="totals-row">
+                        <td></td>
+                        <td class="td-right fw-bold">Total</td>
+                        <td class="td-right fw-bold">
+                          {{ currencySymbol }}
+                          {{ pDebitAmount().toFixed(2) | number:'1.2-2' }}
+                        </td>
+                        <td class="td-right fw-bold">
+                          {{ currencySymbol }}
+                          {{ pCreditAmount().toFixed(2) | number:'1.2-2' }}
+                        </td>
+                      </tr>
+
+                    </tbody>
+
+                  </table>
+                </div>
+
+                <!-- Narration -->
+                <div class="narration-block">
+                  <p class="narration-text">
+                    <strong>Narration :</strong>
+                    {{ pNarration() }}
+                    @if (pNarration()) {
+                      <span>.</span>
+                    }
+                  </p>
+                </div>
+
+                <!-- Signature Row -->
+                <div class="signature-row">
+
+                  <div class="signature-col">
+                    <p class="signature-spacer"></p>
+                    <p class="signature-label">(Approved By)</p>
+                  </div>
+
+                  <div class="signature-col">
+                    <p class="signature-spacer"></p>
+                    <p class="signature-label">(Verified By)</p>
+                  </div>
+
+                  <div class="signature-col">
+                    <label class="signature-name">{{ username }}</label>
+                    <p class="signature-label">(Posted By)</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

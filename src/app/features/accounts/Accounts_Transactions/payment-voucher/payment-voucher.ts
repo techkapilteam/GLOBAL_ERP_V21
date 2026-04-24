@@ -138,10 +138,11 @@ export class PaymentVoucher implements OnInit {
 
   // ── Navigation ────────────────────────────────────────────────────────────
   openVoucherReport(row: VoucherRow): void {
+    debugger;
     if (!row?.paymentId) return;
     const receipt = btoa(`${row.paymentId},Payment Voucher`);
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/PaymentVoucherReport', receipt])
+      this.router.createUrlTree(['/payment-voucher', receipt])
     );
     window.open(url, '_blank');
   }

@@ -34,6 +34,7 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
 import { DatePickerModule } from 'primeng/datepicker';
 
 
+
 // ── Validators ────────────────────────────────────────────────────────────────
 function alphabetsOnlyValidator(c: AbstractControl): ValidationErrors | null {
   if (!c.value) return null;
@@ -91,64 +92,64 @@ export class GeneralReceiptNew implements OnInit {
 
 
   // ── DI ──────────────────────────────────────────────────────────────────────
-  private cs       = inject(CommonService);
-  private svc      = inject(AccountsTransactions);
-  private fb       = inject(FormBuilder);
-  private router   = inject(Router);
+  private cs = inject(CommonService);
+  private svc = inject(AccountsTransactions);
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
   private datepipe = inject(DatePipe);
-  private jvSvc    = inject(AccountsTransactions);
+  private jvSvc = inject(AccountsTransactions);
   private destroyRef = inject(DestroyRef);
 
   // ── Signals — UI state ──────────────────────────────────────────────────────
-  bankshowhide    = signal(false);
-  walletshowhide  = signal(false);
-  chequeshowhide  = signal(false);
-  onlineshowhide  = signal(false);
-  debitShowhide   = signal(false);
-  creditShowhide  = signal(false);
-  gridshowhide    = signal(false);
-  showgst         = signal(false);
-  showtds         = signal(false);
-  showsubledger   = signal(true);
-  showupi         = signal(false);
-  showgstno       = signal(false);
-  showgstamount   = signal(false);
-  showigst        = signal(false);
-  showcgst        = signal(false);
-  showsgst        = signal(false);
-  showutgst       = signal(false);
+  bankshowhide = signal(false);
+  walletshowhide = signal(false);
+  chequeshowhide = signal(false);
+  onlineshowhide = signal(false);
+  debitShowhide = signal(false);
+  creditShowhide = signal(false);
+  gridshowhide = signal(false);
+  showgst = signal(false);
+  showtds = signal(false);
+  showsubledger = signal(true);
+  showupi = signal(false);
+  showgstno = signal(false);
+  showgstamount = signal(false);
+  showigst = signal(false);
+  showcgst = signal(false);
+  showsgst = signal(false);
+  showutgst = signal(false);
   showCashWarning = signal(false);
-  submitted       = signal(false);
+  submitted = signal(false);
   disablesavebutton = signal(false);
-  savebutton      = signal('Save');
+  savebutton = signal('Save');
 
   // ── Signals — data ──────────────────────────────────────────────────────────
-  banklist               = signal<any[]>([]);
-  banklist1              = signal<any[]>([]);
-  partylist              = signal<any[]>([]);
-  ledgeraccountslist     = signal<any[]>([]);
-  subledgeraccountslist  = signal<any[]>([]);
-  gstlist                = signal<any[]>([]);
-  tdssectionlist         = signal<any[]>([]);
-  tdspercentagelist      = signal<any[]>([]);
-  tdslist                = signal<any[]>([]);
-  statelist              = signal<any[]>([]);
-  upinameslist           = signal<any[]>([]);
-  typeofpaymentlist      = signal<any[]>([]);
+  banklist = signal<any[]>([]);
+  banklist1 = signal<any[]>([]);
+  partylist = signal<any[]>([]);
+  ledgeraccountslist = signal<any[]>([]);
+  subledgeraccountslist = signal<any[]>([]);
+  gstlist = signal<any[]>([]);
+  tdssectionlist = signal<any[]>([]);
+  tdspercentagelist = signal<any[]>([]);
+  tdslist = signal<any[]>([]);
+  statelist = signal<any[]>([]);
+  upinameslist = signal<any[]>([]);
+  typeofpaymentlist = signal<any[]>([]);
   modeoftransactionslist = signal<any[]>([]);
-  paymentslist           = signal<any[]>([]);
-  partyjournalentrylist  = signal<any[]>([]);
-  imageResponse          = signal<any>({ name: '' });
-  cashWarningMessage     = signal('');
+  paymentslist = signal<any[]>([]);
+  partyjournalentrylist = signal<any[]>([]);
+  imageResponse = signal<any>({ name: '' });
+  cashWarningMessage = signal('');
 
   // ── Signals — balances ──────────────────────────────────────────────────────
-  cashBalance         = signal('');
-  bankBalance         = signal('');
-  bankbookBalance     = signal('');
+  cashBalance = signal('');
+  bankBalance = signal('');
+  bankbookBalance = signal('');
   bankpassbookBalance = signal('');
-  ledgerBalance       = signal('');
-  subledgerBalance    = signal('');
-  partyBalance        = signal('');
+  ledgerBalance = signal('');
+  subledgerBalance = signal('');
+  partyBalance = signal('');
 
   // ── Computed ─────────────────────────────────────────────────────────────────
   paymentsTotal = computed(() =>
@@ -159,14 +160,14 @@ export class GeneralReceiptNew implements OnInit {
   );
 
   // ── Non-signal state ────────────────────────────────────────────────────────
-  readonly currencySymbol        = this.cs.currencysymbol || '₹';
-  readonly today                 = new Date();
-  readonly maxDate               = new Date();
-  readonly gstnopattern          = '^(0[1-9]|[1-2][0-9]|3[0-9])([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}([a-zA-Z0-9]){1}([a-zA-Z]){1}([a-zA-Z0-9]){1}?';
+  readonly currencySymbol = this.cs.currencysymbol || '₹';
+  readonly today = new Date();
+  readonly maxDate = new Date();
+  readonly gstnopattern = '^(0[1-9]|[1-2][0-9]|3[0-9])([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}([a-zA-Z0-9]){1}([a-zA-Z]){1}([a-zA-Z0-9]){1}?';
   readonly CASH_TRANSACTION_LIMIT = 200000;
-  readonly rowsPerPageOptions    = [5, 10, 20, 50];
+  readonly rowsPerPageOptions = [5, 10, 20, 50];
 
-  dpConfig : any = {};
+  dpConfig: any = {};
   dpConfig1: any = {};
 
   GeneralReceiptForm!: FormGroup;
@@ -178,35 +179,35 @@ export class GeneralReceiptNew implements OnInit {
    */
   formValidationMessages: { [key: string]: string } = {};
 
-  Modeofpayment   = '';
-  Transtype       = '';
-  TempGSTtype     = '';
+  Modeofpayment = '';
+  Transtype = '';
+  TempGSTtype = '';
   TempModeofReceipt: any = '';
   TempgstshowInclude = true;
   TempgstshowExclude = true;
-  tempState: any  = '';
-  tempgstno: any  = '';
+  tempState: any = '';
+  tempgstno: any = '';
   temporaryamount = 0;
   availableAmount: any = 0;
   cashRestrictAmount: any;
   bankexists: boolean | undefined;
   paymentlistcolumnwiselist: any = { ptotalamount: 0, pamount: 0, pgstamount: 0 };
-  gstPercentageSelected   = false;
-  DepositBankDisable      = false;
+  gstPercentageSelected = false;
+  DepositBankDisable = false;
   private _selectedPartyStateName = '';
-  disabletransactiondate  = false;
+  disabletransactiondate = false;
 
   readonly Bankbuttondata = [
-    { type: 'Cheque',      chequeshowhide: true,  onlineshowhide: false, debitShowhide: false, creditShowhide: false },
-    { type: 'Online',      chequeshowhide: false, onlineshowhide: true,  debitShowhide: false, creditShowhide: false },
-    { type: 'Debit Card',  chequeshowhide: false, onlineshowhide: false, debitShowhide: true,  creditShowhide: false },
-    { type: 'Credit Card', chequeshowhide: false, onlineshowhide: false, debitShowhide: false, creditShowhide: true  }
+    { type: 'Cheque', chequeshowhide: true, onlineshowhide: false, debitShowhide: false, creditShowhide: false },
+    { type: 'Online', chequeshowhide: false, onlineshowhide: true, debitShowhide: false, creditShowhide: false },
+    { type: 'Debit Card', chequeshowhide: false, onlineshowhide: false, debitShowhide: true, creditShowhide: false },
+    { type: 'Credit Card', chequeshowhide: false, onlineshowhide: false, debitShowhide: false, creditShowhide: true }
   ];
 
   readonly Paymentbuttondata = [
-    { type: 'Cash',   bankshowhide: false, walletshowhide: false },
-    { type: 'Bank',   bankshowhide: true,  walletshowhide: false },
-    { type: 'Wallet', bankshowhide: false, walletshowhide: true  }
+    { type: 'Cash', bankshowhide: false, walletshowhide: false },
+    { type: 'Bank', bankshowhide: true, walletshowhide: false },
+    { type: 'Wallet', bankshowhide: false, walletshowhide: true }
   ];
 
 
@@ -238,96 +239,96 @@ export class GeneralReceiptNew implements OnInit {
 
   // ── Private setup ─────────────────────────────────────────────────────────
   private _configureDatepickers(): void {
-    this.dpConfig.containerClass    = 'theme-dark-blue';
-    this.dpConfig.dateInputFormat   = 'DD-MMM-YYYY';
-    this.dpConfig.showWeekNumbers   = false;
-    this.dpConfig.isAnimated        = true;
+    this.dpConfig.containerClass = 'theme-dark-blue';
+    this.dpConfig.dateInputFormat = 'DD-MMM-YYYY';
+    this.dpConfig.showWeekNumbers = false;
+    this.dpConfig.isAnimated = true;
     this.dpConfig1 = { ...this.dpConfig, maxDate: new Date() };
   }
 
   private _buildForm(): void {
     this.GeneralReceiptForm = this.fb.group({
-      preceiptid:            [''],
-      preceiptdate:          [{ value: this.today, disabled: true }, Validators.required],
-      pmodofreceipt:         ['CASH', Validators.required],
-      ptotalreceivedamount:  [0],
-      pnarration:            ['', [Validators.required, Validators.maxLength(250)]],
-      ppartyname:            [''],
-      ppartyid:              [null, Validators.required],
-      pistdsapplicable:      [false],
-      pTdsSection:           [''],
-      pTdsPercentage:        [0, percentageValidator],
-      ptdsamount:            [0],
-      ptdscalculationtype:   [''],
-      ppartypannumber:       [''],
-      pbankname:             ['', alphabetsOnlyValidator],
-      pbranchname:           ['', [Validators.required, Validators.pattern(/^[A-Za-z ]+$/), Validators.maxLength(30)]],
-      schemaname:            [this.cs.getschemaname()],
-      ptranstype:            [''],
-      ptypeofpayment:        [null],
-      pAccountnumber:        [''],
-      pChequenumber:         [''],
-      pchequedate:           [{ value: this.today, disabled: false }],
-      pbankid:               [null],
-      pCardNumber:           ['', cardNumberValidator],
-      pdepositbankid:        ['', Validators.required],
-      pdepositbankid1:       [null, Validators.required],
-      pdepositbankname:      [''],
-      pRecordid:             [0],
-      pUpiname:              [''],
-      pUpiid:                [''],
-      pstatename:            [''],
-      pCreatedby:            [this.cs.getCreatedBy()],
-      pModifiedby:           [0],
-      pStatusid:             [''],
-      pStatusname:           [this.cs.pStatusname],
-      pEffectfromdate:       [''],
-      pEffecttodate:         [''],
-      ptypeofoperation:      [this.cs.ptypeofoperation],
-      ppartyreferenceid:     [''],
-      ppartyreftype:         [''],
-      preceiptslist:         this._buildReceiptsGroup(),
-      pFilename:             [''],
-      pFilepath:             [''],
-      pFileformat:           [''],
-      pipaddress:            [this.cs.getIpAddress()],
-      pDocStorePath:         [''],
-      pchequestatus:         [false]
+      preceiptid: [''],
+      preceiptdate: [{ value: this.today, disabled: true }, Validators.required],
+      pmodofreceipt: ['CASH', Validators.required],
+      ptotalreceivedamount: [0],
+      pnarration: ['', [Validators.required, Validators.maxLength(250)]],
+      ppartyname: [''],
+      ppartyid: [null, Validators.required],
+      pistdsapplicable: [false],
+      pTdsSection: [''],
+      pTdsPercentage: [0, percentageValidator],
+      ptdsamount: [0],
+      ptdscalculationtype: [''],
+      ppartypannumber: [''],
+      pbankname: ['', alphabetsOnlyValidator],
+      pbranchname: ['', [Validators.required, Validators.pattern(/^[A-Za-z ]+$/), Validators.maxLength(30)]],
+      schemaname: [this.cs.getschemaname()],
+      ptranstype: [''],
+      ptypeofpayment: [null],
+      pAccountnumber: [''],
+      pChequenumber: [''],
+      pchequedate: [{ value: this.today, disabled: false }],
+      pbankid: [null],
+      pCardNumber: ['', cardNumberValidator],
+      pdepositbankid: ['', Validators.required],
+      pdepositbankid1: [null, Validators.required],
+      pdepositbankname: [''],
+      pRecordid: [0],
+      pUpiname: [''],
+      pUpiid: [''],
+      pstatename: [''],
+      pCreatedby: [this.cs.getCreatedBy()],
+      pModifiedby: [0],
+      pStatusid: [''],
+      pStatusname: [this.cs.pStatusname],
+      pEffectfromdate: [''],
+      pEffecttodate: [''],
+      ptypeofoperation: [this.cs.ptypeofoperation],
+      ppartyreferenceid: [''],
+      ppartyreftype: [''],
+      preceiptslist: this._buildReceiptsGroup(),
+      pFilename: [''],
+      pFilepath: [''],
+      pFileformat: [''],
+      pipaddress: [this.cs.getIpAddress()],
+      pDocStorePath: [''],
+      pchequestatus: [false]
     });
   }
 
   private _buildReceiptsGroup(): FormGroup {
     return this.fb.group({
-      pisgstapplicable:  [false],
-      pState:            [''],
-      pStateId:          [''],
-      pgstpercentage:    [''],
-      pamount:           [''],
-      pgsttype:          [''],
+      pisgstapplicable: [false],
+      pState: [''],
+      pStateId: [''],
+      pgstpercentage: [''],
+      pamount: [''],
+      pgsttype: [''],
       pgstcalculationtype: ['INCLUDE'],
-      pigstamount:       [''],
-      pcgstamount:       [''],
-      psgstamount:       [''],
-      putgstamount:      [''],
-      psubledgerid:      [null],
-      psubledgername:    [''],
-      pledgerid:         [null],
-      pledgername:       [''],
-      pCreatedby:        [this.cs.pCreatedby],
-      pStatusname:       [this.cs.pStatusname],
-      pModifiedby:       [''],
-      pStatusid:         [''],
-      pEffectfromdate:   [''],
-      pEffecttodate:     [''],
-      ptypeofoperation:  [this.cs.ptypeofoperation],
-      pgstamount:        [''],
-      pgstno:            new FormControl('', Validators.pattern(this.gstnopattern)),
-      pigstpercentage:   [''],
-      pcgstpercentage:   [''],
-      psgstpercentage:   [''],
-      putgstpercentage:  [''],
+      pigstamount: [''],
+      pcgstamount: [''],
+      psgstamount: [''],
+      putgstamount: [''],
+      psubledgerid: [null],
+      psubledgername: [''],
+      pledgerid: [null],
+      pledgername: [''],
+      pCreatedby: [this.cs.pCreatedby],
+      pStatusname: [this.cs.pStatusname],
+      pModifiedby: [''],
+      pStatusid: [''],
+      pEffectfromdate: [''],
+      pEffecttodate: [''],
+      ptypeofoperation: [this.cs.ptypeofoperation],
+      pgstamount: [''],
+      pgstno: new FormControl('', Validators.pattern(this.gstnopattern)),
+      pigstpercentage: [''],
+      pcgstpercentage: [''],
+      psgstpercentage: [''],
+      putgstpercentage: [''],
       pactualpaidamount: ['', [Validators.required, positiveAmountValidator, Validators.pattern(/^[0-9,]+(\.[0-9]{1,2})?$/)]],
-      ptotalamount:      ['']
+      ptotalamount: ['']
     });
   }
 
@@ -338,8 +339,8 @@ export class GeneralReceiptNew implements OnInit {
         .subscribe(fn);
 
     sub('preceiptslist.pactualpaidamount', () => this.recalculateAll());
-    sub('pTdsPercentage',                  () => this.recalculateAll());
-    sub('preceiptslist.pgstpercentage',    () => this.recalculateAll());
+    sub('pTdsPercentage', () => this.recalculateAll());
+    sub('preceiptslist.pgstpercentage', () => this.recalculateAll());
 
     sub('pbankid', () => {
       if (this.GeneralReceiptForm.get('ptranstype')?.value === 'Online') {
@@ -425,7 +426,7 @@ export class GeneralReceiptNew implements OnInit {
     }
 
     ['pbankname', 'pChequenumber', 'pdepositbankname', 'ptypeofpayment',
-     'pbranchname', 'pCardNumber', 'pAccountnumber']
+      'pbranchname', 'pCardNumber', 'pAccountnumber']
       .forEach(f => this.GeneralReceiptForm.controls[f]?.setValue(''));
 
     this.GeneralReceiptForm.controls['pchequedate'].setValue(this.today);
@@ -441,7 +442,7 @@ export class GeneralReceiptNew implements OnInit {
     } else {
       this.GeneralReceiptForm.controls['ptranstype'].setValue('');
       ['pdepositbankname', 'pbankid', 'pChequenumber', 'ptypeofpayment',
-       'pbranchname', 'pCardNumber', 'pchequedate', 'pAccountnumber']
+        'pbranchname', 'pCardNumber', 'pchequedate', 'pAccountnumber']
         .forEach(f => {
           this.GeneralReceiptForm.controls[f]?.clearValidators();
           this.GeneralReceiptForm.controls[f]?.updateValueAndValidity();
@@ -451,7 +452,7 @@ export class GeneralReceiptNew implements OnInit {
       this.creditShowhide.set(false);
       this.debitShowhide.set(false);
       this.Modeofpayment = type;
-      this.Transtype     = '';
+      this.Transtype = '';
     }
   }
 
@@ -459,7 +460,7 @@ export class GeneralReceiptNew implements OnInit {
     this.validation(type);
 
     ['pbankid', 'pChequenumber', 'pdepositbankid', 'ptypeofpayment',
-     'pbranchname', 'pCardNumber', 'pAccountnumber', 'pbankname']
+      'pbranchname', 'pCardNumber', 'pAccountnumber', 'pbankname']
       .forEach(f =>
         this.GeneralReceiptForm.controls[f]?.setValue(
           f === 'pbankid' || f === 'pdepositbankid' || f === 'ptypeofpayment' ? null : ''
@@ -474,8 +475,8 @@ export class GeneralReceiptNew implements OnInit {
     this.typeofpaymentlist.set(
       type === 'Online'
         ? this.modeoftransactionslist().filter(
-            (p: any) => p.ptranstype === 'Online' && p.ptypeofpayment !== 'Online'
-          )
+          (p: any) => p.ptranstype === 'Online' && p.ptypeofpayment !== 'Online'
+        )
         : this._getTypeofPaymentData()
     );
 
@@ -507,14 +508,14 @@ export class GeneralReceiptNew implements OnInit {
 
   checkDepositBankEnable(): void {
     const transtype = this.GeneralReceiptForm.get('ptranstype')?.value;
-    const control   = this.GeneralReceiptForm.get('pdepositbankid');
+    const control = this.GeneralReceiptForm.get('pdepositbankid');
 
     if (transtype === 'Debit Card' || transtype === 'Credit Card') {
       control?.enable();
       return;
     }
 
-    const bank    = this.GeneralReceiptForm.get('pbankid')?.value;
+    const bank = this.GeneralReceiptForm.get('pbankid')?.value;
     const payment = this.GeneralReceiptForm.get('ptypeofpayment')?.value;
 
     if (bank && payment) {
@@ -538,19 +539,19 @@ export class GeneralReceiptNew implements OnInit {
 
   // ── Balances ──────────────────────────────────────────────────────────────
   setBalances(type: string, amount: string | number): void {
-    const n       = Number(amount) || 0;
+    const n = Number(amount) || 0;
     const rounded = Math.round(Math.abs(n));
-    const fmt     = this.cs.currencyFormat(rounded.toString());
-    const label   = n < 0 ? `${fmt} Cr` : `${fmt} Dr`;
+    const fmt = this.cs.currencyFormat(rounded.toString());
+    const label = n < 0 ? `${fmt} Cr` : `${fmt} Dr`;
 
     switch (type) {
-      case 'CASH':     this.cashBalance.set(label); break;
-      case 'BANK':     this.bankBalance.set(label); break;
+      case 'CASH': this.cashBalance.set(label); break;
+      case 'BANK': this.bankBalance.set(label); break;
       case 'BANKBOOK': this.bankbookBalance.set(`${this.currencySymbol} ${label}`); break;
       case 'PASSBOOK': this.bankpassbookBalance.set(`${this.currencySymbol} ${label}`); break;
-      case 'LEDGER':   this.ledgerBalance.set(`${this.currencySymbol} ${label}`); break;
-      case 'SUBLEDGER':this.subledgerBalance.set(`${this.currencySymbol} ${label}`); break;
-      case 'PARTY':    this.partyBalance.set(`${this.currencySymbol} ${label}`); break;
+      case 'LEDGER': this.ledgerBalance.set(`${this.currencySymbol} ${label}`); break;
+      case 'SUBLEDGER': this.subledgerBalance.set(`${this.currencySymbol} ${label}`); break;
+      case 'PARTY': this.partyBalance.set(`${this.currencySymbol} ${label}`); break;
     }
   }
 
@@ -582,8 +583,8 @@ export class GeneralReceiptNew implements OnInit {
 
   onAmountInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const raw   = input.value.replace(/,/g, '').replace(/\D/g, '');
-    const MAX   = 9999999999999;
+    const raw = input.value.replace(/,/g, '').replace(/\D/g, '');
+    const MAX = 9999999999999;
 
     if (raw === '') {
       input.value = '';
@@ -620,26 +621,26 @@ export class GeneralReceiptNew implements OnInit {
   // ── Recalculate ───────────────────────────────────────────────────────────
   recalculateAll(): void {
     try {
-      const rg        = this.GeneralReceiptForm.get('preceiptslist') as FormGroup;
+      const rg = this.GeneralReceiptForm.get('preceiptslist') as FormGroup;
       const rawAmount = rg.get('pactualpaidamount')?.value;
       const amountReceived = Number(
         typeof rawAmount === 'string' ? rawAmount.replace(/,/g, '') : rawAmount
       ) || 0;
 
-      const isgst    = rg.get('pisgstapplicable')?.value;
-      const gsttype  = rg.get('pgsttype')?.value;
+      const isgst = rg.get('pisgstapplicable')?.value;
+      const gsttype = rg.get('pgsttype')?.value;
       const calcType = rg.get('pgstcalculationtype')?.value || 'INCLUDE';
-      const igstpct  = Number(rg.get('pigstpercentage')?.value)  || 0;
-      const cgstpct  = Number(rg.get('pcgstpercentage')?.value)  || 0;
-      const sgstpct  = Number(rg.get('psgstpercentage')?.value)  || 0;
+      const igstpct = Number(rg.get('pigstpercentage')?.value) || 0;
+      const cgstpct = Number(rg.get('pcgstpercentage')?.value) || 0;
+      const sgstpct = Number(rg.get('psgstpercentage')?.value) || 0;
       const utgstpct = Number(rg.get('putgstpercentage')?.value) || 0;
-      const isTds    = this.GeneralReceiptForm.get('pistdsapplicable')?.value;
-      const tdsRate  = this._getTdsPercentageValue();
+      const isTds = this.GeneralReceiptForm.get('pistdsapplicable')?.value;
+      const tdsRate = this._getTdsPercentageValue();
 
       let gstRate = 0;
       if (isgst && gsttype) {
-        if      (gsttype === 'IGST')       gstRate = igstpct;
-        else if (gsttype === 'CGST,SGST')  gstRate = cgstpct + sgstpct;
+        if (gsttype === 'IGST') gstRate = igstpct;
+        else if (gsttype === 'CGST,SGST') gstRate = cgstpct + sgstpct;
         else if (gsttype === 'CGST,UTGST') gstRate = cgstpct + utgstpct;
       }
 
@@ -650,24 +651,24 @@ export class GeneralReceiptNew implements OnInit {
       this.showutgst.set(gsttype === 'CGST,UTGST');
 
       const floor2 = (v: number) => Math.floor(v * 100) / 100;
-      const ceil2  = (v: number) => Math.ceil(v  * 100) / 100;
+      const ceil2 = (v: number) => Math.ceil(v * 100) / 100;
 
       let taxableAmount = amountReceived;
       let igstamt = 0, cgstamt = 0, sgstamt = 0, utgstamt = 0,
-          totalGstAmt = 0, tdsAmount = 0;
+        totalGstAmt = 0, tdsAmount = 0;
 
       if (amountReceived > 0) {
         if (isgst && gstRate > 0) {
           if (calcType === 'INCLUDE') {
             taxableAmount = floor2((amountReceived * 100) / (100 + gstRate));
-            totalGstAmt   = parseFloat((amountReceived - taxableAmount).toFixed(2));
+            totalGstAmt = parseFloat((amountReceived - taxableAmount).toFixed(2));
           } else {
             taxableAmount = amountReceived;
-            totalGstAmt   = ceil2((taxableAmount * gstRate) / 100);
+            totalGstAmt = ceil2((taxableAmount * gstRate) / 100);
           }
-          if      (gsttype === 'IGST')       { igstamt  = totalGstAmt; }
-          else if (gsttype === 'CGST,SGST')  { cgstamt  = floor2(totalGstAmt / 2); sgstamt  = parseFloat((totalGstAmt - cgstamt).toFixed(2)); }
-          else if (gsttype === 'CGST,UTGST') { cgstamt  = floor2(totalGstAmt / 2); utgstamt = parseFloat((totalGstAmt - cgstamt).toFixed(2)); }
+          if (gsttype === 'IGST') { igstamt = totalGstAmt; }
+          else if (gsttype === 'CGST,SGST') { cgstamt = floor2(totalGstAmt / 2); sgstamt = parseFloat((totalGstAmt - cgstamt).toFixed(2)); }
+          else if (gsttype === 'CGST,UTGST') { cgstamt = floor2(totalGstAmt / 2); utgstamt = parseFloat((totalGstAmt - cgstamt).toFixed(2)); }
         }
         if (isTds && tdsRate > 0) tdsAmount = floor2((taxableAmount * tdsRate) / 100);
       }
@@ -678,7 +679,7 @@ export class GeneralReceiptNew implements OnInit {
 
       rg.patchValue({
         pamount: taxableAmount || 0,
-        pgstamount:  totalGstAmt,
+        pgstamount: totalGstAmt,
         pigstamount: igstamt,
         pcgstamount: cgstamt,
         psgstamount: sgstamt,
@@ -725,7 +726,7 @@ export class GeneralReceiptNew implements OnInit {
     this.showCashWarning.set(false);
     this.cashWarningMessage.set('');
 
-    const ppartyid   = $event?.ppartyid;
+    const ppartyid = $event?.ppartyid;
     const trans_date = this.cs.getFormatDateNormal(this.GeneralReceiptForm.controls['preceiptdate'].value);
 
     this.svc.GetCashRestrictAmountpercontact1(
@@ -766,7 +767,7 @@ export class GeneralReceiptNew implements OnInit {
       .subscribe({
         next: (json: any) => {
           if (!json) return;
-          const rawTds   = json.lstTdsSectionDetails || [];
+          const rawTds = json.lstTdsSectionDetails || [];
           this.tdslist.set(rawTds);
           const sections = [...new Set(rawTds.map((i: any) => i.pTdsSection))];
           this.tdssectionlist.set(sections.map(s => ({ pTdsSection: s })));
@@ -902,7 +903,7 @@ export class GeneralReceiptNew implements OnInit {
     if (!$event) {
       this.GeneralReceiptForm.get('preceiptslist.pgstpercentage')?.setValue('');
       ['pigstpercentage', 'pcgstpercentage', 'psgstpercentage', 'putgstpercentage',
-       'pgstamount', 'pigstamount', 'pcgstamount', 'psgstamount', 'putgstamount']
+        'pgstamount', 'pigstamount', 'pcgstamount', 'psgstamount', 'putgstamount']
         .forEach(k => this.GeneralReceiptForm.get(`preceiptslist.${k}`)?.setValue(0));
       this.recalculateAll();
       return;
@@ -961,14 +962,14 @@ export class GeneralReceiptNew implements OnInit {
       this.showigst.set(true);
     } else {
       this.showcgst.set(true);
-      if (s.pgsttype === 'CGST,SGST')  this.showsgst.set(true);
+      if (s.pgsttype === 'CGST,SGST') this.showsgst.set(true);
       if (s.pgsttype === 'CGST,UTGST') this.showutgst.set(true);
     }
   }
 
   private _gstClear(): void {
     ['pigstpercentage', 'pcgstpercentage', 'psgstpercentage',
-     'putgstpercentage', 'pgstpercentage', 'pgstno']
+      'putgstpercentage', 'pgstpercentage', 'pgstno']
       .forEach(k => this.GeneralReceiptForm.get(`preceiptslist.${k}`)?.setValue(''));
   }
 
@@ -983,7 +984,7 @@ export class GeneralReceiptNew implements OnInit {
 
   gstvalidation(on: any): void {
     this.formValidationMessages = {};
-    const pctCtrl   = this.GeneralReceiptForm.get('preceiptslist.pgstpercentage');
+    const pctCtrl = this.GeneralReceiptForm.get('preceiptslist.pgstpercentage');
     const stateCtrl = this.GeneralReceiptForm.get('preceiptslist.pStateId');
 
     if (on) {
@@ -1069,8 +1070,8 @@ export class GeneralReceiptNew implements OnInit {
     if (!this.addvalidations()) return;
 
     const accountHeadId = ledger?.value;
-    const subId         = this.GeneralReceiptForm.get('preceiptslist.psubledgerid')?.value;
-    const paid          = parseFloat((this.cs.removeCommasInAmount(amount?.value) || 0).toString());
+    const subId = this.GeneralReceiptForm.get('preceiptslist.psubledgerid')?.value;
+    const paid = parseFloat((this.cs.removeCommasInAmount(amount?.value) || 0).toString());
 
     this.jvSvc.GetdebitchitCheckbalance(
       this.cs.getbranchname(), accountHeadId, 36, subId,
@@ -1095,13 +1096,13 @@ export class GeneralReceiptNew implements OnInit {
             const entry = {
               ...fv,
               pamount,
-              pgstamount:         pgst,
-              ptotalamount:       ptotal,
-              pgstpercentage:     Number(fv.pgstpercentage) || 0,
-              pisgstapplicable:   fv.pisgstapplicable === true,
-              pistdsapplicable:   this.GeneralReceiptForm.get('pistdsapplicable')?.value,
-              pTdsSection:        this.GeneralReceiptForm.get('pTdsSection')?.value || '',
-              pTdsPercentage:     this._getTdsPercentageValue(),
+              pgstamount: pgst,
+              ptotalamount: ptotal,
+              pgstpercentage: Number(fv.pgstpercentage) || 0,
+              pisgstapplicable: fv.pisgstapplicable === true,
+              pistdsapplicable: this.GeneralReceiptForm.get('pistdsapplicable')?.value,
+              pTdsSection: this.GeneralReceiptForm.get('pTdsSection')?.value || '',
+              pTdsPercentage: this._getTdsPercentageValue(),
               ptdsamountindividual: parseFloat(
                 (Number(this.GeneralReceiptForm.get('ptdsamount')?.value) || 0).toFixed(2)
               )
@@ -1151,7 +1152,7 @@ export class GeneralReceiptNew implements OnInit {
     }
     if (!ok) return false;
 
-    const ledgerid   = fg.controls['pledgerid'].value;
+    const ledgerid = fg.controls['pledgerid'].value;
     const subledgerid = fg.controls['psubledgerid'].value;
     const dup = this.paymentslist().some(g => g.pledgerid == ledgerid && g.psubledgerid == subledgerid);
     if (dup) { this.cs.showWarningMessage('Ledger & Sub Ledger already exists'); return false; }
@@ -1191,10 +1192,10 @@ export class GeneralReceiptNew implements OnInit {
       });
 
       [
-        { f: 'pigstamount', n: 'C-IGST'  },
-        { f: 'pcgstamount', n: 'C-CGST'  },
-        { f: 'psgstamount', n: 'C-SGST'  },
-        { f: 'putgstamount',n: 'C-UTGST' }
+        { f: 'pigstamount', n: 'C-IGST' },
+        { f: 'pcgstamount', n: 'C-CGST' },
+        { f: 'psgstamount', n: 'C-SGST' },
+        { f: 'putgstamount', n: 'C-UTGST' }
       ].forEach(({ f, n }) => {
         const amt = list.reduce(
           (s: number, c: any) => s + Number(this.cs.removeCommasInAmount(c[f] || 0)), 0
@@ -1225,8 +1226,8 @@ export class GeneralReceiptNew implements OnInit {
     const ctrl = this.GeneralReceiptForm.get('preceiptslist') as FormGroup;
     ctrl.reset();
     ctrl.patchValue({
-      pisgstapplicable:    false,
-      pStatusname:         this.cs.pStatusname,
+      pisgstapplicable: false,
+      pStatusname: this.cs.pStatusname,
       pgstcalculationtype: 'INCLUDE'
     });
     this.showgst.set(false);
@@ -1246,11 +1247,11 @@ export class GeneralReceiptNew implements OnInit {
     this.ledgerBalance.set(`${this.currencySymbol} 0 Dr`);
     this.subledgerBalance.set(`${this.currencySymbol} 0 Dr`);
     this.formValidationMessages = {};
-    this.gstPercentageSelected  = false;
+    this.gstPercentageSelected = false;
   }
 
   clearPaymentDetails1(): void {
-    const ctrl      = this.GeneralReceiptForm.get('preceiptslist') as FormGroup;
+    const ctrl = this.GeneralReceiptForm.get('preceiptslist') as FormGroup;
     const curLedger = ctrl.get('pledgerid')?.value;
     const curLedgerName = ctrl.get('pledgername')?.value;
     ctrl.reset();
@@ -1258,16 +1259,16 @@ export class GeneralReceiptNew implements OnInit {
     if (this.showsubledger()) ctrl.patchValue({ pledgerid: curLedger, pledgername: curLedgerName });
 
     ctrl.patchValue({
-      pisgstapplicable:    false,
-      pStatusname:         this.cs.pStatusname,
+      pisgstapplicable: false,
+      pStatusname: this.cs.pStatusname,
       pgstcalculationtype: 'INCLUDE'
     });
 
     this.GeneralReceiptForm.patchValue({
       pistdsapplicable: false,
-      pTdsSection:      null,
-      pTdsPercentage:   null,
-      ptdsamount:       0
+      pTdsSection: null,
+      pTdsPercentage: null,
+      ptdsamount: 0
     });
 
     this.showtds.set(false);
@@ -1276,7 +1277,7 @@ export class GeneralReceiptNew implements OnInit {
     this.ledgerBalance.set(`${this.currencySymbol} 0 Dr`);
     this.subledgerBalance.set(`${this.currencySymbol} 0 Dr`);
     this.formValidationMessages = {};
-    this.gstPercentageSelected  = false;
+    this.gstPercentageSelected = false;
   }
 
 
@@ -1293,13 +1294,13 @@ export class GeneralReceiptNew implements OnInit {
       return;
     }
 
-    const id   = typeof $event === 'object'
+    const id = typeof $event === 'object'
       ? ($event.pbankid ?? $event.pBankId ?? $event.bankid ?? $event.id)
       : $event;
     const bank = (this.banklist1() || []).find((b: any) => b.pbankid == id || b.pBankId == id);
     if (bank) {
-      this.setBalances('BANKBOOK', Number(bank.pbankbalance)          || 0);
-      this.setBalances('PASSBOOK', Number(bank.pbankpassbookbalance)  || 0);
+      this.setBalances('BANKBOOK', Number(bank.pbankbalance) || 0);
+      this.setBalances('PASSBOOK', Number(bank.pbankpassbookbalance) || 0);
     }
     this.getBankBranchName(id);
     this.GeneralReceiptForm.get('pbranchname')?.reset();
@@ -1313,8 +1314,8 @@ export class GeneralReceiptNew implements OnInit {
     );
     if (!bank) { this.GeneralReceiptForm.controls['pbranchname'].setValue(''); return; }
     this.GeneralReceiptForm.controls['pbranchname'].setValue(bank.pbranchname || bank.pBranchName || '');
-    const bb = bank.pbankbalance          ?? bank.pBankBalance          ?? null;
-    const pb = bank.pbankpassbookbalance  ?? bank.pBankPassbookBalance  ?? null;
+    const bb = bank.pbankbalance ?? bank.pBankBalance ?? null;
+    const pb = bank.pbankpassbookbalance ?? bank.pBankPassbookBalance ?? null;
     this.setBalances('BANKBOOK', bb !== null && !isNaN(Number(bb)) ? Math.round(Number(bb)) : 0);
     this.setBalances('PASSBOOK', pb !== null && !isNaN(Number(pb)) ? Math.round(Number(pb)) : 0);
   }
@@ -1328,8 +1329,8 @@ export class GeneralReceiptNew implements OnInit {
       .find((b: any) => b.pbankId == id || b.pbankid == id || b.pBankId == id);
     if (obj) {
       this.GeneralReceiptForm.controls['pdepositbankname'].setValue(obj.pbankname || obj.pBankName || '');
-      const bb = obj.pbankbalance          ?? obj.pBankBalance          ?? null;
-      const pb = obj.pbankpassbookbalance  ?? obj.pBankPassbookBalance  ?? null;
+      const bb = obj.pbankbalance ?? obj.pBankBalance ?? null;
+      const pb = obj.pbankpassbookbalance ?? obj.pBankPassbookBalance ?? null;
       this.setBalances('BANKBOOK', bb !== null && !isNaN(Number(bb)) ? Math.round(Number(bb)) : 0);
       this.setBalances('PASSBOOK', pb !== null && !isNaN(Number(pb)) ? Math.round(Number(pb)) : 0);
     }
@@ -1390,14 +1391,14 @@ export class GeneralReceiptNew implements OnInit {
   // ── Validation ────────────────────────────────────────────────────────────
   validation(type: string): void {
     this.formValidationMessages = {};
-    const cheque    = this.GeneralReceiptForm.controls['pChequenumber'];
-    const chequeDate= this.GeneralReceiptForm.controls['pchequedate'];
-    const payType   = this.GeneralReceiptForm.controls['ptypeofpayment'];
-    const bank      = this.GeneralReceiptForm.controls['pbankid'];
-    const card      = this.GeneralReceiptForm.controls['pCardNumber'];
-    const deposit   = this.GeneralReceiptForm.controls['pdepositbankid'];
-    const account   = this.GeneralReceiptForm.controls['pAccountnumber'];
-    const branch    = this.GeneralReceiptForm.controls['pbranchname'];
+    const cheque = this.GeneralReceiptForm.controls['pChequenumber'];
+    const chequeDate = this.GeneralReceiptForm.controls['pchequedate'];
+    const payType = this.GeneralReceiptForm.controls['ptypeofpayment'];
+    const bank = this.GeneralReceiptForm.controls['pbankid'];
+    const card = this.GeneralReceiptForm.controls['pCardNumber'];
+    const deposit = this.GeneralReceiptForm.controls['pdepositbankid'];
+    const account = this.GeneralReceiptForm.controls['pAccountnumber'];
+    const branch = this.GeneralReceiptForm.controls['pbranchname'];
 
     deposit.clearValidators();
     cheque.setValidators([Validators.required, alphanumericValidator]);
@@ -1564,8 +1565,8 @@ export class GeneralReceiptNew implements OnInit {
     this.disablesavebutton.set(true);
     this.savebutton.set('Processing');
 
-    const accountIds  = this.paymentslist().map((x: any) => x.psubledgerid).filter(Boolean).join(',');
-    const trans_date  = this.cs.getFormatDateNormal(this.GeneralReceiptForm.controls['preceiptdate'].value);
+    const accountIds = this.paymentslist().map((x: any) => x.psubledgerid).filter(Boolean).join(',');
+    const trans_date = this.cs.getFormatDateNormal(this.GeneralReceiptForm.controls['preceiptdate'].value);
 
     this.svc.GetCashAmountAccountWise(
       'GENERAL RECEIPT', this.cs.getbranchname(), accountIds, trans_date,
@@ -1579,93 +1580,263 @@ export class GeneralReceiptNew implements OnInit {
             return;
           }
 
-          const totalamount   = parseFloat(
+          const totalamount = parseFloat(
             (this.cs.removeCommasInAmount(this.paymentlistcolumnwiselist?.ptotalamount || 0)).toString()
           );
           const depositBankId = this.GeneralReceiptForm.getRawValue().pdepositbankid ?? 0;
 
+          // const payload: any = {
+          //   preceiptid:            '',
+          //   preceiptno:            'string',
+          //   pRecordid:             0,
+          //   ptypeofoperation:      'CREATE',
+          //   formname:              'General Receipt',
+          //   preceiptdate:          trans_date,
+          //   pmodofreceipt:         this.GeneralReceiptForm.value.pmodofreceipt          || '',
+          //   ptranstype:            this.GeneralReceiptForm.value.ptranstype              || '',
+          //   ptypeofpayment:        this.GeneralReceiptForm.value.ptypeofpayment          || '',
+          //   pbankid:               this.GeneralReceiptForm.value.pbankid                || 0,
+          //   pBankName:             this.GeneralReceiptForm.value.pbankname              || '',
+          //   pbranchname:           this.GeneralReceiptForm.value.pbranchname            || '',
+          //   pAccountnumber:        this.GeneralReceiptForm.value.pAccountnumber         || '',
+          //   pChequenumber:         this.GeneralReceiptForm.getRawValue().pChequenumber  || '',
+          //   pchequedate:           chequeDate,
+          //   pCardNumber:           this.GeneralReceiptForm.value.pCardNumber            || '',
+          //   pdepositbankid:        depositBankId                                         || 0,
+          //   pdepositbankname:      this.GeneralReceiptForm.value.pdepositbankname       || '',
+          //   pUpiname:              this.GeneralReceiptForm.value.pUpiname               || '',
+          //   ppartyid:              this.GeneralReceiptForm.value.ppartyid               || 0,
+          //   ppartyname:            this.GeneralReceiptForm.value.ppartyname             || '',
+          //   ppartypannumber:       this.GeneralReceiptForm.value.ppartypannumber        || '',
+          //   ptotalreceivedamount:  totalamount                                           || 0,
+          //   pistdsapplicable:      this.paymentslist().some((x: any) => x.pistdsapplicable === true),
+          //   pTdsSection:           this.paymentslist()[0]?.pTdsSection                  || 0,
+          //   pTdsPercentage:        this.paymentslist()[0]?.pTdsPercentage               || 0,
+          //   ptdsamount:            this.paymentslist()[0]?.ptdsamountindividual          || 0,
+          //   pnarration:            this.GeneralReceiptForm.value.pnarration             || '',
+          //   pFilename:             this.GeneralReceiptForm.value.pFilename              || '',
+          //   global_schema:         this.cs.getschemaname(),
+          //   branch_schema:         this.cs.getbranchname(),
+          //   companycode:           this.cs.getCompanyCode(),
+          //   branchcode:            this.cs.getBranchCode(),
+          //   branchid:              this.cs.getbrachid()                                  || 1,
+          //   schemaname:            this.cs.getschemaname(),
+          //   pCreatedby:            this.cs.getCreatedBy()                               || 0,
+          //   pModifiedby:           0,
+          //   preceiptslist: this.paymentslist().map((x: any) => ({
+          //     pledgerid:           x.pledgerid               || 0,
+          //     pledgername:         x.pledgername             || '',
+          //     psubledgerid:        x.psubledgerid            || 0,
+          //     psubledgername:      x.psubledgername          || '',
+          //     pactualpaidamount:   parseFloat((Number(x.pactualpaidamount) || 0).toFixed(2)),
+          //     pamount:             parseFloat(
+          //       (Number(this.cs.removeCommasInAmount(x.pamount?.toString() || '0'))).toFixed(2)
+          //     ),
+          //     pisgstapplicable:    x.pisgstapplicable        || false,
+          //     pgstcalculationtype: x.pgstcalculationtype     || 'INCLUDE',
+          //     pgsttype:            x.pgsttype                || '',
+          //     pgstpercentage:      x.pgstpercentage          || 0,
+          //     pgstamount:          parseFloat((Number(x.pgstamount)   || 0).toFixed(2)),
+          //     pigstpercentage:     x.pigstpercentage         || 0,
+          //     pigstamount:         parseFloat((Number(x.pigstamount)  || 0).toFixed(2)),
+          //     pcgstpercentage:     x.pcgstpercentage         || 0,
+          //     pcgstamount:         parseFloat((Number(x.pcgstamount)  || 0).toFixed(2)),
+          //     psgstpercentage:     x.psgstpercentage         || 0,
+          //     psgstamount:         parseFloat((Number(x.psgstamount)  || 0).toFixed(2)),
+          //     putgstpercentage:    x.putgstpercentage        || 0,
+          //     putgstamount:        parseFloat((Number(x.putgstamount) || 0).toFixed(2)),
+          //     pState:              x.pState                  || '',
+          //     pStateId:            x.pStateId                || 0,
+          //     pgstno:              x.pgstno                  || '',
+          //     pistdsapplicable:    x.pistdsapplicable        || false,
+          //     pTdsSection:         x.pTdsSection             || '',
+          //     pTdsPercentage:      Number(x.pTdsPercentage)  || 0,
+          //     ptdsamountindividual: parseFloat(
+          //       ((Math.round(Number(x.pamount)) * (Number(x.pTdsPercentage) || 0)) / 100).toFixed(2)
+          //     ),
+          //     ptotalamount:        parseFloat((Number(x.ptotalamount) || 0).toFixed(2))
+          //   }))
+          // };
+
+
+          const payments = this.paymentslist(); // ✅ SIGNAL → ARRAY
+
           const payload: any = {
-            preceiptid:            '',
-            preceiptno:            'string',
-            pRecordid:             0,
-            ptypeofoperation:      'CREATE',
-            formname:              'General Receipt',
-            preceiptdate:          trans_date,
-            pmodofreceipt:         this.GeneralReceiptForm.value.pmodofreceipt          || '',
-            ptranstype:            this.GeneralReceiptForm.value.ptranstype              || '',
-            ptypeofpayment:        this.GeneralReceiptForm.value.ptypeofpayment          || '',
-            pbankid:               this.GeneralReceiptForm.value.pbankid                || 0,
-            pBankName:             this.GeneralReceiptForm.value.pbankname              || '',
-            pbranchname:           this.GeneralReceiptForm.value.pbranchname            || '',
-            pAccountnumber:        this.GeneralReceiptForm.value.pAccountnumber         || '',
-            pChequenumber:         this.GeneralReceiptForm.getRawValue().pChequenumber  || '',
-            pchequedate:           chequeDate,
-            pCardNumber:           this.GeneralReceiptForm.value.pCardNumber            || '',
-            pdepositbankid:        depositBankId                                         || 0,
-            pdepositbankname:      this.GeneralReceiptForm.value.pdepositbankname       || '',
-            pUpiname:              this.GeneralReceiptForm.value.pUpiname               || '',
-            ppartyid:              this.GeneralReceiptForm.value.ppartyid               || 0,
-            ppartyname:            this.GeneralReceiptForm.value.ppartyname             || '',
-            ppartypannumber:       this.GeneralReceiptForm.value.ppartypannumber        || '',
-            ptotalreceivedamount:  totalamount                                           || 0,
-            pistdsapplicable:      this.paymentslist().some((x: any) => x.pistdsapplicable === true),
-            pTdsSection:           this.paymentslist()[0]?.pTdsSection                  || 0,
-            pTdsPercentage:        this.paymentslist()[0]?.pTdsPercentage               || 0,
-            ptdsamount:            this.paymentslist()[0]?.ptdsamountindividual          || 0,
-            pnarration:            this.GeneralReceiptForm.value.pnarration             || '',
-            pFilename:             this.GeneralReceiptForm.value.pFilename              || '',
-            global_schema:         this.cs.getschemaname(),
-            branch_schema:         this.cs.getbranchname(),
-            companycode:           this.cs.getCompanyCode(),
-            branchcode:            this.cs.getBranchCode(),
-            branchid:              this.cs.getbrachid()                                  || 1,
-            schemaname:            this.cs.getschemaname(),
-            pCreatedby:            this.cs.getCreatedBy()                               || 0,
-            pModifiedby:           0,
-            preceiptslist: this.paymentslist().map((x: any) => ({
-              pledgerid:           x.pledgerid               || 0,
-              pledgername:         x.pledgername             || '',
-              psubledgerid:        x.psubledgerid            || 0,
-              psubledgername:      x.psubledgername          || '',
-              pactualpaidamount:   parseFloat((Number(x.pactualpaidamount) || 0).toFixed(2)),
-              pamount:             parseFloat(
+            // ───────── BASIC DETAILS ─────────
+            preceiptid: '',
+            preceiptno: 'string',
+            pRecordid: 0,
+            ptypeofoperation: 'CREATE',
+            formname: 'General Receipt',
+
+            preceiptdate: trans_date,
+
+            pmodofreceipt: this.GeneralReceiptForm.value.pmodofreceipt || '',
+            ptranstype: this.GeneralReceiptForm.value.ptranstype || '',
+            ptypeofpayment: this.GeneralReceiptForm.value.ptypeofpayment || '',
+
+            // ───────── BANK / PAYMENT ─────────
+            pbankid: this.GeneralReceiptForm.value.pbankid || 0,
+            pBankName: this.GeneralReceiptForm.value.pbankname || '',
+            pbranchname: this.GeneralReceiptForm.value.pbranchname || '',
+
+            pAccountnumber: this.GeneralReceiptForm.value.pAccountnumber || '',
+            pChequenumber: this.GeneralReceiptForm.getRawValue().pChequenumber || '',
+
+            pchequedate: chequeDate || '',
+            pchequedepositdate: '',
+            pchequecleardate: '',
+
+            pCardNumber: this.GeneralReceiptForm.value.pCardNumber || '',
+
+            pdepositbankid: depositBankId || 0,
+            pdepositbankname: this.GeneralReceiptForm.value.pdepositbankname || '',
+
+            pUpiname: this.GeneralReceiptForm.value.pUpiname || '',
+            pUpiid: this.GeneralReceiptForm.value.pUpiid || '', // ✅ REQUIRED
+
+            pBankconfigurationId: '',
+
+            // ───────── PARTY DETAILS ─────────
+            ppartyid: this.GeneralReceiptForm.value.ppartyid || 0,
+            ppartyname: this.GeneralReceiptForm.value.ppartyname || '',
+            ppartypannumber: this.GeneralReceiptForm.value.ppartypannumber || '',
+
+            ppartyreftype: this.GeneralReceiptForm.value.ppartyreftype || '',
+            ppartyreferenceid: this.GeneralReceiptForm.value.ppartyreferenceid || '',
+
+            // ───────── AMOUNTS ─────────
+            ptotalreceivedamount: totalamount || 0,
+
+            pistdsapplicable: payments.some((x: any) => x.pistdsapplicable === true),
+
+            pTdsSection: payments[0]?.pTdsSection || 0,
+            pTdsSectionId: payments[0]?.pTdsSection || 0,
+            pTdsPercentage: payments[0]?.pTdsPercentage || 0,
+            ptdsamount: payments[0]?.ptdsamountindividual || 0,
+
+            ptdscalculationtype: '',
+            ptdsaccountid: 0,
+
+            // ───────── EXTRA INFO ─────────
+            pnarration: this.GeneralReceiptForm.value.pnarration || '',
+
+            pFilename: this.GeneralReceiptForm.value.pFilename || '',
+            pFilepath: this.GeneralReceiptForm.value.pFilepath || '', // ✅ REQUIRED
+            pFileformat: this.GeneralReceiptForm.value.pFileformat || '',
+
+            pDocStorePath: '',
+
+            // ───────── SYSTEM INFO ─────────
+            global_schema: this.cs.getschemaname(),
+            branch_schema: this.cs.getbranchname(),
+
+            companycode: this.cs.getCompanyCode(),
+            branchcode: this.cs.getBranchCode(),
+
+            branchid: this.cs.getbrachid() || 1,
+            schemaname: this.cs.getschemaname(),
+
+            pCreatedby: this.cs.getCreatedBy() || 0,
+            pModifiedby: 0,
+
+            // ───────── STATUS (REQUIRED) ─────────
+            pStatusid: '',
+            pStatusname: '',
+
+            pEffectfromdate: '',
+            pEffecttodate: '',
+
+            pipaddress: '',
+            pdepositeddate: '',
+            pCleardate: '',
+
+            preceiptrecordid: 0,
+            groupcode: '', // ✅ REQUIRED
+
+            pchequestatus: this.GeneralReceiptForm.value.pchequestatus || '',
+
+            preferencetext: '',
+
+            chitpaymentid: 0,
+            adjustmentid: 0,
+
+            challanaNo: '',
+
+            // ───────── CHILD LIST ─────────
+            preceiptslist: payments.map((x: any) => ({
+              pledgerid: x.pledgerid || 0,
+              pledgername: x.pledgername || '',
+
+              psubledgerid: x.psubledgerid || 0,
+              psubledgername: x.psubledgername || '',
+
+              pactualpaidamount: parseFloat((Number(x.pactualpaidamount) || 0).toFixed(2)),
+
+              pamount: parseFloat(
                 (Number(this.cs.removeCommasInAmount(x.pamount?.toString() || '0'))).toFixed(2)
               ),
-              pisgstapplicable:    x.pisgstapplicable        || false,
-              pgstcalculationtype: x.pgstcalculationtype     || 'INCLUDE',
-              pgsttype:            x.pgsttype                || '',
-              pgstpercentage:      x.pgstpercentage          || 0,
-              pgstamount:          parseFloat((Number(x.pgstamount)   || 0).toFixed(2)),
-              pigstpercentage:     x.pigstpercentage         || 0,
-              pigstamount:         parseFloat((Number(x.pigstamount)  || 0).toFixed(2)),
-              pcgstpercentage:     x.pcgstpercentage         || 0,
-              pcgstamount:         parseFloat((Number(x.pcgstamount)  || 0).toFixed(2)),
-              psgstpercentage:     x.psgstpercentage         || 0,
-              psgstamount:         parseFloat((Number(x.psgstamount)  || 0).toFixed(2)),
-              putgstpercentage:    x.putgstpercentage        || 0,
-              putgstamount:        parseFloat((Number(x.putgstamount) || 0).toFixed(2)),
-              pState:              x.pState                  || '',
-              pStateId:            x.pStateId                || 0,
-              pgstno:              x.pgstno                  || '',
-              pistdsapplicable:    x.pistdsapplicable        || false,
-              pTdsSection:         x.pTdsSection             || '',
-              pTdsPercentage:      Number(x.pTdsPercentage)  || 0,
+
+              pisgstapplicable: x.pisgstapplicable || false,
+              pgstcalculationtype: x.pgstcalculationtype || 'INCLUDE',
+              pgsttype: x.pgsttype || '',
+              pgstpercentage: x.pgstpercentage || 0,
+              pgstamount: parseFloat((Number(x.pgstamount) || 0).toFixed(2)),
+
+              pigstpercentage: x.pigstpercentage || 0,
+              pigstamount: parseFloat((Number(x.pigstamount) || 0).toFixed(2)),
+
+              pcgstpercentage: x.pcgstpercentage || 0,
+              pcgstamount: parseFloat((Number(x.pcgstamount) || 0).toFixed(2)),
+
+              psgstpercentage: x.psgstpercentage || 0,
+              psgstamount: parseFloat((Number(x.psgstamount) || 0).toFixed(2)),
+
+              putgstpercentage: x.putgstpercentage || 0,
+              putgstamount: parseFloat((Number(x.putgstamount) || 0).toFixed(2)),
+
+              pState: x.pState || '',
+              pStateId: x.pStateId || 0,
+              pgstno: x.pgstno || '',
+
+              pistdsapplicable: x.pistdsapplicable || false,
+              pTdsSection: x.pTdsSection || '',
+              pTdsPercentage: Number(x.pTdsPercentage) || 0,
+
               ptdsamountindividual: parseFloat(
                 ((Math.round(Number(x.pamount)) * (Number(x.pTdsPercentage) || 0)) / 100).toFixed(2)
               ),
-              ptotalamount:        parseFloat((Number(x.ptotalamount) || 0).toFixed(2))
+
+              ptotalamount: parseFloat((Number(x.ptotalamount) || 0).toFixed(2)),
+
+              // ✅ REQUIRED CHILD FIELDS (VERY IMPORTANT)
+              id: x.id || 0,
+              text: x.text || '',
+              ptranstype: x.ptranstype || '',
+              accountbalance: x.accountbalance || '',
+              pAccounttype: x.pAccounttype || '',
+              legalcellReceipt: x.legalcellReceipt || '',
+              pbranchcode: x.pbranchcode || '',
+              pbranchtype: x.pbranchtype || '',
+              groupcode: x.groupcode || '',
+              chitgroupid: x.chitgroupid || '',
+              preferencetext: x.preferencetext || ''
             }))
           };
-
           this.svc.saveGeneralReceipt(payload)
-            .pipe(takeUntilDestroyed(this.destroyRef))
+            // .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
               next: (res: any) => {
+
+                console.log('FULL RESPONSE STRING:', res); // ← stringify forces snapshot
+                //  console.log('FULL RESPONSE STRING:', JSON.stringify(res)); // ← stringify forces snapshot
+                console.log('receipt_number directly:', res?.receipt_number);
+                console.log('success directly:', res?.success);
                 if (res?.success) {
                   this.cs.showInfoMessage('Saved successfully');
                   this.ClearGenerealReceipt();
                   this.router.navigate([
-                    '/GeneralReceiptReport',
+                    '/general-receipt',
                     btoa(`${res.receipt_number},General Receipt`)
                   ]);
                 }
@@ -1709,10 +1880,10 @@ export class GeneralReceiptNew implements OnInit {
     this.partyjournalentrylist.set([]);
     this.gridshowhide.set(false);
 
-    this.tempState  = '';
-    this.tempgstno  = '';
+    this.tempState = '';
+    this.tempgstno = '';
     this.TempGSTtype = '';
-    this.temporaryamount      = 0;
+    this.temporaryamount = 0;
     this.gstPercentageSelected = false;
     this.partyBalance.set(`${this.currencySymbol} 0 Dr`);
     this._selectedPartyStateName = '';
@@ -1723,7 +1894,7 @@ export class GeneralReceiptNew implements OnInit {
     this.cashWarningMessage.set('');
     this.clearPaymentDetails();
     this.paymentlistcolumnwiselist = { ptotalamount: 0, pamount: 0, pgstamount: 0 };
-    this.formValidationMessages    = {};
+    this.formValidationMessages = {};
     this.submitted.set(false);
     this.imageResponse.set({ name: '' });
   }
