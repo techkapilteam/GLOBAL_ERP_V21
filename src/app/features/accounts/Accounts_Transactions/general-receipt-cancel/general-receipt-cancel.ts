@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -12,17 +12,20 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 
 @Component({
   selector: "app-general-receipt-cancel",
   standalone: true,
-  imports: [CommonModule, DatePipe, DecimalPipe, NgSelectModule, FormsModule, ReactiveFormsModule, BsDatepickerModule, TableModule, ButtonModule, InputTextModule],
+  imports: [CommonModule, DatePipe, DecimalPipe, NgSelectModule, FormsModule, ReactiveFormsModule, DatePickerModule, TableModule, ButtonModule, InputTextModule],
   templateUrl: "./general-receipt-cancel.html",
 })
 
 export class GeneralReceiptCancel implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ─── Injected Services ────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -31,7 +34,7 @@ export class GeneralReceiptCancel implements OnInit {
   private readonly accountingReportsService = inject(AccountsReports);
 
   // ─── Datepicker Config ────────────────────────────────────────────────────
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     maxDate: new Date(),
     containerClass: 'theme-dark-blue',
     dateInputFormat: 'DD-MMM-YYYY',

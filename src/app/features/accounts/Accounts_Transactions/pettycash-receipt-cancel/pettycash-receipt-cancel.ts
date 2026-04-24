@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, signal, computed, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { catchError, concat, debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TableModule } from 'primeng/table';
@@ -10,15 +10,18 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { Router } from '@angular/router';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
   selector: "app-pettycash-receipt-cancel",
-  imports: [CommonModule, BsDatepickerModule, ReactiveFormsModule, FormsModule, NgSelectModule, TableModule],
+  imports: [CommonModule, DatePickerModule, ReactiveFormsModule, FormsModule, NgSelectModule, TableModule],
   templateUrl: "./pettycash-receipt-cancel.html",
 })
 
 export class PettycashReceiptCancel implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ─── Constants ────────────────────────────────────────────────────────────
   readonly currencysymbol = '₹';
@@ -69,7 +72,7 @@ export class PettycashReceiptCancel implements OnInit {
     pCreatedby: FormControl<number | null>;
   }>;
 
-  pDobConfig: Partial<BsDatepickerConfig> = {};
+  pDobConfig: any = {};
 
   // ─── Constructor ──────────────────────────────────────────────────────────
   constructor(

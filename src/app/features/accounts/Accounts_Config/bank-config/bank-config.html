@@ -1,186 +1,136 @@
 <div class="module-page">
 
-  <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0">
-    <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Configuration</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">Bank Configuration</span>
-      </nav>
-      <h1 class="page-title">
-        <i class="pi pi-building"></i> Bank Configuration
-      </h1>
-      <p class="page-subtitle">Manage and configure bank accounts and payment settings</p>
-    </div>
-
-    <a routerLink="/dashboard/accounts/accounts-config/bank-config-view"
-       class="erp-btn btn-primary btn-lg"
-       style="margin-top: auto; white-space: nowrap;">
-      <i class="pi pi-list"></i> View Configs
-    </a>
-  </div>
-
-  <!-- Main Card -->
   <div class="erp-card">
 
-    <!-- Card Header with Search -->
+    <!-- Header -->
     <div class="card-header">
-      <div class="card-title">
-        <i class="pi pi-cog"></i> New Bank Account
-      </div>
-
+      <h2 class="card-title"><i class="pi pi-plus-circle"></i> New Bank Account</h2>
+      <span class="erp-spacer"></span>
+      <a routerLink="/dashboard/accounts/accounts-config/bank-config-view" class="erp-btn btn-white btn-sm">
+        <i class="pi pi-list"></i> View All
+      </a>
     </div>
 
+    <form [formGroup]="bankmasterform" autocomplete="off">
 
-    <!-- Card Body -->
-    <div class="card-body p-4">
-
-      <form [formGroup]="bankmasterform" autocomplete="off">
-
-        <!-- Form Toolbar -->
-        <div class="erp-table-toolbar tbl-toolbar-flush mb-4">
-          <div class="tb-left">
-            <span class="erp-badge badge-primary badge-dot">
-              Bank Configuration Form
-            </span>
+      <!-- ── DATE ── -->
+      <div class="p-4">
+        <div class="row g-2">
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">Date <span class="required">*</span></label>
+              <div class="erp-input-wrap erp-date-wrap" (click)="forceCD()">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <p-datepicker formControlName="pBankdate" dateFormat="dd-M-yy" [readonlyInput]="true" appendTo="body"
+                  styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" placeholder="DD-MMM-YYYY"
+                  (onShow)="forceCD()"></p-datepicker>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Main Form Content -->
-        <div class="form-wrapper">
 
-          <!-- Date Section -->
-          <div class="form-section">
-            <div class="row g-3">
-              <!-- Date -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Date <span class="required">*</span></label>
-                  <input class="erp-input" type="text" [readonly]="true" [bsConfig]="currentdate" bsDatepicker
-                    formControlName="pBankdate" (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" />
-                </div>
+      <!-- ── BASIC BANK DETAILS ── -->
+      <div class="p-4">
+        <h3 class="section-title mb-2">Basic Bank Details</h3>
+
+        <div class="row g-2">
+          <!-- A/C Type -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">A/C Type <span class="required">*</span></label>
+              <ng-select appendTo="body" [items]="accountTypes" bindLabel="label" bindValue="value"
+                placeholder="Select type" formControlName="pAcctountype" [compareWith]="compareByValue"
+                [clearable]="false" [class.is-invalid]="f['pAcctountype'].touched && f['pAcctountype'].invalid">
+              </ng-select>
+              <div *ngIf="f['pAcctountype'].touched && f['pAcctountype'].invalid" class="erp-field-error">
+                A/C Type is required
               </div>
             </div>
           </div>
 
-          <!-- Section 3: Basic Bank Details -->
-          <div class="form-section">
-            <h3 class="section-heading">
-              <i class="pi pi-info-circle"></i> Basic Bank Details
-            </h3>
-
-            <div class="row g-3">
-
-              <!-- A/C Type -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    A/C Type <span class="required">*</span>
-                  </label>
-                  <ng-select [items]="accountTypes" bindLabel="label" bindValue="value" placeholder="Select type"
-                    formControlName="pAcctountype" [class.is-invalid]="f['pAcctountype'].touched && f['pAcctountype'].invalid">
-                  </ng-select>
-                  <div *ngIf="f['pAcctountype'].touched && f['pAcctountype'].invalid" class="field-error">
-                    A/C Type is required
-                  </div>
-                </div>
-              </div>
-
-              <!-- Account No. -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    Account No. <span class="required">*</span>
-                  </label>
-                  <input class="erp-input" type="text" [attr.disabled]="accountno() ? '' : null"
-                    formControlName="pAccountnumber" (input)="allowNumbersOnly1($event)" maxlength="16" inputmode="numeric"
-                    pattern="[0-9]*" [class.is-invalid]="f['pAccountnumber'].touched && f['pAccountnumber'].invalid" />
-                  <div *ngIf="f['pAccountnumber'].touched && f['pAccountnumber'].invalid" class="field-error">
-                    Account No is required
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row g-3">
-              <!-- Bank -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    Bank <span class="required">*</span>
-                  </label>
-                  <ng-select formControlName="bankName" [items]="banksList" bindLabel="bankName" bindValue="bankName"
-                    placeholder="Select bank" (change)="onChange($event)"
-                    [class.is-invalid]="f['bankName'].touched && f['bankName'].invalid">
-                  </ng-select>
-                  <div *ngIf="f['bankName'].touched && f['bankName'].invalid" class="field-error">
-                    Bank Name is required
-                  </div>
-                </div>
-              </div>
-
-              <!-- Account Name -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    Account Name <span class="required">*</span>
-                  </label>
-                  <input class="erp-input" type="text" formControlName="account_name" maxlength="150" appTitlecaseword
-                    appCharactersonly [class.is-invalid]="f['account_name'].touched && f['account_name'].invalid" />
-                  <div *ngIf="f['account_name'].touched && f['account_name'].invalid" class="field-error">
-                    Account Name is required
-                  </div>
-                </div>
-              </div>
-
-              <!-- Branch -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Branch</label>
-                  <input class="erp-input" type="text" formControlName="pBankbranch" maxlength="125"
-                    (blur)="convertTitleCase('pBankbranch')" (input)="lettersOnly($event)"
-                    [class.is-invalid]="bankmastervalidations.pBankbranch" />
-                  <div *ngIf="bankmastervalidations.pBankbranch" class="field-error">
-                    {{ bankmastervalidations.pBankbranch }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row g-3">
-              <!-- IFSC Code -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">IFSC Code</label>
-                  <input class="erp-input" type="text" maxlength="12" formControlName="pIfsccode" (input)="onIfscInput()"
-                    [class.is-invalid]="bankmastervalidations.pIfsccode" />
-                  <div *ngIf="bankmastervalidations.pIfsccode" class="field-error">
-                    {{ bankmastervalidations.pIfsccode }}
-                  </div>
-                </div>
-              </div>
-
-              <!-- Overdraft Limit -->
-              <div class="col-md-6 col-lg-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Overdraft Limit</label>
-                  <input class="erp-input text-end" type="text" formControlName="pOverdraft" placeholder="0.00"
-                    (input)="onCleanInput($event, 'pOverdraft')"
-                    [class.is-invalid]="f['pOverdraft'].invalid && f['pOverdraft'].touched" />
-                  <div *ngIf="f['pOverdraft'].invalid && f['pOverdraft'].touched" class="field-error">
-                    Enter valid amount (max 2 decimals)
-                  </div>
-                </div>
+          <!-- Account No. -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">Account No. <span class="required">*</span></label>
+              <input class="erp-input" type="text" [attr.disabled]="accountno() ? '' : null"
+                formControlName="pAccountnumber" (input)="allowNumbersOnly1($event)" maxlength="16" inputmode="numeric"
+                pattern="[0-9]*" [class.is-invalid]="f['pAccountnumber'].touched && f['pAccountnumber'].invalid" />
+              <div *ngIf="f['pAccountnumber'].touched && f['pAccountnumber'].invalid" class="erp-field-error">
+                Account No is required
               </div>
             </div>
           </div>
 
-          <!-- Section 4: Branch Address -->
+          <!-- Bank -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">Bank <span class="required">*</span></label>
+              <ng-select appendTo="body" formControlName="bankName" [items]="banksList" bindLabel="bankName"
+                bindValue="bankName" placeholder="Select bank" (change)="onChange($event)"
+                [compareWith]="compareByValue" [clearable]="false"
+                [class.is-invalid]="f['bankName'].touched && f['bankName'].invalid">
+              </ng-select>
+              <div *ngIf="f['bankName'].touched && f['bankName'].invalid" class="erp-field-error">
+                Bank Name is required
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Name -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">Account Name <span class="required">*</span></label>
+              <input class="erp-input" type="text" formControlName="account_name" maxlength="150" appTitlecaseword
+                appCharactersonly [class.is-invalid]="f['account_name'].touched && f['account_name'].invalid" />
+              <div *ngIf="f['account_name'].touched && f['account_name'].invalid" class="erp-field-error">
+                Account Name is required
+              </div>
+            </div>
+          </div>
+
+          <!-- Branch -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">Branch</label>
+              <input class="erp-input" type="text" formControlName="pBankbranch" maxlength="125"
+                (blur)="convertTitleCase('pBankbranch')" (input)="lettersOnly($event)"
+                [class.is-invalid]="bankmastervalidations.pBankbranch" />
+              <div *ngIf="bankmastervalidations.pBankbranch" class="erp-field-error">
+                {{ bankmastervalidations.pBankbranch }}
+              </div>
+            </div>
+          </div>
+
+          <!-- IFSC Code -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">IFSC Code</label>
+              <input class="erp-input" type="text" maxlength="12" formControlName="pIfsccode" (input)="onIfscInput()"
+                [class.is-invalid]="bankmastervalidations.pIfsccode" />
+              <div *ngIf="bankmastervalidations.pIfsccode" class="erp-field-error">
+                {{ bankmastervalidations.pIfsccode }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Overdraft Limit -->
+          <div class="col-12 col-md-6">
+            <div class="erp-form-group">
+              <label class="erp-label">Overdraft Limit</label>
+              <input class="erp-input text-end" type="text" formControlName="pOverdraft" placeholder="0.00"
+                (input)="onCleanInput($event, 'pOverdraft')"
+                [class.is-invalid]="f['pOverdraft'].invalid && f['pOverdraft'].touched" />
+              <div *ngIf="f['pOverdraft'].invalid && f['pOverdraft'].touched" class="erp-field-error">
+                Enter valid amount (max 2 decimals)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Branch Address -->
           <div class="form-section">
             <button type="button" class="section-toggle" (click)="toggleBranch()">
               <i [class]="isBranchOpen() ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
@@ -383,24 +333,20 @@
 
             </div>
           </div>
+          
+      <!-- ── FORM FOOTER ── -->
+      <div class="p-4 d-flex gap-2 justify-end">
+        <button type="button" (click)="clear()" class="erp-btn btn-secondary">
+          <i class="pi pi-times"></i> Clear
+        </button>
+        <button type="button" (click)="save()" class="erp-btn btn-primary" [disabled]="disableSaveButton()">
+          <i *ngIf="!disableSaveButton()" class="pi pi-check"></i>
+          <i *ngIf="disableSaveButton()" class="pi pi-spin pi-spinner"></i>
+          {{ buttonName() }}
+        </button>
+      </div>
 
-        </div>
-
-        <!-- Form Footer -->
-        <div class="form-footer">
-          <button type="button" (click)="clear()" class="erp-btn btn-secondary">
-            <i class="pi pi-times"></i> Clear
-          </button>
-          <button type="button" (click)="save()" class="erp-btn btn-primary" [disabled]="disableSaveButton()">
-            <i *ngIf="!disableSaveButton()" class="pi pi-check"></i>
-            <i *ngIf="disableSaveButton()" class="pi pi-spin pi-spinner"></i>
-            {{ buttonName() }}
-          </button>
-        </div>
-
-      </form>
-
-    </div>
+    </form>
 
   </div>
 

@@ -1,767 +1,586 @@
+<!-- petty-cash.html -->
 <div class="module-page">
 
 
-  <div class="d-flex justify-between align-center gap-4 mb-0">
-    <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Transactions</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">Petty Cash</span>
-      </nav>
-      <h1 class="page-title">
-        <i class="pi pi-file-edit"></i> Petty Cash New
-      </h1>
-      <p class="page-subtitle">Create a new petty cash transaction</p>
-    </div>
-
-    <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm"
-      style="margin-top: auto; white-space: nowrap;">
-      <i class="pi pi-list"></i> View
-    </a>
-  </div>
-
-
   <div class="erp-card">
-
-
+    <!-- Header -->
     <div class="card-header">
-      <h2 class="card-title"><i class="pi pi-file-edit"></i> Petty Cash</h2>
+      <h2 class="card-title"><i class="pi pi-wallet"></i> Petty Cash Voucher</h2>
+      <span class="erp-spacer"></span>
+      <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm">
+        <i class="pi pi-list"></i> View
+      </a>
     </div>
 
-
-    <div class="card-body">
-      <form [formGroup]="paymentVoucherForm" autocomplete="off">
-        <div class="p-4">
-          <div class="row g-3">
+    <form [formGroup]="paymentVoucherForm" autocomplete="off">
+      <div class="card-body p-0">
+        
+        <!-- ── DATE ── -->
+        <div class="p-4 border-bottom">
+          <div class="row g-2">
             <div class="col-12 col-md-6">
               <div class="erp-form-group">
-                <label class="erp-label" for="ppaymentdate">
-                  Date <span class="required">*</span>
-                </label>
+                <label class="erp-label" for="ppaymentdate">Date <span class="required">*</span></label>
                 <div class="erp-input-wrap erp-date-wrap">
                   <i class="pi pi-calendar erp-input-icon"></i>
-                  <fieldset [disabled]="!disabletransactiondate" style="border:none; padding:0; margin:0;">
-                    <input type="text" id="ppaymentdate" class="erp-input icon-pad"
-                      [class.erp-input--invalid]="formValidationMessages?.ppaymentdate" readonly bsDatepicker
-                      [bsConfig]="ppaymentdateConfig" formControlName="ppaymentdate" (keydown)="$event.preventDefault()"
-                      (paste)="$event.preventDefault()" />
-                  </fieldset>
+                  <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
+                    placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
+                    inputStyleClass="erp-input icon-pad w-100" [disabled]="!disabletransactiondate"
+                    [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 </div>
                 @if (formValidationMessages?.ppaymentdate) {
-                <span class="erp-field-error">{{ formValidationMessages?.ppaymentdate }}</span>
+                  <app-validation-message [messgae]="formValidationMessages?.ppaymentdate"></app-validation-message>
                 }
               </div>
             </div>
           </div>
         </div>
 
-        <div class="p-4">
+        <!-- ── MODE OF PAYMENT ── -->
+        <div class="p-4 border-bottom bg-light-subtle">
           <h3 class="section-title mb-3">Mode of Payment</h3>
-          <div class="erp-radio-group">
-            <label class="erp-radio">
+          <div class="erp-radio-button-group">
+            <label class="erp-radio-button">
               <input type="radio" formControlName="pmodofPayment" value="CASH" (change)="modeofPaymentChange()">
-              Cash — {{ currencySymbol }} {{ cashBalance }}
+              <span class="button-label">Cash - {{ currencySymbol }} {{ cashBalance || '0.00' }}</span>
             </label>
 
-            <label style="display:none;">
+            <label class="erp-radio-button" style="display:none;">
               <input type="radio" formControlName="pmodofPayment" value="BANK" (change)="modeofPaymentChange()">
-              Bank — {{ currencySymbol }} {{ bankBalance }}
+              <span class="button-label">Bank - {{ currencySymbol }} {{ bankBalance || '0.00' }}</span>
             </label>
           </div>
           @if (formValidationMessages?.pmodofPayment) {
-          <span class="erp-field-error">{{ formValidationMessages?.pmodofPayment }}</span>
+            <app-validation-message [messgae]="formValidationMessages?.pmodofPayment"></app-validation-message>
           }
         </div>
 
-
+        <!-- ── BANK / INSTRUMENT DETAILS ── -->
         @if (showModeofPayment) {
-        <div class="p-4">
-          <h3 class="section-title mb-3">Bank / Instrument Details</h3>
+          <div class="p-4 border-bottom">
+            <h3 class="section-title mb-3">Bank / Instrument Details</h3>
 
-          <div class="row g-3 mb-3">
+            <div class="row g-3">
+              @if (showbankcard) {
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pbankid">Bank Name <span class="required">*</span></label>
+                    <select id="pbankid" class="erp-input" formControlName="pbankid"
+                      (change)="bankName_Change($event)">
+                      <option value="">Select</option>
+                      @for (bank of banklist; track bank.pbankid) {
+                        <option [value]="bank.pbankid">{{ bank.pbankname }}</option>
+                      }
+                    </select>
+                    @if (formValidationMessages?.pbankname) {
+                      <app-validation-message [messgae]="formValidationMessages?.pbankname"></app-validation-message>
+                    }
+                  </div>
+                </div>
+              }
 
+              @if (!showbankcard) {
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pCardNumber">{{ displayCardName }} <span class="required">*</span></label>
+                    <select id="pCardNumber" class="erp-input" formControlName="pCardNumber"
+                      (change)="debitCard_Change()">
+                      <option value="">Select</option>
+                      @for (card of debitcardlist; track card.pCardNumber) {
+                        <option [value]="card.pCardNumber">{{ card.pCardNumber }}</option>
+                      }
+                    </select>
+                    @if (formValidationMessages?.pCardNumber) {
+                      <app-validation-message [messgae]="'Select ' + displayCardName"></app-validation-message>
+                    }
+                  </div>
+                </div>
+              }
 
-            @if (showbankcard) {
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pbankid">
-                  Bank Name <span class="required">*</span>
-                </label>
-                <select id="pbankid" class="erp-input" formControlName="pbankid"
-                  [class.erp-input--invalid]="formValidationMessages?.pbankname" (change)="bankName_Change($event)">
-                  <option value="">Select</option>
-                  @for (bank of banklist; track bank.pbankid) {
-                  <option [value]="bank.pbankid">{{ bank.pbankname }}</option>
-                  }
-                </select>
-                @if (formValidationMessages?.pbankname) {
-                <span class="erp-field-error">{{ formValidationMessages?.pbankname }}</span>
-                }
-              </div>
-            </div>
-            }
+              @if (showTypeofPayment) {
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="ptypeofpayment">Type of Payment <span class="required">*</span></label>
+                    <select id="ptypeofpayment" class="erp-input" formControlName="ptypeofpayment"
+                      (change)="typeofPaymentChange()">
+                      <option value="">Select</option>
+                      @for (t of typeofpaymentlist; track t.ptypeofpayment) {
+                        <option [value]="t.ptypeofpayment">{{ t.ptypeofpayment }}</option>
+                      }
+                    </select>
+                    @if (formValidationMessages?.ptypeofpayment) {
+                      <app-validation-message [messgae]="'Select Type of Payment'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+              }
 
+              @if (showbranch) {
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pbranchname">Branch Name <span class="required">*</span></label>
+                    <input id="pbranchname" class="erp-input" type="text" readonly placeholder="Branch Name"
+                      formControlName="pbranchname" />
+                    @if (formValidationMessages?.pbranchname) {
+                      <app-validation-message [messgae]="'Enter Branch Name'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+              }
 
-            @if (!showbankcard) {
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pCardNumber">
-                  {{ displayCardName }} <span class="required">*</span>
-                </label>
-                <select id="pCardNumber" class="erp-input" formControlName="pCardNumber"
-                  [class.erp-input--invalid]="formValidationMessages?.pCardNumber" (change)="debitCard_Change()">
-                  <option value="">Select</option>
-                  @for (card of debitcardlist; track card.pCardNumber) {
-                  <option [value]="card.pCardNumber">{{ card.pCardNumber }}</option>
-                  }
-                </select>
-                @if (formValidationMessages?.pCardNumber) {
-                <span class="erp-field-error">Select {{ displayCardName }}</span>
-                }
-              </div>
-            </div>
-            }
+              @if (showfinancial) {
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pbankname">Bank / Financial Services <span class="required">*</span></label>
+                    <input id="pbankname" class="erp-input" type="text" readonly formControlName="pbankname" />
+                    @if (formValidationMessages?.pbankname) {
+                      <app-validation-message [messgae]="'Enter Bank / Financial Services'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+              }
 
+              @if (showupi) {
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pUpiname">UPI <span class="required">*</span></label>
+                    <select id="pUpiname" class="erp-input" formControlName="pUpiname"
+                      (change)="upiName_Change($event)">
+                      <option value="">Select</option>
+                      @for (u of upinameslist; track u.pUpiname) {
+                        <option [value]="u.pUpiname">{{ u.pUpiname }}</option>
+                      }
+                    </select>
+                    @if (formValidationMessages?.pUpiname) {
+                      <app-validation-message [messgae]="'Select UPI'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pUpiid">UPI ID <span class="required">*</span></label>
+                    <select id="pUpiid" class="erp-input" formControlName="pUpiid" (change)="upid_change()">
+                      <option value="">Select</option>
+                      @for (u of upiidlist; track u.pUpiid) {
+                        <option [value]="u.pUpiid">{{ u.pUpiid }}</option>
+                      }
+                    </select>
+                    @if (formValidationMessages?.pUpiid) {
+                      <app-validation-message [messgae]="'Select UPI ID'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+              }
 
-            @if (showTypeofPayment) {
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="ptypeofpayment">
-                  Type of Payment <span class="required">*</span>
-                </label>
-                <select id="ptypeofpayment" class="erp-input" formControlName="ptypeofpayment"
-                  [class.erp-input--invalid]="formValidationMessages?.ptypeofpayment" (change)="typeofPaymentChange()">
-                  <option value="">Select</option>
-                  @for (t of typeofpaymentlist; track t.ptypeofpayment) {
-                  <option [value]="t.ptypeofpayment">{{ t.ptypeofpayment }}</option>
-                  }
-                </select>
-                @if (formValidationMessages?.ptypeofpayment) {
-                <span class="erp-field-error">Select Type of Payment</span>
-                }
-              </div>
-            </div>
-            }
-
-
-            @if (showbranch) {
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pbranchname">
-                  Branch Name <span class="required">*</span>
-                </label>
-                <input id="pbranchname" class="erp-input" type="text" readonly placeholder="Branch Name"
-                  formControlName="pbranchname" [class.erp-input--invalid]="formValidationMessages?.pbranchname" />
-                @if (formValidationMessages?.pbranchname) {
-                <span class="erp-field-error">Enter Branch Name</span>
-                }
-              </div>
-            </div>
-            }
-
-
-            @if (showfinancial) {
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pbankname">
-                  Bank / Financial Services <span class="required">*</span>
-                </label>
-                <input id="pbankname" class="erp-input" type="text" readonly formControlName="pbankname"
-                  [class.erp-input--invalid]="formValidationMessages?.pbankname" />
-                @if (formValidationMessages?.pbankname) {
-                <span class="erp-field-error">Enter Bank / Financial Services</span>
-                }
-              </div>
-            </div>
-            }
-
-
-            @if (showupi) {
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pUpiname">
-                  UPI <span class="required">*</span>
-                </label>
-                <select id="pUpiname" class="erp-input" formControlName="pUpiname"
-                  [class.erp-input--invalid]="formValidationMessages?.pUpiname" (change)="upiName_Change($event)">
-                  <option value="">Select</option>
-                  @for (u of upinameslist; track u.pUpiname) {
-                  <option [value]="u.pUpiname">{{ u.pUpiname }}</option>
-                  }
-                </select>
-                @if (formValidationMessages?.pUpiname) {
-                <span class="erp-field-error">Select UPI</span>
-                }
-              </div>
-            </div>
-
-
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pUpiid">
-                  UPI ID <span class="required">*</span>
-                </label>
-                <select id="pUpiid" class="erp-input" formControlName="pUpiid"
-                  [class.erp-input--invalid]="formValidationMessages?.pUpiid" (change)="upid_change()">
-                  <option value="">Select</option>
-                  @for (u of upiidlist; track u.pUpiid) {
-                  <option [value]="u.pUpiid">{{ u.pUpiid }}</option>
-                  }
-                </select>
-                @if (formValidationMessages?.pUpiid) {
-                <span class="erp-field-error">Select UPI ID</span>
-                }
-              </div>
-            </div>
-            }
-
-
-            <div class="col-md-3">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pChequenumber">
-                  {{ displaychequeno }} <span class="required">*</span>
-                </label>
-                @if (showchequno) {
-                <select id="pChequenumber" class="erp-input" formControlName="pChequenumber"
-                  [class.erp-input--invalid]="formValidationMessages?.pChequenumber" (change)="chequenumber_Change()">
-                  <option value="">Select</option>
-                  @for (c of chequenumberslist; track c.pChequenumber) {
-                  <option [value]="c.pChequenumber">{{ c.pChequenumber }}</option>
-                  }
-                </select>
-                } @else {
-                <input id="pChequenumber" class="erp-input" type="text" [placeholder]="displaychequeno"
-                  formControlName="pChequenumber" maxlength="20"
-                  [class.erp-input--invalid]="formValidationMessages?.pChequenumber" (blur)="chequenumber_Change()" />
-                }
-                @if (formValidationMessages?.pChequenumber) {
-                <span class="erp-field-error">Enter {{ displaychequeno }}</span>
-                }
-              </div>
-            </div>
-
-          </div>
-
-
-          <div class="d-flex gap-2 flex-wrap mb-0">
-            <span class="gst-chip" style="background-color: var(--clr-success-light);">
-              <i class="pi pi-info-circle"></i> Bank Book — {{ bankbookBalance }}
-            </span>
-            <span class="gst-chip" style="background-color: var(--clr-warning-light);">
-              <i class="pi pi-info-circle"></i> Pass Book — {{ bankpassbookBalance }}
-            </span>
-          </div>
-        </div>
-        }
-
-
-        <div class="p-4" formGroupName="ppaymentsslistcontrols">
-          <h3 class="section-title mb-3">Payment Details</h3>
-
-
-          <div class="row g-3 mb-3">
-            <div class="col-md-6">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pledgerid">
-                  Ledger <span class="required">*</span>
-                </label>
-                <ng-select id="pledgerid" [items]="ledgeraccountslist" groupBy="pAccounttype" bindLabel="pledgername"
-                  bindValue="pledgerid" placeholder="Select" formControlName="pledgerid"
-                  (change)="ledgerName_Change($event)"
-                  (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.markAsTouched()"
-                  [class.ng-invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid &&
-                                      paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched">
-                  <ng-template ng-optgroup-tmp let-item="item">{{ item.pAccounttype }}</ng-template>
-                </ng-select>
-                @if (paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid &&
-                paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched) {
-                <span class="erp-field-error">Select Ledger</span>
-                }
-                <span class="info-chip">{{ ledgerBalance || '0 Dr' }}</span>
-              </div>
-            </div>
-
-            @if (showsubledger) {
-            <div class="col-md-6">
-              <div class="erp-form-group">
-                <label class="erp-label" for="psubledgerid">
-                  Sub Ledger <span class="required">*</span>
-                </label>
-                <ng-select id="psubledgerid" [items]="subledgeraccountslist" bindLabel="psubledgername"
-                  bindValue="psubledgerid" placeholder="Select" formControlName="psubledgerid" [clearable]="true"
-                  (change)="subledger_Change($event)" [class.ng-invalid]="formValidationMessages?.psubledgername">
-                </ng-select>
-                @if (formValidationMessages?.psubledgername) {
-                <span class="erp-field-error">{{ formValidationMessages?.psubledgername }}</span>
-                }
-                <span class="info-chip">{{ subledgerBalance || '0 Dr' }}</span>
-              </div>
-            </div>
-            }
-          </div>
-
-
-          <div class="row g-3 mb-3">
-            <div class="col-md-6">
-              <div class="erp-form-group">
-                <label class="erp-label" for="ppartyid">
-                  Party <span class="required">*</span>
-                </label>
-                <ng-select id="ppartyid" [items]="partylist" bindLabel="ppartyname" bindValue="ppartyid"
-                  placeholder="Select" formControlName="ppartyid" [searchable]="true" [clearable]="true"
-                  (change)="partyName_Change($event)" (clear)="partyName_Change(null)"
-                  (close)="paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.markAsTouched()"
-                  [class.ng-invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid &&
-                                      paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched">
-                </ng-select>
-                @if (paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid &&
-                paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched) {
-                <span class="erp-field-error">Select Party</span>
-                }
-                <span class="info-chip">{{ partyBalance || '0 Dr' }}</span>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pactualpaidamount">
-                  Amount Paid <span class="required">*</span>
-                </label>
-                <input id="pactualpaidamount" class="erp-input" type="text" placeholder="0.00"
-                  formControlName="pactualpaidamount" inputmode="numeric" style="text-align: right; font-weight: 700;"
-                  [class.erp-input--invalid]="formValidationMessages?.pactualpaidamount" (input)="onAmountInput($event)"
-                  (keydown)="blockInvalidAmountKeys($event)" (blur)="formatAmountOnBlur()" />
-                @if (formValidationMessages?.pactualpaidamount) {
-                <span class="erp-field-error">Enter Amount Paid</span>
-                }
-              </div>
-            </div>
-          </div>
-
-          <div class="erp-section-box mb-3">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <h4 class="section-title mb-0">GST</h4>
-              <label class="material-switch" [class.switch-disabled]="!isPartySelected">
-                <input id="pisgstapplicable" type="checkbox" formControlName="pisgstapplicable"
-                  (change)="isgstapplicable_Checked()" />
-                <span class="switch-slider"></span>
-              </label>
-            </div>
-
-            @if (!showgst) {
-            <div class="row g-3 mb-3">
-
-
-              <div class="col-md-4">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
-                  <label class="erp-label">State <span class="required">*</span></label>
-                  @if (statelist.length === 1) {
-                  <input type="text" class="erp-input" [value]="getStateName(statelist[0])" readonly />
+                  <label class="erp-label" [for]="'pChequenumber'">{{ displaychequeno }} <span class="required">*</span></label>
+                  @if (showchequno) {
+                    <select id="pChequenumber" class="erp-input" formControlName="pChequenumber"
+                      (change)="chequenumber_Change()">
+                      <option value="">Select</option>
+                      @for (c of chequenumberslist; track c.pChequenumber) {
+                        <option [value]="c.pChequenumber">{{ c.pChequenumber }}</option>
+                      }
+                    </select>
                   } @else {
-                  <ng-select [items]="statelist" bindLabel="pState" bindValue="pStateId" placeholder="Select"
-                    formControlName="pStateId" (change)="state_change($event)"
-                    (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.markAsTouched()"
-                    [class.ng-invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched &&
-                                            !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value">
-                    <ng-template ng-label-tmp let-item="item">{{ getStateName(item) }}</ng-template>
-                    <ng-template ng-option-tmp let-item="item">{{ getStateName(item) }}</ng-template>
-                  </ng-select>
-                  @if (paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched &&
-                  !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value) {
-                  <span class="erp-field-error">Select State</span>
+                    <input id="pChequenumber" class="erp-input" type="text" [placeholder]="displaychequeno"
+                      formControlName="pChequenumber" maxlength="20" (blur)="chequenumber_Change()" />
                   }
-                  }
-                </div>
-              </div>
-
-
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">GST No.</label>
-                  <input type="text" class="erp-input" maxlength="15" id="pgstno" formControlName="pgstno"
-                    placeholder="Enter GST No" style="text-transform: uppercase;"
-                    [class.erp-input--invalid]="formValidationMessages?.pgstno" (blur)="gsno_change()" />
-                  @if (formValidationMessages?.pgstno &&
-                  paymentVoucherForm.get('ppaymentsslistcontrols.pgstno')?.touched) {
-                  <span class="erp-field-error">Enter valid GST No</span>
-                  }
-                </div>
-              </div>
-
-
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">GST (%) <span class="required">*</span></label>
-                  <ng-select [items]="gstlist" bindLabel="pgstpercentage" bindValue="pgstpercentage"
-                    placeholder="Select" formControlName="pgstpercentage" [readonly]="disablegst"
-                    (change)="gst_Change($event)"
-                    (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.markAsTouched()"
-                    [class.ng-invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.touched &&
-                                          !paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.value">
-                  </ng-select>
-                  @if (paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.touched &&
-                  !paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.value) {
-                  <span class="erp-field-error">Select GST %</span>
+                  @if (formValidationMessages?.pChequenumber) {
+                    <app-validation-message [messgae]="'Enter ' + displaychequeno"></app-validation-message>
                   }
                 </div>
               </div>
             </div>
 
-
-            @if (showgstamount || showigst || showcgst || showsgst || showutgst) {
-            <div class="row g-3">
-
-              @if (showgstamount) {
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">GST Amount</label>
-                  <div class="erp-amount-display erp-amount-display--primary">
-                    {{ currencyCode }}
-                    {{ paymentVoucherForm.get('ppaymentsslistcontrols.pgstamount')?.value | number:'1.2-2' }}
-                  </div>
-                </div>
-              </div>
-              }
-
-              @if (showigst) {
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    IGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.pigstpercentage')?.value }}%)
-                  </label>
-                  <div class="erp-amount-display">
-                    {{ currencyCode }}
-                    {{ paymentVoucherForm.get('ppaymentsslistcontrols.pigstamount')?.value | number:'1.2-2' }}
-                  </div>
-                </div>
-              </div>
-              }
-
-              @if (showcgst) {
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    CGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.pcgstpercentage')?.value }}%)
-                  </label>
-                  <div class="erp-amount-display">
-                    {{ currencyCode }}
-                    {{ paymentVoucherForm.get('ppaymentsslistcontrols.pcgstamount')?.value | number:'1.2-2' }}
-                  </div>
-                </div>
-              </div>
-              }
-
-              @if (showsgst) {
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    SGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.psgstpercentage')?.value }}%)
-                  </label>
-                  <div class="erp-amount-display">
-                    {{ currencyCode }}
-                    {{ paymentVoucherForm.get('ppaymentsslistcontrols.psgstamount')?.value | number:'1.2-2' }}
-                  </div>
-                </div>
-              </div>
-              }
-
-              @if (showutgst) {
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">
-                    UTGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.putgstpercentage')?.value }}%)
-                  </label>
-                  <div class="erp-amount-display">
-                    {{ currencyCode }}
-                    {{ paymentVoucherForm.get('ppaymentsslistcontrols.putgstamount')?.value | number:'1.2-2' }}
-                  </div>
-                </div>
-              </div>
-              }
-
+            <div class="d-flex gap-2 flex-wrap mt-3">
+              <span class="erp-badge badge-success">
+                Bank Book - {{ bankbookBalance }}
+              </span>
+              <span class="erp-badge badge-info">
+                Pass Book - {{ bankpassbookBalance }}
+              </span>
             </div>
-            }
-            }
+          </div>
+        @}
+
+        <!-- ── PAYMENT DETAILS ── -->
+        <div class="py-4 border-bottom" formGroupName="ppaymentsslistcontrols">
+          <div class="px-4">
+            <h3 class="section-title mb-3">Payment Details</h3>
           </div>
 
-
-          <div class="erp-section-box mb-3">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <h4 class="section-title mb-0">TDS</h4>
-              <label class="material-switch">
-                <input id="pistdsapplicable" type="checkbox" formControlName="pistdsapplicable"
-                  (change)="istdsapplicable_Checked()" />
-                <span class="switch-slider"></span>
-              </label>
-            </div>
-
-            @if (!showtds) {
-            <div class="row g-3">
-
-
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Section <span class="required">*</span></label>
-                  <select class="erp-input" id="pTdsSection" formControlName="pTdsSection" [class.erp-input--invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched &&
-                                                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value"
-                    (change)="tdsSection_Change($event)">
-                    <option value="">Select</option>
-                    @for (tds of tdssectionlist; track tds.pTdsSection) {
-                    <option [value]="tds.pTdsSection">{{ tds.pTdsSection }}</option>
+          <div class="px-4">
+            <div class="row g-2 mb-3">
+              <div class="col-12 col-md-6">
+                <div class="d-flex gap-2 align-items-end">
+                  <div class="erp-flex-1">
+                    <label class="erp-label" for="pledgerid">Ledger <span class="required">*</span></label>
+                    <ng-select appendTo="body" id="pledgerid" [items]="ledgeraccountslist" groupBy="pAccounttype"
+                      bindLabel="pledgername" bindValue="pledgerid" placeholder="Select" formControlName="pledgerid"
+                      (change)="ledgerName_Change($event)"
+                      (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.markAsTouched()"
+                      [class.ng-invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid && paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched">
+                      <ng-template ng-optgroup-tmp let-item="item">{{ item.pAccounttype }}</ng-template>
+                    </ng-select>
+                    @if (paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid && paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched) {
+                      <app-validation-message [messgae]="'Select Ledger'"></app-validation-message>
                     }
-                  </select>
-                  @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched &&
-                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value) {
-                  <span class="erp-field-error">Select Section</span>
-                  }
+                  </div>
+                  <span class="erp-balance-chip">{{ ledgerBalance || '0 Dr' }}</span>
                 </div>
               </div>
 
+              @if (showsubledger) {
+                <div class="col-12 col-md-6">
+                  <div class="d-flex gap-2 align-items-end">
+                    <div class="erp-flex-1">
+                      <label class="erp-label" for="psubledgerid">Sub Ledger <span class="required">*</span></label>
+                      <ng-select appendTo="body" id="psubledgerid" [items]="subledgeraccountslist" bindLabel="psubledgername"
+                        bindValue="psubledgerid" placeholder="Select" formControlName="psubledgerid" [clearable]="true"
+                        (change)="subledger_Change($event)">
+                      </ng-select>
+                      @if (formValidationMessages?.psubledgername) {
+                        <app-validation-message [messgae]="formValidationMessages?.psubledgername"></app-validation-message>
+                      }
+                    </div>
+                    <span class="erp-balance-chip">{{ subledgerBalance || '0 Dr' }}</span>
+                  </div>
+                </div>
+              }
+            </div>
 
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Percentage <span class="required">*</span></label>
-                  <select class="erp-input" id="pTdsPercentage" formControlName="pTdsPercentage"
-                    [class.erp-input--invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched &&
-                                                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value"
-                    (change)="tds_Change($event)">
-                    <option value="">Select</option>
-                    @for (tds of tdspercentagelist; track tds.pTdsPercentage) {
-                    <option [value]="tds.pTdsPercentage">{{ tds.pTdsPercentage }}</option>
+            <div class="row g-2 mb-3">
+              <div class="col-12 col-md-6">
+                <div class="d-flex gap-2 align-items-end">
+                  <div class="erp-flex-1">
+                    <label class="erp-label" for="ppartyid">Party <span class="required">*</span></label>
+                    <ng-select appendTo="body" id="ppartyid" [items]="partylist" bindLabel="ppartyname" bindValue="ppartyid"
+                      placeholder="Select" formControlName="ppartyid" [searchable]="true" [clearable]="true"
+                      (change)="partyName_Change($event)" (clear)="partyName_Change(null)"
+                      (close)="paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.markAsTouched()"
+                      [class.ng-invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid && paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched">
+                    </ng-select>
+                    @if (paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid && paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched) {
+                      <app-validation-message [messgae]="'Select Party'"></app-validation-message>
                     }
-                  </select>
-                  @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched &&
-                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value) {
-                  <span class="erp-field-error">Select Percentage</span>
-                  }
+                  </div>
+                  <span class="erp-balance-chip">{{ partyBalance || '0 Dr' }}</span>
                 </div>
               </div>
 
-
-              <div class="col-md-4">
+              <div class="col-12 col-md-6">
                 <div class="erp-form-group">
-                  <label class="erp-label">TDS Amount</label>
-                  <div class="erp-amount-display erp-amount-display--primary">
-                    {{ currencyCode }}
-                    {{ paymentVoucherForm.get('ppaymentsslistcontrols.ptdsamount')?.value | number:'1.2-2' }}
+                  <label class="erp-label" for="pactualpaidamount">Amount Paid <span class="required">*</span></label>
+                  <input id="pactualpaidamount" class="erp-input text-end font-bold" type="text"
+                    placeholder="0.00" formControlName="pactualpaidamount" inputmode="numeric"
+                    (input)="onAmountInput($event)" (keydown)="blockInvalidAmountKeys($event)" (blur)="formatAmountOnBlur()" />
+                  @if (formValidationMessages?.pactualpaidamount) {
+                    <app-validation-message [messgae]="'Enter Amount Paid'"></app-validation-message>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── TAX TOGGLES ── -->
+          <div class="mt-3 mb-3 px-4">
+            <div class="d-flex gap-4 align-items-center">
+              <!-- TDS Toggle -->
+              <div class="d-flex align-items-center gap-2">
+                <span class="section-title mb-0" style="font-size: 14px; color: #3b82f6;">TDS</span>
+                <div class="erp-toggle-group">
+                  <input id="tds-switch" type="checkbox" formControlName="pistdsapplicable" (change)="istdsapplicable_Checked()" />
+                  <label for="tds-switch" class="erp-toggle"></label>
+                </div>
+              </div>
+
+              <!-- GST Toggle -->
+              <div class="d-flex align-items-center gap-2">
+                <span class="section-title mb-0" style="font-size: 14px; color: #3b82f6;">GST</span>
+                <div class="erp-toggle-group" [class.switch-disabled]="!isPartySelected">
+                  <input id="gst-switch" type="checkbox" formControlName="pisgstapplicable" (change)="isgstapplicable_Checked()" />
+                  <label for="gst-switch" class="erp-toggle"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── TAX DETAILS AREA ── -->
+          <!-- ── GST DETAILS ── -->
+          @if (!showgst) {
+            <div class="mt-4 mb-4 px-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="pi pi-percentage text-primary"></i>
+                <h4 class="m-0 text-sm font-bold uppercase tracking-wider text-primary">GST Information</h4>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <div class="erp-form-group">
+                    <label class="erp-label">State <span class="required">*</span></label>
+                    @if (statelist.length === 1) {
+                      <input type="text" class="erp-input" [value]="getStateName(statelist[0])" readonly />
+                    } @else {
+                      <ng-select [items]="statelist" bindLabel="pState" bindValue="pStateId" placeholder="Select"
+                        formControlName="pStateId" (change)="state_change($event)"
+                        (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.markAsTouched()">
+                        <ng-template ng-label-tmp let-item="item">{{ getStateName(item) }}</ng-template>
+                        <ng-template ng-option-tmp let-item="item">{{ getStateName(item) }}</ng-template>
+                      </ng-select>
+                      @if (paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pStateId')?.value) {
+                        <app-validation-message [messgae]="'Select State'"></app-validation-message>
+                      }
+                    }
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="erp-form-group">
+                    <label class="erp-label">GST No.</label>
+                    <input type="text" class="erp-input uppercase" maxlength="15" id="pgstno" formControlName="pgstno"
+                      placeholder="Enter GST No" (blur)="gsno_change()" />
+                    @if (formValidationMessages?.pgstno && paymentVoucherForm.get('ppaymentsslistcontrols.pgstno')?.touched) {
+                      <app-validation-message [messgae]="'Enter valid GST No'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="erp-form-group">
+                    <label class="erp-label">GST (%) <span class="required">*</span></label>
+                    <ng-select [items]="gstlist" bindLabel="pgstpercentage" bindValue="pgstpercentage"
+                      placeholder="Select" formControlName="pgstpercentage" [readonly]="disablegst"
+                      (change)="gst_Change($event)"
+                      (close)="paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.markAsTouched()">
+                    </ng-select>
+                    @if (paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pgstpercentage')?.value) {
+                      <app-validation-message [messgae]="'Select GST %'"></app-validation-message>
+                    }
                   </div>
                 </div>
               </div>
 
-            </div>
-            }
-          </div>
-
-
-          <div class="d-flex justify-content-end gap-2 mt-3">
-            <button type="button" class="erp-btn btn-secondary" (click)="clearPaymentDetails()">
-              <i class="pi pi-times"></i> Clear
-            </button>
-            <button type="button" class="erp-btn btn-primary" [disabled]="disableaddbutton()"
-              (click)="addPaymentDetails()">
-
-              @if (disableaddbutton()) {
-              <i class="pi pi-spin pi-spinner"></i>
-              } @else {
-              <i class="pi pi-plus"></i>
+              @if (showgstamount || showigst || showcgst || showsgst || showutgst) {
+                <div class="row g-2 mt-1">
+                  @if (showgstamount) {
+                    <div class="col-md-3">
+                      <label class="erp-label">GST Amount</label>
+                      <div class="erp-value-pill">
+                        <span>{{ currencyCode }} {{ paymentVoucherForm.get('ppaymentsslistcontrols.pgstamount')?.value | number:'1.2-2' }}</span>
+                      </div>
+                    </div>
+                  }
+                  @if (showigst) {
+                    <div class="col-md-3">
+                      <label class="erp-label">IGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.pigstpercentage')?.value }}%)</label>
+                      <div class="erp-value-pill">
+                        <span>{{ currencyCode }} {{ paymentVoucherForm.get('ppaymentsslistcontrols.pigstamount')?.value | number:'1.2-2' }}</span>
+                      </div>
+                    </div>
+                  }
+                  @if (showcgst) {
+                    <div class="col-md-3">
+                      <label class="erp-label">CGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.pcgstpercentage')?.value }}%)</label>
+                      <div class="erp-value-pill">
+                        <span>{{ currencyCode }} {{ paymentVoucherForm.get('ppaymentsslistcontrols.pcgstamount')?.value | number:'1.2-2' }}</span>
+                      </div>
+                    </div>
+                  }
+                  @if (showsgst) {
+                    <div class="col-md-3">
+                      <label class="erp-label">SGST ({{ paymentVoucherForm.get('ppaymentsslistcontrols.psgstpercentage')?.value }}%)</label>
+                      <div class="erp-value-pill">
+                        <span>{{ currencyCode }} {{ paymentVoucherForm.get('ppaymentsslistcontrols.psgstamount')?.value | number:'1.2-2' }}</span>
+                      </div>
+                    </div>
+                  }
+                </div>
               }
-              {{ addbutton() }}
+            </div>
+          }
+
+          <!-- ── TDS DETAILS ── -->
+          @if (!showtds) {
+            <div class="mt-4 mb-4 px-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="pi pi-shield text-primary"></i>
+                <h4 class="m-0 text-sm font-bold uppercase tracking-wider text-primary">TDS Information</h4>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pTdsSection">@ Section <span class="required">*</span></label>
+                    <ng-select id="pTdsSection" [items]="tdssectionlist" bindLabel="pTdsSection" bindValue="pTdsSection"
+                      placeholder="Select Section" formControlName="pTdsSection" (change)="tdsSection_Change($event)"
+                      appendTo="body">
+                    </ng-select>
+                    @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value) {
+                      <app-validation-message [messgae]="'Select Section'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="erp-form-group">
+                    <label class="erp-label" for="pTdsPercentage">Percentage <span class="required">*</span></label>
+                    <ng-select id="pTdsPercentage" [items]="tdspercentagelist" bindLabel="pTdsPercentage" bindValue="pTdsPercentage"
+                      placeholder="Select" formControlName="pTdsPercentage" (change)="tds_Change($event)"
+                      appendTo="body">
+                    </ng-select>
+                    @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value) {
+                      <app-validation-message [messgae]="'Select Percentage'"></app-validation-message>
+                    }
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="erp-form-group">
+                    <label class="erp-label">TDS Amount</label>
+                    <div class="erp-value-pill">
+                      <span>{{ currencyCode }} {{ paymentVoucherForm.get('ppaymentsslistcontrols.ptdsamount')?.value | number:'1.2-2' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Add / Clear Buttons -->
+          <div class="d-flex gap-2 mt-2">
+            <button type="button" class="erp-btn btn-secondary" (click)="clearPaymentDetails()">Clear</button>
+            <button type="button" class="erp-btn btn-primary" [disabled]="disableaddbutton()" (click)="addPaymentDetails()">
+              + {{ addbutton() }}
             </button>
           </div>
-
         </div>
 
+        <!-- ── ADDED PAYMENTS TABLE ── -->
         @if (hasRows()) {
-        <div class="p-4 pt-0">
-          <h3 class="section-title mb-3">Added Payments</h3>
-          <div class="erp-table-wrap">
-            <table class="erp-table">
-              <thead>
-                <tr>
-                  <th style="width:50px;">#</th>
-                  <th>Party</th>
-                  <th>Ledger</th>
-                  <th>Sub Ledger</th>
-                  <th class="text-end">Amount</th>
-                  <th class="text-end">GST</th>
-                  <th class="text-end">TDS</th>
-                  <th class="text-end">Total</th>
-                  <th class="text-center" style="width:70px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-
-                @for (row of paymentslist1(); track $index) {
-                <tr>
-                  <td>{{ $index + 1 }}</td>
-                  <td>{{ row.ppartyname }}</td>
-                  <td>{{ row.pledgername }}</td>
-                  <td>{{ row.psubledgername || '— NA —' }}</td>
-                  <td class="text-end">{{ row.pamount | number:'1.2-2' }}</td>
-                  <td class="text-end">
-                    {{ (row.pgstamount && row.pgstamount != 0) ? (row.pgstamount | number:'1.2-2') : '— NA —' }}
-                  </td>
-                  <td class="text-end">
-                    {{ (row.ptdsamount && row.ptdsamount != 0) ? (row.ptdsamount | number:'1.2-2') : '— NA —' }}
-                  </td>
-                  <td class="text-end"><strong>{{ row.ptotalamount | number:'1.2-2' }}</strong></td>
-                  <td class="text-center">
-                    <button type="button" class="erp-btn btn-danger btn-sm" (click)="removeHandler($index)">
-                      <i class="pi pi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                }
-              </tbody>
-              <tfoot>
-                <tr class="erp-table-total">
-                  <td colspan="4"><strong>Total</strong></td>
-                  <td class="text-end">
-                    <strong>{{ paymentlistcolumnwiselist?.pamount | number:'1.2-2' }}</strong>
-                  </td>
-                  <td class="text-end">
-                    <strong>{{ paymentlistcolumnwiselist?.pgstamount | number:'1.2-2' }}</strong>
-                  </td>
-                  <td class="text-end">
-                    <strong>{{ paymentlistcolumnwiselist?.ptdsamount | number:'1.2-2' }}</strong>
-                  </td>
-                  <td class="text-end">
-                    <strong>{{ paymentlistcolumnwiselist?.ptotalamount | number:'1.2-2' }}</strong>
-                  </td>
-                  <td></td>
-                </tr>
-              </tfoot>
-            </table>
+          <div class="p-4 border-top">
+            <h3 class="section-title mb-3">Added Payments</h3>
+            <div class="erp-table-wrap">
+              <table class="erp-table gr-table">
+                <thead>
+                  <tr>
+                    <th style="width:50px;">#</th>
+                    <th>Party</th>
+                    <th>Ledger</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">GST</th>
+                    <th class="text-end">TDS</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-center" style="width:70px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of paymentslist1(); track $index) {
+                    <tr>
+                      <td>{{ $index + 1 }}</td>
+                      <td>{{ row.ppartyname }}</td>
+                      <td>{{ row.pledgername }}</td>
+                      <td class="text-end">{{ row.pamount | number:'1.2-2' }}</td>
+                      <td class="text-end">{{ (row.pgstamount && row.pgstamount != 0) ? (row.pgstamount | number:'1.2-2') : '—' }}</td>
+                      <td class="text-end">{{ (row.ptdsamount && row.ptdsamount != 0) ? (row.ptdsamount | number:'1.2-2') : '—' }}</td>
+                      <td class="text-end"><strong>{{ row.ptotalamount | number:'1.2-2' }}</strong></td>
+                      <td class="text-center">
+                        <button type="button" class="erp-btn btn-danger btn-sm btn-icon" (click)="removeHandler($index)">
+                          <i class="pi pi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot>
+                  <tr class="erp-table-total">
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td class="text-end"><strong>{{ paymentlistcolumnwiselist?.pamount | number:'1.2-2' }}</strong></td>
+                    <td class="text-end"><strong>{{ paymentlistcolumnwiselist?.pgstamount | number:'1.2-2' }}</strong></td>
+                    <td class="text-end"><strong>{{ paymentlistcolumnwiselist?.ptdsamount | number:'1.2-2' }}</strong></td>
+                    <td class="text-end"><strong>{{ paymentlistcolumnwiselist?.ptotalamount | number:'1.2-2' }}</strong></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
-          <div class="text-muted mt-1" style="font-size:12px;">
-            {{ paymentslist1().length }} total
-          </div>
-        </div>
-        }
+        @}
 
-
-        <div class="p-4 pt-0">
+        <!-- ── JOURNAL & NARRATION ── -->
+        <div class="p-4 border-top">
           <div class="row g-4">
-
-
             <div class="col-md-6">
-
               @if (partyjournalentrylist().length > 0) {
-              <h3 class="section-title mb-3">Journal Entry Preview</h3>
-              <div class="erp-table-wrap">
-                <table class="erp-table">
-                  <thead>
-                    <tr>
-                      <th>Particulars</th>
-                      <th class="text-end">Dr</th>
-                      <th class="text-end">Cr</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (entry of partyjournalentrylist(); track $index) {
-                    <tr>
-                      <td>
-                        {{ entry.accountname }}
-                        @if ($index === 0) {
-                        <span style="display:block; font-size:11px; color:#6c757d; font-style:italic; margin-top:2px;">
-                          Amount Paid
-                        </span>
-                        }
-                      </td>
-                      <td class="text-end">
-                        {{ entry.debitamount !== '' ? (entry.debitamount | number:'1.2-2') : '-' }}
-                      </td>
-                      <td class="text-end">
-                        {{ entry.creditamount !== '' ? (entry.creditamount | number:'1.2-2') : '-' }}
-                      </td>
-                    </tr>
-                    }
-                  </tbody>
-                  <tfoot>
-                    <tr class="erp-table-total">
-                      <td><strong>Total</strong></td>
-                      <td class="text-end"><strong>{{ getTotalDebit() | number:'1.2-2' }}</strong></td>
-                      <td class="text-end"><strong>{{ getTotalCredit() | number:'1.2-2' }}</strong></td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <div class="text-muted mt-1" style="font-size:12px;">
-                {{ partyjournalentrylist().length }} total
-              </div>
-              }
+                <h3 class="section-title mb-2">Journal Entry Preview</h3>
+                <div class="erp-table-wrap">
+                  <table class="erp-table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Particulars</th>
+                        <th class="text-end">Dr</th>
+                        <th class="text-end">Cr</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (entry of partyjournalentrylist(); track $index) {
+                        <tr>
+                          <td>{{ entry.accountname }}</td>
+                          <td class="text-end">{{ entry.debitamount !== '' ? (entry.debitamount | number:'1.2-2') : '-' }}</td>
+                          <td class="text-end">{{ entry.creditamount !== '' ? (entry.creditamount | number:'1.2-2') : '-' }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                    <tfoot>
+                      <tr class="erp-table-total">
+                        <td><strong>Total</strong></td>
+                        <td class="text-end"><strong>{{ getTotalDebit() | number:'1.2-2' }}</strong></td>
+                        <td class="text-end"><strong>{{ getTotalCredit() | number:'1.2-2' }}</strong></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              @}
             </div>
 
-
             <div class="col-md-6">
-
-
-              <div class="erp-form-group mt-2">
-                <label class="erp-label" for="pnarration">
-                  Narration <span class="required">*</span>
-                </label>
+              <div class="erp-form-group">
+                <label class="erp-label" for="pnarration">Narration <span class="required">*</span></label>
                 <textarea id="pnarration" class="erp-input erp-textarea" rows="4" maxlength="250"
-                  formControlName="pnarration" placeholder="Enter narration..."
-                  (blur)="paymentVoucherForm.get('pnarration')?.markAsTouched()" [class.erp-input--invalid]="paymentVoucherForm.get('pnarration')?.touched &&
-                                              !paymentVoucherForm.get('pnarration')?.value">
-                </textarea>
-                @if (paymentVoucherForm.get('pnarration')?.touched &&
-                !paymentVoucherForm.get('pnarration')?.value) {
-                <span class="erp-field-error">Enter Narration</span>
+                  formControlName="pnarration" placeholder="Enter narration..."></textarea>
+                @if (paymentVoucherForm.get('pnarration')?.touched && !paymentVoucherForm.get('pnarration')?.value) {
+                  <app-validation-message [messgae]="'Enter Narration'"></app-validation-message>
                 }
-                <div style="display:flex; justify-content:flex-end; margin-top:4px;">
-                  <small [ngStyle]="{
-                    'color': (paymentVoucherForm.get('pnarration')?.value?.length || 0) >= 250 ? '#dc3545' : '#8fa0c4',
-                    'font-weight': (paymentVoucherForm.get('pnarration')?.value?.length || 0) >= 250 ? '700' : '500'
-                  }">
-                    {{ paymentVoucherForm.get('pnarration')?.value?.length || 0 }} / 250
-                  </small>
+                <div class="text-end mt-1">
+                  <small class="text-muted">{{ paymentVoucherForm.get('pnarration')?.value?.length || 0 }} / 250</small>
                 </div>
               </div>
-
 
               <div class="erp-form-group mt-3">
                 <label class="erp-label">Upload Document</label>
-                <div class="input-group">
-                  <input type="text" class="erp-input" placeholder="No file chosen" [value]="imageResponse?.name || ''"
-                    [disabled]="true" readonly />
-                  <button type="button" class="erp-btn btn-secondary"
-                    style="border-left: none; border-radius: 0 6px 6px 0;" (click)="fileInput.click()">
+                <div class="erp-input-wrap">
+                  <input type="text" class="erp-input" placeholder="No file chosen" [value]="imageResponse?.name || ''" disabled readonly />
+                  <button type="button" class="erp-btn btn-secondary btn-icon" style="border-left: none; border-radius: 0 14px 14px 0;" (click)="fileInput.click()">
                     <i class="pi pi-upload"></i>
                   </button>
-                  <input style="display:none" type="file" accept=".jpg,.png,.pdf" (change)="uploadAndProgress($event)"
-                    #fileInput />
+                  <input style="display:none" type="file" accept=".jpg,.png,.pdf" (change)="uploadAndProgress($event)" #fileInput />
                 </div>
               </div>
-
             </div>
           </div>
         </div>
+      </div>
 
-      </form>
-    </div>
-
-
-    <div class="card-footer">
-      <button type="button" class="erp-btn btn-secondary btn-lg" (click)="clearPaymentVoucher()">
-        <i class="pi pi-times"></i> Clear
-      </button>
-      <button type="button" class="erp-btn btn-primary btn-lg" [disabled]="disablesavebutton()"
-        (click)="savePaymentVoucher()">
-
-        @if (disablesavebutton()) {
-        <i class="pi pi-spin pi-spinner"></i>
-        } @else {
-        <i class="pi pi-check"></i>
-        }
-        {{ savebutton() }}
-      </button>
-    </div>
-
+      <!-- Footer -->
+      <div class="card-footer d-flex justify-end gap-2">
+        <button type="button" class="erp-btn btn-secondary" (click)="clearPaymentVoucher()">
+          <i class="pi pi-times"></i> Clear
+        </button>
+        <button type="button" class="erp-btn btn-primary" [disabled]="disablesavebutton()" (click)="savePaymentVoucher()">
+          @if (disablesavebutton()) { <i class="pi pi-spin pi-spinner"></i> }
+          @else { <i class="pi pi-check"></i> }
+          {{ savebutton() }}
+        </button>
+      </div>
+    </form>
   </div>
-
 </div>

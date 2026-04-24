@@ -10,7 +10,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 
 import { finalize } from 'rxjs';
@@ -21,6 +21,7 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-day-book',
@@ -29,7 +30,7 @@ import { Companydetails } from '../../../common/company-details/companydetails/c
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     NgSelectModule,
     Companydetails
@@ -39,6 +40,8 @@ import { Companydetails } from '../../../common/company-details/companydetails/c
   providers: [DatePipe]
 })
 export class DayBook implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ──────────────────────────────────────────────────────────────────────
   private fb                   = inject(FormBuilder);
@@ -85,14 +88,14 @@ export class DayBook implements OnInit {
   pageCriteria = new PageCriteria();
 
   // ── Datepicker configs ───────────────────────────────────────────────────────
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass:  'theme-dark-blue',
     maxDate:         new Date(),
     showWeekNumbers: false
   };
 
-  dppConfig: Partial<BsDatepickerConfig> = { ...this.dpConfig };
+  dppConfig: any = { ...this.dpConfig };
 
   // ── Form ─────────────────────────────────────────────────────────────────────
   dayBookForm!: FormGroup;

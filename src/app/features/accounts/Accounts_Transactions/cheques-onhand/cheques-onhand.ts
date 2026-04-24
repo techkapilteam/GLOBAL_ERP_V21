@@ -1752,7 +1752,7 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { forkJoin } from 'rxjs';
 import { Table } from 'primeng/table';
@@ -1760,12 +1760,13 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { CompanyDetailsService } from '../../../../core/services/Common/company-details-service';
+import { DatePickerModule } from 'primeng/datepicker';
 
 declare var $: any;
 @Component({
   selector: "app-cheques-onhand",
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, NgSelectModule, BsDatepickerModule, CurrencyPipe, TableModule, CheckboxModule, PaginatorModule, ValidationMessageComponent],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, NgSelectModule, DatePickerModule, CurrencyPipe, TableModule, CheckboxModule, PaginatorModule, ValidationMessageComponent],
   templateUrl: "./cheques-onhand.html",
 })
 
@@ -1859,9 +1860,9 @@ export class ChequesOnhand implements OnInit {
   pageCriteria: PageCriteria;
   pageSize = 10;
 
-  public dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  public brsfromConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  public brstoConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  public dpConfig: any = {};
+  public brsfromConfig: any = {};
+  public brstoConfig: any = {};
 
   public group: any[] = [
     { field: 'preceiptdate' },
@@ -3568,18 +3569,14 @@ export class ChequesOnhand implements OnInit {
   }
 
   onDepositChange(event: any, row: any) {
-    debugger
     if (event.checked) {
-      this.checked = event.checked;
       row.pcancelstatus = false;
     }
     this.checkedDeposit(event, row);
   }
 
   onCancelChange(event: any, row: any) {
-    debugger
     if (event.checked) {
-      this.checked = event.checked;
       row.pdepositstatus = false;
     }
     this.checkedCancel(event, row);
@@ -3590,3 +3587,4 @@ export class ChequesOnhand implements OnInit {
     return element.pbranchname?.name || element.pbranchname?.pBranchname || element.branch_name || '';
   }
 }
+

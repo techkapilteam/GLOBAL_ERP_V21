@@ -10,7 +10,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,6 +21,7 @@ import { AccountsReports } from '../../../../core/services/accounts/accounts-rep
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-bank-book',
@@ -29,7 +30,7 @@ import { Companydetails } from '../../../common/company-details/companydetails/c
     CommonModule,
     FormsModule,
     Companydetails,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     ReactiveFormsModule,
     NgSelectModule
@@ -39,6 +40,8 @@ import { Companydetails } from '../../../common/company-details/companydetails/c
   providers: [DatePipe]
 })
 export class BankBook implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ─────────────────────────────────────────────────────────────────────
   private fb                          = inject(FormBuilder);
@@ -84,14 +87,14 @@ export class BankBook implements OnInit {
   get f() { return this.bankBookForm.controls; }
 
   // ── Datepicker configs ───────────────────────────────────────────────────────
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     dateInputFormat:  'DD-MMM-YYYY',
     containerClass:   'theme-dark-blue',
     showWeekNumbers:  false,
     maxDate:          new Date()
   };
 
-  dpConfig1: Partial<BsDatepickerConfig> = {
+  dpConfig1: any = {
     dateInputFormat:  'DD-MMM-YYYY',
     containerClass:   'theme-dark-blue',
     showWeekNumbers:  false,

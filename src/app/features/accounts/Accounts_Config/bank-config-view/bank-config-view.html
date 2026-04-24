@@ -1,136 +1,149 @@
 <div class="module-page">
 
-    <!-- Main Card -->
-    <div class="erp-card">
+  <!-- Header Section -->
+  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
+    <div>
+      <h1 class="page-title">
+        <i class="pi pi-list"></i> Bank Master View
+      </h1>
+      <p class="page-subtitle">Browse and manage all registered bank accounts and configurations</p>
+    </div>
 
-        <!-- Card Header with Search -->
-        <div class="card-header">
-            <div class="card-title">
-                <i class="pi pi-list"></i>Bank Configuration
-            </div>
+    <a routerLink="/dashboard/accounts/accounts-config/bank-config" class="erp-btn btn-primary btn-lg"
+      (click)="newSchemeForm()" style="margin-top: auto; white-space: nowrap;">
+      <i class="pi pi-plus"></i> New Bank Account
+    </a>
+  </div>
 
-            <!-- Search in header -->
-            <div class="header-search" style="flex: 1; max-width: 300px;">
-                <div class="erp-input-wrap">
-                    <i class="pi pi-search erp-input-icon"></i>
-                    <input type="text" class="erp-input icon-pad" placeholder="Search..."
-                        style="font-size: 12px; color: #374151;" (keyup)="filterDatatable($event)"/>
-                </div>
-            </div>
+  <!-- Main Card -->
+  <div class="erp-card">
 
-            <div class="card-actions">
+    <!-- Card Header with Search -->
+    <div class="card-header">
+      <div class="card-title">
+        <i class="pi pi-list"></i> Bank Accounts
+      </div>
 
-                <a (click)="newSchemeForm()" routerLink="/dashboard/accounts/accounts-config/bank-config"
-                    class="erp-btn btn-primary btn-lg" style="margin-top: auto; white-space: nowrap;">
-                    <i class="pi pi-plus"></i> New
-                </a>
-
-            </div>
+      <!-- Search in header -->
+      <div class="header-search" style="flex: 1; max-width: 300px;">
+        <div class="erp-input-wrap">
+          <i class="pi pi-search erp-input-icon"></i>
+          <input type="text" class="erp-input icon-pad" placeholder="Search bank..."
+            style="font-size: 12px; color: #374151;" (keyup)="filterDatatable($event)" />
         </div>
+      </div>
 
-        <!-- Card Body -->
-        <div class="card-body p-0">
+      <div class="card-actions">
+        <button class="erp-btn btn-white btn-sm" title="Refresh list">
+          <i class="pi pi-refresh"></i> Refresh
+        </button>
+        <button class="erp-btn btn-secondary btn-sm" title="Export data">
+          <i class="pi pi-download"></i> Export
+        </button>
+      </div>
+    </div>
 
-            <!-- Table Toolbar -->
-            <div class="erp-table-toolbar tbl-toolbar-flush">
-                <div class="tb-left">
-                    <span class="erp-badge badge-primary badge-dot">
-                      {{gridData().length}}  records 
-                    </span>
-                </div>
-            </div>
+    <!-- Card Body -->
+    <div class="card-body p-0">
 
-            <!-- DataTable -->
-            <div class="tbl-wrap">
-                <p-table [value]="gridData()" [paginator]="true" [rows]="pageCriteria.pageSize"
-                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 20, 50]"
-                    currentPageReportTemplate="Showing {first}–{last} of {totalRecords} entries"
-                    responsiveLayout="scroll" [loading]="loading()" [sortMode]="'single'" styleClass="gr-table"
-                    paginatorPosition="bottom">
-
-
-
-                    <!-- Header -->
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th class="th-actions">Actions</th>
-                            <th pSortableColumn="receipt_date">
-                                <div class="th-cell">
-                                    <i class="pi pi-calendar"></i>
-                                    Bank Name
-                                    <p-sortIcon field="receipt_date"></p-sortIcon>
-                                </div>
-                            </th>
-                            <th pSortableColumn="receipt_number" class="th-center">
-                                <div class="th-cell" style="justify-content:center">
-                                    <i class="pi pi-hashtag"></i>
-                                    Account Number
-                                    <p-sortIcon field="receipt_number"></p-sortIcon>
-                                </div>
-                            </th>
-                            <th pSortableColumn="modeof_receipt">
-                                <div class="th-cell">
-                                    <i class="pi pi-credit-card"></i>
-                                    Name of the Account
-                                    <p-sortIcon field="modeof_receipt"></p-sortIcon>
-                                </div>
-                            </th>
-                            <th pSortableColumn="totalreceivedamount" class="th-right">
-                                <div class="th-cell" style="justify-content:flex-end">
-                                    <i class="pi pi-indian-rupee"></i>
-                                    A/C Status
-                                    <p-sortIcon field="totalreceivedamount"></p-sortIcon>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="th-cell">
-                                    <i class="pi pi-align-left"></i>
-                                    Account Type
-                                </div>
-                            </th>
-                        </tr>
-                    </ng-template>
-
-                    <!-- Body -->
-                    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-                        <tr class="table-row">
-
-                            <td class="td-actions">
-                                <button class="erp-btn btn-outline btn-sm btn-icon" (click)="editHandler(row)"
-                                    title="Edit Bank Account">
-                                    <i class="pi pi-pencil"></i>
-                                </button>
-                            </td>
-
-                            <td class="td-cell">{{ row.bankName || '--' }}</td>
-                            <td class="td-cell">{{ row.account_number || '--' }}</td>
-                            <td class="td-cell">{{ row.account_name || '--' }}</td>
-
-                            <td class="td-cell">
-                                @if (row.status) {
-                                <span class="erp-badge badge-neutral">Active</span>
-                                } @else {
-                                <span class="erp-badge badge-neutral">Inactive</span>
-                                }
-                            </td>
-
-                            <td class="td-cell">{{ getAccountType(row) }}</td>
-
-                        </tr>
-                    </ng-template>
-
-                    <!-- Empty State -->
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="6" class="empty-message">No records found</td>
-                        </tr>
-                    </ng-template>
-
-                </p-table>
-            </div>
-
+      <!-- Table Toolbar -->
+      <div class="erp-table-toolbar tbl-toolbar-flush">
+        <div class="tb-left">
+          <span class="erp-badge badge-primary badge-dot">
+            {{ gridData().length }} records
+          </span>
         </div>
+        <div class="tb-right">
+          <span class="text-muted text-small">
+            Bank Account Management
+          </span>
+        </div>
+      </div>
+
+      <!-- DataTable -->
+      <div class="tbl-wrap">
+        <p-table [value]="gridData()" [paginator]="true" [rows]="pageCriteria.pageSize"
+          [rowsPerPageOptions]="[5, 10, 20, 50]" [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first}–{last} of {totalRecords} entries" responsiveLayout="scroll"
+          [loading]="loading()" [sortMode]="'single'" styleClass="gr-table" paginatorPosition="bottom">
+
+          <!-- Header -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="th-actions">Actions</th>
+              <th pSortableColumn="bankName">
+                <div class="th-cell">
+                  <i class="pi pi-building"></i>
+                  Bank Name
+                  <p-sortIcon field="bankName"></p-sortIcon>
+                </div>
+              </th>
+              <th pSortableColumn="account_number">
+                <div class="th-cell">
+                  <i class="pi pi-hashtag"></i>
+                  Account No.
+                  <p-sortIcon field="account_number"></p-sortIcon>
+                </div>
+              </th>
+              <th pSortableColumn="account_name">
+                <div class="th-cell">
+                  <i class="pi pi-user"></i>
+                  Account Name
+                  <p-sortIcon field="account_name"></p-sortIcon>
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-check-circle"></i>
+                  Status
+                </div>
+              </th>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-tag"></i>
+                  A/C Type
+                </div>
+              </th>
+            </tr>
+          </ng-template>
+
+          <!-- Body -->
+          <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr class="table-row">
+              <td class="td-actions">
+                <button class="erp-btn btn-white btn-sm" (click)="editHandler(row)" title="Edit">
+                  <i class="pi pi-pencil"></i>
+                </button>
+              </td>
+              <td>{{ row.bankName || '--' }}</td>
+              <td>{{ row.account_number || '--' }}</td>
+              <td>{{ row.account_name || '--' }}</td>
+              <td>
+                @if (row.status) {
+                <span class="erp-badge badge-primary">Active</span>
+                } @else {
+                <span class="erp-badge badge-secondary">Inactive</span>
+                }
+              </td>
+              <td>{{ getAccountType(row) }}</td>
+            </tr>
+          </ng-template>
+
+          <!-- Empty State -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="empty-state-message">
+                <i class="pi pi-inbox" style="font-size: 2rem; color: #d1d5db;"></i>
+                <p style="color: #6b7280; margin-top: 0.5rem;">No bank accounts found</p>
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
 
     </div>
+
+  </div>
 
 </div>

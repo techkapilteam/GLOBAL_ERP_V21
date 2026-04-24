@@ -20,7 +20,7 @@ import {
 } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +31,7 @@ import { Observable } from 'rxjs';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { ValidationMessageComponent } from '../../../common/validation-message/validation-message.component';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 
@@ -81,12 +82,14 @@ function percentageValidator(c: AbstractControl): ValidationErrors | null {
     ButtonModule,
     TableModule,
     ValidationMessageComponent,
-    BsDatepickerModule,
+    DatePickerModule,
     MessageModule
   ],
   templateUrl: './general-receipt-new.html',
 })
 export class GeneralReceiptNew implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ──────────────────────────────────────────────────────────────────────
   private cs = inject(CommonService);
@@ -164,8 +167,8 @@ export class GeneralReceiptNew implements OnInit {
   readonly CASH_TRANSACTION_LIMIT = 200000;
   readonly rowsPerPageOptions = [5, 10, 20, 50];
 
-  dpConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  dpConfig1: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   GeneralReceiptForm!: FormGroup;
 

@@ -3,22 +3,25 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
   selector: "app-bank-entries",
   standalone:true,
-  imports: [CommonModule, ReactiveFormsModule, BsDatepickerModule, TableModule, DatePipe],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerModule, TableModule, DatePipe],
   templateUrl: "./bank-entries.html",
   styleUrl: "./bank-entries.css",
 })
 
 export class BankEntries implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── injected services ──────────────────────────────────────────────────────
   private readonly datePipe = inject(DatePipe);
@@ -40,8 +43,8 @@ export class BankEntries implements OnInit {
   BanknBookReportForm!: FormGroup;
   submitted = false;
 
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   pageCriteria: PageCriteria = new PageCriteria();
   currencysymbol: any;

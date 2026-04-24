@@ -5,9 +5,12 @@ import { Router } from '@angular/router';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 
+import { NgSelectModule } from '@ng-select/ng-select';
+
 @Component({
   selector: "app-address",
-  imports: [ReactiveFormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgSelectModule],
   templateUrl: "./address.html",
   styleUrl: "./address.css",
 })
@@ -41,7 +44,7 @@ export class Address implements OnInit {
 
   private initForm(): void {
     this.addressForm = this.fb.group({
-      paddress1: [''],
+      paddress1: ['', Validators.required],
       paddress2: [''],
       pcity: ['', Validators.required],
       pRecordid: [0],
@@ -153,43 +156,43 @@ export class Address implements OnInit {
 
   // ── Dropdown Change Handlers ────────────────────────────────────────
 
-  pCountry_Change(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const countryId = select.value;
-
-    if (countryId) {
-      const countryName = select.options[select.selectedIndex].text;
+  pCountry_Change(country: any): void {
+    if (country) {
+      const countryId = country.tbl_mst_country_id;
+      const countryName = country.country_name;
+      this.addressForm.get('pCountryId')?.setValue(countryId);
       this.addressForm.get('pCountry')?.setValue(countryName);
       this.getSateDetails(countryId);
     } else {
       this.stateDetails.set([]);
       this.districtDetails.set([]);
-      this.addressForm.patchValue({ pStateId: '', pDistrictId: '' });
+      this.addressForm.patchValue({ pCountryId: '', pCountry: '', pStateId: '', pDistrictId: '' });
     }
   }
 
-  pState_Change(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const stateId = select.value;
-
-    if (stateId) {
-      const stateName = select.options[select.selectedIndex].text;
+  pState_Change(state: any): void {
+    if (state) {
+      const stateId = state.tbl_mst_state_id;
+      const stateName = state.state_name;
+      this.addressForm.get('pStateId')?.setValue(stateId);
       this.addressForm.get('pState')?.setValue(stateName);
       this.getDistrictDetails(stateId);
     } else {
       this.districtDetails.set([]);
+      this.addressForm.get('pStateId')?.setValue('');
+      this.addressForm.get('pState')?.setValue('');
       this.addressForm.get('pDistrictId')?.setValue('');
     }
   }
 
-  pDistrict_Change(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const districtId = select.value;
-
-    if (districtId) {
-      const districtName = select.options[select.selectedIndex].text;
+  pDistrict_Change(district: any): void {
+    if (district) {
+      const districtId = district.tbl_mst_district_id;
+      const districtName = district.district_name;
+      this.addressForm.get('pDistrictId')?.setValue(districtId);
       this.addressForm.get('pDistrict')?.setValue(districtName);
     } else {
+      this.addressForm.get('pDistrictId')?.setValue('');
       this.addressForm.get('pDistrict')?.setValue('');
     }
   }

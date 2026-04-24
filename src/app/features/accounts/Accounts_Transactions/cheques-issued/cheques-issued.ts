@@ -2,7 +2,7 @@ import { Component, Input, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import * as XLSX from 'xlsx';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 type AOA = any[][];
@@ -86,7 +87,7 @@ interface ChequesIssuedRow {
   receiptnumbers?: string; pdepositedBankid?: string; pdepositedBankName?: string;
   preferencetext?: string; preceiptype?: string; puploadeddate?: any;
   subscriberbankaccountno?: string; pkgmsreceiptdate?: any; chequeStatus?: string;
-  pCreatedby?: any; pipaddress?: string; pclearstatus?: boolean; [key: string]: any;
+  pCreatedby?: any; pipaddress?: string; pclearstatus?: boolean;[key: string]: any;
 }
 type ActiveTabType =
   | 'all' | 'chequesissued' | 'onlinepayment' | 'cleared' | 'returned'
@@ -96,7 +97,7 @@ type ActiveTabType =
 @Component({
   selector: "app-cheques-issued",
   imports: [CommonModule, CurrencyPipe, NgSelectModule, TableModule, CheckboxModule,
-    FormsModule, ReactiveFormsModule, BsDatepickerModule],
+    FormsModule, ReactiveFormsModule, DatePickerModule],
   templateUrl: "./cheques-issued.html",
 })
 
@@ -198,9 +199,9 @@ export class ChequesIssued implements OnInit {
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName = 'AutoBrs.xlsx';
   Exceldata: any[] = [];
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  brsfromConfig: Partial<BsDatepickerConfig> = {};
-  brstoConfig: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  brsfromConfig: any = {};
+  brstoConfig: any = {};
   today = new Date();
   clearMinToDate = new Date(1900, 0, 1);
   returnMinToDate = new Date(1900, 0, 1);
@@ -529,105 +530,105 @@ export class ChequesIssued implements OnInit {
   // }
 
   onBankChange(bank: any): void {
-  // Guard: ng-select can emit null/undefined on clear
-  if (bank === null || bank === undefined) {
-    this.selectedBankName.set('');
-    this.bankname = '';
-    this.bankbalance.set(0);
-    this.bankbalancetype.set('');
-    this.brsdate.set('');
-    this.bankid = 0;
-    this.banknameshowhide.set(false);
-    this.bankbalancedetails = { pfrombrsdate: null, ptobrsdate: null };
-    this.gridData.set([]);
+    // Guard: ng-select can emit null/undefined on clear
+    if (bank === null || bank === undefined) {
+      this.selectedBankName.set('');
+      this.bankname = '';
+      this.bankbalance.set(0);
+      this.bankbalancetype.set('');
+      this.brsdate.set('');
+      this.bankid = 0;
+      this.banknameshowhide.set(false);
+      this.bankbalancedetails = { pfrombrsdate: null, ptobrsdate: null };
+      this.gridData.set([]);
+      this.ChequesIssuedValidation.update(v => ({ ...v, bankname: '' }));
+      return;
+    }
+
+    const bankName: string = (bank?.pbankname || bank?.pdepositbankname || '') as string;
+    const bankId: any = bank?.pbankid ?? 0;
+
+    if (!bankName || !bankId) {
+      return;
+    }
+
+    this.selectedBankName.set(bankName);
+    this.bankname = bankName;
+    this.bankid = bankId;
+    this.banknameshowhide.set(true);
+
+    const bal: number = bank?.pbankbalance ?? 0;
+    if (bal < 0) {
+      this.bankbalance.set(Math.abs(bal));
+      this.bankbalancetype.set('Cr');
+    } else if (bal === 0) {
+      this.bankbalance.set(0);
+      this.bankbalancetype.set('');
+    } else {
+      this.bankbalance.set(bal);
+      this.bankbalancetype.set('Dr');
+    }
+
+    this.brsdate.set(this.buildTodayBrsDate());
     this.ChequesIssuedValidation.update(v => ({ ...v, bankname: '' }));
-    return;
+
+    const formattedDate: string =
+      this.datepipe.transform(
+        this.ChequesIssuedForm.value?.ptransactiondate,
+        'yyyy-MM-dd'
+      ) || '';
+
+    if (!formattedDate) {
+      this.GetChequesIssued_Load(this.bankid);
+      return;
+    }
+
+    this._accountingtransaction
+      .GetBankBalance(
+        formattedDate,
+        bankId,
+        this._commonService.getbranchname(),
+        this._commonService.getBranchCode(),
+        this._commonService.getCompanyCode()
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.bankbalancedetails = {
+            pfrombrsdate: res?.pfrombrsdate ?? null,
+            ptobrsdate: res?.ptobrsdate ?? null,
+          };
+
+          const fromDateBank = this.safeBrsDate(
+            res?.pfrombrsdate,
+            'yesterday'
+          );
+          const toDateBank = this.safeBrsDate(res?.ptobrsdate, 'today');
+
+          this.ChequesIssuedForm.patchValue({
+            pfrombrsdate: fromDateBank,
+            ptobrsdate: toDateBank,
+          });
+          this.BrsReturnForm.patchValue({
+            frombrsdate: fromDateBank,
+            tobrsdate: toDateBank,
+          });
+          this.BrsCancelForm.patchValue({
+            frombrsdate: fromDateBank,
+            tobrsdate: toDateBank,
+          });
+
+          this.clearMinToDate = fromDateBank;
+          this.returnMinToDate = fromDateBank;
+          this.cancelMinToDate = fromDateBank;
+
+          this.GetChequesIssued_Load(this.bankid);
+        },
+        error: (err: any) => {
+          this._commonService.showErrorMessage(err);
+          this.GetChequesIssued_Load(this.bankid);
+        },
+      });
   }
-
-  const bankName: string = (bank?.pbankname || bank?.pdepositbankname || '') as string;
-  const bankId: any = bank?.pbankid ?? 0;
-
-  if (!bankName || !bankId) {
-    return;
-  }
-
-  this.selectedBankName.set(bankName);
-  this.bankname = bankName;
-  this.bankid = bankId;
-  this.banknameshowhide.set(true);
-
-  const bal: number = bank?.pbankbalance ?? 0;
-  if (bal < 0) {
-    this.bankbalance.set(Math.abs(bal));
-    this.bankbalancetype.set('Cr');
-  } else if (bal === 0) {
-    this.bankbalance.set(0);
-    this.bankbalancetype.set('');
-  } else {
-    this.bankbalance.set(bal);
-    this.bankbalancetype.set('Dr');
-  }
-
-  this.brsdate.set(this.buildTodayBrsDate());
-  this.ChequesIssuedValidation.update(v => ({ ...v, bankname: '' }));
-
-  const formattedDate: string =
-    this.datepipe.transform(
-      this.ChequesIssuedForm.value?.ptransactiondate,
-      'yyyy-MM-dd'
-    ) || '';
-
-  if (!formattedDate) {
-    this.GetChequesIssued_Load(this.bankid);
-    return;
-  }
-
-  this._accountingtransaction
-    .GetBankBalance(
-      formattedDate,
-      bankId,
-      this._commonService.getbranchname(),
-      this._commonService.getBranchCode(),
-      this._commonService.getCompanyCode()
-    )
-    .subscribe({
-      next: (res: any) => {
-        this.bankbalancedetails = {
-          pfrombrsdate: res?.pfrombrsdate ?? null,
-          ptobrsdate: res?.ptobrsdate ?? null,
-        };
-
-        const fromDateBank = this.safeBrsDate(
-          res?.pfrombrsdate,
-          'yesterday'
-        );
-        const toDateBank = this.safeBrsDate(res?.ptobrsdate, 'today');
-
-        this.ChequesIssuedForm.patchValue({
-          pfrombrsdate: fromDateBank,
-          ptobrsdate: toDateBank,
-        });
-        this.BrsReturnForm.patchValue({
-          frombrsdate: fromDateBank,
-          tobrsdate: toDateBank,
-        });
-        this.BrsCancelForm.patchValue({
-          frombrsdate: fromDateBank,
-          tobrsdate: toDateBank,
-        });
-
-        this.clearMinToDate = fromDateBank;
-        this.returnMinToDate = fromDateBank;
-        this.cancelMinToDate = fromDateBank;
-
-        this.GetChequesIssued_Load(this.bankid);
-      },
-      error: (err: any) => {
-        this._commonService.showErrorMessage(err);
-        this.GetChequesIssued_Load(this.bankid);
-      },
-    });
-}
 
   onClearFromDateChange(date: Date): void {
     if (date) {

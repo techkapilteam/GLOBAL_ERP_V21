@@ -1,21 +1,21 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
-    <!-- ── Header ──────────────────────────────────────────────────────────── -->
+    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Header Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
     <div class="screen-header">
       <h2 class="screen-title">Re Print</h2>
     </div>
 
-    <!-- ── Filter Form ──────────────────────────────────────────────────────── -->
+    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Filter Form Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
     <div class="section-content filter-section">
       <form [formGroup]="ReprintRepotForm" autocomplete="off">
         <div class="row">
 
           <!-- Transaction Type -->
           <div class="col-md-3 mb-3">
-            <div class="form-group">
-              <label class="form-label">
-                Transaction Type<span class="required-star">*</span>
+            <div class="erp-form-group">
+              <label class="erp-label">
+                Transaction Type<span class="required">*</span>
               </label>
               <ng-select
                 [items]="lstreporttype"
@@ -38,11 +38,11 @@
           <!-- Transaction No. -->
           @if (userbranchtxtboxshowhide()) {
             <div class="col-md-3 mb-3">
-              <div class="form-group">
-                <label class="form-label">
-                  Transaction No.<span class="required-star">*</span>
+              <div class="erp-form-group">
+                <label class="erp-label">
+                  Transaction No.<span class="required">*</span>
                 </label>
-                <input type="text" class="form-control" formControlName="Transno" />
+                <input type="text" class="erp-input" formControlName="Transno" />
               </div>
               @if ((f['Transno'].touched || submitted) && f['Transno'].errors?.['required']) {
                 <div class="text-danger mt-1">Transaction No. is required</div>
@@ -53,9 +53,9 @@
           <!-- PAN No. -->
           @if (form15UID()) {
             <div class="col-md-3 mb-3">
-              <div class="form-group">
-                <label class="form-label">PAN No.</label>
-                <input type="text" class="form-control" formControlName="panno" />
+              <div class="erp-form-group">
+                <label class="erp-label">PAN No.</label>
+                <input type="text" class="erp-input" formControlName="panno" />
               </div>
               @if (f['panno'].errors?.['pattern']) {
                 <div class="text-danger mt-1">Invalid PAN format (ABCDE1234F)</div>
@@ -64,7 +64,7 @@
           }
 
           <!-- Generate Report Button -->
-          <div class="col-md-3">
+          <div class="col-12 col-md-6">
             <div class="btn-generate-wrap">
               <button
                 type="button"
@@ -85,16 +85,16 @@
       </form>
     </div>
 
-    <!-- ── Receipt Grid ─────────────────────────────────────────────────────── -->
+    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Receipt Grid Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
     @if (showhide()) {
       <div class="section-content grid-section">
         <div class="row">
 
           <!-- Search -->
-          <div class="col-md-4 mb-3">
+          <div class="col-12 col-md-6 mb-3">
             <input
               type="text"
-              class="form-control"
+              class="erp-input"
               placeholder="Search"
               (keyup)="ReprintdataFilter($any($event.target).value)" />
           </div>
@@ -157,7 +157,7 @@
       </div>
     }
 
-    <!-- ── Form 15H Grid ────────────────────────────────────────────────────── -->
+    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Form 15H Grid Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
     @if (showForm15HGrid()) {
       <div class="section-content grid-section">
         <p-table

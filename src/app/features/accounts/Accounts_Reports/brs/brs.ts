@@ -9,7 +9,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,6 +19,7 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { AccountLedger } from '../account-ledger/account-ledger';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-brs',
@@ -26,63 +27,65 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    
-    BsDatepickerModule,
+
+    DatePickerModule,
     TableModule,
     Companydetails,
     NgSelectModule
   ],
-  templateUrl:'./brs.html',
+  templateUrl: './brs.html',
   styleUrl: './brs.css',
   providers: [DatePipe]
 })
 export class Brs implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ──────────────────────────────────────────────────────────────────────
-  private datePipe      = inject(DatePipe);
-  private router        = inject(Router);
-  private fb            = inject(FormBuilder);
+  private datePipe = inject(DatePipe);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
   private commonService = inject(CommonService);
   private bankBookService = inject(AccountsReports);
-  private brstatement   = inject(AccountsReports);
-  private cdr             = inject(ChangeDetectorRef);
+  private brstatement = inject(AccountsReports);
+  private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('myTable') table: any;
 
   // ── Signals ──────────────────────────────────────────────────────────────────
-  readonly loading    = signal(false);
-  readonly isLoading  = signal(false);
-  readonly showhide   = signal(true);
-  readonly show       = signal(false);
+  readonly loading = signal(false);
+  readonly isLoading = signal(false);
+  readonly showhide = signal(true);
+  readonly show = signal(false);
   readonly chequesInfo = signal(false);
-  readonly bankData   = signal<any[]>([]);
-  readonly gridView   = signal<any[]>([]);
-  readonly savebutton  = signal('Generate Report');  
+  readonly bankData = signal<any[]>([]);
+  readonly gridView = signal<any[]>([]);
+  readonly savebutton = signal('Generate Report');
 
   // ── State ────────────────────────────────────────────────────────────────────
-  submitted    = false;
-  printedDate  = true;
+  submitted = false;
+  printedDate = true;
   // savebutton   = 'Generate Report';
   currencysymbol: any;
-  bankname     = '';
-  roleid       = '';
+  bankname = '';
+  roleid = '';
   dbdate: any;
 
   startDate!: Date;
   pBankBookBalance: any;
   chequesdepositedbutnotcredited = 0;
-  CHEQUESISSUEDBUTNOTCLEARED     = 0;
+  CHEQUESISSUEDBUTNOTCLEARED = 0;
   Balanceasperbankbook: any;
 
-  ChequesInfoDetails: any[]  = [];
+  ChequesInfoDetails: any[] = [];
   imageResponse: any;
   kycFileName: any;
 
   pageCriteria = new PageCriteria();
 
   // ── Datepicker configs ───────────────────────────────────────────────────────
-  dpConfig:  Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   // ── Form ─────────────────────────────────────────────────────────────────────
   BRStatmentForm!: FormGroup;
@@ -100,11 +103,11 @@ export class Brs implements OnInit {
 
     this.BRStatmentForm = this.fb.group(
       {
-        fromDate:      [this.dbdate ? new Date(this.dbdate) : new Date(), Validators.required],
-        toDate:        [new Date()],
-        bankAccountId: ['',  Validators.required],
-        pbankbalance:  [0,   [Validators.required, Validators.min(0)]],
-        pFilename:     ['']
+        fromDate: [this.dbdate ? new Date(this.dbdate) : new Date(), Validators.required],
+        toDate: [new Date()],
+        bankAccountId: ['', Validators.required],
+        pbankbalance: [0, [Validators.required, Validators.min(0)]],
+        pFilename: ['']
       },
       { validators: this.dateRangeValidator }
     );
@@ -116,9 +119,9 @@ export class Brs implements OnInit {
   // ── Validators ────────────────────────────────────────────────────────────────
   private dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const fromControl = group.get('fromDate');
-    const toControl   = group.get('toDate');
+    const toControl = group.get('toDate');
     const from = fromControl?.value;
-    const to   = toControl?.value;
+    const to = toControl?.value;
     if (!fromControl?.touched && !toControl?.touched) return null;
     if (from && to && new Date(from) > new Date(to)) return { dateRangeInvalid: true };
     return null;
@@ -130,9 +133,9 @@ export class Brs implements OnInit {
 
     this.dpConfig = {
       dateInputFormat: 'DD-MMM-YYYY',
-      containerClass:  'theme-dark-blue',
+      containerClass: 'theme-dark-blue',
       showWeekNumbers: false,
-      maxDate:         new Date()
+      maxDate: new Date()
     };
 
     this.dpConfig1 = { ...this.dpConfig };
@@ -162,9 +165,9 @@ export class Brs implements OnInit {
 
   // ── Page model ────────────────────────────────────────────────────────────────
   private setPageModel(): void {
-    this.pageCriteria.pageSize         = this.commonService.pageSize;
-    this.pageCriteria.offset           = 0;
-    this.pageCriteria.pageNumber       = 1;
+    this.pageCriteria.pageSize = this.commonService.pageSize;
+    this.pageCriteria.offset = 0;
+    this.pageCriteria.pageNumber = 1;
     this.pageCriteria.footerPageHeight = 50;
   }
 
@@ -215,11 +218,11 @@ export class Brs implements OnInit {
     this.loading.set(true);
     this.isLoading.set(true);
     this.showhide.set(false);
-    // this.savebutton.set('Processing');
-    this.startDate  = new Date(this.BRStatmentForm.value.fromDate);
+    this.savebutton.set('Processing');
+    this.startDate = new Date(this.BRStatmentForm.value.fromDate);
 
-    const fromDate       = this.commonService.getFormatDateNormal(this.BRStatmentForm.value.fromDate) ?? '';
-    const toDate         = this.commonService.getFormatDateNormal(this.BRStatmentForm.value.toDate)   ?? '';
+    const fromDate = this.commonService.getFormatDateNormal(this.BRStatmentForm.value.fromDate) ?? '';
+    const toDate = this.commonService.getFormatDateNormal(this.BRStatmentForm.value.toDate) ?? '';
     const _pBankAccountId = this.BRStatmentForm.value.bankAccountId;
 
     if (!this.chequesInfo()) {
@@ -237,7 +240,7 @@ export class Brs implements OnInit {
             this.show.set(true);
             this.loading.set(false);
             this.isLoading.set(false);
-            // this.savebutton.set('Generate Report');
+            this.savebutton.set('Generate Report');
 
             const selectedBank = this.bankData().find(b => b.bankAccountId == _pBankAccountId);
             this.bankname = selectedBank?.bankName ?? '';
@@ -267,7 +270,7 @@ export class Brs implements OnInit {
         });
     } else {
       const formattedFrom = new Date(this.BRStatmentForm.value.fromDate).toLocaleDateString('en-CA');
-      const formattedTo   = new Date(this.BRStatmentForm.value.toDate).toLocaleDateString('en-CA');
+      const formattedTo = new Date(this.BRStatmentForm.value.toDate).toLocaleDateString('en-CA');
 
       this.brstatement
         .GetBrStatementReportByDatesChequesInfo(
@@ -280,13 +283,13 @@ export class Brs implements OnInit {
         .pipe(finalize(() => {
           this.loading.set(false);
           this.isLoading.set(false);
-          // this.savebutton.set('Generate Report');            
-            this.cdr.detectChanges();
+          this.savebutton.set('Generate Report');            
+          this.cdr.detectChanges();
         }))
         .subscribe({
           next: (res: any[]) => {
             const from = new Date(this.BRStatmentForm.value.fromDate);
-            const to   = new Date(this.BRStatmentForm.value.toDate);
+            const to = new Date(this.BRStatmentForm.value.toDate);
             this.ChequesInfoDetails = (res ?? []).filter(item => {
               if (!item.depositeddate) return false;
               const dep = new Date(item.depositeddate);
@@ -307,28 +310,28 @@ export class Brs implements OnInit {
   // ── Export ────────────────────────────────────────────────────────────────────
   export(): void {
     const rows = this.ChequesInfoDetails.map(element => ({
-      'Branch Name':                      element.branch_name,
-      'Contact Name':                     element.contact_name,
-      'Self Cheque Status':               element.selfchequestatus ? 'True' : 'False',
-      'Receipt ID':                       element.receiptid,
-      'Receipt Date':                     this.datePipe.transform(element.receiptdate, 'dd-MMM-yyyy'),
-      'Total Received Amount':            this.commonService.currencyformat(element.total_received_amount),
-      'Mode of Receipt':                  element.modeof_receipt,
-      'Reference Number':                 element.reference_number,
-      'Reference Text':                   element.referencetext || '',
-      'Cheque Date':                      this.datePipe.transform(element.chequedate, 'dd-MMM-yyyy'),
-      'Deposit Status':                   element.deposit_status || '',
-      'Cheque Bank':                      element.cheque_bank || '',
-      'Receipt Branch Name':              element.receipt_branch_name || '',
-      'Received From':                    element.received_from || '',
-      'Transaction No':                   element.transaction_no,
-      'Transaction Date':                 this.datePipe.transform(element.transaction_date, 'dd-MMM-yyyy'),
-      'Chit Receipt Number':              element.comman_receipt_no || '',
+      'Branch Name': element.branch_name,
+      'Contact Name': element.contact_name,
+      'Self Cheque Status': element.selfchequestatus ? 'True' : 'False',
+      'Receipt ID': element.receiptid,
+      'Receipt Date': this.datePipe.transform(element.receiptdate, 'dd-MMM-yyyy'),
+      'Total Received Amount': this.commonService.currencyformat(element.total_received_amount),
+      'Mode of Receipt': element.modeof_receipt,
+      'Reference Number': element.reference_number,
+      'Reference Text': element.referencetext || '',
+      'Cheque Date': this.datePipe.transform(element.chequedate, 'dd-MMM-yyyy'),
+      'Deposit Status': element.deposit_status || '',
+      'Cheque Bank': element.cheque_bank || '',
+      'Receipt Branch Name': element.receipt_branch_name || '',
+      'Received From': element.received_from || '',
+      'Transaction No': element.transaction_no,
+      'Transaction Date': this.datePipe.transform(element.transaction_date, 'dd-MMM-yyyy'),
+      'Chit Receipt Number': element.comman_receipt_no || '',
       'Cleared / Cancel / Returned Date': this.datePipe.transform(element.clear_date, 'dd-MMM-yyyy'),
-      'Deposited Date':                   this.datePipe.transform(element.depositeddate, 'dd-MMM-yyyy'),
-      'DateTime':                         element.time || '',
-      'BankName':                         element.bankname || '',
-      'Cleared By':                       element.user || '--'
+      'Deposited Date': this.datePipe.transform(element.depositeddate, 'dd-MMM-yyyy'),
+      'DateTime': element.time || '',
+      'BankName': element.bankname || '',
+      'Cleared By': element.user || '--'
     }));
 
     this.commonService.exportAsExcelFile(rows, 'BRS Cheques Info');
@@ -347,8 +350,8 @@ export class Brs implements OnInit {
       return `${String(d.getDate()).padStart(2, '0')}-${d.toLocaleString('en-US', { month: 'short' })}-${d.getFullYear()}`;
     };
 
-    const rows: any[]     = [];
-    const gridheaders     = ['Transaction Date', 'Cheque No.', 'Particulars', 'Amount'];
+    const rows: any[] = [];
+    const gridheaders = ['Transaction Date', 'Cheque No.', 'Particulars', 'Amount'];
     const groupOrder: string[] = [];
     const grouped: Record<string, any[]> = {};
 
@@ -366,7 +369,7 @@ export class Brs implements OnInit {
         rows.push([
           fmt(element.ptransactiondate),
           element.pChequeNumber || '',
-          element.pparticulars  || '--NA--',
+          element.pparticulars || '--NA--',
           this.commonService.convertAmountToPdfFormat(element.ptotalreceivedamount)
         ]);
       });

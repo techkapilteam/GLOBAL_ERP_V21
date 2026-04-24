@@ -11,7 +11,7 @@ import {
   Validators
 } from '@angular/forms';
 
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
@@ -19,6 +19,7 @@ import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-cheque-cancel',
@@ -27,7 +28,7 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
     TableModule,
     FormsModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     Companydetails
   ],
   standalone: true,
@@ -35,6 +36,8 @@ import { AccountsTransactions } from '../../../../core/services/accounts/account
   styleUrl: './cheque-cancel.css'
 })
 export class ChequeCancel implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private datePipe = inject(DatePipe);
@@ -49,8 +52,8 @@ export class ChequeCancel implements OnInit {
   }>;
 
   submitted = false;
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   savebutton = signal('Generate Report');
   loading = signal(false);

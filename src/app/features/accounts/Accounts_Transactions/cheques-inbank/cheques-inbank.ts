@@ -6,7 +6,7 @@ import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
@@ -19,6 +19,7 @@ import { NumberToWordsPipe } from '../../../../shared/pipes/number-to-words-pipe
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 
@@ -31,13 +32,14 @@ type AOA = any[][];
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule,
-    BsDatepickerModule,
+    DatePickerModule,
     ReactiveFormsModule,
     PaginatorModule,
     TableModule,
     CheckboxModule,
     ButtonModule,
     InputTextModule,
+    ValidationMessageComponent,
   ],
   templateUrl: './cheques-inbank.html',
   providers: [DatePipe, NumberToWordsPipe, CurrencyPipe],
@@ -46,6 +48,8 @@ type AOA = any[][];
 
 
 export class ChequesInbank implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI via inject() ────────────────────────────────────────────────
   private readonly _accountingtransaction = inject(AccountsTransactions);
@@ -153,10 +157,10 @@ export class ChequesInbank implements OnInit {
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName = 'AutoBrs.xlsx';
 
-  public ptransactiondateConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  public pchequecleardateConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  public brsfromConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
-  public brstoConfig: Partial<BsDatepickerConfig> = new BsDatepickerConfig();
+  public ptransactiondateConfig: any = {};
+  public pchequecleardateConfig: any = {};
+  public brsfromConfig: any = {};
+  public brstoConfig: any = {};
 
   public group: any[] = [{ field: 'preceiptdate' }, { field: 'pChequenumber' }];
 
@@ -912,9 +916,10 @@ export class ChequesInbank implements OnInit {
   }
 
   CheckedReturn(event: any, data: any) {
+    const isChecked = event.checked ?? event.target?.checked ?? false;
     const gridtemp = this.gridData.filter(a => a?.preceiptid == data.preceiptid);
     this.PopupData = data;
-    if (event.target.checked) {
+    if (isChecked) {
       const depositedDateStr = gridtemp[0]?.pdepositeddate;
       const receiptdate = depositedDateStr ? this._commonService.getDateObjectFromDataBase(depositedDateStr) : null;
       const chequecleardate = this.ChequesInBankForm?.get('pchequecleardate')?.value;
@@ -938,13 +943,15 @@ export class ChequesInbank implements OnInit {
   }
 
   CheckedClear(event: any, data: any) {
+    const isChecked = event.checked ?? event.target?.checked ?? false;
     const gridtemp = this.gridData.filter(a => a?.preceiptid == data.preceiptid);
-    if (event.target.checked) {
+    if (isChecked) {
       const receiptdate = gridtemp[0]?.pdepositeddate
         ? this._commonService.getDateObjectFromDataBase(gridtemp[0].pdepositeddate) : null;
       const chequecleardate = this.ChequesInBankForm?.get('pchequecleardate')?.value;
       if (receiptdate && chequecleardate && new Date(chequecleardate).getTime() < new Date(receiptdate).getTime()) {
-        event.target.checked = false;
+        if (event.target) event.target.checked = false;
+        data.pdepositstatus = false;
         this._commonService.showWarningMessage('Cheque Clear Date Should be Greater than or Equal to Deposited Date');
       } else {
         if (parseInt(this.roleid, 10) !== 2) {
@@ -1693,3 +1700,4 @@ function isNullOrEmptyString(incidentalcharges: any): boolean {
   throw new Error('Function not implemented.');
 
 }
+

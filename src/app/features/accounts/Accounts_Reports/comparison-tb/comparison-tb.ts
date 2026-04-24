@@ -11,12 +11,13 @@ import {
   Validators
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-comparison-tb',
@@ -25,7 +26,7 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     Companydetails
   ],
@@ -34,6 +35,8 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   styleUrl: './comparison-tb.css'
 })
 export class ComparisonTb implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Injected Services ───────────────────────────────────────
   private readonly fb             = inject(FormBuilder);
@@ -72,8 +75,8 @@ export class ComparisonTb implements OnInit {
 
   private rawData: any[] = [];
 
-  dpConfig:  Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig:  any = {};
+  dpConfig1: any = {};
 
   @ViewChild('myTable') table: any;
 

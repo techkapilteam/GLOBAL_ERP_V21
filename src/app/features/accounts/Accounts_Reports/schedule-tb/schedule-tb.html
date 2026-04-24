@@ -16,22 +16,10 @@
           <!-- Date Field -->
           <div class="filter-field">
             <label class="field-label" for="asOnDate">
-              As On Date <span class="required-star">*</span>
+              As On Date <span class="required">*</span>
             </label>
             <div class="field-row">
-              <input
-                type="text"
-                class="form-control date-input"
-                id="asOnDate"
-                name="asOnDate"
-                [(ngModel)]="asOnDate"
-                [bsConfig]="dpConfig"
-                bsDatepicker
-                required
-                readonly
-                #asOnDateRef="ngModel"
-                (keydown)="$event.preventDefault()"
-              />
+              <p-datepicker name="asOnDate" required #asOnDateRef="ngModel" [(ngModel)]="asOnDate" id="asOnDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control date-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
 
               <!-- Submit Button -->
               <button
@@ -45,7 +33,7 @@
             </div>
 
             @if ((asOnDateRef.dirty || submitted()) && asOnDateRef.errors?.['required']) {
-              <div class="field-error">As On Date is required.</div>
+              <div class="erp-field-error">As On Date is required.</div>
             }
           </div>
 

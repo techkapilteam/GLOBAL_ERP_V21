@@ -13,13 +13,14 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-cheque-return',
@@ -28,7 +29,7 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     Companydetails
   ],
@@ -36,6 +37,8 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   styleUrl: './cheque-return.css'
 })
 export class ChequeReturn implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   private fb = inject(FormBuilder);
   private datePipe = inject(DatePipe);
@@ -50,8 +53,8 @@ export class ChequeReturn implements OnInit {
     todate: FormControl<Date | null>;
   }>;
 
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   // Signals
   savebutton = signal('Generate Report');

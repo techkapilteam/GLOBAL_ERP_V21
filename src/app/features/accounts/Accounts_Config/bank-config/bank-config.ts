@@ -7,10 +7,12 @@ import {
   signal,
   computed,
   DestroyRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { viewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { DatePickerModule } from 'primeng/datepicker';
 import {
   FormBuilder,
   FormGroup,
@@ -89,6 +91,7 @@ interface BankMasterFormShape {
     CommonModule,
     ReactiveFormsModule,
     BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     ValidationMessageComponent,
     Address,
@@ -108,6 +111,7 @@ export class BankConfig implements OnInit {
   private readonly datepipe                = inject(DatePipe);
   private readonly _accountingMasterSvc    = inject(AccountsConfig);
   private readonly destroyRef              = inject(DestroyRef);
+  private readonly cdr                     = inject(ChangeDetectorRef);
 
   // ── viewChild signal (replaces @ViewChild + setter) ─────────────────────────
   private readonly addressRef = viewChild(Address);
@@ -209,6 +213,14 @@ export class BankConfig implements OnInit {
     this.configureDatepicker();
     this.loadDropdownData();
     this.checkEditMode();
+  }
+
+  forceCD(): void {
+    this.cdr.detectChanges();
+  }
+
+  compareByValue(a: any, b: any): boolean {
+    return a === b;
   }
 
   // ── Form Construction ────────────────────────────────────────────────────────

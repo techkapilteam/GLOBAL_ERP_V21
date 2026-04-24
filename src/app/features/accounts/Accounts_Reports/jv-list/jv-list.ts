@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { TreeTableModule } from 'primeng/treetable';
 import { Router } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { Companydetails } from '../../../common/company-details/companydetails/c
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-jv-list',
@@ -20,7 +21,7 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   imports: [
     CommonModule,
     FormsModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule,
     PaginatorModule,
     ReactiveFormsModule,
@@ -32,6 +33,8 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   providers: [DatePipe]
 })
 export class JvList implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── DI ──────────────────────────────────────────────────────────────────────
   private fb               = inject(FormBuilder);
@@ -71,14 +74,14 @@ export class JvList implements OnInit {
   pageCriteria: PageCriteria = new PageCriteria();
 
   // ── Datepicker configs ───────────────────────────────────────────────────────
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass:  'theme-dark-blue',
     showWeekNumbers: false,
     maxDate:         new Date()
   };
 
-  dpConfig1: Partial<BsDatepickerConfig> = {
+  dpConfig1: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass:  'theme-dark-blue',
     showWeekNumbers: false,

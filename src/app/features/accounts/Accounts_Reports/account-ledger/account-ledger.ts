@@ -3,12 +3,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal, computed, linkedSignal, effect, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import { TableModule } from 'primeng/table';
 import { Companydetails } from '../../../common/company-details/companydetails/companydetails';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { AccountsTransactions } from '../../../../core/services/accounts/accounts-transactions';
 import { CommonService } from '../../../../core/services/Common/common.service';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
@@ -50,13 +51,15 @@ function dateRangeValidator(group: AbstractControl): ValidationErrors | null {
 @Component({
   selector: "app-account-ledger",
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, BsDatepickerModule, TableModule, Companydetails],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, DatePickerModule, TableModule, Companydetails],
   templateUrl: "./account-ledger.html",
   styleUrl: "./account-ledger.css",
   providers: [DatePipe]
 })
 
 export class AccountLedger implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Services ──────────────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -135,8 +138,8 @@ export class AccountLedger implements OnInit {
   form!: FormGroup;
   readonly today = new Date();
 
-  dpConfig: Partial<BsDatepickerConfig> = {};
-  dpConfig1: Partial<BsDatepickerConfig> = {};
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 

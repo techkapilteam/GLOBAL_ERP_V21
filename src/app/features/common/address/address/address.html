@@ -1,110 +1,105 @@
-<form [formGroup]="addressForm">
-    <div class="address-grid">
+<form [formGroup]="addressForm" autocomplete="off">
+  <div class="p-4">
+    <h3 class="section-title mb-3">Address Information</h3>
+    <div class="row g-2">
 
-        <!-- Address Line 1 -->
-        <div class="form-group">
-            <label class="form-label" id="paddress1" title="Address Line 1">
-                Address Line 1 <span class="required-star">*</span>
-            </label>
-            <input type="text" formControlName="paddress1" class="form-control" maxlength="150" appAddressformat
-                [class.is-invalid]="errorOf('paddress1')" />
-            @if (errorOf('paddress1')) {
-            <div class="field-error">{{ errorOf('paddress1') }}</div>
-            }
+      <!-- Address Line 1 -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="paddress1">Address Line 1 <span class="required">*</span></label>
+          <input type="text" id="paddress1" formControlName="paddress1" class="erp-input" maxlength="150"
+            placeholder="Enter address line 1" appAddressformat
+            [class.ng-invalid]="errorOf('paddress1') && addressForm.get('paddress1')?.touched" />
+          @if (errorOf('paddress1')) {
+          <span class="erp-field-error">{{ errorOf('paddress1') }}</span>
+          }
         </div>
+      </div>
 
-        <!-- Address Line 2 -->
-        <div class="form-group">
-            <label class="form-label" id="paddress2" title="Address Line 2">
-                Address Line 2
-            </label>
-            <input type="text" formControlName="paddress2" class="form-control" maxlength="150" appAddressformat
-                [class.is-invalid]="errorOf('paddress2')" />
-            @if (errorOf('paddress2')) {
-            <div class="field-error">{{ errorOf('paddress2') }}</div>
-            }
+      <!-- Address Line 2 -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="paddress2">Address Line 2</label>
+          <input type="text" id="paddress2" formControlName="paddress2" class="erp-input" maxlength="150"
+            placeholder="Enter address line 2" appAddressformat
+            [class.ng-invalid]="errorOf('paddress2') && addressForm.get('paddress2')?.touched" />
+          @if (errorOf('paddress2')) {
+          <span class="erp-field-error">{{ errorOf('paddress2') }}</span>
+          }
         </div>
+      </div>
 
-        <!-- City / Village -->
-        <div class="form-group">
-            <label class="form-label" id="pcity" title="City / Village">
-                City / Village
-            </label>
-            <input type="text" formControlName="pcity" class="form-control" maxlength="75" appAddressformat
-                [class.is-invalid]="errorOf('pcity')" />
-            @if (errorOf('pcity')) {
-            <div class="field-error">{{ errorOf('pcity') }}</div>
-            }
+      <!-- City / Village -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="pcity">City / Village <span class="required">*</span></label>
+          <input type="text" id="pcity" formControlName="pcity" class="erp-input" maxlength="75"
+            placeholder="Enter city or village" appAddressformat
+            [class.ng-invalid]="errorOf('pcity') && addressForm.get('pcity')?.touched" />
+          @if (errorOf('pcity')) {
+          <span class="erp-field-error">{{ errorOf('pcity') }}</span>
+          }
         </div>
+      </div>
 
-        <!-- Country -->
-        <div class="form-group">
-            <label class="form-label" id="pCountry" title="Country">
-                Country <span class="required-star">*</span>
-            </label>
-            <select class="form-select" formControlName="pCountryId" [class.is-invalid]="errorOf('pCountry')"
-                (change)="pCountry_Change($event)">
-                <option value="">Select</option>
-                @for (country of countryDetails(); track country.tbl_mst_country_id) {
-                <option [value]="country.tbl_mst_country_id">
-                    {{ country.country_name }}
-                </option>
-                }
-            </select>
-            @if (errorOf('pCountry')) {
-            <div class="field-error">{{ errorOf('pCountry') }}</div>
-            }
+      <!-- Country -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="pCountryId">Country <span class="required">*</span></label>
+          <ng-select id="pCountryId" [items]="countryDetails()" bindLabel="country_name"
+            formControlName="pCountryId" placeholder="Select Country" [searchable]="true" [clearable]="true"
+            appendTo="body" (change)="pCountry_Change($event)"
+            [ngClass]="{'ng-invalid': errorOf('pCountry') && addressForm.get('pCountryId')?.touched}">
+          </ng-select>
+          @if (errorOf('pCountry')) {
+          <span class="erp-field-error">{{ errorOf('pCountry') }}</span>
+          }
         </div>
+      </div>
 
-        <!-- State -->
-        <div class="form-group">
-            <label class="form-label" id="pState" title="State">
-                State <span class="required-star">*</span>
-            </label>
-            <select class="form-select" formControlName="pStateId" [class.is-invalid]="errorOf('pState')"
-                (change)="pState_Change($event)">
-                <option value="">Select</option>
-                @for (state of stateDetails(); track state.tbl_mst_state_id) {
-                <option [value]="state.tbl_mst_state_id">
-                    {{ state.state_name }}
-                </option>
-                }
-            </select>
-            @if (errorOf('pState')) {
-            <div class="field-error">{{ errorOf('pState') }}</div>
-            }
+      <!-- State -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="pStateId">State <span class="required">*</span></label>
+          <ng-select id="pStateId" [items]="stateDetails()" bindLabel="state_name"
+            formControlName="pStateId" placeholder="Select State" [searchable]="true" [clearable]="true"
+            appendTo="body" (change)="pState_Change($event)"
+            [ngClass]="{'ng-invalid': errorOf('pState') && addressForm.get('pStateId')?.touched}">
+          </ng-select>
+          @if (errorOf('pState')) {
+          <span class="erp-field-error">{{ errorOf('pState') }}</span>
+          }
         </div>
+      </div>
 
-        <!-- District -->
-        <div class="form-group">
-            <label class="form-label" id="pDistrict" title="District">
-                District <span class="required-star">*</span>
-            </label>
-            <select class="form-select" formControlName="pDistrictId" [class.is-invalid]="errorOf('pDistrict')"
-                (change)="pDistrict_Change($event)">
-                <option value="">Select</option>
-                @for (district of districtDetails(); track district.tbl_mst_district_id) {
-                <option [value]="district.tbl_mst_district_id">
-                    {{ district.district_name }}
-                </option>
-                }
-            </select>
-            @if (errorOf('pDistrict')) {
-            <div class="field-error">{{ errorOf('pDistrict') }}</div>
-            }
+      <!-- District -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="pDistrictId">District <span class="required">*</span></label>
+          <ng-select id="pDistrictId" [items]="districtDetails()" bindLabel="district_name"
+            formControlName="pDistrictId" placeholder="Select District" [searchable]="true" [clearable]="true"
+            appendTo="body" (change)="pDistrict_Change($event)"
+            [ngClass]="{'ng-invalid': errorOf('pDistrict') && addressForm.get('pDistrictId')?.touched}">
+          </ng-select>
+          @if (errorOf('pDistrict')) {
+          <span class="erp-field-error">{{ errorOf('pDistrict') }}</span>
+          }
         </div>
+      </div>
 
-        <!-- Pincode -->
-        <div class="form-group">
-            <label class="form-label" id="Pincode" title="Pincode">
-                Pincode <span class="required-star">*</span>
-            </label>
-            <input type="text" formControlName="Pincode" class="form-control" appNumbersonly minlength="6" maxlength="6"
-                (keypress)="allowOnlyNumbers($event)" [class.is-invalid]="errorOf('Pincode')" />
-            @if (errorOf('Pincode')) {
-            <div class="field-error">{{ errorOf('Pincode') }}</div>
-            }
+      <!-- Pincode -->
+      <div class="col-12 col-md-6">
+        <div class="erp-form-group">
+          <label class="erp-label" for="Pincode">Pincode <span class="required">*</span></label>
+          <input type="text" id="Pincode" formControlName="Pincode" class="erp-input" appNumbersonly minlength="6"
+            maxlength="6" placeholder="Enter pincode" (keypress)="allowOnlyNumbers($event)"
+            [class.ng-invalid]="errorOf('Pincode') && addressForm.get('Pincode')?.touched" />
+          @if (errorOf('Pincode')) {
+          <span class="erp-field-error">{{ errorOf('Pincode') }}</span>
+          }
         </div>
+      </div>
 
     </div>
+  </div>
 </form>

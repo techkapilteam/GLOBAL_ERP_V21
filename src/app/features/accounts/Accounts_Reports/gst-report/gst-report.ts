@@ -11,13 +11,14 @@ import {
   Validators
 } from '@angular/forms';
 
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TableModule } from 'primeng/table';
 import { CommonService } from '../../../../core/services/Common/common.service';
 import { AccountsReports } from '../../../../core/services/accounts/accounts-reports';
 import { PageCriteria } from '../../../../core/models/pagecriteria';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-gst-report',
@@ -27,7 +28,7 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
     
     ReactiveFormsModule,
     NgSelectModule,
-    BsDatepickerModule,
+    DatePickerModule,
     TableModule
   ],
   templateUrl: './gst-report.html',
@@ -35,6 +36,8 @@ import { PageCriteria } from '../../../../core/models/pagecriteria';
   styleUrl: './gst-report.css'
 })
 export class GstReport implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   // ── Injected services ─────────────────────────────────────────────────────
   private readonly commonService     = inject(CommonService);
@@ -83,14 +86,14 @@ export class GstReport implements OnInit {
   private loginBranchSchema: any;
 
   // ── Datepicker configs ────────────────────────────────────────────────────
-  dpConfig: Partial<BsDatepickerConfig> = {
+  dpConfig: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass: 'theme-dark-blue',
     showWeekNumbers: false,
     maxDate: new Date()
   };
 
-  dpConfig1: Partial<BsDatepickerConfig> = {
+  dpConfig1: any = {
     dateInputFormat: 'DD-MMM-YYYY',
     containerClass: 'theme-dark-blue',
     showWeekNumbers: false,

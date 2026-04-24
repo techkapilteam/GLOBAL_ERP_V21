@@ -3,10 +3,11 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CommonService } from '../../../../core/services/Common/common.service';
+import { DatePickerModule } from 'primeng/datepicker';
 
 interface TBRow {
   accountId: string;
@@ -33,12 +34,14 @@ interface TBResponse {
 @Component({
   selector: "app-schedule-tb",
   standalone:true,
-  imports: [CommonModule, FormsModule, HttpClientModule, BsDatepickerModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, DatePickerModule],
   templateUrl: "./schedule-tb.html",
   styleUrl: "./schedule-tb.css",
 })
 
 export class ScheduleTb implements OnInit {
+  pDatepickerMaxDate: Date = new Date();
+
 
   private http = inject(HttpClient);
   private commonService = inject(CommonService);
@@ -55,7 +58,7 @@ export class ScheduleTb implements OnInit {
   private readonly apiBase = 'https://localhost:5001/api';
 
   // ── Datepicker config ─────────────────────────────────────────────────
-  readonly dpConfig: Partial<BsDatepickerConfig> = {
+  readonly dpConfig: any = {
     containerClass: 'theme-dark-blue',
     dateInputFormat: 'DD-MMM-YYYY',
     maxDate: new Date(),

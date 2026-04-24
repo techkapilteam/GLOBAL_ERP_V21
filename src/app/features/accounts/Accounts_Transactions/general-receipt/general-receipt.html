@@ -1,26 +1,17 @@
-﻿<div class="module-page">
+<div class="module-page">
 
   <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-0">
-    <div style="flex: 1;">
-      <nav class="erp-breadcrumb">
-        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Accounts</button>
-        <span class="bc-sep">›</span>
-        <button class="bc-item">Transactions</button>
-        <span class="bc-sep">›</span>
-        <span class="bc-item current">General Receipts</span>
-      </nav>
+  <div class="d-flex justify-between align-center gap-4 mb-0 p-4">
+    <div>
+
       <h1 class="page-title">
         <i class="pi pi-receipt"></i> General Receipts
       </h1>
       <p class="page-subtitle">Track and manage all general receipt transactions</p>
     </div>
 
-    <a routerLink="/dashboard/accounts/accounts-transactions/general-receipt-new"
-       class="erp-btn btn-primary btn-lg"
-       style="margin-top: auto; white-space: nowrap;">
+    <a routerLink="/dashboard/accounts/accounts-transactions/general-receipt-new" class="erp-btn btn-primary btn-lg"
+      style="margin-top: auto; white-space: nowrap;">
       <i class="pi pi-plus"></i> New Receipt
     </a>
   </div>
@@ -38,11 +29,8 @@
       <div class="header-search" style="flex: 1; max-width: 300px;">
         <div class="erp-input-wrap">
           <i class="pi pi-search erp-input-icon"></i>
-          <input type="text"
-                 class="erp-input icon-pad"
-                 placeholder="Search receipt..."
-                 style="font-size: 12px; color: #374151;"
-                 (input)="onSearch($event)"/>
+          <input type="text" class="erp-input icon-pad" placeholder="Search receipt..."
+            style="font-size: 12px; color: #374151;" (input)="onSearch($event)" />
         </div>
       </div>
 
@@ -56,24 +44,6 @@
       </div>
     </div>
 
-    <!-- Filter Bar -->
-    <!-- <div class="filter-bar">
-      <div class="filter-group">
-        <label class="filter-lbl">From Date</label>
-        <div class="erp-input-wrap">
-          <i class="pi pi-calendar erp-input-icon"></i>
-          <input type="date" class="erp-input icon-pad" placeholder="From date"/>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-lbl">To Date</label>
-        <div class="erp-input-wrap">
-          <i class="pi pi-calendar erp-input-icon"></i>
-          <input type="date" class="erp-input icon-pad" placeholder="To date"/>
-        </div>
-      </div>
-    </div> -->
 
     <!-- Card Body -->
     <div class="card-body p-0">
@@ -94,20 +64,10 @@
 
       <!-- DataTable -->
       <div class="tbl-wrap">
-        <p-table
-          [value]="filteredData()"
-          [paginator]="true"
-          [rows]="pageSize()"
-          [totalRecords]="filteredData().length"
-          [showCurrentPageReport]="true"
-          [rowsPerPageOptions]="rowsPerPageOptions"
-          (onPage)="onPageChange($event)"
-          currentPageReportTemplate="Showing {first}–{last} of {totalRecords} entries"
-          responsiveLayout="scroll"
-          [loading]="loading()"
-          [sortMode]="'single'"
-          styleClass="gr-table"
-          paginatorPosition="bottom">
+        <p-table [value]="filteredData()" [paginator]="true" [rows]="pageSize()" [totalRecords]="filteredData().length"
+          [showCurrentPageReport]="true" [rowsPerPageOptions]="rowsPerPageOptions" (onPage)="onPageChange($event)"
+          currentPageReportTemplate="Showing {first}–{last} of {totalRecords} entries" responsiveLayout="scroll"
+          [loading]="loading()" [sortMode]="'single'" styleClass="gr-table" paginatorPosition="bottom">
 
           <!-- Header -->
           <ng-template pTemplate="header">
@@ -155,9 +115,7 @@
             <tr>
               <!-- Action -->
               <td class="td-actions">
-                <button class="erp-btn btn-outline btn-sm btn-icon"
-                        (click)="viewRow(row)"
-                        title="View Receipt">
+                <button class="erp-btn btn-outline btn-sm btn-icon" (click)="viewRow(row)" title="View Receipt">
                   <i class="pi pi-eye"></i>
                 </button>
               </td>
@@ -178,24 +136,22 @@
               <!-- Payment Mode -->
               <td>
                 <div class="td-payment">
-                  <span class="erp-badge"
-                        [class.badge-success]="row.modeof_receipt === 'C'"
-                        [class.badge-info]="row.modeof_receipt === 'B'"
-                        [class.badge-neutral]="row.modeof_receipt !== 'C' && row.modeof_receipt !== 'B'">
-                    <i class="pi"
-                       [class.pi-wallet]="row.modeof_receipt === 'C'"
-                       [class.pi-credit-card]="row.modeof_receipt === 'B'"
-                       [class.pi-circle]="row.modeof_receipt !== 'C' && row.modeof_receipt !== 'B'">
+                  <span class="erp-badge" [class.badge-success]="row.modeof_receipt === 'C'"
+                    [class.badge-info]="row.modeof_receipt === 'B'"
+                    [class.badge-neutral]="row.modeof_receipt !== 'C' && row.modeof_receipt !== 'B'">
+                    <i class="pi" [class.pi-wallet]="row.modeof_receipt === 'C'"
+                      [class.pi-credit-card]="row.modeof_receipt === 'B'"
+                      [class.pi-circle]="row.modeof_receipt !== 'C' && row.modeof_receipt !== 'B'">
                     </i>
                     {{ getPaymentLabel(row) }}
                   </span>
                   @if (row.ptypeofpayment) {
-                    <span class="erp-badge badge-neutral">{{ row.ptypeofpayment }}</span>
+                  <span class="erp-badge badge-neutral">{{ row.ptypeofpayment }}</span>
                   }
                   @if (row.pChequenumber) {
-                    <span class="cheque-ref">
-                      <i class="pi pi-file-edit"></i>{{ row.pChequenumber }}
-                    </span>
+                  <span class="cheque-ref">
+                    <i class="pi pi-file-edit"></i>{{ row.pChequenumber }}
+                  </span>
                   }
                 </div>
               </td>

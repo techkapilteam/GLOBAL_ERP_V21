@@ -1,4 +1,4 @@
-<div class="screen-container">
+﻿<div class="screen-container">
   <div class="screen-card">
 
     <!-- Header -->
@@ -13,23 +13,12 @@
           <div class="row filter-row">
 
             <!-- From Date -->
-            <div class="col-md-3 filter-col">
-              <div class="form-group">
+            <div class="col-12 col-md-6 filter-col">
+              <div class="erp-form-group">
                 <label class="form-label required-field">
                   From Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="fromDate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onFromDateChange($event)"
-                  [ngClass]="{ 'is-invalid': submitted && f['fromDate'].invalid }"
-                />
+                <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['fromDate'].errors?.['required']">
                   From Date is required
                 </div>
@@ -37,23 +26,12 @@
             </div>
 
             <!-- To Date -->
-            <div class="col-md-3 filter-col">
-              <div class="form-group">
+            <div class="col-12 col-md-6 filter-col">
+              <div class="erp-form-group">
                 <label class="form-label required-field">
                   To Date <span class="required-asterisk">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="toDate"
-                  bsDatepicker
-                  [bsConfig]="dpConfig1"
-                  placement="bottom"
-                  readonly
-                  (keydown)="$event.preventDefault()"
-                  (bsValueChange)="onToDateChange($event)"
-                  [ngClass]="{ 'is-invalid': submitted && f['toDate'].invalid }"
-                />
+                <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 <div class="invalid-feedback" *ngIf="submitted && f['toDate'].errors?.['required']">
                   To Date is required
                 </div>
@@ -61,9 +39,9 @@
             </div>
 
             <!-- Bank Name -->
-            <div class="col-md-3 filter-col">
-              <div class="form-group">
-                <label class="form-label">
+            <div class="col-12 col-md-6 filter-col">
+              <div class="erp-form-group">
+                <label class="erp-label">
                   Bank Name <span class="required-asterisk">*</span>
                 </label>
                 <ng-select
@@ -83,7 +61,7 @@
             </div>
 
             <!-- Generate Button -->
-            <div class="col-md-3 filter-col btn-col">
+            <div class="col-12 col-md-6 filter-col btn-col">
               <button
                 type="button"
                 class="btn btn-primary btn-generate"
@@ -220,16 +198,16 @@
                   <td class="td-left td-narration">{{ row.pdescription || '--NA--' }}</td>
                   <td class="td-right td-receipt">
                     @if (row.pdebitamount !== 0) {
-                      ₹ {{ row.pdebitamount | number:'1.2-2' }}
+                      Ã¢â€šÂ¹ {{ row.pdebitamount | number:'1.2-2' }}
                     } @else {
-                      <span class="text-muted">—</span>
+                      <span class="text-muted">Ã¢â‚¬â€</span>
                     }
                   </td>
                   <td class="td-right td-payment">
                     @if (row.pcreditamount !== 0) {
-                      ₹ {{ row.pcreditamount | number:'1.2-2' }}
+                      Ã¢â€šÂ¹ {{ row.pcreditamount | number:'1.2-2' }}
                     } @else {
-                      <span class="text-muted">—</span>
+                      <span class="text-muted">Ã¢â‚¬â€</span>
                     }
                   </td>
                   <td class="td-right td-balance">
@@ -237,7 +215,7 @@
                       'balance-cr': row.pBalanceType === 'Cr',
                       'balance-dr': row.pBalanceType === 'Dr'
                     }">
-                      ₹ {{ row.popeningbal | number:'1.2-2' }} {{ row.pBalanceType }}
+                      Ã¢â€šÂ¹ {{ row.popeningbal | number:'1.2-2' }} {{ row.pBalanceType }}
                     </span>
                   </td>
                 </tr>
@@ -252,8 +230,8 @@
                         <thead>
                           <tr class="expansion-header-row">
                             <th class="expansion-th">Ledger Name</th>
-                            <th class="expansion-th text-end">Debit (₹)</th>
-                            <th class="expansion-th text-end">Credit (₹)</th>
+                            <th class="expansion-th text-end">Debit (Ã¢â€šÂ¹)</th>
+                            <th class="expansion-th text-end">Credit (Ã¢â€šÂ¹)</th>
                           </tr>
                         </thead>
                         <tbody>
