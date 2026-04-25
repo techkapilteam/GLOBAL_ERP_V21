@@ -458,7 +458,7 @@ export class BankConfig implements OnInit {
   //   }
   // }
 
-allowNumbersOnly1(event: any) {
+  allowNumbersOnly1(event: any) {
   event.target.value = event.target.value.replace(/[^0-9]/g, '');
   const accountNumber = event.target.value;
   this.bankmasterform.get('pAccountnumber')?.setValue(accountNumber);
@@ -471,24 +471,6 @@ allowNumbersOnly1(event: any) {
     this.bankmasterform.get('account_name')?.setValue(bankName);
   }
 }
-//woking
-
-
-//   allowNumbersOnly1(event: any) {
-//   event.target.value = event.target.value.replace(/[^0-9]/g, '');
-//   const accountNumber = event.target.value;
-//   this.bankmasterform.get('pAccountnumber')?.setValue(accountNumber);
-
-//   // ✅ bankName@accountNumber
-//   const bankName = this.bankname || this.bankmasterform.get('bankName')?.value || '';
-//   if (bankName && accountNumber) {
-//     this.bankmasterform.get('account_name')?.setValue(`${bankName}@${accountNumber}`);
-//   } else if (bankName) {
-//     this.bankmasterform.get('account_name')?.setValue(bankName);
-//   }
-// }
-
-
 
   allowNumbersOnly(event: KeyboardEvent): void {
     const charCode = event.which || event.keyCode;
@@ -589,21 +571,6 @@ allowNumbersOnly1(event: any) {
   //   );
   //   this.bankmasterform.get('pBankID')?.setValue(bankid);
   // }
-//working but small iosyue
-//   onChange(event: any) {
-//   this.bankname = event.bankName;
-//   let bankid = event.bankId;
-
-//   const accountNumber = this.bankmasterform.get('pAccountnumber')?.value || '';
-
-//   // ✅ Only set account_name if accountNumber exists, else just bankName
-//   const accountNameValue = accountNumber
-//     ? `${this.bankname}@${accountNumber}`
-//     : this.bankname;
-
-//   this.bankmasterform.get('account_name')?.setValue(accountNameValue);
-//   this.bankmasterform.get('pBankID')?.setValue(bankid);
-// }
 
   onChange(event: any) {
   this.bankname = event.bankName;
@@ -619,6 +586,7 @@ allowNumbersOnly1(event: any) {
   this.bankmasterform.get('account_name')?.setValue(accountNameValue);
   this.bankmasterform.get('pBankID')?.setValue(bankid);
 }
+
 
 
   // ── UPI grid ─────────────────────────────────────────────────────────────────
@@ -922,7 +890,6 @@ allowNumbersOnly1(event: any) {
 
   // ── Save ──────────────────────────────────────────────────────────────────────
   save(): void {
-    debugger;
     this.bankmasterform.markAllAsTouched();
 
     // Clear address fields from bankmasterform — managed by AddressComponent

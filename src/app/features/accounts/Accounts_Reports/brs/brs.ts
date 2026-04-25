@@ -399,69 +399,37 @@ export class Brs implements OnInit {
   }
 
   uploadAndProgress(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  if (!input.files?.length) return;
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
 
-  const file = input.files[0];
+    if (!this.validateFile(input.value)) {
+      this.commonService.showWarningMessage('Upload jpg, png or pdf files');
+      return;
+    }
 
-  if (!this.validateFile(file.name)) {
-    this.commonService.showWarningMessage('Upload jpg, png or pdf files');
-    return;
+    const formData = new FormData();
+    Array.from(input.files).forEach(file => formData.append(file.name, file));
+
+    this.commonService.fileUploadS3('BPO', formData).subscribe(data => {
+      this.kycFileName = data[0];
+      this.BRStatmentForm.patchValue({ pFilename: this.kycFileName });
+    });
   }
-
-  if (file.size / 1024 / 1024 > 30) {
-    this.commonService.showWarningMessage('File Size Maximum Allowed 30Mb Only!');
-    return;
-  }
-
-  const newFileName = 'BRS.' + file.name.split('.').pop();
-  this.kycFileName = newFileName;
-  this.BRStatmentForm.patchValue({ pFilename: newFileName });
-}
 
   // ── Save ──────────────────────────────────────────────────────────────────────
   saveWithPrint(): void {
-  if (!this.BRStatmentForm.value.pFilename) {
-    this.commonService.showWarningMessage('Upload Document Required');
-    return;
-  }
-
-  if (!confirm('Do you want to save?')) return;
-
-  const schemaName  = this.commonService.getbranchname();
-  const bankId      = this.BRStatmentForm.value.bankAccountId;
-  const companyCode = this.commonService.getCompanyCode();
-  const branchCode  = this.commonService.getBranchCode();
-
-  const payload = this.gridView().map((row, index) => ({
-    pgrouptype:        row.pGroupType,
-    pchequedate:       row.ptransactiondate,
-    preferencenumber:  row.pChequeNumber,
-    pparticulars:      row.pparticulars,
-    pbankname:         row.pBankName,
-    pbranchname:       row.pBranchName,
-    pamount:           row.ptotalreceivedamount,
-    pbankid:           +bankId,
-    pbrsdate:          this.datePipe.transform(this.BRStatmentForm.value.fromDate, 'yyyy-MM-dd'),
-    pbankbalance:      this.commonService.removeCommasForEntredNumber(this.BRStatmentForm.value.pbankbalance),
-    ptypeofoperation:  index === 0 ? 'UPDATE' : 'CREATE',
-    schemaname:        schemaName,
-    pFilename:         this.BRStatmentForm.value.pFilename,
-    company_code:      companyCode,
-    branch_code:       branchCode
-  }));
-  
-
-  this.brstatement.SaveBrs(JSON.stringify({ '_BrsDTO': payload })).subscribe({
-    next: () => {
-      this.commonService.showSuccessMsg('success');
-      this.getBRStatmentReports();
-    },
-    error: () => {
-      this.commonService.showWarningMessage('Save failed. Please try again.');
+    if (!this.BRStatmentForm.value.pFilename) {
+      this.commonService.showWarningMessage('Upload Document Required');
+      return;
     }
-  });
-}
+
+    this.brstatement
+      .SaveBrs(JSON.stringify({ '_BrsDTO': this.gridView() }))
+      .subscribe(() => {
+        this.commonService.showSuccessMsg('success');
+        this.BRStatmentForm.patchValue({ pbankbalance: 0 });
+      });
+  }
 
   // ── Row group helpers ─────────────────────────────────────────────────────────
   toggleExpandGroup(group: any): void {

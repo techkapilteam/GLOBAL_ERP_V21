@@ -26,7 +26,7 @@
                   <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                     placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
                     inputStyleClass="erp-input icon-pad w-100" [disabled]="!disabletransactiondate"
-                    ></p-datepicker>
+                    [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 </div>
                 @if (formValidationMessages?.ppaymentdate) {
                   <app-validation-message [messgae]="formValidationMessages?.ppaymentdate"></app-validation-message>
@@ -408,7 +408,7 @@
                 <h4 class="m-0 text-sm font-bold uppercase tracking-wider text-primary">TDS Information</h4>
               </div>
               <div class="row g-2">
-                <!-- <div class="col-md-4">
+                <div class="col-md-4">
                   <div class="erp-form-group">
                     <label class="erp-label" for="pTdsSection">@ Section <span class="required">*</span></label>
                     <ng-select id="pTdsSection" [items]="tdssectionlist" bindLabel="pTdsSection" bindValue="pTdsSection"
@@ -419,64 +419,20 @@
                       <app-validation-message [messgae]="'Select Section'"></app-validation-message>
                     }
                   </div>
-                </div> -->
-
-
-
-                 <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Section <span class="required">*</span></label>
-                  <select class="erp-input" id="pTdsSection" formControlName="pTdsSection" [class.erp-input--invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched &&
-                                                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value"
-                    (change)="tdsSection_Change($event)">
-                    <option value="">Select</option>
-                    @for (tds of tdssectionlist; track tds.pTdsSection) {
-                    <option [value]="tds.pTdsSection">{{ tds.pTdsSection }}</option>
-                    }
-                  </select>
-                  @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched &&
-                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value) {
-                  <span class="erp-field-error">Select Section</span>
-                  }
                 </div>
-              </div>
-<!-- 
+
                 <div class="col-md-4">
                   <div class="erp-form-group">
                     <label class="erp-label" for="pTdsPercentage">Percentage <span class="required">*</span></label>
                     <ng-select id="pTdsPercentage" [items]="tdspercentagelist" bindLabel="pTdsPercentage" bindValue="pTdsPercentage"
                       placeholder="Select" formControlName="pTdsPercentage" (change)="tds_Change($event)"
-                      appendTo="body" bindValue="pTdsPercentage">
+                      appendTo="body">
                     </ng-select>
                     @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value) {
                       <app-validation-message [messgae]="'Select Percentage'"></app-validation-message>
                     }
                   </div>
-                </div> -->
-
-
-
-
-
-                
-              <div class="col-md-4">
-                <div class="erp-form-group">
-                  <label class="erp-label">Percentage <span class="required">*</span></label>
-                  <select class="erp-input" id="pTdsPercentage" formControlName="pTdsPercentage"
-                    [class.erp-input--invalid]="paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched &&
-                                                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value"
-                    (change)="tds_Change($event)">
-                    <option value="">Select</option>
-                    @for (tds of tdspercentagelist; track tds.pTdsPercentage) {
-                    <option [value]="tds.pTdsPercentage">{{ tds.pTdsPercentage }}</option>
-                    }
-                  </select>
-                  @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched &&
-                  !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value) {
-                  <span class="erp-field-error">Select Percentage</span>
-                  }
                 </div>
-              </div>
 
                 <div class="col-md-4">
                   <div class="erp-form-group">

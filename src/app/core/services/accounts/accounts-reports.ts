@@ -2731,7 +2731,7 @@ export class AccountsReports {
   }
   SaveBrs(brsData: any): Observable<any> {
     return this._CommonService.postAPI(
-      '/Accounts/AccountingReports/SaveBrs',
+      '/Accounting/AccountingReports/SaveBrs',
       brsData
     );
   }

@@ -9,9 +9,8 @@
       <p class="page-subtitle">Browse and manage all journal vouchers and accounting adjustments</p>
     </div>
 
-    <a routerLink="/dashboard/accounts/accounts-transactions/journal-voucher"
-       class="erp-btn btn-primary btn-lg"
-       style="margin-top: auto; white-space: nowrap;">
+    <a routerLink="/dashboard/accounts/accounts-transactions/journal-voucher" class="erp-btn btn-primary btn-lg"
+      style="margin-top: auto; white-space: nowrap;">
       <i class="pi pi-plus"></i> New Voucher
     </a>
   </div>
@@ -29,11 +28,8 @@
       <div class="header-search" style="flex: 1; max-width: 300px;">
         <div class="erp-input-wrap">
           <i class="pi pi-search erp-input-icon"></i>
-          <input type="search"
-                 class="erp-input icon-pad"
-                 placeholder="Search vouchers..."
-                 (input)="filterDatatable($event)"
-                 autocomplete="off" />
+          <input type="search" class="erp-input icon-pad" placeholder="Search vouchers..."
+            (input)="filterDatatable($event)" autocomplete="off" />
         </div>
       </div>
     </div>
@@ -50,23 +46,11 @@
     <!-- DataTable -->
     <div class="tbl-wrap">
 
-      <p-table
-        #dt
-        [value]="Journalvoucherlist"
-        dataKey="pjvnumber"
-        [rows]="pageCriteria.pageSize"
-        [paginator]="true"
-        [totalRecords]="pageCriteria.totalrows"
-        [rowsPerPageOptions]="[10, 20, 50]"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        sortMode="single"
-        responsiveLayout="scroll"
-        [scrollable]="true"
-        scrollHeight="400px"
-        [resizableColumns]="true"
-        columnResizeMode="fit"
-        styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+      <p-table #dt [value]="Journalvoucherlist" dataKey="pjvnumber" [rows]="pageCriteria.pageSize" [paginator]="true"
+        [totalRecords]="pageCriteria.totalrows" [rowsPerPageOptions]="[10, 20, 50]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" sortMode="single"
+        responsiveLayout="scroll" [scrollable]="true" scrollHeight="400px" [resizableColumns]="true"
+        columnResizeMode="fit" styleClass="gr-table p-datatable-sm p-datatable-gridlines">
 
         <!-- Header -->
         <ng-template pTemplate="header">
@@ -102,10 +86,7 @@
         <ng-template pTemplate="body" let-row>
           <tr>
             <td class="td-actions">
-              <button
-                class="erp-btn btn-outline btn-sm btn-icon"
-                title="View"
-                (click)="viewHandler($event, row)">
+              <button class="erp-btn btn-outline btn-sm btn-icon" title="View" (click)="viewHandler($event, row)">
                 <i class="pi pi-eye"></i>
               </button>
             </td>

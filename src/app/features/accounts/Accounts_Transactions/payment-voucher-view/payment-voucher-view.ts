@@ -39,7 +39,7 @@ import { DatePickerModule } from 'primeng/datepicker';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-
+    
     DatePickerModule,
     CurrencyPipe,
     NgSelectModule,
@@ -52,8 +52,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 })
 export class PaymentVoucherView implements OnInit, OnDestroy {
   pDatepickerMaxDate: Date = new Date();
-  pDatepickerMinDate: Date = new Date();
-  // pDatepickerMinDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
 
   // ─── Injected Services ────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -144,20 +142,18 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   groups: any[] = [];
 
   // ─── Datepicker Config ───────────────────────────────────────────────────
-  // readonly ppaymentdateConfig: any = {
-  //   maxDate: new Date(),
-  //   containerClass: 'theme-dark-blue',
-  //   dateInputFormat: 'DD-MMM-YYYY',
-  //   showWeekNumbers: false,
-  // };
+  readonly ppaymentdateConfig: any = {
+    maxDate: new Date(),
+    containerClass: 'theme-dark-blue',
+    dateInputFormat: 'DD-MMM-YYYY',
+    showWeekNumbers: false,
+  };
 
   formValidationMessages: Record<string, string> = {};
   paymentVoucherForm!: FormGroup;
-  today: Date = new Date();
 
   // ─── Lifecycle ────────────────────────────────────────────────────────────
   ngOnInit(): void {
-    this.getLoadData();
     this.initBalances();
     this.currencySymbol = this.commonService.currencysymbol;
 
@@ -182,9 +178,9 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
     //   .get('ppaymentsslistcontrols.ppaymentdate')
     //   ?.setValue(new Date());
 
-    this.paymentVoucherForm.get('ppaymentdate')?.setValue(new Date());
+      this.paymentVoucherForm.get('ppaymentdate')?.setValue(new Date());
 
-
+    this.getLoadData();
     this.blurEventAllControls(this.paymentVoucherForm);
 
     this.paymentVoucherForm
@@ -200,11 +196,11 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
 
   // ─── Form Builder ─────────────────────────────────────────────────────────
   private buildForm(): void {
+    //  [{ value: this.today, disabled: true }, Validators.required]
     this.paymentVoucherForm = this.fb.group({
       ppaymentid: [''],
       schemaname: [this.commonService.getschemaname()],
-      ppaymentdate: [{ value: this.today, disabled: true }, Validators.required],
-      //  ppaymentdate: ['', Validators.required],
+      ppaymentdate: ['',{disabled: true }, Validators.required],
       ptotalpaidamount: [''],
       pnarration: ['', Validators.required],
       pmodofpayment: ['CASH'],
@@ -229,7 +225,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
 
   private buildPaymentLineControls(): FormGroup {
     return this.fb.group({
-      psubledgerid: [null,Validators.required],
+      psubledgerid: [null],
       psubledgername: [''],
       pledgerid: [null, Validators.required],
       pledgername: ['', Validators.required],
@@ -1180,230 +1176,16 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   }
 
   // ─── Add / Remove Row ─────────────────────────────────────────────────────
-  // addPaymentDetails(): void {
-  //   debugger;
-  //   const round = (n: number) =>
-  //     Math.round((n + Number.EPSILON) * 100) / 100;
-
-  //   this.disableAddButton.set(true);
-  //   this.addButtonLabel.set('Processing');
-
-  //   const ctrl = this.paymentVoucherForm.get(
-  //     'ppaymentsslistcontrols'
-  //   ) as FormGroup;
-
-  //   const ppartyid = ctrl.get('ppartyid')?.value;
-  //   const pledgerid = ctrl.get('pledgerid')?.value;
-  //   const pactualpaidamount = ctrl.get('pactualpaidamount')?.value;
-  //   const subledgerid = ctrl.get('psubledgerid')?.value;
-
-  //   if (!ppartyid) return this.showAddError('Please select Party');
-  //   if (!pledgerid) return this.showAddError('Please select Ledger');
-  //   if (!pactualpaidamount || parseFloat(pactualpaidamount) <= 0)
-  //     return this.showAddError('Please enter Amount');
-
-  //   const isgst = ctrl.get('pisgstapplicable')?.value;
-  //   if (isgst) {
-  //     if (!ctrl.get('pgstcalculationtype')?.value)
-  //       return this.showAddError('Please select GST Calculation Type');
-  //     if (!ctrl.get('pStateId')?.value)
-  //       return this.showAddError('Please select State');
-  //     if (!ctrl.get('pgstpercentage')?.value)
-  //       return this.showAddError('Please select GST Percentage');
-  //   }
-
-  //   const istds = ctrl.get('pistdsapplicable')?.value;
-  //   if (istds) {
-  //     if (!ctrl.get('ptdscalculationtype')?.value)
-  //       return this.showAddError('Please select TDS Calculation Type');
-  //     if (!ctrl.get('pTdsSection')?.value)
-  //       return this.showAddError('Please select TDS Section');
-  //     if (!ctrl.get('pTdsPercentage')?.value)
-  //       return this.showAddError('Please select TDS Percentage');
-  //   }
-
-  //   const isSubledgerRequired = this.subLedgerAccountsList?.length > 0;
-  //   if (isSubledgerRequired && !subledgerid)
-  //     return this.showAddError('Please select Subledger');
-
-  //   const selectedSub =
-  //     this.subLedgerAccountsList?.find((x) => x.subledgerid === subledgerid) ??
-  //     null;
-
-  //   const currentRow = {
-  //     ppartyname: ctrl.get('ppartyname')?.value,
-  //     pledgername: ctrl.get('pledgername')?.value,
-  //     psubledgerid: selectedSub?.subledgerid ?? subledgerid,
-  //     psubledgername: selectedSub?.subledgername ?? '',
-  //     ptotalamount: round(
-  //       parseFloat(
-  //         this.commonService.removeCommasInAmount(
-  //           ctrl.get('ptotalamount')?.value ?? '0'
-  //         )
-  //       )
-  //     ),
-  //     pamount: round(
-  //       parseFloat(
-  //         this.commonService.removeCommasInAmount(
-  //           ctrl.get('pamount')?.value ?? '0'
-  //         )
-  //       )
-  //     ),
-  //     pgstcalculationtype: isgst ? ctrl.get('pgstcalculationtype')?.value : null,
-  //     pgsttype: isgst ? ctrl.get('pgsttype')?.value : null,
-  //     pgstpercentage: isgst ? ctrl.get('pgstpercentage')?.value ?? 0 : 0,
-  //     pgstamount: isgst
-  //       ? round(parseFloat(ctrl.get('pgstamount')?.value ?? '0'))
-  //       : 0,
-  //     pisgstapplicable: isgst ?? false,
-  //     pTdsSection: istds ? ctrl.get('pTdsSection')?.value : null,
-  //     pTdsPercentage: istds ? ctrl.get('pTdsPercentage')?.value ?? 0 : 0,
-  //     ptdsamount: istds
-  //       ? round(
-  //         parseFloat(
-  //           this.commonService.removeCommasInAmount(
-  //             ctrl.get('ptdsamount')?.value ?? '0'
-  //           )
-  //         )
-  //       )
-  //       : 0,
-  //     ptdscalculationtype: istds ? ctrl.get('ptdscalculationtype')?.value : null,
-  //     pistdsapplicable: istds ?? false,
-  //     ppartyid,
-  //     pledgerid,
-  //     pStateId: isgst ? ctrl.get('pStateId')?.value ?? 0 : 0,
-  //     pState: isgst ? ctrl.get('pState')?.value ?? '' : '',
-  //     pgstno: isgst ? ctrl.get('pgstno')?.value ?? '' : '',
-  //     ppartyreferenceid: ctrl.get('ppartyreferenceid')?.value ?? '',
-  //     ppartyreftype: ctrl.get('ppartyreftype')?.value ?? '',
-  //     ppartypannumber: ctrl.get('ppartypannumber')?.value ?? '',
-  //   };
-
-  //   if (!this.validateAddPaymentDetails(currentRow)) {
-  //     this.resetAddButton();
-  //     return;
-  //   }
-
-  //   const paidAmount = round(
-  //     parseFloat(
-  //       this.commonService.removeCommasInAmount(pactualpaidamount ?? '0')
-  //     )
-  //   );
-
-  //   if (isSubledgerRequired) {
-  //     this.subscriberJvService
-  //       .GetdebitchitCheckbalance(
-  //         this.commonService.getbranchname(),
-  //         pledgerid,
-  //         36,
-  //         subledgerid,
-  //         this.commonService.getschemaname(),
-  //         this.commonService.getCompanyCode(),
-  //         this.commonService.getBranchCode()
-  //       )
-  //       .pipe(takeUntil(this.destroy$))
-  //       .subscribe({
-  //         next: (result: any) => {
-  //           if (
-  //             result?.balancecheckstatus &&
-  //             paidAmount > parseFloat(result?.balanceamount ?? '0')
-  //           ) {
-  //             this.showAddError(
-  //               'Enter the amount less or equal to subledger amount'
-  //             );
-  //             return;
-  //           }
-  //           this.savePaymentRow(currentRow, ctrl);
-  //         },
-  //         error: (err) => this.showAddError(err),
-  //       });
-  //   } else {
-  //     this.savePaymentRow(currentRow, ctrl);
-  //   }
-  // }
-
-  validateAddPaymentDetails(currentRow: any): boolean {
-    debugger;
-      let isValid = true;
-    try {
-      const { pledgername, psubledgername, psubledgerid, ppartyid } =
-        currentRow;
-      let count = 0,
-        fixedCount = 0,
-        bankCount = 0;
-
-      for (const row of this.paymentsList) {
-        if (row === currentRow) continue;
-        if (
-          pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' &&
-          this.paymentsList.length > 0
-        ) {
-          count = fixedCount = 1;
-          break;
-        }
-        if (
-          row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' ||
-          (row.pledgername === pledgername &&
-            row.psubledgername === psubledgername &&
-            row.ppartyid === ppartyid)
-        ) {
-          if (row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS')
-            fixedCount = 1;
-          count = 1;
-          break;
-        }
-        for (const bank of this.banklist) {
-          if (
-            bank.paccountid === row.psubledgerid ||
-            bank.paccountid === psubledgerid
-          ) {
-            count = bankCount = 1;
-            break;
-          }
-        }
-      }
-
-      if (count === 1) {
-        if (fixedCount === 1)
-          this.commonService.showWarningMessage(
-            'Fixed deposit receipts accepts only one record in the grid'
-          );
-        else if (bankCount === 1)
-          this.commonService.showWarningMessage(
-            'Bank Accounts only one record in the grid'
-          );
-        else
-          this.commonService.showWarningMessage(
-            'Ledger, subledger and party already exists in the grid.'
-          );
-        isValid = false;
-      }
-    } catch (e) {
-      this.commonService.showErrorMessage(e);
-      isValid = false;
-    }
-    return isValid;
-  }
-
-
-
-addPaymentDetails(): void {
-    debugger;
+  addPaymentDetails(): void {
     const round = (n: number) =>
       Math.round((n + Number.EPSILON) * 100) / 100;
 
-    // ── ADD THIS: mark all controls touched so validation messages appear ──
+    this.disableAddButton.set(true);
+    this.addButtonLabel.set('Processing');
+
     const ctrl = this.paymentVoucherForm.get(
       'ppaymentsslistcontrols'
     ) as FormGroup;
-    ctrl.markAllAsTouched();
-    Object.keys(ctrl.controls).forEach(key =>
-      this.getValidationByControl(ctrl, key, true)
-    );
-    // ──────────────────────────────────────────────────────────────────────
-
-    this.disableAddButton.set(true);
-    this.addButtonLabel.set('Processing');
 
     const ppartyid = ctrl.get('ppartyid')?.value;
     const pledgerid = ctrl.get('pledgerid')?.value;
@@ -1535,9 +1317,67 @@ addPaymentDetails(): void {
     }
   }
 
+  validateAddPaymentDetails(currentRow: any): boolean {
+    let isValid = true;
+    try {
+      const { pledgername, psubledgername, psubledgerid, ppartyid } =
+        currentRow;
+      let count = 0,
+        fixedCount = 0,
+        bankCount = 0;
 
+      for (const row of this.paymentsList) {
+        if (row === currentRow) continue;
+        if (
+          pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' &&
+          this.paymentsList.length > 0
+        ) {
+          count = fixedCount = 1;
+          break;
+        }
+        if (
+          row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' ||
+          (row.pledgername === pledgername &&
+            row.psubledgername === psubledgername &&
+            row.ppartyid === ppartyid)
+        ) {
+          if (row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS')
+            fixedCount = 1;
+          count = 1;
+          break;
+        }
+        for (const bank of this.banklist) {
+          if (
+            bank.paccountid === row.psubledgerid ||
+            bank.paccountid === psubledgerid
+          ) {
+            count = bankCount = 1;
+            break;
+          }
+        }
+      }
 
-
+      if (count === 1) {
+        if (fixedCount === 1)
+          this.commonService.showWarningMessage(
+            'Fixed deposit receipts accepts only one record in the grid'
+          );
+        else if (bankCount === 1)
+          this.commonService.showWarningMessage(
+            'Bank Accounts only one record in the grid'
+          );
+        else
+          this.commonService.showWarningMessage(
+            'Ledger, subledger and party already exists in the grid.'
+          );
+        isValid = false;
+      }
+    } catch (e) {
+      this.commonService.showErrorMessage(e);
+      isValid = false;
+    }
+    return isValid;
+  }
 
   private showAddError(msg: string): void {
     this.commonService.showWarningMessage(msg);
@@ -1901,11 +1741,9 @@ addPaymentDetails(): void {
 
         this.paymentVoucherForm.get('pipaddress')?.setValue('192.168.2.177');
         this.paymentVoucherForm.get('pCreatedby')?.setValue(9);
-console.log(this.paymentVoucherForm.value , "formval");
 
         const payload = this.buildSavePayload(
-          this.paymentVoucherForm.getRawValue()
-          // this.paymentVoucherForm.value
+          this.paymentVoucherForm.value
         );
 
         this.accountingTxService
@@ -1913,8 +1751,8 @@ console.log(this.paymentVoucherForm.value , "formval");
           // .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (res: any) => {
-              console.log(res, "res");
-
+              console.log(res,"res");
+              
               if (res.success === true) {
                 this.jsonDataItem = res;
                 this.disableSaveButton.set(false);
@@ -2040,221 +1878,213 @@ console.log(this.paymentVoucherForm.value , "formval");
   // }
 
   // ─── Journal Entry ────────────────────────────────────────────────────────
+ 
+ 
+ 
+ private buildSavePayload(formVal: any): any {
 
+  const safe = (val: any, def: any = "") => val ?? def;
+  const str = (val: any) => (val ?? "").toString();
 
+  return {
+    // ── Schema ─────────────────────────────
+    global_schema: this.commonService.getschemaname(),
+    branch_schema: this.commonService.getbranchname(),
+    company_code: this.commonService.getCompanyCode(),
+    branch_code: this.commonService.getBranchCode(),
 
-  private buildSavePayload(formVal: any): any {
-    debugger
-    const safe = (val: any, def: any = "") => val ?? def;
-    const str = (val: any) => (val ?? "").toString();
+    // ── Core ───────────────────────────────
+    ppaymentid: safe(formVal.ppaymentid),
+    ppaymentdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
+    pjvdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
+    pmodofpayment: safe(formVal.pmodofpayment),
+    ptotalpaidamount: safe(formVal.ptotalpaidamount, 0),
+    pnarration: safe(formVal.pnarration),
+    subscriberjoinedbranchid: 0,
 
-    return {
-      // ── Schema ─────────────────────────────
-      global_schema: this.commonService.getschemaname(),
-      branch_schema: this.commonService.getbranchname(),
-      company_code: this.commonService.getCompanyCode(),
-      branch_code: this.commonService.getBranchCode(),
+    bank_id: safe(formVal.pbankid, 0),
+    pbankid: safe(formVal.pbankid, 0),
 
-      // ── Core ───────────────────────────────
-      ppaymentid: safe(formVal.ppaymentid),
-      // ppaymentdate: safe(this.datePipe.transform(formVal.ppaymentdate, 'dd-MMM-yyyy')),
-      ppaymentdate: formVal.ppaymentdate
-  ? this.datePipe.transform(formVal.ppaymentdate, 'dd-MMM-yyyy')
-  : "",
-      pjvdate: safe(this.datePipe.transform(formVal.ppaymentdate, 'dd-MMM-yyyy')),
-      // ppaymentdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
-      // pjvdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
-      pmodofpayment: safe(formVal.pmodofpayment),
-      ptotalpaidamount: safe(formVal.ptotalpaidamount, 0),
-      pnarration: safe(formVal.pnarration),
-      subscriberjoinedbranchid: 0,
+    // ── Bank / Payment ─────────────────────
+    pBankName: safe(formVal.pbankname),
+    pbranchname: safe(formVal.pbranchname),
+    ptranstype: safe(formVal.ptranstype),
+    ptypeofpayment: safe(formVal.ptypeofpayment),
 
-      bank_id: safe(formVal.pbankid, 0),
-      pbankid: safe(formVal.pbankid, 0),
+    pChequenumber: str(formVal.pChequenumber),
+    pchequedate: safe(this.commonService.getFormatDateNormal(formVal.pchequedate)),
+    pchequedepositdate: "",
+    pchequecleardate: "",
 
-      // ── Bank / Payment ─────────────────────
-      pBankName: safe(formVal.pbankname),
-      pbranchname: safe(formVal.pbranchname),
-      ptranstype: safe(formVal.ptranstype),
-      ptypeofpayment: safe(formVal.ptypeofpayment),
+    pCardNumber: safe(formVal.pCardNumber),
+    pUpiname: safe(formVal.pUpiname),
+    pUpiid: safe(formVal.pUpiid),
 
-      pChequenumber: str(formVal.pChequenumber),
-      pchequedate: safe(this.commonService.getFormatDateNormal(formVal.pchequedate)),
-      pchequedepositdate: "",
-      pchequecleardate: "",
+    pRecordid: "",
+    pBankconfigurationId: "",
+    pdepositbankid: "",
+    pdepositbankname: "",
+    pAccountnumber: "",
 
-      pCardNumber: safe(formVal.pCardNumber),
-      pUpiname: safe(formVal.pUpiname),
-      pUpiid: safe(formVal.pUpiid),
+    branchid: str(this.commonService.getbrachid()),
 
-      pRecordid: "",
-      pBankconfigurationId: "",
-      pdepositbankid: "",
-      pdepositbankname: "",
-      pAccountnumber: "",
+    // ── User/System ────────────────────────
+    pCreatedby: 9,
+    pipaddress: safe(formVal.pipaddress),
 
-      branchid: str(this.commonService.getbrachid()),
+    // ── File ──────────────────────────────
+    pFilename: safe(formVal.pDocStorePath),
+    pFilepath: "",
+    pFileformat: "",
 
-      // ── User/System ────────────────────────
-      pCreatedby: 9,
-      pipaddress: safe(formVal.pipaddress),
+    // ── Contact / Receipt ─────────────────
+    formname: "",
+    totalreceivedamount: str(formVal.ptotalpaidamount || 0),
+    receiptid: "",
+    parentaccountname: "",
+    contactid: "",
+    contactname: "",
+    contactpaytype: "",
+    contactbankname: "",
+    contactbankaccno: "",
+    contactbankbranch: "",
+    contactbankifsc: "",
 
-      // ── File ──────────────────────────────
-      pFilename: safe(formVal.pDocStorePath),
-      pFilepath: "",
-      pFileformat: "",
+    // ── Chit / Required junk fields ───────
+    chitgroupid: "",
+    groupcode: "",
+    ticketno: "",
+    challanaNo: "",
+    pparentid: "",
+    pAccountName: "",
+    pContactReferenceId: "",
+    pPanNumber: "",
+    radioButtonValue: "",
+    checkedChitScheme: "",
+    toChitNo: "",
+    payableValue: "",
+    pinstallment_no: "",
+    pchequeno_scheme: "",
+    pchequedate_scheme: "",
+    bank_name: "",
+    pchequeEntryid: "",
 
-      // ── Contact / Receipt ─────────────────
-      formname: "",
-      totalreceivedamount: str(formVal.ptotalpaidamount || 0),
-      receiptid: "",
-      parentaccountname: "",
-      contactid: "",
-      contactname: "",
-      contactpaytype: "",
-      contactbankname: "",
-      contactbankaccno: "",
-      contactbankbranch: "",
-      contactbankifsc: "",
+    // ── Grid 1 ────────────────────────────
+    ppaymentsslistcontrols: this.paymentsList.map((p: any) => ({
+      ppartyid: safe(p.ppartyid, 0),
+      psubledgerid: safe(p.psubledgerid, 0),
+      pamount: Number(p.pamount ?? p.ptotalamount ?? 0),
 
-      // ── Chit / Required junk fields ───────
-      chitgroupid: "",
-      groupcode: "",
-      ticketno: "",
-      challanaNo: "",
-      pparentid: "",
-      pAccountName: "",
-      pContactReferenceId: "",
-      pPanNumber: "",
-      radioButtonValue: "",
-      checkedChitScheme: "",
-      toChitNo: "",
-      payableValue: "",
-      pinstallment_no: "",
-      pchequeno_scheme: "",
-      pchequedate_scheme: "",
-      bank_name: "",
-      pchequeEntryid: "",
+      pistdsapplicable: p.pistdsapplicable ?? false,
+      pTdsSection: safe(p.pTdsSection),
+      pTdsPercentage: str(p.pTdsPercentage || 0),
+      ptdsamount: Number(p.ptdsamount || 0),
 
-      // ── Grid 1 ────────────────────────────
-      ppaymentsslistcontrols: this.paymentsList.map((p: any) => ({
-        ppartyid: safe(p.ppartyid, 0),
-        psubledgerid: safe(p.psubledgerid, 0),
-        pamount: Number(p.pamount ?? p.ptotalamount ?? 0),
+      pisgstapplicable: p.pisgstapplicable ?? false,
+      ptdscalculationtype: safe(p.ptdscalculationtype),
 
-        pistdsapplicable: p.pistdsapplicable ?? false,
-        pTdsSection: safe(p.pTdsSection),
-        pTdsPercentage: str(p.pTdsPercentage || 0),
-        ptdsamount: Number(p.ptdsamount || 0),
+      ppartyreferenceid: safe(p.ppartyreferenceid),
+      ppartyname: safe(p.ppartyname),
 
-        pisgstapplicable: p.pisgstapplicable ?? false,
-        ptdscalculationtype: safe(p.ptdscalculationtype),
+      pgsttype: safe(p.pgsttype),
+      pgstcalculationtype: safe(p.pgstcalculationtype),
+      pgstpercentage: str(p.pgstpercentage || 0),
 
-        ppartyreferenceid: safe(p.ppartyreferenceid),
-        ppartyname: safe(p.ppartyname),
+      pigstamount: str(p.pigstamount || 0),
+      pcgstamount: str(p.pcgstamount || 0),
+      psgstamount: str(p.psgstamount || 0),
+      putgstamount: str(p.putgstamount || 0),
+      pgstamount: str(p.pgstamount || 0),
 
-        pgsttype: safe(p.pgsttype),
-        pgstcalculationtype: safe(p.pgstcalculationtype),
-        pgstpercentage: str(p.pgstpercentage || 0),
+      pactualpaidamount: str(p.pamount || 0),
+    })),
 
-        pigstamount: str(p.pigstamount || 0),
-        pcgstamount: str(p.pcgstamount || 0),
-        psgstamount: str(p.psgstamount || 0),
-        putgstamount: str(p.putgstamount || 0),
-        pgstamount: str(p.pgstamount || 0),
+    // ── Grid 2 (IMPORTANT FIXED) ───────────
+    ppaymentslist: this.paymentsList.map((p: any) => ({
+      id: str(p.id),
+      text: safe(p.text),
 
-        pactualpaidamount: str(p.pamount || 0),
-      })),
+      psubledgerid: str(p.psubledgerid),
+      psubledgername: safe(p.psubledgername),
+      pledgerid: str(p.pledgerid),
+      pledgername: safe(p.pledgername),
 
-      // ── Grid 2 (IMPORTANT FIXED) ───────────
-      ppaymentslist: this.paymentsList.map((p: any) => ({
-        id: str(p.id),
-        text: safe(p.text),
+      ptranstype: safe(p.ptranstype),
+      accountbalance: str(p.accountbalance || 0),
+      pAccounttype: safe(p.pAccounttype),
 
-        psubledgerid: str(p.psubledgerid),
-        psubledgername: safe(p.psubledgername),
-        pledgerid: str(p.pledgerid),
-        pledgername: safe(p.pledgername),
+      legalcellReceipt: safe(p.legalcellReceipt),
+      pbranchcode: safe(p.pbranchcode),
+      pbranchtype: safe(p.pbranchtype),
+      groupcode: safe(p.groupcode),
 
-        ptranstype: safe(p.ptranstype),
-        accountbalance: str(p.accountbalance || 0),
-        pAccounttype: safe(p.pAccounttype),
+      pamount: str(p.pamount || 0),
 
-        legalcellReceipt: safe(p.legalcellReceipt),
-        pbranchcode: safe(p.pbranchcode),
-        pbranchtype: safe(p.pbranchtype),
-        groupcode: safe(p.groupcode),
+      pgsttype: safe(p.pgsttype),
+      pgstcalculationtype: safe(p.pgstcalculationtype),
+      pgstpercentage: str(p.pgstpercentage || 0),
 
-        pamount: str(p.pamount || 0),
+      pigstamount: str(p.pigstamount || 0),
+      pcgstamount: str(p.pcgstamount || 0),
+      psgstamount: str(p.psgstamount || 0),
+      putgstamount: str(p.putgstamount || 0),
 
-        pgsttype: safe(p.pgsttype),
-        pgstcalculationtype: safe(p.pgstcalculationtype),
-        pgstpercentage: str(p.pgstpercentage || 0),
+      pState: safe(p.pState),
+      pStateId: str(p.pStateId),
 
-        pigstamount: str(p.pigstamount || 0),
-        pcgstamount: str(p.pcgstamount || 0),
-        psgstamount: str(p.psgstamount || 0),
-        putgstamount: str(p.putgstamount || 0),
+      pgstno: safe(p.pgstno),
+      pgstamount: str(p.pgstamount || 0),
 
-        pState: safe(p.pState),
-        pStateId: str(p.pStateId),
+      pigstpercentage: str(p.pigstpercentage || 0),
+      pcgstpercentage: str(p.pcgstpercentage || 0),
+      psgstpercentage: str(p.psgstpercentage || 0),
+      putgstpercentage: str(p.putgstpercentage || 0),
 
-        pgstno: safe(p.pgstno),
-        pgstamount: str(p.pgstamount || 0),
+      pactualpaidamount: str(p.pamount || 0),
+      ptotalamount: str(p.ptotalamount || 0),
 
-        pigstpercentage: str(p.pigstpercentage || 0),
-        pcgstpercentage: str(p.pcgstpercentage || 0),
-        psgstpercentage: str(p.psgstpercentage || 0),
-        putgstpercentage: str(p.putgstpercentage || 0),
+      pisgstapplicable: str(p.pisgstapplicable ?? false),
 
-        pactualpaidamount: str(p.pamount || 0),
-        ptotalamount: str(p.ptotalamount || 0),
+      ptdsamountindividual: str(p.ptdsamountindividual || 0),
+      pTdsSection: safe(p.pTdsSection),
+      pTdsPercentage: str(p.pTdsPercentage || 0),
 
-        pisgstapplicable: str(p.pisgstapplicable ?? false),
+      preferencetext: safe(p.preferencetext),
+      pgstnumber: safe(p.pgstnumber),
 
-        ptdsamountindividual: str(p.ptdsamountindividual || 0),
-        pTdsSection: safe(p.pTdsSection),
-        pTdsPercentage: str(p.pTdsPercentage || 0),
+      ppartyname: safe(p.ppartyname),
+      ppartyid: str(p.ppartyid),
+      ppartyreferenceid: safe(p.ppartyreferenceid),
+      ppartyreftype: safe(p.ppartyreftype),
 
-        preferencetext: safe(p.preferencetext),
-        pgstnumber: safe(p.pgstnumber),
+      pistdsapplicable: str(p.pistdsapplicable ?? false),
+      ptdsamount: str(p.ptdsamount || 0),
+      ptdscalculationtype: safe(p.ptdscalculationtype),
+      ptdsaccountId: str(p.ptdsaccountId),
 
-        ppartyname: safe(p.ppartyname),
-        ppartyid: str(p.ppartyid),
-        ppartyreferenceid: safe(p.ppartyreferenceid),
-        ppartyreftype: safe(p.ppartyreftype),
+      ppartypannumber: safe(p.ppartypannumber),
+      ptdsrefjvnumber: safe(p.ptdsrefjvnumber),
 
-        pistdsapplicable: str(p.pistdsapplicable ?? false),
-        ptdsamount: str(p.ptdsamount || 0),
-        ptdscalculationtype: safe(p.ptdscalculationtype),
-        ptdsaccountId: str(p.ptdsaccountId),
+      ledgeramount: str(p.ledgeramount || 0),
+      totalreceivedamount: str(p.totalreceivedamount || 0),
 
-        ppartypannumber: safe(p.ppartypannumber),
-        ptdsrefjvnumber: safe(p.ptdsrefjvnumber),
+      pFilename: safe(p.pFilename),
+      agentcode: safe(p.agentcode),
+      ticketno: safe(p.ticketno),
+      chitgroupid: safe(p.chitgroupid),
 
-        ledgeramount: str(p.ledgeramount || 0),
-        totalreceivedamount: str(p.totalreceivedamount || 0),
+      schemesubscriberid: safe(p.schemesubscriberid),
+      interbranchsubledgerid: safe(p.interbranchsubledgerid),
+      interbranchid: safe(p.interbranchid),
 
-        pFilename: safe(p.pFilename),
-        agentcode: safe(p.agentcode),
-        ticketno: safe(p.ticketno),
-        chitgroupid: safe(p.chitgroupid),
+      pformname: safe(p.pformname),
+      paccountname: safe(p.paccountname),
+      pgstvoucherno: safe(p.pgstvoucherno),
 
-        schemesubscriberid: safe(p.schemesubscriberid),
-        interbranchsubledgerid: safe(p.interbranchsubledgerid),
-        interbranchid: safe(p.interbranchid),
-
-        pformname: safe(p.pformname),
-        paccountname: safe(p.paccountname),
-        pgstvoucherno: safe(p.pgstvoucherno),
-
-        pChequenumber: str(p.pChequenumber)
-      }))
-    };
-  }
-
-
-
+      pChequenumber: str(p.pChequenumber)
+    }))
+  };
+}
   getPartyJournalEntryData(): void {
     try {
       const tdsEntries: any[] = [];
@@ -2432,10 +2262,3 @@ console.log(this.paymentVoucherForm.value , "formval");
     return this.lineGroup?.get(key)?.value ?? 0;
   }
 }
-
-
-
-
-
-
-
