@@ -5243,3 +5243,23 @@ select.erp-input:has(option:not([value=""]):checked) option[value=""],
 select.erp-select:has(option:not([value=""]):checked) option[value=""] {
   display: none;
 }
+ng-select.ng-valid .ng-select-container {
+border-color: #ced4da !important;
+box-shadow: none !important;
+}
+
+ng-select.ng-invalid.ng-touched .ng-select-container,
+ng-select.ng-invalid.ng-dirty .ng-select-container {
+border-color: #dc3545 !important;
+box-shadow: none !important;
+}
+
+.ng-invalid.ng-touched {
+border-color: #dc3545 !important;
+box-shadow: none !important;
+}
+
+.ng-valid {
+border-color: #ced4da !important;
+box-shadow: none !important;
+}
