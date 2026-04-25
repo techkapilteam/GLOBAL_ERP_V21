@@ -53,9 +53,9 @@
           @if (showTransType()) {
           <div class="erp-radio-button-group mb-2">
             @for (pill of [
-              { value: 'CHEQUE', label: 'Cheque' },
-              { value: 'ONLINE', label: 'Online' },
-              { value: 'DEBIT CARD', label: 'Debit Card' }
+            { value: 'CHEQUE', label: 'Cheque' },
+            { value: 'ONLINE', label: 'Online' },
+            { value: 'DEBIT CARD', label: 'Debit Card' }
             ]; track pill.value) {
             <label class="erp-radio-button">
               <input type="radio" name="ptranstype" formControlName="ptranstype" [value]="pill.value"
@@ -72,13 +72,11 @@
             <div class="col-12 col-md-6">
               <div class="erp-form-group">
                 <label class="erp-label" id="bankName" title="Bank Name">Bank Name
-                   <!-- <span class="required">*</span> -->
+                  <!-- <span class="required">*</span> -->
                 </label>
-                <ng-select appendTo="body" [items]="banklist" formControlName="pbankname"
-                  bindLabel="pbankname" bindValue="pbankname" placeholder="Select"
-                  [searchable]="true" [clearable]="false"
-                  (change)="bankName_Change($event)"
-                  (close)="paymentVoucherForm.get('pbankname')?.markAsTouched()"
+                <ng-select appendTo="body" [items]="banklist" formControlName="pbankname" bindLabel="pbankname"
+                  bindValue="pbankname" placeholder="Select" [searchable]="true" [clearable]="false"
+                  (change)="bankName_Change($event)" (close)="paymentVoucherForm.get('pbankname')?.markAsTouched()"
                   [ngClass]="{
                     'ng-invalid': paymentVoucherForm.get('pbankname')?.touched && !paymentVoucherForm.get('pbankname')?.value,
                     'ng-dirty':   paymentVoucherForm.get('pbankname')?.touched && !paymentVoucherForm.get('pbankname')?.value
@@ -97,11 +95,10 @@
                 <label class="erp-label" id="pCardNumber" [title]="displayCardName">
                   {{ displayCardName }} <span class="required">*</span>
                 </label>
-                <ng-select appendTo="body" [items]="debitCardList" formControlName="pCardNumber"
-                  bindLabel="pCardNumber" bindValue="pCardNumber" placeholder="Select"
+                <ng-select appendTo="body" [items]="debitCardList" formControlName="pCardNumber" bindLabel="pCardNumber"
+                  bindValue="pCardNumber" placeholder="Select"
                   (change)="debitCard_Change(); paymentVoucherForm.get('pCardNumber')?.markAsTouched()"
-                  (close)="paymentVoucherForm.get('pCardNumber')?.markAsTouched()"
-                  [ngClass]="{
+                  (close)="paymentVoucherForm.get('pCardNumber')?.markAsTouched()" [ngClass]="{
                     'ng-invalid': paymentVoucherForm.get('pCardNumber')?.touched && !paymentVoucherForm.get('pCardNumber')?.value,
                     'ng-dirty':   paymentVoucherForm.get('pCardNumber')?.touched && !paymentVoucherForm.get('pCardNumber')?.value
                   }">
@@ -118,7 +115,7 @@
               <div class="erp-form-group">
                 <label class="erp-label" id="ptypeofpayment" title="Type of Payment">
                   Type of Payment
-                   <!-- <span class="required">*</span> -->
+                  <!-- <span class="required">*</span> -->
                 </label>
                 <select class="erp-input"
                   [class.erp-input--invalid]="paymentVoucherForm.get('ptypeofpayment')?.touched && !paymentVoucherForm.get('ptypeofpayment')?.value"
@@ -129,7 +126,8 @@
                   <option [value]="t.ptypeofpayment">{{ t.ptypeofpayment }}</option>
                   }
                 </select>
-                @if (paymentVoucherForm.get('ptypeofpayment')?.touched && !paymentVoucherForm.get('ptypeofpayment')?.value) {
+                @if (paymentVoucherForm.get('ptypeofpayment')?.touched &&
+                !paymentVoucherForm.get('ptypeofpayment')?.value) {
                 <div class="erp-field-error">Please Select Type of Payment</div>
                 }
               </div>
@@ -140,7 +138,7 @@
             <div class="col-12 col-md-6">
               <div class="erp-form-group">
                 <label class="erp-label" id="pbranchname" title="Branch Name">
-                  Branch Name 
+                  Branch Name
                   <!-- <span class="required">*</span> -->
                 </label>
                 <input readonly class="erp-input erp-input--readonly"
@@ -206,31 +204,31 @@
               <div class="erp-form-group">
                 <label class="erp-label" id="pChequenumber" [title]="displayChequeNo">
                   {{ displayChequeNo }}
-                   <!-- <span class="required">*</span> -->
+                  <!-- <span class="required">*</span> -->
                 </label>
                 @if (showChequeNo()) {
                 <ng-select appendTo="body" formControlName="pChequenumber" [items]="chequeNumbersList"
                   bindLabel="pChequenumber" bindValue="pChequenumber" placeholder="Select"
-                  (close)="paymentVoucherForm.get('pChequenumber')?.markAsTouched()"
-                  (change)="chequeNumber_Change()"
+                  (close)="paymentVoucherForm.get('pChequenumber')?.markAsTouched()" (change)="chequeNumber_Change()"
                   [ngClass]="{
                     'ng-invalid': paymentVoucherForm.get('pChequenumber')?.touched && !paymentVoucherForm.get('pChequenumber')?.value,
                     'ng-dirty':   paymentVoucherForm.get('pChequenumber')?.touched && !paymentVoucherForm.get('pChequenumber')?.value
                   }">
                 </ng-select>
                 } @else {
-                <input class="erp-input"
-                  [class.erp-input--invalid]="paymentVoucherForm.get('pChequenumber')?.touched &&
+                <input class="erp-input" [class.erp-input--invalid]="paymentVoucherForm.get('pChequenumber')?.touched &&
                     (paymentVoucherForm.get('pChequenumber')?.errors?.['required'] ||
-                     paymentVoucherForm.get('pChequenumber')?.errors?.['pattern'])"
-                  type="text" [placeholder]="displayChequeNo" formControlName="pChequenumber"
-                  maxlength="25" (keypress)="allowNumberOnly($event)"
+                     paymentVoucherForm.get('pChequenumber')?.errors?.['pattern'])" type="text"
+                  [placeholder]="displayChequeNo" formControlName="pChequenumber" maxlength="25"
+                  (keypress)="allowNumberOnly($event)"
                   (blur)="chequeNumber_Change(); paymentVoucherForm.get('pChequenumber')?.markAsTouched()" />
                 }
-                @if (paymentVoucherForm.get('pChequenumber')?.touched && paymentVoucherForm.get('pChequenumber')?.errors?.['required']) {
+                @if (paymentVoucherForm.get('pChequenumber')?.touched &&
+                paymentVoucherForm.get('pChequenumber')?.errors?.['required']) {
                 <div class="erp-field-error">Please Enter {{ displayChequeNo }}</div>
                 }
-                @if (paymentVoucherForm.get('pChequenumber')?.touched && paymentVoucherForm.get('pChequenumber')?.errors?.['pattern']) {
+                @if (paymentVoucherForm.get('pChequenumber')?.touched &&
+                paymentVoucherForm.get('pChequenumber')?.errors?.['pattern']) {
                 <div class="erp-field-error">Reference No. must contain numbers only</div>
                 }
               </div>
@@ -259,11 +257,9 @@
               <div class="d-flex gap-2 align-items-center">
                 <div class="erp-flex-1">
                   <ng-select appendTo="body" id="ppartyname" title="Party" [items]="partyList"
-                    formControlName="ppartyid" bindLabel="ppartyname" bindValue="ppartyid"
-                    placeholder="Select" [searchable]="true" [clearable]="true"
-                    (change)="partyName_Change($event)"
-                    (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.markAsTouched()"
-                    [ngClass]="{
+                    formControlName="ppartyid" bindLabel="ppartyname" bindValue="ppartyid" placeholder="Select"
+                    [searchable]="true" [clearable]="true" (change)="partyName_Change($event)"
+                    (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.markAsTouched()" [ngClass]="{
                       'ng-invalid': paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.invalid,
                       'ng-dirty':   paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.invalid
                     }">
@@ -272,7 +268,7 @@
                 <span class="erp-balance-chip">{{ partyBalance }}</span>
               </div>
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','ppartyid'])?.invalid) {
               <div class="erp-field-error">Party is required</div>
               }
             </div>
@@ -285,11 +281,9 @@
               <div class="d-flex gap-2 align-items-center">
                 <div class="erp-flex-1">
                   <ng-select appendTo="body" id="pledgername" title="Ledger" [items]="ledgerAccountsList"
-                    formControlName="pledgerid" groupBy="pAccounttype" bindLabel="pledgername"
-                    bindValue="pledgerid" placeholder="Select" [searchable]="true" [clearable]="true"
-                    (change)="ledgerName_Change($event)"
-                    (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.markAsTouched()"
-                    [ngClass]="{
+                    formControlName="pledgerid" groupBy="pAccounttype" bindLabel="pledgername" bindValue="pledgerid"
+                    placeholder="Select" [searchable]="true" [clearable]="true" (change)="ledgerName_Change($event)"
+                    (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.markAsTouched()" [ngClass]="{
                       'ng-invalid': paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.invalid,
                       'ng-dirty':   paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.invalid
                     }">
@@ -299,7 +293,7 @@
                 <span class="erp-balance-chip">{{ ledgerBalance }}</span>
               </div>
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','pledgerid'])?.invalid) {
               <div class="erp-field-error">Ledger is required</div>
               }
             </div>
@@ -319,22 +313,14 @@
           @if (showSubledger()) {
           <div class="col-12 col-md-6">
             <div class="erp-form-group">
-              <label class="erp-label">Sub Ledger 
+              <label class="erp-label">Sub Ledger
                 <span class="required">*</span>
               </label>
               <div class="d-flex gap-2 align-items-center">
                 <div class="erp-flex-1">
-                  <ng-select
-                    appendTo="body"
-                    title="Sub Ledger"
-                    [items]="subLedgerAccountsList"
-                    formControlName="psubledgerid"
-                    bindLabel="subledgername"
-                    bindValue="subledgerid"
-                    placeholder="Select"
-                    [searchable]="true"
-                    [clearable]="true"
-                    (change)="subledger_Change($event)"
+                  <ng-select appendTo="body" title="Sub Ledger" [items]="subLedgerAccountsList"
+                    formControlName="psubledgerid" bindLabel="subledgername" bindValue="subledgerid"
+                    placeholder="Select" [searchable]="true" [clearable]="true" (change)="subledger_Change($event)"
                     (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.markAsTouched()"
                     [ngClass]="{
                       'ng-invalid': paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.invalid,
@@ -350,7 +336,7 @@
                 the control will be invalid when psubledgerid is null/empty.
               -->
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','psubledgerid'])?.invalid) {
               <div class="erp-field-error">Sub Ledger is required</div>
               }
             </div>
@@ -361,17 +347,14 @@
           <div [class]="showSubledger() ? 'col-12 col-md-6' : 'col-12 col-md-6 offset-md-6'">
             <div class="erp-form-group">
               <label class="erp-label">Amount Paid <span class="required">*</span></label>
-              <input class="erp-input"
-                [class.erp-input--invalid]="
+              <input class="erp-input" [class.erp-input--invalid]="
                   paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.touched &&
-                  paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.invalid"
-                type="text" id="pactualpaidamount" title="Amount Paid"
-                formControlName="pactualpaidamount"
+                  paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.invalid" type="text"
+                id="pactualpaidamount" title="Amount Paid" formControlName="pactualpaidamount"
                 (blur)="pamount_change(); paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.markAsTouched()"
-                (keypress)="allowNumberOnly($event)"
-                appRoundecimal="12@2" appMycurrencyFormatter placeholder="0" />
+                (keypress)="allowNumberOnly($event)" appRoundecimal="12@2" appMycurrencyFormatter placeholder="0" />
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','pactualpaidamount'])?.invalid) {
               <div class="erp-field-error">Amount is required</div>
               }
             </div>
@@ -407,17 +390,15 @@
           <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">State <span class="required">*</span></label>
-              <ng-select appendTo="body" title="State" formControlName="pStateId" [items]="stateList"
-                bindLabel="pState" bindValue="pStateId" placeholder="Select" [clearable]="true"
-                (change)="state_Change($event)"
-                (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.markAsTouched()"
-                [ngClass]="{
+              <ng-select appendTo="body" title="State" formControlName="pStateId" [items]="stateList" bindLabel="pState"
+                bindValue="pStateId" placeholder="Select" [clearable]="true" (change)="state_Change($event)"
+                (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.markAsTouched()" [ngClass]="{
                   'ng-invalid': paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.invalid,
                   'ng-dirty':   paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.invalid
                 }">
               </ng-select>
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','pStateId'])?.invalid) {
               <div class="erp-field-error">State is required</div>
               }
             </div>
@@ -428,8 +409,8 @@
             <div class="erp-form-group">
               <label class="erp-label">GST No.</label>
               <input type="text" class="erp-input" [class.erp-input--invalid]="formValidationMessages['pgstno']"
-                maxlength="15" appAlphanumeric appUppercase formControlName="pgstno"
-                (blur)="gstNo_Change()" placeholder="GSTIN" />
+                maxlength="15" appAlphanumeric appUppercase formControlName="pgstno" (blur)="gstNo_Change()"
+                placeholder="GSTIN" />
               <app-validation-message [messgae]="formValidationMessages['pgstno']"></app-validation-message>
             </div>
           </div>
@@ -438,8 +419,8 @@
           <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">GST (%) <span class="required">*</span></label>
-              <ng-select appendTo="body" title="GST(%)" formControlName="pgstpercentage"
-                (change)="gst_Change($event)" (clear)="gst_Change(null)" [clearable]="false"
+              <ng-select appendTo="body" title="GST(%)" formControlName="pgstpercentage" (change)="gst_Change($event)"
+                (clear)="gst_Change(null)" [clearable]="false"
                 (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pgstpercentage'])?.markAsTouched()"
                 [ngClass]="{
                   'ng-invalid': paymentVoucherForm.get(['ppaymentsslistcontrols','pgstpercentage'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pgstpercentage'])?.invalid,
@@ -451,7 +432,7 @@
                 }
               </ng-select>
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','pgstpercentage'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','pgstpercentage'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','pgstpercentage'])?.invalid) {
               <div class="erp-field-error">GST % is required</div>
               }
             </div>
@@ -460,19 +441,24 @@
 
         <div class="d-flex gap-2 flex-wrap mb-3">
           @if (showGstAmount()) {
-          <span class="erp-value-pill">GST: {{ getLineValue('pgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
+          <span class="erp-value-pill">GST: {{ getLineValue('pgstamount') | currency:currencyCode:'symbol':'1.2-2'
+            }}</span>
           }
           @if (showIgst()) {
-          <span class="erp-badge badge-info">IGST ({{ getLineValue('pigstpercentage') }}%): {{ getLineValue('pigstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
+          <span class="erp-badge badge-info">IGST ({{ getLineValue('pigstpercentage') }}%): {{
+            getLineValue('pigstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
           }
           @if (showCgst()) {
-          <span class="erp-badge badge-info">CGST ({{ getLineValue('pcgstpercentage') }}%): {{ getLineValue('pcgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
+          <span class="erp-badge badge-info">CGST ({{ getLineValue('pcgstpercentage') }}%): {{
+            getLineValue('pcgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
           }
           @if (showSgst()) {
-          <span class="erp-badge badge-info">SGST ({{ getLineValue('psgstpercentage') }}%): {{ getLineValue('psgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
+          <span class="erp-badge badge-info">SGST ({{ getLineValue('psgstpercentage') }}%): {{
+            getLineValue('psgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
           }
           @if (showUtgst()) {
-          <span class="erp-badge badge-info">UTGST ({{ getLineValue('putgstpercentage') }}%): {{ getLineValue('putgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
+          <span class="erp-badge badge-info">UTGST ({{ getLineValue('putgstpercentage') }}%): {{
+            getLineValue('putgstamount') | currency:currencyCode:'symbol':'1.2-2' }}</span>
           }
         </div>
         }
@@ -483,17 +469,15 @@
           <div class="col-12 col-md-6">
             <div class="erp-form-group">
               <label class="erp-label">Section <span class="required">*</span></label>
-              <ng-select appendTo="body" formControlName="pTdsSection" [items]="tdsSectionList"
-                bindLabel="pTdsSection" bindValue="pTdsSection" placeholder="Select Section"
-                (change)="tdsSection_Change($event)"
-                (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.markAsTouched()"
-                [ngClass]="{
+              <ng-select appendTo="body" formControlName="pTdsSection" [items]="tdsSectionList" bindLabel="pTdsSection"
+                bindValue="pTdsSection" placeholder="Select Section" (change)="tdsSection_Change($event)"
+                (close)="paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.markAsTouched()" [ngClass]="{
                   'ng-invalid': paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.invalid,
                   'ng-dirty':   paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.touched && paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.invalid
                 }">
               </ng-select>
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsSection'])?.invalid) {
               <div class="erp-field-error">TDS Section is required</div>
               }
             </div>
@@ -511,7 +495,7 @@
                 }">
               </ng-select>
               @if (paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsPercentage'])?.touched &&
-                paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsPercentage'])?.invalid) {
+              paymentVoucherForm.get(['ppaymentsslistcontrols','pTdsPercentage'])?.invalid) {
               <div class="erp-field-error">TDS Percentage is required</div>
               }
             </div>
@@ -529,7 +513,8 @@
 
         <div class="d-flex gap-2 mt-2">
           <button type="button" class="erp-btn btn-secondary" (click)="clearPaymentDetails()">Clear</button>
-          <button type="button" class="erp-btn btn-primary" (click)="addPaymentDetails()" [disabled]="disableAddButton()">
+          <button type="button" class="erp-btn btn-primary" (click)="addPaymentDetails()"
+            [disabled]="disableAddButton()">
             @if (!disableAddButton()) { <i class="pi pi-plus"></i> } @else { <i class="pi pi-spin pi-spinner"></i> }
             {{ addButtonLabel() }}
           </button>
@@ -545,10 +530,15 @@
             <ng-template pTemplate="header">
               <tr>
                 <th class="th-actions">Actions</th>
-                <th>Party Name</th><th>Ledger Name</th><th>Sub Ledger Name</th>
-                <th class="th-right">Total Paid</th><th class="th-right">Paid Amount</th>
-                <th class="th-center">GST Type</th><th class="th-center">GST %</th>
-                <th>TDS Section</th><th class="th-right">TDS Amount</th>
+                <th>Party Name</th>
+                <th>Ledger Name</th>
+                <th>Sub Ledger Name</th>
+                <th class="th-right">Total Paid</th>
+                <th class="th-right">Paid Amount</th>
+                <th class="th-center">GST Type</th>
+                <th class="th-center">GST %</th>
+                <th>TDS Section</th>
+                <th class="th-right">TDS Amount</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
@@ -609,25 +599,37 @@
               <p-table [value]="partyjournalentrylist" [paginator]="true" [rows]="5" [scrollable]="true"
                 scrollHeight="300px" styleClass="gr-table p-datatable-sm p-datatable-gridlines">
                 <ng-template pTemplate="header">
-                  <tr><th>Particulars</th><th class="th-right">Dr</th><th class="th-right">Cr</th></tr>
+                  <tr>
+                    <th>Particulars</th>
+                    <th class="th-right">Dr</th>
+                    <th class="th-right">Cr</th>
+                  </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData>
                   <tr>
                     <td>{{ rowData.accountname }}</td>
                     <td class="td-right">
                       <div class="amount-cell">
-                        @if (rowData.debitamount > 0) { <span class="amt-num">{{ rowData.debitamount | number:'1.2-2' }}</span> }
+                        @if (rowData.debitamount > 0) { <span class="amt-num">{{ rowData.debitamount | number:'1.2-2'
+                          }}</span> }
                       </div>
                     </td>
                     <td class="td-right">
                       <div class="amount-cell">
-                        @if (rowData.creditamount > 0) { <span class="amt-num">{{ rowData.creditamount | number:'1.2-2' }}</span> }
+                        @if (rowData.creditamount > 0) { <span class="amt-num">{{ rowData.creditamount | number:'1.2-2'
+                          }}</span> }
                       </div>
                     </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="3" class="p-4"><div style="text-align:center;color:#94a3b8;padding:20px;"><p style="margin:0;font-size:14px;">No data to display.</p></div></td></tr>
+                  <tr>
+                    <td colspan="3" class="p-4">
+                      <div style="text-align:center;color:#94a3b8;padding:20px;">
+                        <p style="margin:0;font-size:14px;">No data to display.</p>
+                      </div>
+                    </td>
+                  </tr>
                 </ng-template>
               </p-table>
             </div>
@@ -636,7 +638,8 @@
           <div class="col-12 col-md-6">
             <h3 class="section-title mb-3">Narration & Attachment</h3>
             <div class="erp-form-group">
-              <label class="erp-label" id="pnarration" title="Narration">Narration <span class="required">*</span></label>
+              <label class="erp-label" id="pnarration" title="Narration">Narration <span
+                  class="required">*</span></label>
               <textarea class="erp-textarea"
                 [class.erp-input--invalid]="paymentVoucherForm.get('pnarration')?.touched && !paymentVoucherForm.get('pnarration')?.value"
                 rows="5" formControlName="pnarration" maxlength="250" placeholder="Enter narration"
@@ -656,7 +659,8 @@
                 <button type="button" class="erp-file-btn" (click)="fileInput.click()">
                   <i class="pi pi-upload"></i> Upload
                 </button>
-                <input style="display:none" type="file" (change)="uploadAndProgress($event, fileInput.files)" #fileInput />
+                <input style="display:none" type="file" (change)="uploadAndProgress($event, fileInput.files)"
+                  #fileInput />
               </div>
             </div>
           </div>
@@ -668,7 +672,8 @@
         <button type="button" class="erp-btn btn-secondary" (click)="clearPaymentVoucher()">
           <i class="pi pi-times"></i> Clear
         </button>
-        <button type="button" class="erp-btn btn-primary" (click)="savePaymentVoucher()" [disabled]="disableSaveButton()">
+        <button type="button" class="erp-btn btn-primary" (click)="savePaymentVoucher()"
+          [disabled]="disableSaveButton()">
           @if (!disableSaveButton()) { <i class="pi pi-check"></i> } @else { <i class="pi pi-spin pi-spinner"></i> }
           {{ saveButtonLabel() }}
         </button>
