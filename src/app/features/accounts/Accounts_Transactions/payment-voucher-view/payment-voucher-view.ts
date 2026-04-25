@@ -39,7 +39,7 @@ import { DatePickerModule } from 'primeng/datepicker';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    
+
     DatePickerModule,
     CurrencyPipe,
     NgSelectModule,
@@ -52,6 +52,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 })
 export class PaymentVoucherView implements OnInit, OnDestroy {
   pDatepickerMaxDate: Date = new Date();
+  pDatepickerMinDate: Date = new Date();
+  // pDatepickerMinDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
 
   // ─── Injected Services ────────────────────────────────────────────────────
   private readonly fb = inject(FormBuilder);
@@ -142,18 +144,20 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   groups: any[] = [];
 
   // ─── Datepicker Config ───────────────────────────────────────────────────
-  readonly ppaymentdateConfig: any = {
-    maxDate: new Date(),
-    containerClass: 'theme-dark-blue',
-    dateInputFormat: 'DD-MMM-YYYY',
-    showWeekNumbers: false,
-  };
+  // readonly ppaymentdateConfig: any = {
+  //   maxDate: new Date(),
+  //   containerClass: 'theme-dark-blue',
+  //   dateInputFormat: 'DD-MMM-YYYY',
+  //   showWeekNumbers: false,
+  // };
 
   formValidationMessages: Record<string, string> = {};
   paymentVoucherForm!: FormGroup;
+  today: Date = new Date();
 
   // ─── Lifecycle ────────────────────────────────────────────────────────────
   ngOnInit(): void {
+    this.getLoadData();
     this.initBalances();
     this.currencySymbol = this.commonService.currencysymbol;
 
@@ -178,9 +182,9 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
     //   .get('ppaymentsslistcontrols.ppaymentdate')
     //   ?.setValue(new Date());
 
-      this.paymentVoucherForm.get('ppaymentdate')?.setValue(new Date());
+    this.paymentVoucherForm.get('ppaymentdate')?.setValue(new Date());
 
-    this.getLoadData();
+
     this.blurEventAllControls(this.paymentVoucherForm);
 
     this.paymentVoucherForm
@@ -200,7 +204,8 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
     this.paymentVoucherForm = this.fb.group({
       ppaymentid: [''],
       schemaname: [this.commonService.getschemaname()],
-      ppaymentdate: ['',{disabled: true }, Validators.required],
+      ppaymentdate: [{ value: this.today, disabled: true }, Validators.required],
+      //  ppaymentdate: ['', Validators.required],
       ptotalpaidamount: [''],
       pnarration: ['', Validators.required],
       pmodofpayment: ['CASH'],
@@ -1741,9 +1746,11 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
 
         this.paymentVoucherForm.get('pipaddress')?.setValue('192.168.2.177');
         this.paymentVoucherForm.get('pCreatedby')?.setValue(9);
+console.log(this.paymentVoucherForm.value , "formval");
 
         const payload = this.buildSavePayload(
-          this.paymentVoucherForm.value
+          this.paymentVoucherForm.getRawValue()
+          // this.paymentVoucherForm.value
         );
 
         this.accountingTxService
@@ -1751,8 +1758,8 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
           // .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (res: any) => {
-              console.log(res,"res");
-              
+              console.log(res, "res");
+
               if (res.success === true) {
                 this.jsonDataItem = res;
                 this.disableSaveButton.set(false);
@@ -1878,213 +1885,221 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   // }
 
   // ─── Journal Entry ────────────────────────────────────────────────────────
- 
- 
- 
- private buildSavePayload(formVal: any): any {
 
-  const safe = (val: any, def: any = "") => val ?? def;
-  const str = (val: any) => (val ?? "").toString();
 
-  return {
-    // ── Schema ─────────────────────────────
-    global_schema: this.commonService.getschemaname(),
-    branch_schema: this.commonService.getbranchname(),
-    company_code: this.commonService.getCompanyCode(),
-    branch_code: this.commonService.getBranchCode(),
 
-    // ── Core ───────────────────────────────
-    ppaymentid: safe(formVal.ppaymentid),
-    ppaymentdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
-    pjvdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
-    pmodofpayment: safe(formVal.pmodofpayment),
-    ptotalpaidamount: safe(formVal.ptotalpaidamount, 0),
-    pnarration: safe(formVal.pnarration),
-    subscriberjoinedbranchid: 0,
+  private buildSavePayload(formVal: any): any {
+    debugger
+    const safe = (val: any, def: any = "") => val ?? def;
+    const str = (val: any) => (val ?? "").toString();
 
-    bank_id: safe(formVal.pbankid, 0),
-    pbankid: safe(formVal.pbankid, 0),
+    return {
+      // ── Schema ─────────────────────────────
+      global_schema: this.commonService.getschemaname(),
+      branch_schema: this.commonService.getbranchname(),
+      company_code: this.commonService.getCompanyCode(),
+      branch_code: this.commonService.getBranchCode(),
 
-    // ── Bank / Payment ─────────────────────
-    pBankName: safe(formVal.pbankname),
-    pbranchname: safe(formVal.pbranchname),
-    ptranstype: safe(formVal.ptranstype),
-    ptypeofpayment: safe(formVal.ptypeofpayment),
+      // ── Core ───────────────────────────────
+      ppaymentid: safe(formVal.ppaymentid),
+      // ppaymentdate: safe(this.datePipe.transform(formVal.ppaymentdate, 'dd-MMM-yyyy')),
+      ppaymentdate: formVal.ppaymentdate
+  ? this.datePipe.transform(formVal.ppaymentdate, 'dd-MMM-yyyy')
+  : "",
+      pjvdate: safe(this.datePipe.transform(formVal.ppaymentdate, 'dd-MMM-yyyy')),
+      // ppaymentdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
+      // pjvdate: safe(this.commonService.getFormatDateNormal(formVal.ppaymentdate)),
+      pmodofpayment: safe(formVal.pmodofpayment),
+      ptotalpaidamount: safe(formVal.ptotalpaidamount, 0),
+      pnarration: safe(formVal.pnarration),
+      subscriberjoinedbranchid: 0,
 
-    pChequenumber: str(formVal.pChequenumber),
-    pchequedate: safe(this.commonService.getFormatDateNormal(formVal.pchequedate)),
-    pchequedepositdate: "",
-    pchequecleardate: "",
+      bank_id: safe(formVal.pbankid, 0),
+      pbankid: safe(formVal.pbankid, 0),
 
-    pCardNumber: safe(formVal.pCardNumber),
-    pUpiname: safe(formVal.pUpiname),
-    pUpiid: safe(formVal.pUpiid),
+      // ── Bank / Payment ─────────────────────
+      pBankName: safe(formVal.pbankname),
+      pbranchname: safe(formVal.pbranchname),
+      ptranstype: safe(formVal.ptranstype),
+      ptypeofpayment: safe(formVal.ptypeofpayment),
 
-    pRecordid: "",
-    pBankconfigurationId: "",
-    pdepositbankid: "",
-    pdepositbankname: "",
-    pAccountnumber: "",
+      pChequenumber: str(formVal.pChequenumber),
+      pchequedate: safe(this.commonService.getFormatDateNormal(formVal.pchequedate)),
+      pchequedepositdate: "",
+      pchequecleardate: "",
 
-    branchid: str(this.commonService.getbrachid()),
+      pCardNumber: safe(formVal.pCardNumber),
+      pUpiname: safe(formVal.pUpiname),
+      pUpiid: safe(formVal.pUpiid),
 
-    // ── User/System ────────────────────────
-    pCreatedby: 9,
-    pipaddress: safe(formVal.pipaddress),
+      pRecordid: "",
+      pBankconfigurationId: "",
+      pdepositbankid: "",
+      pdepositbankname: "",
+      pAccountnumber: "",
 
-    // ── File ──────────────────────────────
-    pFilename: safe(formVal.pDocStorePath),
-    pFilepath: "",
-    pFileformat: "",
+      branchid: str(this.commonService.getbrachid()),
 
-    // ── Contact / Receipt ─────────────────
-    formname: "",
-    totalreceivedamount: str(formVal.ptotalpaidamount || 0),
-    receiptid: "",
-    parentaccountname: "",
-    contactid: "",
-    contactname: "",
-    contactpaytype: "",
-    contactbankname: "",
-    contactbankaccno: "",
-    contactbankbranch: "",
-    contactbankifsc: "",
+      // ── User/System ────────────────────────
+      pCreatedby: 9,
+      pipaddress: safe(formVal.pipaddress),
 
-    // ── Chit / Required junk fields ───────
-    chitgroupid: "",
-    groupcode: "",
-    ticketno: "",
-    challanaNo: "",
-    pparentid: "",
-    pAccountName: "",
-    pContactReferenceId: "",
-    pPanNumber: "",
-    radioButtonValue: "",
-    checkedChitScheme: "",
-    toChitNo: "",
-    payableValue: "",
-    pinstallment_no: "",
-    pchequeno_scheme: "",
-    pchequedate_scheme: "",
-    bank_name: "",
-    pchequeEntryid: "",
+      // ── File ──────────────────────────────
+      pFilename: safe(formVal.pDocStorePath),
+      pFilepath: "",
+      pFileformat: "",
 
-    // ── Grid 1 ────────────────────────────
-    ppaymentsslistcontrols: this.paymentsList.map((p: any) => ({
-      ppartyid: safe(p.ppartyid, 0),
-      psubledgerid: safe(p.psubledgerid, 0),
-      pamount: Number(p.pamount ?? p.ptotalamount ?? 0),
+      // ── Contact / Receipt ─────────────────
+      formname: "",
+      totalreceivedamount: str(formVal.ptotalpaidamount || 0),
+      receiptid: "",
+      parentaccountname: "",
+      contactid: "",
+      contactname: "",
+      contactpaytype: "",
+      contactbankname: "",
+      contactbankaccno: "",
+      contactbankbranch: "",
+      contactbankifsc: "",
 
-      pistdsapplicable: p.pistdsapplicable ?? false,
-      pTdsSection: safe(p.pTdsSection),
-      pTdsPercentage: str(p.pTdsPercentage || 0),
-      ptdsamount: Number(p.ptdsamount || 0),
+      // ── Chit / Required junk fields ───────
+      chitgroupid: "",
+      groupcode: "",
+      ticketno: "",
+      challanaNo: "",
+      pparentid: "",
+      pAccountName: "",
+      pContactReferenceId: "",
+      pPanNumber: "",
+      radioButtonValue: "",
+      checkedChitScheme: "",
+      toChitNo: "",
+      payableValue: "",
+      pinstallment_no: "",
+      pchequeno_scheme: "",
+      pchequedate_scheme: "",
+      bank_name: "",
+      pchequeEntryid: "",
 
-      pisgstapplicable: p.pisgstapplicable ?? false,
-      ptdscalculationtype: safe(p.ptdscalculationtype),
+      // ── Grid 1 ────────────────────────────
+      ppaymentsslistcontrols: this.paymentsList.map((p: any) => ({
+        ppartyid: safe(p.ppartyid, 0),
+        psubledgerid: safe(p.psubledgerid, 0),
+        pamount: Number(p.pamount ?? p.ptotalamount ?? 0),
 
-      ppartyreferenceid: safe(p.ppartyreferenceid),
-      ppartyname: safe(p.ppartyname),
+        pistdsapplicable: p.pistdsapplicable ?? false,
+        pTdsSection: safe(p.pTdsSection),
+        pTdsPercentage: str(p.pTdsPercentage || 0),
+        ptdsamount: Number(p.ptdsamount || 0),
 
-      pgsttype: safe(p.pgsttype),
-      pgstcalculationtype: safe(p.pgstcalculationtype),
-      pgstpercentage: str(p.pgstpercentage || 0),
+        pisgstapplicable: p.pisgstapplicable ?? false,
+        ptdscalculationtype: safe(p.ptdscalculationtype),
 
-      pigstamount: str(p.pigstamount || 0),
-      pcgstamount: str(p.pcgstamount || 0),
-      psgstamount: str(p.psgstamount || 0),
-      putgstamount: str(p.putgstamount || 0),
-      pgstamount: str(p.pgstamount || 0),
+        ppartyreferenceid: safe(p.ppartyreferenceid),
+        ppartyname: safe(p.ppartyname),
 
-      pactualpaidamount: str(p.pamount || 0),
-    })),
+        pgsttype: safe(p.pgsttype),
+        pgstcalculationtype: safe(p.pgstcalculationtype),
+        pgstpercentage: str(p.pgstpercentage || 0),
 
-    // ── Grid 2 (IMPORTANT FIXED) ───────────
-    ppaymentslist: this.paymentsList.map((p: any) => ({
-      id: str(p.id),
-      text: safe(p.text),
+        pigstamount: str(p.pigstamount || 0),
+        pcgstamount: str(p.pcgstamount || 0),
+        psgstamount: str(p.psgstamount || 0),
+        putgstamount: str(p.putgstamount || 0),
+        pgstamount: str(p.pgstamount || 0),
 
-      psubledgerid: str(p.psubledgerid),
-      psubledgername: safe(p.psubledgername),
-      pledgerid: str(p.pledgerid),
-      pledgername: safe(p.pledgername),
+        pactualpaidamount: str(p.pamount || 0),
+      })),
 
-      ptranstype: safe(p.ptranstype),
-      accountbalance: str(p.accountbalance || 0),
-      pAccounttype: safe(p.pAccounttype),
+      // ── Grid 2 (IMPORTANT FIXED) ───────────
+      ppaymentslist: this.paymentsList.map((p: any) => ({
+        id: str(p.id),
+        text: safe(p.text),
 
-      legalcellReceipt: safe(p.legalcellReceipt),
-      pbranchcode: safe(p.pbranchcode),
-      pbranchtype: safe(p.pbranchtype),
-      groupcode: safe(p.groupcode),
+        psubledgerid: str(p.psubledgerid),
+        psubledgername: safe(p.psubledgername),
+        pledgerid: str(p.pledgerid),
+        pledgername: safe(p.pledgername),
 
-      pamount: str(p.pamount || 0),
+        ptranstype: safe(p.ptranstype),
+        accountbalance: str(p.accountbalance || 0),
+        pAccounttype: safe(p.pAccounttype),
 
-      pgsttype: safe(p.pgsttype),
-      pgstcalculationtype: safe(p.pgstcalculationtype),
-      pgstpercentage: str(p.pgstpercentage || 0),
+        legalcellReceipt: safe(p.legalcellReceipt),
+        pbranchcode: safe(p.pbranchcode),
+        pbranchtype: safe(p.pbranchtype),
+        groupcode: safe(p.groupcode),
 
-      pigstamount: str(p.pigstamount || 0),
-      pcgstamount: str(p.pcgstamount || 0),
-      psgstamount: str(p.psgstamount || 0),
-      putgstamount: str(p.putgstamount || 0),
+        pamount: str(p.pamount || 0),
 
-      pState: safe(p.pState),
-      pStateId: str(p.pStateId),
+        pgsttype: safe(p.pgsttype),
+        pgstcalculationtype: safe(p.pgstcalculationtype),
+        pgstpercentage: str(p.pgstpercentage || 0),
 
-      pgstno: safe(p.pgstno),
-      pgstamount: str(p.pgstamount || 0),
+        pigstamount: str(p.pigstamount || 0),
+        pcgstamount: str(p.pcgstamount || 0),
+        psgstamount: str(p.psgstamount || 0),
+        putgstamount: str(p.putgstamount || 0),
 
-      pigstpercentage: str(p.pigstpercentage || 0),
-      pcgstpercentage: str(p.pcgstpercentage || 0),
-      psgstpercentage: str(p.psgstpercentage || 0),
-      putgstpercentage: str(p.putgstpercentage || 0),
+        pState: safe(p.pState),
+        pStateId: str(p.pStateId),
 
-      pactualpaidamount: str(p.pamount || 0),
-      ptotalamount: str(p.ptotalamount || 0),
+        pgstno: safe(p.pgstno),
+        pgstamount: str(p.pgstamount || 0),
 
-      pisgstapplicable: str(p.pisgstapplicable ?? false),
+        pigstpercentage: str(p.pigstpercentage || 0),
+        pcgstpercentage: str(p.pcgstpercentage || 0),
+        psgstpercentage: str(p.psgstpercentage || 0),
+        putgstpercentage: str(p.putgstpercentage || 0),
 
-      ptdsamountindividual: str(p.ptdsamountindividual || 0),
-      pTdsSection: safe(p.pTdsSection),
-      pTdsPercentage: str(p.pTdsPercentage || 0),
+        pactualpaidamount: str(p.pamount || 0),
+        ptotalamount: str(p.ptotalamount || 0),
 
-      preferencetext: safe(p.preferencetext),
-      pgstnumber: safe(p.pgstnumber),
+        pisgstapplicable: str(p.pisgstapplicable ?? false),
 
-      ppartyname: safe(p.ppartyname),
-      ppartyid: str(p.ppartyid),
-      ppartyreferenceid: safe(p.ppartyreferenceid),
-      ppartyreftype: safe(p.ppartyreftype),
+        ptdsamountindividual: str(p.ptdsamountindividual || 0),
+        pTdsSection: safe(p.pTdsSection),
+        pTdsPercentage: str(p.pTdsPercentage || 0),
 
-      pistdsapplicable: str(p.pistdsapplicable ?? false),
-      ptdsamount: str(p.ptdsamount || 0),
-      ptdscalculationtype: safe(p.ptdscalculationtype),
-      ptdsaccountId: str(p.ptdsaccountId),
+        preferencetext: safe(p.preferencetext),
+        pgstnumber: safe(p.pgstnumber),
 
-      ppartypannumber: safe(p.ppartypannumber),
-      ptdsrefjvnumber: safe(p.ptdsrefjvnumber),
+        ppartyname: safe(p.ppartyname),
+        ppartyid: str(p.ppartyid),
+        ppartyreferenceid: safe(p.ppartyreferenceid),
+        ppartyreftype: safe(p.ppartyreftype),
 
-      ledgeramount: str(p.ledgeramount || 0),
-      totalreceivedamount: str(p.totalreceivedamount || 0),
+        pistdsapplicable: str(p.pistdsapplicable ?? false),
+        ptdsamount: str(p.ptdsamount || 0),
+        ptdscalculationtype: safe(p.ptdscalculationtype),
+        ptdsaccountId: str(p.ptdsaccountId),
 
-      pFilename: safe(p.pFilename),
-      agentcode: safe(p.agentcode),
-      ticketno: safe(p.ticketno),
-      chitgroupid: safe(p.chitgroupid),
+        ppartypannumber: safe(p.ppartypannumber),
+        ptdsrefjvnumber: safe(p.ptdsrefjvnumber),
 
-      schemesubscriberid: safe(p.schemesubscriberid),
-      interbranchsubledgerid: safe(p.interbranchsubledgerid),
-      interbranchid: safe(p.interbranchid),
+        ledgeramount: str(p.ledgeramount || 0),
+        totalreceivedamount: str(p.totalreceivedamount || 0),
 
-      pformname: safe(p.pformname),
-      paccountname: safe(p.paccountname),
-      pgstvoucherno: safe(p.pgstvoucherno),
+        pFilename: safe(p.pFilename),
+        agentcode: safe(p.agentcode),
+        ticketno: safe(p.ticketno),
+        chitgroupid: safe(p.chitgroupid),
 
-      pChequenumber: str(p.pChequenumber)
-    }))
-  };
-}
+        schemesubscriberid: safe(p.schemesubscriberid),
+        interbranchsubledgerid: safe(p.interbranchsubledgerid),
+        interbranchid: safe(p.interbranchid),
+
+        pformname: safe(p.pformname),
+        paccountname: safe(p.paccountname),
+        pgstvoucherno: safe(p.pgstvoucherno),
+
+        pChequenumber: str(p.pChequenumber)
+      }))
+    };
+  }
+
+
+
   getPartyJournalEntryData(): void {
     try {
       const tdsEntries: any[] = [];
