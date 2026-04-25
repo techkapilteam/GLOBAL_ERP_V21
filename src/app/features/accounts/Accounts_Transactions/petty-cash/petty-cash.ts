@@ -1441,7 +1441,7 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
   providers: [DatePipe],
 })
 export class PettyCash implements OnInit {
-  pDatepickerMaxDate: Date = new Date();
+  pDatepickerMaxDate: any = new Date();
 
 
   // ── DI via inject() ──────────────────────────────────────────────────────
@@ -2223,7 +2223,18 @@ export class PettyCash implements OnInit {
   }
 
 
-  tdsSection_Change(section: any): void {
+  // tdsSection_Change(section: any): void {
+  //   debugger;
+  //   this.tdspercentagelist = [];
+  //   this.pc.get('pTdsPercentage')?.setValue('');
+  //   if (section) this.getTdsPercentage(section);
+  //   this.getValidationByControl(this.paymentVoucherForm, 'pTdsSection');
+  //   this.cdr.markForCheck();
+  // }
+
+  
+  tdsSection_Change(event: Event): void {
+    const section = (event.target as HTMLSelectElement).value;
     this.tdspercentagelist = [];
     this.pc.get('pTdsPercentage')?.setValue('');
     if (section) this.getTdsPercentage(section);
@@ -2231,9 +2242,16 @@ export class PettyCash implements OnInit {
     this.cdr.markForCheck();
   }
 
-  private getTdsPercentage(section: any): void {
-    debugger;
-    console.log("''");
+  // private getTdsPercentage(section: any): void {
+  //   debugger;
+  //   this.tdspercentagelist = this.tdslist.filter((t: any) => t.pTdsSection === section);
+  //   this.claculategsttdsamounts();
+  // }
+
+
+    private getTdsPercentage(section: any): void {
+    debugger
+    console.log("chyeolomfnmf");
     
     this.tdspercentagelist = this.tdslist.filter((t: any) => t.pTdsSection === section);
     this.claculategsttdsamounts();

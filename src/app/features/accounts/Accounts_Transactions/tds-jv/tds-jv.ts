@@ -123,7 +123,7 @@ export class TdsJv implements OnInit {
     this.BlurEventAllControll(this.tdsJvDetailsForm);
 
     this.jvdetailslist = this._commonService.hrmsjvtypes;
-    this.minDate = new Date();
+    // this.minDate = new Date();
     this.maxDate = new Date();
     this.tdsJvDetailsForm.controls['preceiptdate'].setValue(new Date());
   }
@@ -185,7 +185,7 @@ export class TdsJv implements OnInit {
       pCalendarMonth: [null, Validators.required],
       CreditLedger: [null, Validators.required],
       preceiptdate: [''],
-      pnarration: ['', Validators.required],
+      // pnarration: ['', Validators.required],
     });
   }
 
@@ -209,27 +209,27 @@ export class TdsJv implements OnInit {
     }
   }
 
-  CalendarYear_change_native(selectedId: any): void {
-    debugger;
+  CalendarYear_change_native(event: any): void {
     this.pmonth = this.notselected;
     this.cmonth = this.notselected;
     this.MonthName = '';
     this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue(null);
 
-    if (selectedId) {
-      const found = this.calendarYearData.find(
-        (y: any) => String(y.calendarPeriodId) === String(selectedId.calendarPeriodId)
-      );
-      if (found) {
-        this.CalendarId = found.calendarPeriodId;
-        this.CalendarYear = found.periodType;
+    // if (selectedId) {
+    //   const found = this.calendarYearData.find(
+    //     (y: any) => String(y.calendarPeriodId) === String(selectedId)
+    //   );
+      if (event) {
+        this.CalendarId = event.calendarPeriodId;
+        this.CalendarYear = event.periodType;
         this.BindCalendarMonth();
-      }
+      // }
       // Clear validation error as soon as a valid value is chosen
       this.tdsJvDetailsForm.controls['pPeriodType'].setErrors(null);
       this.tdsJvDetailsForm.controls['pPeriodType'].markAsUntouched();
       this.formValidationMessages = {};
-    } else {
+    }
+     else {
       this.calendarMonthData = [];
       this.tdsJvDetailsGrid = [];
       this.formValidationMessages = {};
@@ -238,7 +238,6 @@ export class TdsJv implements OnInit {
 
   // Keep old ng-select handler in case it is called elsewhere
   CalendarYear_change(event: any): void {
-    debugger;
     this.pmonth = this.notselected;
     this.cmonth = this.notselected;
     if (event != null) {
@@ -279,6 +278,7 @@ export class TdsJv implements OnInit {
 
   // ── Calendar helpers ──────────────────────────────────────────────────────
   BindCalendarYear(): void {
+
     this._employeeAttendService
       .GetCalendarYear(this._commonService.getschemaname())
       .subscribe((res: any) => {
@@ -287,18 +287,18 @@ export class TdsJv implements OnInit {
   }
 
   BindCalendarMonth(): void {
-    debugger
-    this.calendarMonthData = [];
-    this._employeeAttendService
-      .GetTDSJVCalendarYearMonth(this.CalendarId, this._commonService.getschemaname())
-      .subscribe((res: any) => {
-        if (res != null) { this.calendarMonthData = res; }
-      });
 
+    this.calendarMonthData = [];
     const ctrl = this.tdsJvDetailsForm.controls['pCalendarMonth'];
     ctrl.setValidators([Validators.required]);
     ctrl.updateValueAndValidity();
     ctrl.setValue(null);
+    this._employeeAttendService
+      .GetTDSJVCalendarYearMonth(this.CalendarId, this._commonService.getschemaname())
+      .subscribe((res: any) => {
+        console.log('Month API res:', res);
+        if (res != null) { this.calendarMonthData = res; }
+      });
   }
 
   getCurrentMonthdetails(): void {
@@ -340,38 +340,6 @@ export class TdsJv implements OnInit {
   }
 
   // ── Grid fetch ────────────────────────────────────────────────────────────
-  // gettdsjvdetails(): void {
-  //   this.selected1         = [];
-  //   this.selectedValues    = [];
-  //   this.totaldebitamount  = 0;
-  //   this.totalcreditamount = 0;
-  //   this.showhidetable     = false;
-  //   this.dataisempty       = false;
-  //   this.tdsJvDetailsGrid  = [];
-
-  //   const creditledger    = this.tdsJvDetailsForm.controls['CreditLedger'].value || '';
-  //   const debitledger     = this.tdsJvDetailsForm.controls['DebitLedger'].value  || '';
-  //   const selectedMonth    = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
-  //   const monthYear       = (this.MonthName || selectedMonth || '').toString().toUpperCase();
-
-  //   if (!debitledger) {
-  //     this._commonService.showWarningMessage('Please select Debit Ledger');
-  //     this.tdsJvDetailsForm.controls['DebitLedger'].markAsTouched();
-  //     return;
-  //   }
-  //   if (!creditledger) {
-  //     this._commonService.showWarningMessage('Please select Credit Ledger');
-  //     this.tdsJvDetailsForm.controls['CreditLedger'].markAsTouched();
-  //     return;
-  //   }
-  //   if (!monthYear) {
-  //     this._commonService.showWarningMessage('Please select Year and Month');
-  //     return;
-  //   }
-
-  //   this.savebutton1        = 'Processing';
-  //   this.disablesavebutton1 = true;
-
   gettdsjvdetails(): void {
     this.selected1 = [];
     this.selectedValues = [];
@@ -383,9 +351,8 @@ export class TdsJv implements OnInit {
 
     const creditledger = this.tdsJvDetailsForm.controls['CreditLedger'].value || '';
     const debitledger = this.tdsJvDetailsForm.controls['DebitLedger'].value || '';
-    const selectedYear = this.tdsJvDetailsForm.controls['pPeriodType'].value;
     const selectedMonth = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
-    const monthYear = (this.MonthName || '').toString().toUpperCase();
+    const monthYear = (this.MonthName || selectedMonth || '').toString().toUpperCase();
 
     if (!debitledger) {
       this._commonService.showWarningMessage('Please select Debit Ledger');
@@ -397,21 +364,6 @@ export class TdsJv implements OnInit {
       this.tdsJvDetailsForm.controls['CreditLedger'].markAsTouched();
       return;
     }
-
-    // ── NEW: validate Year ──────────────────────────────────────────────────
-    if (!selectedYear) {
-      this._commonService.showWarningMessage('Please select Year');
-      this.tdsJvDetailsForm.controls['pPeriodType'].markAsTouched();
-      return;
-    }
-
-    // ── NEW: validate Month ─────────────────────────────────────────────────
-    if (!selectedMonth || !this.MonthName) {
-      this._commonService.showWarningMessage('Please select Month');
-      this.tdsJvDetailsForm.controls['pCalendarMonth'].markAsTouched();
-      return;
-    }
-
     if (!monthYear) {
       this._commonService.showWarningMessage('Please select Year and Month');
       return;
@@ -490,8 +442,6 @@ export class TdsJv implements OnInit {
     });
   }
 
-
-
   // ── Selection ─────────────────────────────────────────────────────────────
   onSelect(event: any): void {
     this.selected1 = event ?? [];
@@ -554,7 +504,7 @@ export class TdsJv implements OnInit {
         ),
         payroll_month: this.MonthName,
         jv_type: this.tdsJvDetailsForm.controls['DebitLedger'].value || '',
-        narration: this.tdsJvDetailsForm.controls['pnarration']?.value || '',
+        // narration: this.tdsJvDetailsForm.controls['pnarration']?.value || '',
         jv_details: this.selectedValues.map(row => ({
           account_id: String(row.account_id),
           account_trans_type: row.account_trans_type,
