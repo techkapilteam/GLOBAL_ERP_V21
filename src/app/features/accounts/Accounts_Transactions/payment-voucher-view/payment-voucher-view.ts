@@ -200,6 +200,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
 
   // ─── Form Builder ─────────────────────────────────────────────────────────
   private buildForm(): void {
+    //  [{ value: this.today, disabled: true }, Validators.required]
     this.paymentVoucherForm = this.fb.group({
       ppaymentid: [''],
       schemaname: [this.commonService.getschemaname()],
@@ -229,7 +230,7 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
 
   private buildPaymentLineControls(): FormGroup {
     return this.fb.group({
-      psubledgerid: [null,Validators.required],
+      psubledgerid: [null],
       psubledgername: [''],
       pledgerid: [null, Validators.required],
       pledgername: ['', Validators.required],
@@ -1180,230 +1181,16 @@ export class PaymentVoucherView implements OnInit, OnDestroy {
   }
 
   // ─── Add / Remove Row ─────────────────────────────────────────────────────
-  // addPaymentDetails(): void {
-  //   debugger;
-  //   const round = (n: number) =>
-  //     Math.round((n + Number.EPSILON) * 100) / 100;
-
-  //   this.disableAddButton.set(true);
-  //   this.addButtonLabel.set('Processing');
-
-  //   const ctrl = this.paymentVoucherForm.get(
-  //     'ppaymentsslistcontrols'
-  //   ) as FormGroup;
-
-  //   const ppartyid = ctrl.get('ppartyid')?.value;
-  //   const pledgerid = ctrl.get('pledgerid')?.value;
-  //   const pactualpaidamount = ctrl.get('pactualpaidamount')?.value;
-  //   const subledgerid = ctrl.get('psubledgerid')?.value;
-
-  //   if (!ppartyid) return this.showAddError('Please select Party');
-  //   if (!pledgerid) return this.showAddError('Please select Ledger');
-  //   if (!pactualpaidamount || parseFloat(pactualpaidamount) <= 0)
-  //     return this.showAddError('Please enter Amount');
-
-  //   const isgst = ctrl.get('pisgstapplicable')?.value;
-  //   if (isgst) {
-  //     if (!ctrl.get('pgstcalculationtype')?.value)
-  //       return this.showAddError('Please select GST Calculation Type');
-  //     if (!ctrl.get('pStateId')?.value)
-  //       return this.showAddError('Please select State');
-  //     if (!ctrl.get('pgstpercentage')?.value)
-  //       return this.showAddError('Please select GST Percentage');
-  //   }
-
-  //   const istds = ctrl.get('pistdsapplicable')?.value;
-  //   if (istds) {
-  //     if (!ctrl.get('ptdscalculationtype')?.value)
-  //       return this.showAddError('Please select TDS Calculation Type');
-  //     if (!ctrl.get('pTdsSection')?.value)
-  //       return this.showAddError('Please select TDS Section');
-  //     if (!ctrl.get('pTdsPercentage')?.value)
-  //       return this.showAddError('Please select TDS Percentage');
-  //   }
-
-  //   const isSubledgerRequired = this.subLedgerAccountsList?.length > 0;
-  //   if (isSubledgerRequired && !subledgerid)
-  //     return this.showAddError('Please select Subledger');
-
-  //   const selectedSub =
-  //     this.subLedgerAccountsList?.find((x) => x.subledgerid === subledgerid) ??
-  //     null;
-
-  //   const currentRow = {
-  //     ppartyname: ctrl.get('ppartyname')?.value,
-  //     pledgername: ctrl.get('pledgername')?.value,
-  //     psubledgerid: selectedSub?.subledgerid ?? subledgerid,
-  //     psubledgername: selectedSub?.subledgername ?? '',
-  //     ptotalamount: round(
-  //       parseFloat(
-  //         this.commonService.removeCommasInAmount(
-  //           ctrl.get('ptotalamount')?.value ?? '0'
-  //         )
-  //       )
-  //     ),
-  //     pamount: round(
-  //       parseFloat(
-  //         this.commonService.removeCommasInAmount(
-  //           ctrl.get('pamount')?.value ?? '0'
-  //         )
-  //       )
-  //     ),
-  //     pgstcalculationtype: isgst ? ctrl.get('pgstcalculationtype')?.value : null,
-  //     pgsttype: isgst ? ctrl.get('pgsttype')?.value : null,
-  //     pgstpercentage: isgst ? ctrl.get('pgstpercentage')?.value ?? 0 : 0,
-  //     pgstamount: isgst
-  //       ? round(parseFloat(ctrl.get('pgstamount')?.value ?? '0'))
-  //       : 0,
-  //     pisgstapplicable: isgst ?? false,
-  //     pTdsSection: istds ? ctrl.get('pTdsSection')?.value : null,
-  //     pTdsPercentage: istds ? ctrl.get('pTdsPercentage')?.value ?? 0 : 0,
-  //     ptdsamount: istds
-  //       ? round(
-  //         parseFloat(
-  //           this.commonService.removeCommasInAmount(
-  //             ctrl.get('ptdsamount')?.value ?? '0'
-  //           )
-  //         )
-  //       )
-  //       : 0,
-  //     ptdscalculationtype: istds ? ctrl.get('ptdscalculationtype')?.value : null,
-  //     pistdsapplicable: istds ?? false,
-  //     ppartyid,
-  //     pledgerid,
-  //     pStateId: isgst ? ctrl.get('pStateId')?.value ?? 0 : 0,
-  //     pState: isgst ? ctrl.get('pState')?.value ?? '' : '',
-  //     pgstno: isgst ? ctrl.get('pgstno')?.value ?? '' : '',
-  //     ppartyreferenceid: ctrl.get('ppartyreferenceid')?.value ?? '',
-  //     ppartyreftype: ctrl.get('ppartyreftype')?.value ?? '',
-  //     ppartypannumber: ctrl.get('ppartypannumber')?.value ?? '',
-  //   };
-
-  //   if (!this.validateAddPaymentDetails(currentRow)) {
-  //     this.resetAddButton();
-  //     return;
-  //   }
-
-  //   const paidAmount = round(
-  //     parseFloat(
-  //       this.commonService.removeCommasInAmount(pactualpaidamount ?? '0')
-  //     )
-  //   );
-
-  //   if (isSubledgerRequired) {
-  //     this.subscriberJvService
-  //       .GetdebitchitCheckbalance(
-  //         this.commonService.getbranchname(),
-  //         pledgerid,
-  //         36,
-  //         subledgerid,
-  //         this.commonService.getschemaname(),
-  //         this.commonService.getCompanyCode(),
-  //         this.commonService.getBranchCode()
-  //       )
-  //       .pipe(takeUntil(this.destroy$))
-  //       .subscribe({
-  //         next: (result: any) => {
-  //           if (
-  //             result?.balancecheckstatus &&
-  //             paidAmount > parseFloat(result?.balanceamount ?? '0')
-  //           ) {
-  //             this.showAddError(
-  //               'Enter the amount less or equal to subledger amount'
-  //             );
-  //             return;
-  //           }
-  //           this.savePaymentRow(currentRow, ctrl);
-  //         },
-  //         error: (err) => this.showAddError(err),
-  //       });
-  //   } else {
-  //     this.savePaymentRow(currentRow, ctrl);
-  //   }
-  // }
-
-  validateAddPaymentDetails(currentRow: any): boolean {
-    debugger;
-      let isValid = true;
-    try {
-      const { pledgername, psubledgername, psubledgerid, ppartyid } =
-        currentRow;
-      let count = 0,
-        fixedCount = 0,
-        bankCount = 0;
-
-      for (const row of this.paymentsList) {
-        if (row === currentRow) continue;
-        if (
-          pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' &&
-          this.paymentsList.length > 0
-        ) {
-          count = fixedCount = 1;
-          break;
-        }
-        if (
-          row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' ||
-          (row.pledgername === pledgername &&
-            row.psubledgername === psubledgername &&
-            row.ppartyid === ppartyid)
-        ) {
-          if (row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS')
-            fixedCount = 1;
-          count = 1;
-          break;
-        }
-        for (const bank of this.banklist) {
-          if (
-            bank.paccountid === row.psubledgerid ||
-            bank.paccountid === psubledgerid
-          ) {
-            count = bankCount = 1;
-            break;
-          }
-        }
-      }
-
-      if (count === 1) {
-        if (fixedCount === 1)
-          this.commonService.showWarningMessage(
-            'Fixed deposit receipts accepts only one record in the grid'
-          );
-        else if (bankCount === 1)
-          this.commonService.showWarningMessage(
-            'Bank Accounts only one record in the grid'
-          );
-        else
-          this.commonService.showWarningMessage(
-            'Ledger, subledger and party already exists in the grid.'
-          );
-        isValid = false;
-      }
-    } catch (e) {
-      this.commonService.showErrorMessage(e);
-      isValid = false;
-    }
-    return isValid;
-  }
-
-
-
-addPaymentDetails(): void {
-    debugger;
+  addPaymentDetails(): void {
     const round = (n: number) =>
       Math.round((n + Number.EPSILON) * 100) / 100;
 
-    // ── ADD THIS: mark all controls touched so validation messages appear ──
+    this.disableAddButton.set(true);
+    this.addButtonLabel.set('Processing');
+
     const ctrl = this.paymentVoucherForm.get(
       'ppaymentsslistcontrols'
     ) as FormGroup;
-    ctrl.markAllAsTouched();
-    Object.keys(ctrl.controls).forEach(key =>
-      this.getValidationByControl(ctrl, key, true)
-    );
-    // ──────────────────────────────────────────────────────────────────────
-
-    this.disableAddButton.set(true);
-    this.addButtonLabel.set('Processing');
 
     const ppartyid = ctrl.get('ppartyid')?.value;
     const pledgerid = ctrl.get('pledgerid')?.value;
@@ -1535,9 +1322,67 @@ addPaymentDetails(): void {
     }
   }
 
+  validateAddPaymentDetails(currentRow: any): boolean {
+    let isValid = true;
+    try {
+      const { pledgername, psubledgername, psubledgerid, ppartyid } =
+        currentRow;
+      let count = 0,
+        fixedCount = 0,
+        bankCount = 0;
 
+      for (const row of this.paymentsList) {
+        if (row === currentRow) continue;
+        if (
+          pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' &&
+          this.paymentsList.length > 0
+        ) {
+          count = fixedCount = 1;
+          break;
+        }
+        if (
+          row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS' ||
+          (row.pledgername === pledgername &&
+            row.psubledgername === psubledgername &&
+            row.ppartyid === ppartyid)
+        ) {
+          if (row.pledgername === 'FIXED DEPOSIT RECEIPTS-CHITS')
+            fixedCount = 1;
+          count = 1;
+          break;
+        }
+        for (const bank of this.banklist) {
+          if (
+            bank.paccountid === row.psubledgerid ||
+            bank.paccountid === psubledgerid
+          ) {
+            count = bankCount = 1;
+            break;
+          }
+        }
+      }
 
-
+      if (count === 1) {
+        if (fixedCount === 1)
+          this.commonService.showWarningMessage(
+            'Fixed deposit receipts accepts only one record in the grid'
+          );
+        else if (bankCount === 1)
+          this.commonService.showWarningMessage(
+            'Bank Accounts only one record in the grid'
+          );
+        else
+          this.commonService.showWarningMessage(
+            'Ledger, subledger and party already exists in the grid.'
+          );
+        isValid = false;
+      }
+    } catch (e) {
+      this.commonService.showErrorMessage(e);
+      isValid = false;
+    }
+    return isValid;
+  }
 
   private showAddError(msg: string): void {
     this.commonService.showWarningMessage(msg);
@@ -2432,10 +2277,3 @@ console.log(this.paymentVoucherForm.value , "formval");
     return this.lineGroup?.get(key)?.value ?? 0;
   }
 }
-
-
-
-
-
-
-
