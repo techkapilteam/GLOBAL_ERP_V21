@@ -51,7 +51,7 @@
                       <i class="pi pi-calendar erp-input-icon"></i>
                       <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                         placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate" [disabled]="true"> </p-datepicker> 
                     </div>
                   </div>
                 </div>
@@ -159,8 +159,13 @@
         <div class="p-4">
           <div class="erp-form-group">
             <label class="erp-label" for="remarks">Cancel Remarks</label>
-            <textarea id="remarks" class="erp-textarea" placeholder="Enter reason for cancellation"
-              formControlName="remarks" rows="3"></textarea>
+            <!-- <textarea id="remarks" class="erp-textarea" placeholder="Enter reason for cancellation"
+              formControlName="remarks" rows="3"></textarea>   -->
+
+            <textarea id="cancellationreason" formControlName="cancellationreason" class="erp-textarea"
+              placeholder="Enter reason for cancellation" rows="3">
+</textarea>
+
           </div>
         </div>
         }

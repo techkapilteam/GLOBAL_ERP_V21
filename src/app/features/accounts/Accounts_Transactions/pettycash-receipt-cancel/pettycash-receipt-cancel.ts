@@ -20,7 +20,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 })
 
 export class PettycashReceiptCancel implements OnInit {
-  pDatepickerMaxDate: Date = new Date();
 
 
   // ─── Constants ────────────────────────────────────────────────────────────
@@ -54,6 +53,7 @@ export class PettycashReceiptCancel implements OnInit {
   // ─── RxJS (non-signal — stays as Observable for ng-select typeahead) ──────
   authorizedbylist$ = of<any[]>([]);
   contactSearchevent = new Subject<string>();
+  pDatepickerMaxDate = new Date();
 
   // ─── Form ─────────────────────────────────────────────────────────────────
   PettyCashCancel!: FormGroup<{
@@ -108,15 +108,20 @@ export class PettycashReceiptCancel implements OnInit {
     this.getReceiptNumber();
   }
 
+
+
+
   // ─── Form Builder ─────────────────────────────────────────────────────────
   private buildForm(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     this.PettyCashCancel = this.fb.group({
       receiptnumber: [''],
       receiptid: [null, Validators.required],
       ipaddress: [''],
       userid: [''],
       activitytype: ['C'],
-      ppaymentdate: [new Date(), Validators.required],
+      ppaymentdate: [today, Validators.required],
       totalreceivedamount: [null],
       narration: [''],
       cancellationreason: ['', Validators.required],
@@ -125,7 +130,9 @@ export class PettycashReceiptCancel implements OnInit {
       subintroducedname: [''],
       pCreatedby: [this._commonService.getCreatedBy()]
     }) as any;
+
   }
+
 
   // ─── Receipt Selection ────────────────────────────────────────────────────
   getreceiptdata(event: any): void {
@@ -378,6 +385,8 @@ export class PettycashReceiptCancel implements OnInit {
     this.isLoading.set(false);
     this.getReceiptNumber();
   }
+
+
 
   // ─── Data Fetchers ────────────────────────────────────────────────────────
   getReceiptNumber(): void {

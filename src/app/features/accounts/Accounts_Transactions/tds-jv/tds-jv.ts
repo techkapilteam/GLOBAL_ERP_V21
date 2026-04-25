@@ -25,7 +25,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     NgSelectModule,
     DatePickerModule,
     TableModule,
-    
+
   ],
   templateUrl: './tds-jv.html',
   providers: [DatePipe],
@@ -36,40 +36,40 @@ export class TdsJv implements OnInit {
   formValidationMessages: Record<string, string> = {};
 
   // ── Lookup data ──────────────────────────────────────────────────────────
-  calendarYearData: any[]  = [];
+  calendarYearData: any[] = [];
   calendarMonthData: any[] = [];
-  ledgeraccountslist: any[]    = [];
+  ledgeraccountslist: any[] = [];
   tdsledgeraccountslist: any[] = [];
-  jvdetailslist: any[]         = [];
+  jvdetailslist: any[] = [];
 
   // ── Grid ─────────────────────────────────────────────────────────────────
   tdsJvDetailsGrid: any[] = [];
-  selected1: any[]        = [];
-  selectedValues: any[]   = [];
+  selected1: any[] = [];
+  selectedValues: any[] = [];
   pageCriteria: PageCriteria;
 
   // ── Totals ───────────────────────────────────────────────────────────────
-  totaldebitamount  = 0;
+  totaldebitamount = 0;
   totalcreditamount = 0;
 
   // ── UI state ──────────────────────────────────────────────────────────────
   currencysymbol: any;
-  showhidetable   = false;
-  dataisempty     = false;
-  isExists        = false;
+  showhidetable = false;
+  dataisempty = false;
+  isExists = false;
   allRowsSelected = false;
 
   disabletransactiondate = false;
-  disablesavebutton      = false;
-  disablesavebutton1     = false;
-  savebutton    = 'Save';
-  savebutton1   = 'Show';
+  disablesavebutton = false;
+  disablesavebutton1 = false;
+  savebutton = 'Save';
+  savebutton1 = 'Show';
 
   // ── Date helpers ─────────────────────────────────────────────────────────
   public dpConfig1: any = {};
-  today    = '';
+  today = '';
   splidate: string[] = [];
-  MonthName   = '';
+  MonthName = '';
   CalendarYear = '';
   CalendarId: any;
   MonthId: any;
@@ -80,11 +80,11 @@ export class TdsJv implements OnInit {
   employeeCode: any;
   cmonth: any;
   pmonth: any;
-  selected    = 'btn btn-primary text-white';
+  selected = 'btn btn-primary text-white';
   notselected = 'btn btn-default border';
   minDate: any;
   maxDate: any;
-  
+
 
   constructor(
     private _FormBuilder: FormBuilder,
@@ -94,9 +94,9 @@ export class TdsJv implements OnInit {
     private _AccountingTransactionsService: AccountsTransactions,
   ) {
     this.currencysymbol = this._commonService.datePickerPropertiesSetup('currencysymbol');
-    this.pageCriteria   = new PageCriteria();
+    this.pageCriteria = new PageCriteria();
 
-    this.dpConfig1.maxDate        = new Date();
+    this.dpConfig1.maxDate = new Date();
     this.dpConfig1.containerClass = 'theme-dark-blue';
     this.dpConfig1.dateInputFormat = 'DD-MMM-YYYY';
     this.dpConfig1.showWeekNumbers = false;
@@ -111,8 +111,8 @@ export class TdsJv implements OnInit {
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.BranchId = this._commonService.comapnydetails.pbranchid;
-    this.cmonth   = this.selected;
-    this.pmonth   = this.notselected;
+    this.cmonth = this.selected;
+    this.pmonth = this.notselected;
 
     this.bindformControls();
     this.setPageModel();
@@ -123,16 +123,16 @@ export class TdsJv implements OnInit {
     this.BlurEventAllControll(this.tdsJvDetailsForm);
 
     this.jvdetailslist = this._commonService.hrmsjvtypes;
-    this.minDate = new Date();
+    // this.minDate = new Date();
     this.maxDate = new Date();
     this.tdsJvDetailsForm.controls['preceiptdate'].setValue(new Date());
   }
 
   // ── Page model ───────────────────────────────────────────────────────────
   setPageModel(): void {
-    this.pageCriteria.pageSize         = this._commonService.pageSize;
-    this.pageCriteria.offset           = 0;
-    this.pageCriteria.pageNumber       = 1;
+    this.pageCriteria.pageSize = this._commonService.pageSize;
+    this.pageCriteria.offset = 0;
+    this.pageCriteria.pageNumber = 1;
     this.pageCriteria.footerPageHeight = 50;
   }
 
@@ -155,8 +155,8 @@ export class TdsJv implements OnInit {
     ).subscribe({
       next: (json: any) => {
         if (json != null) {
-           this.tdsledgeraccountslist = json; 
-          }
+          this.tdsledgeraccountslist = json;
+        }
       },
       error: (error: any) => this._commonService.showErrorMessage(error),
     });
@@ -180,12 +180,12 @@ export class TdsJv implements OnInit {
   // ── Form setup ────────────────────────────────────────────────────────────
   bindformControls(): void {
     this.tdsJvDetailsForm = this._FormBuilder.group({
-      pPeriodType:    [null, Validators.required],
-      DebitLedger:    [null, Validators.required],
+      pPeriodType: [null, Validators.required],
+      DebitLedger: [null, Validators.required],
       pCalendarMonth: [null, Validators.required],
-      CreditLedger:   [null, Validators.required],
-      preceiptdate:   [''],
-      pnarration:     ['', Validators.required],
+      CreditLedger: [null, Validators.required],
+      preceiptdate: [''],
+      // pnarration: ['', Validators.required],
     });
   }
 
@@ -209,28 +209,29 @@ export class TdsJv implements OnInit {
     }
   }
 
-  CalendarYear_change_native(selectedId: any): void {
+  CalendarYear_change_native(event: any): void {
     this.pmonth = this.notselected;
     this.cmonth = this.notselected;
     this.MonthName = '';
     this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue(null);
 
-    if (selectedId) {
-      const found = this.calendarYearData.find(
-        (y: any) => String(y.calendarPeriodId) === String(selectedId)
-      );
-      if (found) {
-        this.CalendarId   = found.calendarPeriodId;
-        this.CalendarYear = found.periodType;
+    // if (selectedId) {
+    //   const found = this.calendarYearData.find(
+    //     (y: any) => String(y.calendarPeriodId) === String(selectedId)
+    //   );
+      if (event) {
+        this.CalendarId = event.calendarPeriodId;
+        this.CalendarYear = event.periodType;
         this.BindCalendarMonth();
-      }
+      // }
       // Clear validation error as soon as a valid value is chosen
       this.tdsJvDetailsForm.controls['pPeriodType'].setErrors(null);
       this.tdsJvDetailsForm.controls['pPeriodType'].markAsUntouched();
       this.formValidationMessages = {};
-    } else {
+    }
+     else {
       this.calendarMonthData = [];
-      this.tdsJvDetailsGrid  = [];
+      this.tdsJvDetailsGrid = [];
       this.formValidationMessages = {};
     }
   }
@@ -240,13 +241,13 @@ export class TdsJv implements OnInit {
     this.pmonth = this.notselected;
     this.cmonth = this.notselected;
     if (event != null) {
-      this.CalendarId   = event.calendarPeriodId;
+      this.CalendarId = event.calendarPeriodId;
       this.CalendarYear = event.periodType;
       this.BindCalendarMonth();
       this.formValidationMessages = {};
     } else {
       this.calendarMonthData = [];
-      this.tdsJvDetailsGrid  = [];
+      this.tdsJvDetailsGrid = [];
       this.formValidationMessages = {};
     }
     this.MonthName = '';
@@ -259,7 +260,7 @@ export class TdsJv implements OnInit {
         (m: any) => String(m.calendarPeriodDetailsId) === String(selectedId)
       );
       if (found) {
-        this.MonthId   = found.calendarPeriodDetailsId;
+        this.MonthId = found.calendarPeriodDetailsId;
         this.MonthName = found.calendarMonth;
       }
       // Clear validation error as soon as a valid value is chosen
@@ -270,13 +271,14 @@ export class TdsJv implements OnInit {
 
   CalendarYearMOnth_change(event: any): void {
     if (event) {
-      this.MonthId   = event.calendarPeriodDetailsId;
+      this.MonthId = event.calendarPeriodDetailsId;
       this.MonthName = event.calendarMonth;
     }
   }
 
   // ── Calendar helpers ──────────────────────────────────────────────────────
   BindCalendarYear(): void {
+
     this._employeeAttendService
       .GetCalendarYear(this._commonService.getschemaname())
       .subscribe((res: any) => {
@@ -285,17 +287,18 @@ export class TdsJv implements OnInit {
   }
 
   BindCalendarMonth(): void {
-    this.calendarMonthData = [];
-    this._employeeAttendService
-      .GetTDSJVCalendarYearMonth(this.CalendarId, this._commonService.getschemaname())
-      .subscribe((res: any) => {
-        if (res != null) { this.calendarMonthData = res; }
-      });
 
+    this.calendarMonthData = [];
     const ctrl = this.tdsJvDetailsForm.controls['pCalendarMonth'];
     ctrl.setValidators([Validators.required]);
     ctrl.updateValueAndValidity();
     ctrl.setValue(null);
+    this._employeeAttendService
+      .GetTDSJVCalendarYearMonth(this.CalendarId, this._commonService.getschemaname())
+      .subscribe((res: any) => {
+        console.log('Month API res:', res);
+        if (res != null) { this.calendarMonthData = res; }
+      });
   }
 
   getCurrentMonthdetails(): void {
@@ -303,9 +306,9 @@ export class TdsJv implements OnInit {
     this.pmonth = this.notselected;
     this.cmonth = this.selected;
 
-    this.today    = this.datePipe.transform(new Date(), 'dd-MMM-yyyy')!;
+    this.today = this.datePipe.transform(new Date(), 'dd-MMM-yyyy')!;
     this.splidate = this.today.split('-');
-    this.MonthName  = `${this.splidate[1]}-${this.splidate[2]}`;
+    this.MonthName = `${this.splidate[1]}-${this.splidate[2]}`;
     const year = parseInt(this.splidate[2], 10) - 1;
     this.CalendarYear = `${year}-${this.splidate[2]}`;
 
@@ -321,9 +324,9 @@ export class TdsJv implements OnInit {
     const previous = new Date();
     previous.setMonth(previous.getMonth() - 1);
 
-    this.today    = this.datePipe.transform(previous, 'dd-MMM-yyyy') ?? '';
+    this.today = this.datePipe.transform(previous, 'dd-MMM-yyyy') ?? '';
     this.splidate = this.today.split('-');
-    this.MonthName  = `${this.splidate[1]}-${this.splidate[2]}`;
+    this.MonthName = `${this.splidate[1]}-${this.splidate[2]}`;
     const year = parseInt(this.splidate[2], 10) - 1;
     this.CalendarYear = `${year}-${this.splidate[2]}`;
 
@@ -331,25 +334,25 @@ export class TdsJv implements OnInit {
     this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue(null);
 
     const periodCtrl = this.tdsJvDetailsForm.controls['pPeriodType'];
-    const monthCtrl  = this.tdsJvDetailsForm.controls['pCalendarMonth'];
+    const monthCtrl = this.tdsJvDetailsForm.controls['pCalendarMonth'];
     periodCtrl.clearValidators();
     monthCtrl.clearValidators();
   }
 
   // ── Grid fetch ────────────────────────────────────────────────────────────
   gettdsjvdetails(): void {
-    this.selected1         = [];
-    this.selectedValues    = [];
-    this.totaldebitamount  = 0;
+    this.selected1 = [];
+    this.selectedValues = [];
+    this.totaldebitamount = 0;
     this.totalcreditamount = 0;
-    this.showhidetable     = false;
-    this.dataisempty       = false;
-    this.tdsJvDetailsGrid  = [];
+    this.showhidetable = false;
+    this.dataisempty = false;
+    this.tdsJvDetailsGrid = [];
 
-    const creditledger    = this.tdsJvDetailsForm.controls['CreditLedger'].value || '';
-    const debitledger     = this.tdsJvDetailsForm.controls['DebitLedger'].value  || '';
-    const selectedMonth    = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
-    const monthYear       = (this.MonthName || selectedMonth || '').toString().toUpperCase();
+    const creditledger = this.tdsJvDetailsForm.controls['CreditLedger'].value || '';
+    const debitledger = this.tdsJvDetailsForm.controls['DebitLedger'].value || '';
+    const selectedMonth = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
+    const monthYear = (this.MonthName || selectedMonth || '').toString().toUpperCase();
 
     if (!debitledger) {
       this._commonService.showWarningMessage('Please select Debit Ledger');
@@ -366,7 +369,7 @@ export class TdsJv implements OnInit {
       return;
     }
 
-    this.savebutton1        = 'Processing';
+    this.savebutton1 = 'Processing';
     this.disablesavebutton1 = true;
 
     this._AccountingTransactionsService.GettdsJVDetails(
@@ -389,18 +392,18 @@ export class TdsJv implements OnInit {
         if (validRecords.length > 0) {
           this.tdsJvDetailsGrid = validRecords.map((item: any) => ({
             ...item,
-            debit_amount:  Number(item.debit_amount)  || 0,
+            debit_amount: Number(item.debit_amount) || 0,
             credit_amount: Number(item.credit_amount) || 0,
           }));
 
           this.showhidetable = true;
-          this.dataisempty   = false;
+          this.dataisempty = false;
 
-          this.totaldebitamount  = this.tdsJvDetailsGrid.reduce((s, r) => s + r.debit_amount, 0);
+          this.totaldebitamount = this.tdsJvDetailsGrid.reduce((s, r) => s + r.debit_amount, 0);
           this.totalcreditamount = this.tdsJvDetailsGrid.reduce((s, r) => s + r.credit_amount, 0);
 
-          this.pageCriteria.totalrows       = this.tdsJvDetailsGrid.length;
-          this.pageCriteria.TotalPages      = Math.ceil(this.pageCriteria.totalrows / this.pageCriteria.pageSize);
+          this.pageCriteria.totalrows = this.tdsJvDetailsGrid.length;
+          this.pageCriteria.TotalPages = Math.ceil(this.pageCriteria.totalrows / this.pageCriteria.pageSize);
           this.pageCriteria.currentPageRows = Math.min(this.tdsJvDetailsGrid.length, this.pageCriteria.pageSize);
 
           this._AccountingTransactionsService.GetTDSJVDetailsDuplicateCheck(
@@ -414,25 +417,25 @@ export class TdsJv implements OnInit {
             this.isExists = !(result > 0);
           });
         } else {
-          this.tdsJvDetailsGrid  = [];
-          this.showhidetable     = false;
-          this.dataisempty       = true;
-          this.totaldebitamount  = 0;
+          this.tdsJvDetailsGrid = [];
+          this.showhidetable = false;
+          this.dataisempty = true;
+          this.totaldebitamount = 0;
           this.totalcreditamount = 0;
-          this.isExists          = false;
+          this.isExists = false;
         }
 
-        this.savebutton1        = 'Show';
+        this.savebutton1 = 'Show';
         this.disablesavebutton1 = false;
       },
       error: (error: any) => {
-        this.tdsJvDetailsGrid  = [];
-        this.showhidetable     = false;
-        this.dataisempty       = true;
-        this.totaldebitamount  = 0;
+        this.tdsJvDetailsGrid = [];
+        this.showhidetable = false;
+        this.dataisempty = true;
+        this.totaldebitamount = 0;
         this.totalcreditamount = 0;
-        this.isExists          = false;
-        this.savebutton1        = 'Show';
+        this.isExists = false;
+        this.savebutton1 = 'Show';
         this.disablesavebutton1 = false;
         this._commonService.showErrorMessage(error);
       },
@@ -466,7 +469,7 @@ export class TdsJv implements OnInit {
       }
 
       const creditRows = this.selectedValues.filter(r => r.account_trans_type === 'C');
-      const debitRows  = this.selectedValues.filter(r => r.account_trans_type === 'D');
+      const debitRows = this.selectedValues.filter(r => r.account_trans_type === 'D');
 
       if (creditRows.length === 0 || debitRows.length === 0) {
         this._commonService.showWarningMessage('Please select at least one Debit and one Credit row');
@@ -474,7 +477,7 @@ export class TdsJv implements OnInit {
         return;
       }
 
-      const totalDebit  = debitRows.reduce((s, r) => s + Number(r.debit_amount  || 0), 0);
+      const totalDebit = debitRows.reduce((s, r) => s + Number(r.debit_amount || 0), 0);
       const totalCredit = creditRows.reduce((s, r) => s + Number(r.credit_amount || 0), 0);
 
       if (totalDebit !== totalCredit) {
@@ -489,25 +492,25 @@ export class TdsJv implements OnInit {
       }
 
       const payload = {
-        model:            'JOURNAL VOUCHER',
-        global_schema:    this._commonService.getschemaname(),
-        branch_schema:    this._commonService.getbranchname(),
-        company_code:     this._commonService.getCompanyCode(),
-        branch_code:      this._commonService.getBranchCode(),
-        createdby:        Number(this._commonService.getCreatedBy()) || 0,
-        ipaddress:        this._commonService.getIpAddress() || '',
+        model: 'JOURNAL VOUCHER',
+        global_schema: this._commonService.getschemaname(),
+        branch_schema: this._commonService.getbranchname(),
+        company_code: this._commonService.getCompanyCode(),
+        branch_code: this._commonService.getBranchCode(),
+        createdby: Number(this._commonService.getCreatedBy()) || 0,
+        ipaddress: this._commonService.getIpAddress() || '',
         transaction_date: this._commonService.getFormatDateNormal(
           this.tdsJvDetailsForm.controls['preceiptdate'].value,
         ),
         payroll_month: this.MonthName,
         jv_type: this.tdsJvDetailsForm.controls['DebitLedger'].value || '',
-        narration:     this.tdsJvDetailsForm.controls['pnarration']?.value || '',
-        jv_details:    this.selectedValues.map(row => ({
-          account_id:         String(row.account_id),
+        // narration: this.tdsJvDetailsForm.controls['pnarration']?.value || '',
+        jv_details: this.selectedValues.map(row => ({
+          account_id: String(row.account_id),
           account_trans_type: row.account_trans_type,
-          particulars:        row.particulars || '',
-          debit_amount:       String(row.account_trans_type === 'D' ? row.debit_amount  || 0 : 0),
-          credit_amount:      String(row.account_trans_type === 'C' ? row.credit_amount || 0 : 0),
+          particulars: row.particulars || '',
+          debit_amount: String(row.account_trans_type === 'D' ? row.debit_amount || 0 : 0),
+          credit_amount: String(row.account_trans_type === 'C' ? row.credit_amount || 0 : 0),
         })),
       };
 
@@ -515,11 +518,11 @@ export class TdsJv implements OnInit {
         next: () => {
           this._commonService.showSuccessMessage();
           this.clearAllFields();
-          this.tdsJvDetailsGrid  = [];
-          this.selectedValues    = [];
-          this.totaldebitamount  = 0;
+          this.tdsJvDetailsGrid = [];
+          this.selectedValues = [];
+          this.totaldebitamount = 0;
           this.totalcreditamount = 0;
-          this.allRowsSelected   = false;
+          this.allRowsSelected = false;
           this.resetSaveButton();
         },
         error: (error: any) => {
@@ -545,25 +548,25 @@ export class TdsJv implements OnInit {
 
   clearAllFields(): void {
     this.bindformControls();
-    this.tdsJvDetailsGrid  = [];
+    this.tdsJvDetailsGrid = [];
     this.calendarMonthData = [];
     this.formValidationMessages = {};
     this.tdsJvDetailsForm.controls['preceiptdate'].setValue(new Date());
-    this.MonthName    = '';
+    this.MonthName = '';
     this.CalendarYear = '';
     this.getCurrentMonthdetails();
-    this.employeeCode    = 'All';
-    this.selected1       = [];
-    this.showhidetable   = false;
-    this.dataisempty     = false;
-    this.isExists        = false;
+    this.employeeCode = 'All';
+    this.selected1 = [];
+    this.showhidetable = false;
+    this.dataisempty = false;
+    this.isExists = false;
   }
 
   // ── Export ────────────────────────────────────────────────────────────────
   export(): void {
     const rows = this.tdsJvDetailsGrid.map((element: any) => ({
-      Particulars:     element.particulars,
-      'Debit Amount':  element.debit_amount  !== 0 ? element.debit_amount  : 0,
+      Particulars: element.particulars,
+      'Debit Amount': element.debit_amount !== 0 ? element.debit_amount : 0,
       'Credit Amount': element.credit_amount !== 0 ? element.credit_amount : 0,
     }));
     this._commonService.exportAsExcelFile(rows, 'TDS-Jv');
@@ -616,7 +619,7 @@ export class TdsJv implements OnInit {
         } else if (formcontrol.validator) {
           this.formValidationMessages[key] = '';
           if (formcontrol.errors || formcontrol.invalid || formcontrol.touched || formcontrol.dirty) {
-            const element  = document.getElementById(key) as HTMLInputElement;
+            const element = document.getElementById(key) as HTMLInputElement;
             const lablename = element?.title || key;
 
             for (const errorkey in formcontrol.errors) {
