@@ -590,7 +590,7 @@ export type SaveType = 'Active' | 'InActive';
   providers: [DatePipe],
 })
 export class ChequeManagementnew implements OnInit {
-  pDatepickerMaxDate: Date = new Date();
+  pDatepickerMaxDate: any = new Date();
 
   // ─── Angular 21: inject() instead of constructor injection ─────────────────
   private readonly fb             = inject(FormBuilder);
