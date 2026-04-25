@@ -1586,9 +1586,9 @@ export class PettyCash implements OnInit {
 
   private buildPaymentControls(): FormGroup {
     return this.fb.group({
-      psubledgerid: [null],
+      psubledgerid: [null, Validators.required],
       psubledgername: [''],
-      pledgerid: [null],
+      pledgerid: [null, Validators.required],
       pledgername: ['', Validators.required],
       pamount: [''],
       pactualpaidamount: ['', Validators.required],
@@ -1602,7 +1602,7 @@ export class PettyCash implements OnInit {
       psgstamount: [''],
       putgstamount: [''],
       ppartyname: ['', Validators.required],
-      ppartyid: [null],
+      ppartyid: [null,Validators.required],
       pistdsapplicable: [false],
       pgstno: new FormControl('', Validators.pattern(this.gstnopattern)),
       pTdsSection: [''],
@@ -2232,7 +2232,7 @@ export class PettyCash implements OnInit {
   //   this.cdr.markForCheck();
   // }
 
-  
+
   tdsSection_Change(event: Event): void {
     const section = (event.target as HTMLSelectElement).value;
     this.tdspercentagelist = [];
@@ -2249,10 +2249,10 @@ export class PettyCash implements OnInit {
   // }
 
 
-    private getTdsPercentage(section: any): void {
+  private getTdsPercentage(section: any): void {
     debugger
     console.log("chyeolomfnmf");
-    
+
     this.tdspercentagelist = this.tdslist.filter((t: any) => t.pTdsSection === section);
     this.claculategsttdsamounts();
   }
@@ -2752,6 +2752,7 @@ export class PettyCash implements OnInit {
 
 
   savePaymentVoucher(): void {
+    debugger;
 
     if (!this.validatesavePaymentVoucher()) {
       return;
