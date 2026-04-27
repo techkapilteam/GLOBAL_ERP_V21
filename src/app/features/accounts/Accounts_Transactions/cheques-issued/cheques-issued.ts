@@ -307,7 +307,7 @@ export class ChequesIssued implements OnInit {
 
     this.ChequesIssuedForm = this.fb.group({
       ptransactiondate: [new Date(), Validators.required],
-      bankname: [''], pfrombrsdate: [''], ptobrsdate: [''],
+      bankname: ['', Validators.required], pfrombrsdate: [''], ptobrsdate: [''],
       pchequesOnHandlist: [], SearchClear: [''], pCreatedby: [''],
       schemaname: [this._commonService.getschemaname()],
       pipaddress: [this._commonService.getIpAddress()],
