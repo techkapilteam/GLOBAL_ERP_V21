@@ -203,7 +203,6 @@ export class ChequesIssued implements OnInit {
   brsfromConfig: any = {};
   brstoConfig: any = {};
   today = new Date();
-  pDatepickerMaxDate: Date = new Date();
   clearMinToDate = new Date(1900, 0, 1);
   returnMinToDate = new Date(1900, 0, 1);
   cancelMinToDate = new Date(1900, 0, 1);
@@ -308,7 +307,7 @@ export class ChequesIssued implements OnInit {
 
     this.ChequesIssuedForm = this.fb.group({
       ptransactiondate: [new Date(), Validators.required],
-      bankname: [''], pfrombrsdate: [''], ptobrsdate: [''],
+      bankname: ['', Validators.required], pfrombrsdate: [''], ptobrsdate: [''],
       pchequesOnHandlist: [], SearchClear: [''], pCreatedby: [''],
       schemaname: [this._commonService.getschemaname()],
       pipaddress: [this._commonService.getIpAddress()],
