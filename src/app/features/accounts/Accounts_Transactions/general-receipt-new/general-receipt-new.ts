@@ -81,7 +81,6 @@ function percentageValidator(c: AbstractControl): ValidationErrors | null {
     NgSelectModule,
     ButtonModule,
     TableModule,
-    ValidationMessageComponent,
     DatePickerModule,
     MessageModule
   ],
