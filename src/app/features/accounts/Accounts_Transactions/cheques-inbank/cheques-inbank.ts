@@ -402,7 +402,7 @@ export class ChequesInbank implements OnInit {
       this.bankname = '';
       this.banknameshowhide = false;
       // Show validation message just like the reference component
-      this.ChequesInBankValidation['bankname'] = 'Select Bank Name';
+      this.ChequesInBankValidation['bankname'] = 'Bank Name is Required';
       this.bankbalance = 0;
       this.bankbalancetype = '';
       const d = new Date();
