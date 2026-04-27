@@ -25,8 +25,8 @@
                   <i class="pi pi-calendar erp-input-icon"></i>
                   <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                     placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                    inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"
-                    [disabled]="!disabletransactiondate"></p-datepicker>
+                    inputStyleClass="erp-input icon-pad w-100" [disabled]="!disabletransactiondate"
+                    ></p-datepicker>
                 </div>
                 @if (formValidationMessages?.ppaymentdate) {
                 <app-validation-message [messgae]="formValidationMessages?.ppaymentdate"></app-validation-message>

@@ -1449,6 +1449,7 @@ export class PettyCash implements OnInit {
   private readonly router = inject(Router);
   private readonly commonService = inject(CommonService);
   private readonly accountingService = inject(AccountsTransactions);
+   private datepipe = inject(DatePipe);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -1525,8 +1526,12 @@ export class PettyCash implements OnInit {
   kycFileName = '';
   BranchCode = '';
   receiptid = '';
+  dpConfig: any = {};
+  dpConfig1: any = {};
 
   private _selectedPartyStateName = '';
+   readonly today = new Date();
+  readonly maxDate = new Date();
 
   readonly gstnopattern = '^(0[1-9]|[1-2][0-9]|3[0-9])([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}([a-zA-Z0-9]){1}([a-zA-Z]){1}([a-zA-Z0-9]){1}?';
 
@@ -1546,6 +1551,7 @@ export class PettyCash implements OnInit {
   }
 
   ngOnInit(): void {
+     this._configureDatepickers();
     this.currencySymbol = this.commonService.currencysymbol || '₹';
 
     const company = this.commonService.comapnydetails;
@@ -1581,6 +1587,13 @@ export class PettyCash implements OnInit {
     this.paymentVoucherForm.get('ppaymentdate')?.setValue(new Date());
     this.blurEventAllControls(this.paymentVoucherForm);
     this.getLoadData();
+  }
+   private _configureDatepickers(): void {
+    this.dpConfig.containerClass = 'theme-dark-blue';
+    this.dpConfig.dateInputFormat = 'DD-MMM-YYYY';
+    this.dpConfig.showWeekNumbers = false;
+    this.dpConfig.isAnimated = true;
+    this.dpConfig1 = { ...this.dpConfig, maxDate: new Date() };
   }
 
 
@@ -2754,14 +2767,14 @@ export class PettyCash implements OnInit {
   savePaymentVoucher(): void {
     debugger;
 
-    if (!this.validatesavePaymentVoucher()) {
-      return;
-    }
+    //if (!this.validatesavePaymentVoucher()) {
+     // return;
+   // }
 
 
-    if (!confirm('Do You Want To Save ?')) {
-      return;
-    }
+   // if (!confirm('Do You Want To Save ?')) {
+      //return;
+    //}
 
     this.disablesavebutton.set(true);
     this.cdr.markForCheck();
