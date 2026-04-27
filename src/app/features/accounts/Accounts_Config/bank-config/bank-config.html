@@ -191,8 +191,9 @@
                         <div class="col-6">
                           <div class="erp-form-group">
                             <label class="erp-label">Valid From</label>
-                            <input class="erp-input" type="text" [bsConfig]="dpConfig" readonly bsDatepicker placeholder="MM/YY"
-                              formControlName="pValidfrom" [class.is-invalid]="bankmastervalidations.pValidfrom" />
+                            <!-- <input class="erp-input" type="text" [bsConfig]="dpConfig" readonly bsDatepicker placeholder="MM/YY"
+                              formControlName="pValidfrom" [class.is-invalid]="bankmastervalidations.pValidfrom" /> -->
+                              <p-datepicker formControlName="pValidfrom" dateFormat="dd-M-yy" placeholder="mm/yy" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100"></p-datepicker>
                             <div *ngIf="bankmastervalidations.pValidfrom" class="field-error">
                               {{ bankmastervalidations.pValidfrom }}
                             </div>
@@ -201,8 +202,10 @@
                         <div class="col-6">
                           <div class="erp-form-group">
                             <label class="erp-label">Valid Thru</label>
-                            <input class="erp-input" type="text" [bsConfig]="ddpConfig" readonly bsDatepicker placeholder="MM/YY"
-                              formControlName="pValidto" [class.is-invalid]="bankmastervalidations.pValidto" />
+                            <!-- <input class="erp-input" type="text" [bsConfig]="ddpConfig" readonly bsDatepicker placeholder="MM/YY"
+                              formControlName="pValidto" [class.is-invalid]="bankmastervalidations.pValidto" /> -->
+
+                              <p-datepicker formControlName="pValidto" dateFormat="dd-M-yy" placeholder="mm/yy" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100"></p-datepicker>
                             <div *ngIf="bankmastervalidations.pValidto" class="field-error">
                               {{ bankmastervalidations.pValidto }}
                             </div>
@@ -333,7 +336,7 @@
 
             </div>
           </div>
-          
+
       <!-- ── FORM FOOTER ── -->
       <div class="p-4 d-flex gap-2 justify-end">
         <button type="button" (click)="clear()" class="erp-btn btn-secondary">
