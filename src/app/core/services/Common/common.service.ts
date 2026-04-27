@@ -3053,6 +3053,7 @@ if (doc.getNumberOfPages() === 1) {
 
       didDrawPage: (data) => {
         const centerX = pageWidth / 2;
+        if (data.pageNumber === 1) {
         doc.addImage(kapil_logo, 'JPEG', 15, 5, 20, 20);
 
         doc.setFontSize(15);
@@ -3087,6 +3088,7 @@ if (doc.getNumberOfPages() === 1) {
 
         doc.setLineWidth(0.3);
         doc.line(15, 43, pageWidth - 15, 43);
+      }
 
         // doc.addImage(kapil_logo, 'JPEG', pageWidth - 40, 10, 20, 20);
 

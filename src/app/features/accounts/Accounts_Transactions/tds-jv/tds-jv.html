@@ -10,9 +10,6 @@
         <p class="card-subtitle">Process and manage Tax Deducted at Source (TDS) journal entries</p>
       </div>
       <span class="erp-spacer"></span>
-      <!-- <a routerLink="/dashboard/accounts/accounts-transactions/tds-jv-view" class="erp-btn btn-white btn-sm">
-        <i class="pi pi-list"></i> View
-      </a> -->
     </div>
 
     <!-- Card Body -->
@@ -68,20 +65,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Narration (Top) -->
-            <div class="col-12">
-              <div class="erp-form-group">
-                <label class="erp-label" for="pnarration">Narration <span class="required">*</span></label>
-                <textarea id="pnarration" class="erp-textarea" formControlName="pnarration" rows="2"
-                  placeholder="Enter narration"
-                  [class.ng-invalid]="tdsJvDetailsForm.get('pnarration')?.invalid && tdsJvDetailsForm.get('pnarration')?.touched"></textarea>
-                @if (tdsJvDetailsForm.get('pnarration')?.invalid && tdsJvDetailsForm.get('pnarration')?.touched) {
-                <span class="erp-field-error">Narration is required</span>
-                }
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -117,6 +100,10 @@
                       (change)="CalendarYearMOnth_change_native($event)"
                       [ngClass]="{'ng-invalid': tdsJvDetailsForm.get('pCalendarMonth')?.invalid && (tdsJvDetailsForm.get('pCalendarMonth')?.touched || tdsJvDetailsForm.get('pCalendarMonth')?.dirty)}">
                     </ng-select>
+                    @if (tdsJvDetailsForm.get('pCalendarMonth')?.invalid &&
+                    tdsJvDetailsForm.get('pCalendarMonth')?.touched) {
+                    <span class="erp-field-error">Month is required</span>
+                    }
                   </div>
                 </div>
                 <button type="button" class="erp-btn btn-primary btn-md" (click)="gettdsjvdetails()"
@@ -129,9 +116,6 @@
                   {{ savebutton1 }}
                 </button>
               </div>
-              @if (tdsJvDetailsForm.get('pCalendarMonth')?.invalid && tdsJvDetailsForm.get('pCalendarMonth')?.touched) {
-              <span class="erp-field-error">Month is required</span>
-              }
             </div>
 
           </div>
@@ -161,7 +145,7 @@
               <!-- Header -->
               <ng-template pTemplate="header">
                 <tr>
-                  <th class="th-actions" style="width: 50px;">
+                  <th class="th-actions th-col-checkbox">
                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                   </th>
                   <th class="th-cell">
@@ -170,14 +154,14 @@
                       Particulars
                     </div>
                   </th>
-                  <th class="th-right" style="width: 150px;">
-                    <div class="th-cell" style="justify-content:flex-end">
+                  <th class="th-right th-col-amount">
+                    <div class="th-cell th-cell-end">
                       <i class="pi pi-arrow-down"></i>
                       Debit Amount
                     </div>
                   </th>
-                  <th class="th-right" style="width: 150px;">
-                    <div class="th-cell" style="justify-content:flex-end">
+                  <th class="th-right th-col-amount">
+                    <div class="th-cell th-cell-end">
                       <i class="pi pi-arrow-up"></i>
                       Credit Amount
                     </div>
@@ -207,15 +191,13 @@
 
               <!-- Footer Totals -->
               <ng-template pTemplate="footer">
-                <tr style="background-color: #f8fafc;">
-                  <td colspan="2" style="text-align: right; padding-right: 1rem; font-weight: 600;">Totals:</td>
+                <tr class="tbl-footer-row">
+                  <td colspan="2" class="tbl-footer-label">Totals:</td>
                   <td class="td-right">
-                    <span class="amount-cell" style="font-weight: 600;">{{ currencysymbol }} {{
-                      totaldebitamount.toFixed(2) }}</span>
+                    <span class="amount-cell amount-bold">{{ currencysymbol }} {{ totaldebitamount.toFixed(2) }}</span>
                   </td>
                   <td class="td-right">
-                    <span class="amount-cell" style="font-weight: 600;">{{ currencysymbol }} {{
-                      totalcreditamount.toFixed(2) }}</span>
+                    <span class="amount-cell amount-bold">{{ currencysymbol }} {{ totalcreditamount.toFixed(2) }}</span>
                   </td>
                 </tr>
               </ng-template>
@@ -224,10 +206,9 @@
               <ng-template pTemplate="emptymessage">
                 <tr>
                   <td colspan="4" class="p-4">
-                    <div style="text-align: center; color: #94a3b8; padding: 20px;">
-                      <i class="pi pi-inbox"
-                        style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
-                      <p style="margin: 0; font-size: 14px;">No records to display</p>
+                    <div class="tbl-empty-state">
+                      <i class="pi pi-inbox tbl-empty-icon"></i>
+                      <p class="tbl-empty-text">No records to display</p>
                     </div>
                   </td>
                 </tr>
@@ -238,9 +219,9 @@
         </div>
         } @else if (dataisempty) {
         <div class="p-4">
-          <div style="text-align: center; color: #94a3b8; padding: 40px 20px;">
-            <i class="pi pi-inbox" style="font-size: 28px; opacity: 0.5; display: block; margin-bottom: 8px;"></i>
-            <p style="margin: 0; font-size: 14px;">No records to display. Please select period and click Show.</p>
+          <div class="tbl-empty-state tbl-empty-state-lg">
+            <i class="pi pi-inbox tbl-empty-icon"></i>
+            <p class="tbl-empty-text">No records to display. Please select period and click Show.</p>
           </div>
         </div>
         }
