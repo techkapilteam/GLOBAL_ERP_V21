@@ -255,6 +255,21 @@ export class TdsJv implements OnInit {
     this.tdsJvDetailsForm.controls['pCalendarMonth'].setValue(null);
   }
 
+  // CalendarYearMOnth_change_native(selectedId: any): void {
+  //   if (selectedId) {
+  //     const found = this.calendarMonthData.find(
+  //       (m: any) => String(m.calendarPeriodDetailsId) === String(selectedId)
+  //     );
+  //     if (found) {
+  //       this.MonthId = found.calendarPeriodDetailsId;
+  //       this.MonthName = found.calendarMonth;
+  //     }
+  //     // Clear validation error as soon as a valid value is chosen
+  //     this.tdsJvDetailsForm.controls['pCalendarMonth'].setErrors(null);
+  //     this.tdsJvDetailsForm.controls['pCalendarMonth'].markAsUntouched();
+  //   }
+  // }
+
   CalendarYearMOnth_change_native(selectedId: any): void {
     if (selectedId) {
       const found = this.calendarMonthData.find(
@@ -262,11 +277,13 @@ export class TdsJv implements OnInit {
       );
       if (found) {
         this.MonthId = found.calendarPeriodDetailsId;
-        this.MonthName = found.calendarMonth;
+        this.MonthName = found.calendarMonth; // ✅ This sets MonthName
       }
-      // Clear validation error as soon as a valid value is chosen
       this.tdsJvDetailsForm.controls['pCalendarMonth'].setErrors(null);
       this.tdsJvDetailsForm.controls['pCalendarMonth'].markAsUntouched();
+    } else {
+      this.MonthName = '';
+      this.MonthId = null;
     }
   }
 
@@ -286,13 +303,38 @@ export class TdsJv implements OnInit {
       });
   }
 
+  // BindCalendarMonth(): void {
+  //   debugger
+  //   this.calendarMonthData = [];
+  //   this._employeeAttendService
+  //     .GetTDSJVCalendarYearMonth(this.CalendarId, this._commonService.getschemaname())
+  //     .subscribe((res: any) => {
+  //       if (res != null) { this.calendarMonthData = res; }
+  //     });
+
+  //   const ctrl = this.tdsJvDetailsForm.controls['pCalendarMonth'];
+  //   ctrl.setValidators([Validators.required]);
+  //   ctrl.updateValueAndValidity();
+  //   ctrl.setValue(null);
+  // }
+
   BindCalendarMonth(): void {
-    debugger
     this.calendarMonthData = [];
+    this.MonthName = '';
+    this.MonthId = null;
+
+    if (!this.CalendarId) return;
+
     this._employeeAttendService
       .GetTDSJVCalendarYearMonth(this.CalendarId, this._commonService.getschemaname())
-      .subscribe((res: any) => {
-        if (res != null) { this.calendarMonthData = res; }
+      .subscribe({
+        next: (res: any) => {
+          this.calendarMonthData = res ? [...res] : []; // spread creates new reference
+        },
+        error: (error: any) => {
+          this.calendarMonthData = [];
+          this._commonService.showErrorMessage(error);
+        }
       });
 
     const ctrl = this.tdsJvDetailsForm.controls['pCalendarMonth'];
@@ -386,8 +428,8 @@ export class TdsJv implements OnInit {
     const debitledger = this.tdsJvDetailsForm.controls['DebitLedger'].value || '';
     const selectedYear = this.tdsJvDetailsForm.controls['pPeriodType'].value;
     const selectedMonth = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
-
-    const monthYear = (this.MonthName || '').toString().toUpperCase();
+    const monthYear = (this.CalendarYear || '').toString().toUpperCase();
+    // const monthYear = (this.MonthName || '').toString().toUpperCase();
 
     if (!debitledger) {
       this._commonService.showWarningMessage('Please select Debit Ledger');
@@ -408,13 +450,13 @@ export class TdsJv implements OnInit {
     }
 
     // ── NEW: validate Month ─────────────────────────────────────────────────
-    if (!selectedMonth || !this.MonthName) {
+    if (!selectedMonth || !this.CalendarYear) {
       this._commonService.showWarningMessage('Please select Month');
       this.tdsJvDetailsForm.controls['pCalendarMonth'].markAsTouched();
       return;
     }
 
-    if (!monthYear) {
+    if (!this.CalendarYear) {
       this._commonService.showWarningMessage('Please select Year and Month');
       return;
     }
