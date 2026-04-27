@@ -1,14 +1,18 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, DestroyRef, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import {
   Module,
   NavigationService,
+  NavigationPath,
   SubModule,
   Screen
 } from '../../../core/services/Navigation/navigation.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SosHelpComponent } from '../../sos-help/sos-help.component';
 
 export interface Theme {
   id: string;
@@ -31,7 +35,7 @@ export interface RecentForm {
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, SosHelpComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'
 })
@@ -44,6 +48,13 @@ export class MainLayoutComponent implements OnInit {
   sidebarCollapsed = true;
   username = '';
   expandedSubModules: Set<string> = new Set<string>();
+
+  // Snapshot of the path for the currently active screen
+  breadcrumbPath = {
+    module: null as Module | null,
+    subModule: null as SubModule | null,
+    screen: null as Screen | null
+  };
 
   showMegaMenu = false;
   showAvatarMenu = false;
@@ -71,7 +82,8 @@ export class MainLayoutComponent implements OnInit {
   constructor(
     private navigationService: NavigationService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private destroyRef: DestroyRef
   ) {}
 
   ngOnInit(): void {
@@ -81,17 +93,46 @@ export class MainLayoutComponent implements OnInit {
     const savedTheme = localStorage.getItem('erp-theme');
     this.setTheme(savedTheme || this.activeTheme);
 
-    this.navigationService.selectedModule$.subscribe((module: Module | null) => {
-      this.selectedModule = module;
-    });
+    const savedSidebarState = localStorage.getItem('sidebar-collapsed');
+    if (savedSidebarState !== null) {
+      this.sidebarCollapsed = JSON.parse(savedSidebarState);
+    }
 
-    this.navigationService.selectedSubModule$.subscribe((subModule: SubModule | null) => {
-      this.selectedSubModule = subModule;
-    });
+    this.navigationService.selectedModule$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((module: Module | null) => {
+        this.selectedModule = module;
+      });
 
-    this.navigationService.selectedScreen$.subscribe((screen: Screen | null) => {
-      this.selectedScreen = screen;
-    });
+    this.navigationService.selectedSubModule$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((subModule: SubModule | null) => {
+        this.selectedSubModule = subModule;
+      });
+
+    this.navigationService.selectedScreen$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((screen: Screen | null) => {
+        this.selectedScreen = screen;
+        
+        // Only update breadcrumb when a screen is actually active
+        if (screen) {
+          this.breadcrumbPath = {
+            module: this.selectedModule,
+            subModule: this.selectedSubModule,
+            screen: screen
+          };
+        }
+      });
+
+    this.restoreNavigationFromRoute(this.router.url);
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(event => this.restoreNavigationFromRoute(event.urlAfterRedirects));
 
     // Set General Receipt as default selection
     // this.setDefaultSelection();
@@ -143,17 +184,18 @@ export class MainLayoutComponent implements OnInit {
     }
 
     this.selectedSubModule = null;
-    this.selectedScreen = null;
     this.expandedSubModules.clear();
     this.closeFlyoutSearch();
 
     this.navigationService.selectModule(module);
     this.sidebarCollapsed = false;
+    this.saveSidebarState();
   }
 
   toggleSubModule(subModule: SubModule): void {
     if (this.sidebarCollapsed) {
       this.sidebarCollapsed = false;
+      this.saveSidebarState();
     }
 
     if (this.expandedSubModules.has(subModule.id)) {
@@ -184,10 +226,15 @@ export class MainLayoutComponent implements OnInit {
     this.showMegaMenu = false;
     this.showRecentForms = false;
     this.closeFlyoutSearch();
+    
+    // Ensure sidebar is expanded to show where we are
+    this.sidebarCollapsed = false;
+    this.saveSidebarState();
   }
 
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+    this.saveSidebarState();
 
     if (this.sidebarCollapsed) {
       this.expandedSubModules.clear();
@@ -195,6 +242,115 @@ export class MainLayoutComponent implements OnInit {
     } else if (!this.selectedModule && this.modules.length > 0) {
       this.navigationService.selectModule(this.modules[0]);
     }
+  }
+
+  private saveSidebarState(): void {
+    localStorage.setItem('sidebar-collapsed', JSON.stringify(this.sidebarCollapsed));
+  }
+
+  private restoreNavigationFromRoute(route: string): void {
+    const activePath = this.navigationService.findPathByRoute(route);
+
+    if (activePath) {
+      this.applyNavigationPath(activePath);
+      return;
+    }
+
+    if (this.isStandaloneShellRoute(route)) {
+      this.applyStandalonePageState();
+      return;
+    }
+
+    if (this.isDashboardHome(route)) {
+      this.applyDefaultMenuState();
+    }
+  }
+
+  private applyNavigationPath(path: NavigationPath): void {
+    if (this.selectedModule?.id !== path.module.id) {
+      this.navigationService.selectModule(path.module);
+    }
+
+    this.expandedSubModules.clear();
+    this.expandedSubModules.add(path.subModule.id);
+
+    if (this.selectedSubModule?.id !== path.subModule.id) {
+      this.navigationService.selectSubModule(path.subModule);
+    }
+
+    if (this.selectedScreen?.id !== path.screen.id) {
+      this.navigationService.selectScreen(path.screen);
+    }
+
+    this.breadcrumbPath = {
+      module: path.module,
+      subModule: path.subModule,
+      screen: path.screen
+    };
+
+    this.sidebarCollapsed = false;
+    this.saveSidebarState();
+  }
+
+  private applyDefaultMenuState(): void {
+    if (this.selectedModule || this.modules.length === 0) {
+      return;
+    }
+
+    const module = this.modules[0];
+    const subModule = module.subModules[0];
+
+    this.navigationService.selectModule(module);
+    this.sidebarCollapsed = false;
+    this.saveSidebarState();
+
+    if (subModule) {
+      this.expandedSubModules.add(subModule.id);
+      this.navigationService.selectSubModule(subModule);
+    }
+  }
+
+  private isDashboardHome(route: string): boolean {
+    return this.normalizeRoute(route) === '/dashboard';
+  }
+
+  private isStandaloneShellRoute(route: string): boolean {
+    const normalized = this.normalizeRoute(route);
+    return normalized === '/dashboard/contacts' || normalized === '/dashboard/sos-dashboard';
+  }
+
+  private applyStandalonePageState(): void {
+    this.selectedModule = null;
+    this.selectedSubModule = null;
+    this.selectedScreen = null;
+    this.expandedSubModules.clear();
+    this.breadcrumbPath = {
+      module: null,
+      subModule: null,
+      screen: null
+    };
+    this.closeAllPanels();
+    this.closeFlyoutSearch();
+    this.sidebarCollapsed = true;
+    this.saveSidebarState();
+  }
+
+  openContacts(): void {
+    this.applyStandalonePageState();
+  }
+
+  openSosDashboard(): void {
+    this.showAvatarMenu = false;
+    this.showMegaMenu = false;
+    this.showRecentForms = false;
+    this.applyStandalonePageState();
+    this.router.navigate(['/dashboard/sos-dashboard']);
+  }
+
+  private normalizeRoute(route: string): string {
+    const pathOnly = (route || '/').split(/[?#]/)[0] || '/';
+    const withLeadingSlash = pathOnly.startsWith('/') ? pathOnly : `/${pathOnly}`;
+    return withLeadingSlash.replace(/\/+$/, '') || '/';
   }
 
   closeFlyout(): void {
@@ -220,15 +376,35 @@ export class MainLayoutComponent implements OnInit {
     this.showThemeDropdown = !this.showThemeDropdown;
   }
 
-  get filteredFlyoutScreens(): Screen[] {
-    const screens = this.selectedSubModule?.screens || [];
+  get filteredFlyoutScreens(): any[] {
     const q = this.flyoutSearchQuery.trim().toLowerCase();
-
+    
     if (!q) {
-      return screens;
+      return this.selectedSubModule?.screens || [];
     }
 
-    return screens.filter(screen => screen.name.toLowerCase().includes(q));
+    const allResults: any[] = [];
+    this.selectedModule?.subModules.forEach(sub => {
+      const matches = sub.screens.filter(s => s.name.toLowerCase().includes(q));
+      matches.forEach(m => {
+        allResults.push({
+          ...m,
+          subModule: sub,
+          isFromOtherSubModule: sub.id !== this.selectedSubModule?.id
+        });
+      });
+    });
+
+    return allResults;
+  }
+
+  navigateToScreen(item: any): void {
+    if (item.subModule) {
+      this.navigationService.selectSubModule(item.subModule);
+      this.expandedSubModules.clear();
+      this.expandedSubModules.add(item.subModule.id);
+    }
+    this.selectScreen(item);
   }
 
   get filteredMegaModules(): Module[] {
@@ -264,6 +440,7 @@ export class MainLayoutComponent implements OnInit {
   navigateFromMega(mod: Module, sub: SubModule, screen: Screen): void {
     this.navigationService.selectModule(mod);
     this.sidebarCollapsed = false;
+    this.saveSidebarState();
     this.expandedSubModules.clear();
     this.expandedSubModules.add(sub.id);
     this.navigationService.selectSubModule(sub);
@@ -303,6 +480,7 @@ export class MainLayoutComponent implements OnInit {
     if (module) {
       this.navigationService.selectModule(module);
       this.sidebarCollapsed = false;
+      this.saveSidebarState();
 
       const subModule =
         module.subModules.find(item => item.id === form.subModuleId) ||
@@ -318,7 +496,7 @@ export class MainLayoutComponent implements OnInit {
           subModule.screens.find(item => item.route === form.route);
 
         if (screen) {
-          this.navigationService.selectScreen(screen);
+          this.selectScreen(screen);
         }
       }
     }

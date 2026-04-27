@@ -414,6 +414,60 @@
   text-transform: uppercase !important;
 }
 
+.rp-inner .erp-form-group {
+  margin-bottom: 16px !important;
+  min-width: 0;
+}
+
+:host ::ng-deep ng-select.login-combo {
+  display: block !important;
+  width: 100% !important;
+}
+
+:host ::ng-deep ng-select.login-combo .ng-select-container {
+  min-height: 44px !important;
+  height: 44px !important;
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 11px !important;
+  box-shadow: none !important;
+  transition: border-color 0.22s, box-shadow 0.22s, background 0.22s !important;
+}
+
+:host ::ng-deep ng-select.login-combo .ng-select-container .ng-value-container {
+  min-height: 42px !important;
+  padding: 0 12px !important;
+  align-items: center !important;
+}
+
+:host ::ng-deep ng-select.login-combo .ng-placeholder,
+:host ::ng-deep ng-select.login-combo .ng-input input,
+:host ::ng-deep ng-select.login-combo .ng-value-label {
+  font-size: 13.5px !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep ng-select.login-combo .ng-placeholder {
+  color: #a0aec0 !important;
+}
+
+:host ::ng-deep ng-select.login-combo:hover .ng-select-container {
+  border-color: var(--clr-p2, #0891b2) !important;
+  background: #fff !important;
+}
+
+:host ::ng-deep ng-select.login-combo.ng-select-focused .ng-select-container {
+  border-color: var(--clr-p2, #0891b2) !important;
+  box-shadow: 0 0 0 3.5px rgba(8,145,178,0.14) !important;
+  background: #fff !important;
+}
+
+:host ::ng-deep ng-select.login-combo.ng-select-disabled .ng-select-container {
+  background: #eef2f7 !important;
+  border-color: #e2e8f0 !important;
+  opacity: 0.74;
+}
+
 // Back button
 .btn-back {
   font-size: 13px;
@@ -557,6 +611,7 @@
 
 :host ::ng-deep input[pInputText],
 :host ::ng-deep .p-inputtext {
+  min-height: 44px !important;
   background: #f8fafc !important;
   border: 1.5px solid #e2e8f0 !important;
   border-radius: 11px !important;
@@ -588,6 +643,7 @@
 }
 
 :host ::ng-deep .p-password .p-inputtext {
+  min-height: 44px !important;
   background: #f8fafc !important;
   border: 1.5px solid #e2e8f0 !important;
   border-radius: 11px !important;

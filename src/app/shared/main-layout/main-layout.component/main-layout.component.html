@@ -91,6 +91,18 @@
 
       <div class="nav-action-group">
         <button
+          class="nav-icon-btn"
+          routerLink="/dashboard/contacts"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="openContacts()"
+          title="Contacts">
+          <i class="pi pi-users"></i>
+        </button>
+      </div>
+
+      <div class="nav-action-group">
+        <button
           class="quick-menu-btn"
           [class.active]="showMegaMenu"
           (click)="showMegaMenu = !showMegaMenu; showRecentForms = false; showAvatarMenu = false">
@@ -178,6 +190,11 @@
             <button class="ap-menu-item">
               <i class="pi pi-cog"></i>
               <span>Settings</span>
+            </button>
+
+            <button class="ap-menu-item" (click)="openSosDashboard()">
+              <i class="pi pi-life-ring"></i>
+              <span>SOS Dashboard</span>
             </button>
           </div>
 
@@ -293,12 +310,17 @@
           *ngFor="let screen of filteredFlyoutScreens"
           class="fp-item"
           [class.active]="selectedScreen?.id === screen.id"
-          (click)="selectScreen(screen); $event.stopPropagation()">
+          (click)="navigateToScreen(screen); $event.stopPropagation()">
           <span class="fp-screen-icon">
             <i [class]="getScreenIcon(screen.name)"></i>
           </span>
 
-          <span class="fp-name">{{ screen.name }}</span>
+          <div class="fp-name-wrap">
+            <span class="fp-name">{{ screen.name }}</span>
+            <span class="fp-sub-name" *ngIf="flyoutSearchQuery && screen.isFromOtherSubModule">
+              {{ screen.subModule?.name }}
+            </span>
+          </div>
 
           <i class="pi pi-check fp-check" *ngIf="selectedScreen?.id === screen.id"></i>
         </button>
@@ -311,25 +333,25 @@
     </div>
 
     <main class="content-area" role="main">
-      <nav class="breadcrumb-bar" *ngIf="selectedScreen" aria-label="Breadcrumb">
+      <nav class="breadcrumb-bar" *ngIf="breadcrumbPath.screen" aria-label="Breadcrumb">
         <div class="bc-inner">
-          <button class="bc-item bc-link" (click)="selectModule(selectedModule!)">
-            <i [class]="getModuleIcon(selectedModule?.name)"></i>
-            <span>{{ selectedModule?.name }}</span>
+          <button class="bc-item bc-link" (click)="selectModule(breadcrumbPath.module!)">
+            <i [class]="getModuleIcon(breadcrumbPath.module?.name)"></i>
+            <span>{{ breadcrumbPath.module?.name }}</span>
           </button>
 
           <i class="pi pi-angle-right bc-sep"></i>
 
-          <button class="bc-item bc-link" (click)="toggleSubModule(selectedSubModule!)">
-            <i [class]="getSubModuleIcon(selectedSubModule!.name)"></i>
-            <span>{{ selectedSubModule!.name }}</span>
+          <button class="bc-item bc-link" (click)="toggleSubModule(breadcrumbPath.subModule!)">
+            <i [class]="getSubModuleIcon(breadcrumbPath.subModule!.name)"></i>
+            <span>{{ breadcrumbPath.subModule!.name }}</span>
           </button>
 
           <i class="pi pi-angle-right bc-sep"></i>
 
           <span class="bc-item bc-current">
-            <i [class]="getScreenIcon(selectedScreen!.name)"></i>
-            <span>{{ selectedScreen!.name }}</span>
+            <i [class]="getScreenIcon(breadcrumbPath.screen!.name)"></i>
+            <span>{{ breadcrumbPath.screen!.name }}</span>
           </span>
         </div>
       </nav>
@@ -360,4 +382,6 @@
       </div>
     </main>
   </div>
+
+  <app-sos-help></app-sos-help>
 </div>

@@ -7,7 +7,7 @@
     <div class="card-header">
       <div class="d-flex flex-column">
         <h2 class="card-title"><i class="pi pi-times-circle"></i> Cancel Petty Cash Receipt</h2>
-        <p class="card-subtitle p-4">Void or cancel petty cash receipt transactions and reverse entries</p>
+        <p class="card-subtitle">Void or cancel petty cash receipt transactions and reverse entries</p>
       </div>
       <span class="erp-spacer"></span>
       <!-- <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm">
@@ -51,7 +51,7 @@
                       <i class="pi pi-calendar erp-input-icon"></i>
                       <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                         placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate" [disabled]="true"> </p-datepicker> 
                     </div>
                   </div>
                 </div>
@@ -159,8 +159,13 @@
         <div class="p-4">
           <div class="erp-form-group">
             <label class="erp-label" for="remarks">Cancel Remarks</label>
-            <textarea id="remarks" class="erp-textarea" placeholder="Enter reason for cancellation"
-              formControlName="remarks" rows="3"></textarea>
+            <!-- <textarea id="remarks" class="erp-textarea" placeholder="Enter reason for cancellation"
+              formControlName="remarks" rows="3"></textarea>   -->
+
+            <textarea id="cancellationreason" formControlName="cancellationreason" class="erp-textarea"
+              placeholder="Enter reason for cancellation" rows="3">
+</textarea>
+
           </div>
         </div>
         }

@@ -1,0 +1,214 @@
+import {
+  Component, OnInit, Input, Output, EventEmitter,
+  signal, computed, OnChanges, SimpleChanges
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Contact } from '../contacts-list/contacts-list.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { DatePickerModule } from 'primeng/datepicker';
+
+export type ContactType = 'Individual' | 'Business Entity';
+export type Gender = 'Male' | 'Female' | 'Third Gender';
+
+interface Address {
+  isPrimary: boolean;
+  type: string;
+  addressLine: string;
+  area: string;
+  city: string;
+  country: string;
+  state: string;
+  district: string;
+  pincode: string;
+  longitude: string;
+  latitude: string;
+}
+
+interface ContactPerson {
+  contact: string;
+  designation: string;
+}
+
+@Component({
+  selector: 'app-contact-add',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgSelectModule, DatePickerModule],
+  templateUrl: './contact-add.component.html',
+  styleUrl: './contact-add.component.scss',
+})
+export class ContactAddComponent implements OnInit, OnChanges {
+  @Input() contact: Contact | null = null;
+  @Output() onClose = new EventEmitter<void>();
+  @Output() onSave = new EventEmitter<Contact>();
+
+  contactType = signal<ContactType>('Individual');
+  activeSection = signal<'personal' | 'address' | 'others'>('personal');
+
+  form!: FormGroup;
+
+  // Address table
+  addressRows = signal<Address[]>([]);
+  currentAddress: Address = this.emptyAddress();
+
+  // Contact persons (Business)
+  contactPersons = signal<ContactPerson[]>([]);
+  currentContactPerson: ContactPerson = { contact: '', designation: '' };
+
+  // Photo
+  photoPreview = signal<string | null>(null);
+  pDatepickerMaxDate: Date = new Date();
+
+  genders: Gender[] = ['Male', 'Female', 'Third Gender'];
+  salutations = ['Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Prof.'];
+  addressTypes = ['Home', 'Office', 'Permanent', 'Temporary', 'Other'];
+  enterpriseTypes = ['Private Limited', 'Public Limited', 'Partnership', 'LLP', 'Proprietorship', 'Trust', 'Society'];
+  businessNatures = ['Manufacturing', 'Trading', 'Services', 'Agriculture', 'Retail', 'Wholesale', 'Other'];
+  countries = ['India', 'USA', 'UK', 'UAE', 'Australia'];
+  states = ['Telangana', 'Andhra Pradesh', 'Karnataka', 'Tamil Nadu', 'Maharashtra'];
+  districts = ['Hyderabad', 'Rangareddy', 'Medchal', 'Sangareddy', 'Nalgonda'];
+
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit() {
+    this.buildForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['contact'] && this.form) {
+      if (this.contact) {
+        this.patchForm(this.contact);
+      } else {
+        this.form.reset();
+      }
+    }
+  }
+
+  buildForm() {
+    this.form = this.fb.group({
+      // Individual
+      salutation: ['Mr.'],
+      firstName: ['', Validators.required],
+      surName: [''],
+      mailingName: [''],
+      gender: ['Male', Validators.required],
+      fatherSalutation: ['Mr.'],
+      fatherName: ['', Validators.required],
+      dob: [null],
+      age: [''],
+      panCard: [''],
+      aadharCard: [''],
+      cntNo: [''],
+      // Business
+      enterpriseName: [''],
+      enterpriseEmail: [''],
+      enterpriseContact: [''],
+      enterprisePan: [''],
+      enterpriseType: [''],
+      businessNature: [''],
+      // Contact Info
+      primaryContact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      secondaryContact: [''],
+      primaryEmail: ['', Validators.email],
+      secondaryEmail: ['', Validators.email],
+      // Flags
+      fabricatedContact: [false],
+      paidGuarantor: [false],
+    });
+  }
+
+  patchForm(c: Contact) {
+    this.form.patchValue({
+      firstName: c.name,
+      primaryContact: c.phone,
+    });
+  }
+
+  setContactType(type: ContactType) {
+    this.contactType.set(type);
+  }
+
+  // Address management
+  emptyAddress(): Address {
+    return {
+      isPrimary: false, type: '', addressLine: '', area: '',
+      city: '', country: '', state: '', district: '',
+      pincode: '', longitude: '', latitude: ''
+    };
+  }
+
+  addAddress() {
+    if (!this.currentAddress.addressLine && !this.currentAddress.city) return;
+    const rows = this.addressRows();
+    const newAddr = { ...this.currentAddress };
+    if (rows.length === 0) newAddr.isPrimary = true;
+    this.addressRows.update(list => [...list, newAddr]);
+    this.currentAddress = this.emptyAddress();
+  }
+
+  removeAddress(idx: number) {
+    this.addressRows.update(list => list.filter((_, i) => i !== idx));
+  }
+
+  setPrimaryAddress(idx: number) {
+    this.addressRows.update(list => list.map((a, i) => ({ ...a, isPrimary: i === idx })));
+  }
+
+  // Contact persons
+  addContactPerson() {
+    if (!this.currentContactPerson.contact) return;
+    this.contactPersons.update(list => [...list, { ...this.currentContactPerson }]);
+    this.currentContactPerson = { contact: '', designation: '' };
+  }
+
+  removeContactPerson(idx: number) {
+    this.contactPersons.update(list => list.filter((_, i) => i !== idx));
+  }
+
+  // Photo upload
+  onPhotoChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => this.photoPreview.set(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  clearForm() {
+    this.form.reset();
+    this.addressRows.set([]);
+    this.contactPersons.set([]);
+    this.photoPreview.set(null);
+    this.currentAddress = this.emptyAddress();
+  }
+
+  saveContact() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    const v = this.form.value;
+    const saved: Contact = {
+      id: this.contact?.id ?? '',
+      uid: this.contact?.uid ?? '',
+      name: this.contactType() === 'Individual'
+        ? `${v.salutation} ${v.firstName} ${v.surName}`.trim()
+        : v.enterpriseName,
+      relation: this.contactType() === 'Individual' ? `S/o - ${v.fatherName}` : '',
+      phone: v.primaryContact,
+      address: this.addressRows()[0]
+        ? `${this.addressRows()[0].addressLine},${this.addressRows()[0].city}` : '',
+      status: 'Active',
+      photo: this.photoPreview() ?? undefined,
+      type: 'Contacts',
+    };
+    this.onSave.emit(saved);
+  }
+
+  close() {
+    this.onClose.emit();
+  }
+
+  get isIndividual() { return this.contactType() === 'Individual'; }
+}

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, computed, inject, OnInit, signal } from "@angular/core";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonService } from "../../../../core/services/Common/common.service";
 import { CommonModule, DatePipe } from "@angular/common";
@@ -38,6 +38,8 @@ export class CashBook implements OnInit {
   readonly gridView = signal<any[]>([]);
   readonly startDate = signal<Date | null>(null);
   readonly endDate = signal<Date | null>(null);
+  readonly totalReceipts = computed(() => this.gridView().reduce((s, x) => s + (x.pdebitamount ?? 0), 0));
+  readonly totalPayments = computed(() => this.gridView().reduce((s, x) => s + (x.pcreditamount ?? 0), 0));
 
   // Datepicker configs as signals so template reacts to minDate/maxDate updates
   readonly dpConfig = signal<any>({

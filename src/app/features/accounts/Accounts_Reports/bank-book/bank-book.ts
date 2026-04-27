@@ -64,6 +64,7 @@ export class BankBook implements OnInit {
 
   // ── State ───────────────────────────────────────────────────────────────────
   submitted       = false;
+  currencySymbol  = '₹';
   printedDate     = true;
   saveButton      = 'Generate Report';
   sortColumn      = '';

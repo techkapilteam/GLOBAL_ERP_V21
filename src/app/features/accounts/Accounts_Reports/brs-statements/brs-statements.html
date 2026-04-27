@@ -1,239 +1,239 @@
-﻿<div class="screen-container">
-    <div class="screen-card">
+<div class="module-page">
+  <div class="erp-card">
 
-        <!-- Header -->
-        <div class="screen-header">
-            <h2 class="screen-title">BRS Statements</h2>
-        </div>
-
-        <div class="section-content">
-            <form [formGroup]="form" autocomplete="off">
-
-                <!-- Radio Buttons -->
-                <div class="row-wrap">
-                    <div class="radio-group">
-                        <div class="radio-item">
-                            <input class="radio-input" type="radio" id="BankCredit" formControlName="Bank"
-                                value="CREDIT" (change)="onBankTypeChange('CREDIT')">
-                            <label class="radio-label" for="BankCredit">Bank Credit</label>
-                        </div>
-                        <div class="radio-item">
-                            <input class="radio-input" type="radio" id="BankDebit" formControlName="Bank" value="DEBIT"
-                                (change)="onBankTypeChange('DEBIT')">
-                            <label class="radio-label" for="BankDebit">Bank Debit</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filters Row -->
-                <div class="filter-row">
-
-                    <!-- Bank Name -->
-                    <div class="filter-field filter-field--wide">
-                        <label class="field-label">Bank Name <span class="required">*</span></label>
-                        <ng-select appendTo="body" formControlName="pbankname" [items]="bankData()" bindLabel="bankName"
-                            bindValue="bankAccountId" placeholder="Select" [searchable]="true"
-                            (change)="onBankSelected($event)"
-                            [ngClass]="{ 'is-invalid': f['pbankname'].errors && submitted() }">
-                        </ng-select>
-                        @if (submitted() && f['pbankname'].errors?.['required']) {
-                        <div class="error-msg">Select Bank</div>
-                        }
-                    </div>
-
-                    <!-- From Date -->
-                    <div class="filter-field">
-                        <label class="field-label">From Date</label>
-                        <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control date-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
-                    </div>
-
-                    <!-- To Date -->
-                    <div class="filter-field">
-                        <label class="field-label">To Date</label>
-                        <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control date-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
-                        @if (form.errors?.['dateRangeInvalid'] && form.touched) {
-                        <small class="error-msg">From Date cannot be greater than To Date</small>
-                        }
-                    </div>
-
-                    <!-- Show Button -->
-                    <div class="filter-field filter-field--btn">
-                        <button type="button" class="btn-primary-custom" (click)="show()" [disabled]="isSaving()">
-                            <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isSaving() }"></i>
-                            {{ saveButtonLabel() }}
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- Export Icons -->
-                @if (bankCreditShow()) {
-                <div class="export-bar">
-                    <ul class="export-list">
-                        <li>
-                            <img src="assets/images/pdf-icon-blue.svg" class="export-icon" title="PDF"
-                                (click)="pdfOrPrintCredit('Pdf')">
-                        </li>
-                        <li>
-                            <img src="assets/images/print-icon-blue.svg" class="export-icon" title="Print"
-                                (click)="pdfOrPrintCredit('Print')">
-                        </li>
-                        <li>
-                            <img src="assets/images/icon-excel.svg" class="export-icon" title="Excel"
-                                (click)="exportBankCredit()">
-                        </li>
-                    </ul>
-                </div>
-                }
-
-                @if (bankDebitShow()) {
-                <div class="export-bar">
-                    <ul class="export-list">
-                        <li>
-                            <img src="assets/images/pdf-icon-blue.svg" class="export-icon" title="PDF"
-                                (click)="pdfOrPrintDebit('Pdf')">
-                        </li>
-                        <li>
-                            <img src="assets/images/print-icon-blue.svg" class="export-icon" title="Print"
-                                (click)="pdfOrPrintDebit('Print')">
-                        </li>
-                        <li>
-                            <img src="assets/images/icon-excel.svg" class="export-icon" title="Excel"
-                                (click)="exportBankDebit()">
-                        </li>
-                    </ul>
-                </div>
-                }
-
-                <!-- Bank Credit Table -->
-                @if (bankCreditShow()) {
-                <div class="table-card">
-                    <p-table [value]="sortedGrid()" [paginator]="true" [rows]="pageCriteria.pageSize"
-                        [first]="pageCriteria.offset * pageCriteria.pageSize" (onPage)="onPageChange($event)"
-                        responsiveLayout="scroll" [loading]="loading()"
-                        styleClass="p-datatable-sm p-datatable-gridlines">
-
-                        <ng-template pTemplate="header">
-                            <tr class="table-header-row">
-                                <th class="th-left sortable" (click)="sortBy('pissuedate')">
-                                    Receipt Date <span [innerHTML]="getSortIcon('pissuedate')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('ptransactionno')">
-                                    Receipt No <span [innerHTML]="getSortIcon('ptransactionno')"></span>
-                                </th>
-                                <th class="th-right sortable" (click)="sortBy('ptotalamount')">
-                                    Amount <span [innerHTML]="getSortIcon('ptotalamount')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('preferencenumber')">
-                                    Cheque No <span [innerHTML]="getSortIcon('preferencenumber')"></span>
-                                </th>
-                                <th class="th-left">Cheque Date</th>
-                                <th class="th-left sortable" (click)="sortBy('pdepositdate')">
-                                    Deposit Date <span [innerHTML]="getSortIcon('pdepositdate')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('pclearDate')">
-                                    Cleared Date <span [innerHTML]="getSortIcon('pclearDate')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('pparticulars')">
-                                    Particular <span [innerHTML]="getSortIcon('pparticulars')"></span>
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-row>
-                            <tr class="table-body-row">
-                                <td class="td-left">{{ row.pissuedate | date:'dd-MMM-yyyy' }}</td>
-                                <td class="td-left">{{ row.ptransactionno }}</td>
-                                <td class="td-right td-credit">
-                                    {{ currencySymbol }} {{ row.ptotalamount | number:'1.2-2' }}
-                                </td>
-                                <td class="td-left">{{ row.preferencenumber || '--NA--' }}</td>
-                                <td class="td-left">
-                                    @if (row.preferencenumber) {
-                                    {{ row.pissuedate | date:'dd-MMM-yyyy' }}
-                                    } @else {
-                                    --NA--
-                                    }
-                                </td>
-                                <td class="td-left">{{ row.pdepositdate | date:'dd-MMM-yyyy' }}</td>
-                                <td class="td-left">
-                                    @if (row.preferencenumber) {
-                                    {{ row.pclearDate | date:'dd-MMM-yyyy' }}
-                                    } @else {
-                                    --NA--
-                                    }
-                                </td>
-                                <td class="td-left">{{ row.pparticulars }}</td>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td colspan="8" class="td-empty">No data to display</td>
-                            </tr>
-                        </ng-template>
-
-                    </p-table>
-                </div>
-                }
-
-                <!-- Bank Debit Table -->
-                @if (bankDebitShow()) {
-                <div class="table-card">
-                    <p-table [value]="sortedGrid()" [paginator]="true" [rows]="pageCriteria.pageSize"
-                        [first]="pageCriteria.offset * pageCriteria.pageSize" (onPage)="onPageChange($event)"
-                        responsiveLayout="scroll" [loading]="loading()"
-                        styleClass="p-datatable-sm p-datatable-gridlines">
-
-                        <ng-template pTemplate="header">
-                            <tr class="table-header-row">
-                                <th class="th-left sortable" (click)="sortBy('pissuedate')">
-                                    Trans Date <span [innerHTML]="getSortIcon('pissuedate')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('ptransactionno')">
-                                    Trans No <span [innerHTML]="getSortIcon('ptransactionno')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('preferencenumber')">
-                                    Cheque No <span [innerHTML]="getSortIcon('preferencenumber')"></span>
-                                </th>
-                                <th class="th-right sortable" (click)="sortBy('ptotalamount')">
-                                    Amount <span [innerHTML]="getSortIcon('ptotalamount')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('pclearDate')">
-                                    Cleared Date <span [innerHTML]="getSortIcon('pclearDate')"></span>
-                                </th>
-                                <th class="th-left sortable" (click)="sortBy('pparticulars')">
-                                    Particular <span [innerHTML]="getSortIcon('pparticulars')"></span>
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-row>
-                            <tr class="table-body-row">
-                                <td class="td-left">
-                                    {{ _CommonService.getDateObjectFromDataBase(row.pissuedate) | date:'dd-MMM-yyyy' }}
-                                </td>
-                                <td class="td-left">{{ row.ptransactionno }}</td>
-                                <td class="td-left">{{ row.preferencenumber }}</td>
-                                <td class="td-right td-debit">
-                                    {{ currencySymbol }} {{ row.ptotalamount | number:'1.2-2' }}
-                                </td>
-                                <td class="td-left">{{ row.pclearDate | date:'dd-MMM-yyyy' }}</td>
-                                <td class="td-left">{{ row.pparticulars || '--NA--' }}</td>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td colspan="6" class="td-empty">No data to display</td>
-                            </tr>
-                        </ng-template>
-
-                    </p-table>
-                </div>
-                }
-
-            </form>
-        </div>
+    <!-- Header -->
+    <div class="card-header">
+      <h2 class="card-title">
+        <i class="pi pi-file-pdf"></i> BRS Statements
+      </h2>
     </div>
-</div>
+
+    <div class="card-body p-0">
+      <form [formGroup]="form" autocomplete="off">
+        <div class="p-4 border-bottom">
+
+          <!-- View Mode Toggle -->
+          <div class="row g-2 mb-4">
+            <div class="col-12">
+              <div class="erp-form-group">
+                <label class="erp-label mb-2">Select Statement Type</label>
+                <div class="d-flex gap-4 p-3 border rounded bg-light-subtle">
+                  <label class="erp-radio">
+                    <input type="radio" formControlName="Bank" value="CREDIT" (change)="onBankTypeChange('CREDIT')">
+                    <span class="font-bold">Bank Credit (Receipts)</span>
+                  </label>
+                  <label class="erp-radio">
+                    <input type="radio" formControlName="Bank" value="DEBIT" (change)="onBankTypeChange('DEBIT')">
+                    <span class="font-bold">Bank Debit (Payments)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 align-items-end">
+
+            <!-- Bank Name -->
+            <div class="col-12 col-md-4">
+              <div class="erp-form-group">
+                <label class="erp-label required">Bank Name <span class="required">*</span></label>
+                <ng-select appendTo="body" formControlName="pbankname" [items]="bankData()" bindLabel="bankName"
+                  bindValue="bankAccountId" placeholder="Select Bank" [searchable]="true"
+                  (change)="onBankSelected($event)"
+                  class="erp-ng-select"
+                  [class.is-invalid]="f['pbankname'].errors && submitted()">
+                </ng-select>
+                @if (submitted() && f['pbankname'].errors?.['required']) {
+                  <div class="erp-field-error">Select Bank is required</div>
+                }
+              </div>
+            </div>
+
+            <!-- From Date -->
+            <div class="col-12 col-md-3">
+              <div class="erp-form-group">
+                <label class="erp-label">From Date</label>
+                <div class="erp-input-wrap erp-date-wrap">
+                  <i class="pi pi-calendar erp-input-icon"></i>
+                  <p-datepicker formControlName="fromDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                </div>
+              </div>
+            </div>
+
+            <!-- To Date -->
+            <div class="col-12 col-md-3">
+              <div class="erp-form-group">
+                <label class="erp-label">To Date</label>
+                <div class="erp-input-wrap erp-date-wrap">
+                  <i class="pi pi-calendar erp-input-icon"></i>
+                  <p-datepicker formControlName="toDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                </div>
+                @if (form.errors?.['dateRangeInvalid'] && form.touched) {
+                  <div class="erp-field-error">From Date cannot be greater than To Date</div>
+                }
+              </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="col-12 col-md-2">
+              <div class="erp-form-group">
+                <button type="button" class="erp-btn btn-primary w-100 shadow-sm" (click)="show()" [disabled]="isSaving()">
+                  <i class="pi" [ngClass]="isSaving() ? 'pi-spin pi-spinner' : 'pi-search'"></i>
+                  {{ isSaving() ? 'Processing' : saveButtonLabel() }}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Report Results -->
+        @if (bankCreditShow() || bankDebitShow()) {
+          <div class="p-4">
+            
+            <!-- Export Toolbar -->
+            <div class="erp-table-toolbar mb-4 d-print-none">
+              <div class="tb-left">
+                <h6 class="mb-0 font-bold text-primary">
+                  {{ bankCreditShow() ? 'Bank Credit Statement' : 'Bank Debit Statement' }}
+                </h6>
+              </div>
+              <div class="tb-right">
+                @if (bankCreditShow()) {
+                  <button class="erp-btn btn-white btn-sm" (click)="pdfOrPrintCredit('Pdf')" title="Export PDF">
+                    <i class="pi pi-file-pdf"></i> PDF
+                  </button>
+                  <button class="erp-btn btn-white btn-sm" (click)="pdfOrPrintCredit('Print')" title="Print">
+                    <i class="pi pi-print"></i> Print
+                  </button>
+                  <button class="erp-btn btn-white btn-sm" (click)="exportBankCredit()" title="Excel">
+                    <i class="pi pi-download"></i> Excel
+                  </button>
+                }
+                @if (bankDebitShow()) {
+                  <button class="erp-btn btn-white btn-sm" (click)="pdfOrPrintDebit('Pdf')" title="Export PDF">
+                    <i class="pi pi-file-pdf"></i> PDF
+                  </button>
+                  <button class="erp-btn btn-white btn-sm" (click)="pdfOrPrintDebit('Print')" title="Print">
+                    <i class="pi pi-print"></i> Print
+                  </button>
+                  <button class="erp-btn btn-white btn-sm" (click)="exportBankDebit()" title="Excel">
+                    <i class="pi pi-download"></i> Excel
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="tbl-wrap">
+              <!-- Bank Credit Table -->
+              @if (bankCreditShow()) {
+                <p-table [value]="sortedGrid()" [paginator]="true" [rows]="pageCriteria.pageSize"
+                  [rowsPerPageOptions]="[10, 20, 50]"
+                  [first]="pageCriteria.offset * pageCriteria.pageSize" (onPage)="onPageChange($event)"
+                  responsiveLayout="scroll" [loading]="loading()"
+                  styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th (click)="sortBy('pissuedate')" style="cursor: pointer; width: 140px;">
+                        <div class="th-cell">Receipt Date <span class="sort-icon" [innerHTML]="getSortIcon('pissuedate')"></span></div>
+                      </th>
+                      <th (click)="sortBy('ptransactionno')" style="cursor: pointer; width: 130px;">
+                        <div class="th-cell">Receipt No <span class="sort-icon" [innerHTML]="getSortIcon('ptransactionno')"></span></div>
+                      </th>
+                      <th (click)="sortBy('ptotalamount')" style="cursor: pointer; width: 130px;">
+                        <div class="th-cell text-end">Amount <span class="sort-icon" [innerHTML]="getSortIcon('ptotalamount')"></span></div>
+                      </th>
+                      <th (click)="sortBy('preferencenumber')" style="cursor: pointer; width: 130px;">
+                        <div class="th-cell">Cheque No <span class="sort-icon" [innerHTML]="getSortIcon('preferencenumber')"></span></div>
+                      </th>
+                      <th style="width: 130px;" class="text-center">Cheque Date</th>
+                      <th (click)="sortBy('pdepositdate')" style="cursor: pointer; width: 140px;">
+                        <div class="th-cell">Deposit Date <span class="sort-icon" [innerHTML]="getSortIcon('pdepositdate')"></span></div>
+                      </th>
+                      <th (click)="sortBy('pclearDate')" style="cursor: pointer; width: 140px;">
+                        <div class="th-cell">Cleared Date <span class="sort-icon" [innerHTML]="getSortIcon('pclearDate')"></span></div>
+                      </th>
+                      <th (click)="sortBy('pparticulars')" style="cursor: pointer;">
+                        <div class="th-cell">Particular <span class="sort-icon" [innerHTML]="getSortIcon('pparticulars')"></span></div>
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-row>
+                    <tr>
+                      <td class="text-center">{{ row.pissuedate | date:'dd-MMM-yyyy' }}</td>
+                      <td><span class="font-bold text-primary">{{ row.ptransactionno }}</span></td>
+                      <td class="td-right text-success font-bold">
+                        {{ currencySymbol }} {{ row.ptotalamount | number:'1.2-2' }}
+                      </td>
+                      <td>{{ row.preferencenumber || '--NA--' }}</td>
+                      <td class="text-center">{{ row.preferencenumber ? (row.pissuedate | date:'dd-MMM-yyyy') : '--NA--' }}</td>
+                      <td class="text-center">{{ row.pdepositdate | date:'dd-MMM-yyyy' }}</td>
+                      <td class="text-center font-bold text-primary">{{ row.preferencenumber ? (row.pclearDate | date:'dd-MMM-yyyy') : '--NA--' }}</td>
+                      <td class="small">{{ row.pparticulars }}</td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr><td colspan="8" class="p-4 text-center text-muted italic">No credit statements found for the selected period</td></tr>
+                  </ng-template>
+                </p-table>
+              }
+
+              <!-- Bank Debit Table -->
+              @if (bankDebitShow()) {
+                <p-table [value]="sortedGrid()" [paginator]="true" [rows]="pageCriteria.pageSize"
+                  [rowsPerPageOptions]="[10, 20, 50]"
+                  [first]="pageCriteria.offset * pageCriteria.pageSize" (onPage)="onPageChange($event)"
+                  responsiveLayout="scroll" [loading]="loading()"
+                  styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th (click)="sortBy('pissuedate')" style="cursor: pointer; width: 150px;">
+                        <div class="th-cell">Trans Date <span class="sort-icon" [innerHTML]="getSortIcon('pissuedate')"></span></div>
+                      </th>
+                      <th (click)="sortBy('ptransactionno')" style="cursor: pointer; width: 140px;">
+                        <div class="th-cell">Trans No <span class="sort-icon" [innerHTML]="getSortIcon('ptransactionno')"></span></div>
+                      </th>
+                      <th (click)="sortBy('preferencenumber')" style="cursor: pointer; width: 140px;">
+                        <div class="th-cell">Cheque No <span class="sort-icon" [innerHTML]="getSortIcon('preferencenumber')"></span></div>
+                      </th>
+                      <th (click)="sortBy('ptotalamount')" style="cursor: pointer; width: 150px;">
+                        <div class="th-cell text-end">Amount <span class="sort-icon" [innerHTML]="getSortIcon('ptotalamount')"></span></div>
+                      </th>
+                      <th (click)="sortBy('pclearDate')" style="cursor: pointer; width: 150px;">
+                        <div class="th-cell">Cleared Date <span class="sort-icon" [innerHTML]="getSortIcon('pclearDate')"></span></div>
+                      </th>
+                      <th (click)="sortBy('pparticulars')" style="cursor: pointer;">
+                        <div class="th-cell">Particular <span class="sort-icon" [innerHTML]="getSortIcon('pparticulars')"></span></div>
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-row>
+                    <tr>
+                      <td class="text-center">{{ _CommonService.getDateObjectFromDataBase(row.pissuedate) | date:'dd-MMM-yyyy' }}</td>
+                      <td><span class="font-bold text-primary">{{ row.ptransactionno }}</span></td>
+                      <td>{{ row.preferencenumber }}</td>
+                      <td class="td-right text-danger font-bold">
+                        {{ currencySymbol }} {{ row.ptotalamount | number:'1.2-2' }}
+                      </td>
+                      <td class="text-center font-bold text-primary">{{ row.pclearDate | date:'dd-MMM-yyyy' }}</td>
+                      <td class="small">{{ row.pparticulars || '--NA--' }}</td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr><td colspan="6" class="p-4 text-center text-muted italic">No debit statements found for the selected period</td></tr>
+                  </ng-template>
+                </p-table>
+              }
+            </div>
+          </div>
+        }
+      </form>
+    </div>
+  </div>
+</div>

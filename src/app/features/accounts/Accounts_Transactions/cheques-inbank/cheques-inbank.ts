@@ -66,6 +66,9 @@ export class ChequesInbank implements OnInit {
   onChequeClearDateSelect(date: Date) {
     this.ChequesInBankForm.get('pchequecleardate')?.setValue(date);
   }
+
+
+
   @Input() fromFormName: any;
 
   gridLoading = signal(false);
@@ -213,7 +216,7 @@ export class ChequesInbank implements OnInit {
     this.ChequesInBankForm = this.fb.group({
       ptransactiondate: [{ value: today, disabled: true }, Validators.required],
       pchequecleardate: [today, Validators.required],
-      bankname: [null],
+      bankname: [null, Validators.required],
       pfrombrsdate: [today],
       ptobrsdate: [today],
       pchequesOnHandlist: [],
@@ -803,40 +806,106 @@ export class ChequesInbank implements OnInit {
 
   OnBrsDateChanges(fromdate: any, todate: any) { this.validate = fromdate > todate; }
 
-  ShowBrsClear() {
-    this._searchText = ''; this.gridData = [];
-    this.amounttotal = 0;
-    const fromdate = this.ChequesInBankForm.controls['pfrombrsdate'].value;
-    const todate = this.ChequesInBankForm.controls['ptobrsdate'].value;
-    if (fromdate != null && todate != null) {
-      this.OnBrsDateChanges(fromdate, todate);
-      if (!this.validate) {
-        const fd = this._commonService.getFormatDateNormal(fromdate);
-        const td = this._commonService.getFormatDateNormal(todate);
-        this.fromdate = fd; this.todate = td; this.validatebrsdateclear = false;
-        this.pageSetUp(); this.GetDataOnBrsDates(fd, td, this.bankid);
-      } else { this.validatebrsdateclear = true; }
-    } else { this._commonService.showWarningMessage('select fromdate and todate'); }
-  }
+  // ShowBrsClear() {
+  //   this._searchText = ''; this.gridData = [];
+  //   this.amounttotal = 0;
+  //   const fromdate = this.ChequesInBankForm.controls['pfrombrsdate'].value;
+  //   const todate = this.ChequesInBankForm.controls['ptobrsdate'].value;
+  //   if (fromdate != null && todate != null) {
+  //     this.OnBrsDateChanges(fromdate, todate);
+  //     if (!this.validate) {
+  //       const fd = this._commonService.getFormatDateNormal(fromdate);
+  //       const td = this._commonService.getFormatDateNormal(todate);
+  //       this.fromdate = fd; this.todate = td; this.validatebrsdateclear = false;
+  //       this.pageSetUp(); this.GetDataOnBrsDates(fd, td, this.bankid);
+  //     } else { this.validatebrsdateclear = true; }
+  //   } else { this._commonService.showWarningMessage('select fromdate and todate'); }
+  // }
 
-  ShowBrsReturn() {
-    this._searchText = ''; this.gridData = [];
-    this.amounttotal = 0;
-    const fromdate = this.BrsDateForm.controls['frombrsdate'].value;
-    const todate = this.BrsDateForm.controls['tobrsdate'].value;
-    if (fromdate != null && todate != null) {
-      this.OnBrsDateChanges(fromdate, todate);
-      if (!this.validate) {
-        const fd = this._commonService.getFormatDateNormal(fromdate);
-        const td = this._commonService.getFormatDateNormal(todate);
-        this.fromdate = fd; this.todate = td; this.validatebrsdatereturn = false;
-        this.pageSetUp(); this.GetDataOnBrsDates(fd, td, this.bankid);
-      } else { this.validatebrsdatereturn = true; }
-    } else { this._commonService.showWarningMessage('select fromdate and todate'); }
-  }
+  // ShowBrsReturn() {
+  //   this._searchText = ''; this.gridData = [];
+  //   this.amounttotal = 0;
+  //   const fromdate = this.BrsDateForm.controls['frombrsdate'].value;
+  //   const todate = this.BrsDateForm.controls['tobrsdate'].value;
+  //   if (fromdate != null && todate != null) {
+  //     this.OnBrsDateChanges(fromdate, todate);
+  //     if (!this.validate) {
+  //       const fd = this._commonService.getFormatDateNormal(fromdate);
+  //       const td = this._commonService.getFormatDateNormal(todate);
+  //       this.fromdate = fd; this.todate = td; this.validatebrsdatereturn = false;
+  //       this.pageSetUp(); this.GetDataOnBrsDates(fd, td, this.bankid);
+  //     } else { this.validatebrsdatereturn = true; }
+  //   } else { this._commonService.showWarningMessage('select fromdate and todate'); }
+  // }
 
   // ── Search ────────────────────────────────────────────────────────────────────
+   ShowBrsClear() {
+  this._searchText = ''; this.gridData = [];
+  this.amounttotal = 0;
+  const fromdate = this.brsFromDateModel;
+  const todate = this.brsToDateModel;
+  if (fromdate != null && todate != null) {
+    this.OnBrsDateChanges(fromdate, todate);
+    if (!this.validate) {
+      this.validatebrsdateclear = false;
+      const fd = new Date(fromdate as Date); fd.setHours(0,0,0,0);
+      const td = new Date(todate as Date); td.setHours(23,59,59,999);
 
+      const bankFilter = (d: any) => this.bankid == 0 || d?.pdepositbankid == this.bankid;
+      const filtered = this.ChequesClearReturnData
+        .filter(bankFilter)
+        .filter((d: any) => d.pchequestatus === 'Y')
+        .filter((d: any) => {
+          if (!d.pCleardate) return false;
+          const clearDate = new Date(this._commonService.getDateObjectFromDataBase(d.pCleardate) as Date);
+          clearDate.setHours(0,0,0,0);
+          return clearDate >= fd && clearDate <= td;
+        });
+
+      this.gridData = JSON.parse(JSON.stringify(filtered));
+      this.gridDatatemp = [...this.gridData];
+      this.cleared = this.gridData.length;
+      this.amounttotal = this.gridData.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
+      this.page.totalElements = this.gridData.length;
+      this.page.totalPages = Math.ceil(this.gridData.length / (this.page.size || 10));
+      this.cdr.markForCheck();
+    } else { this.validatebrsdateclear = true; }
+  } else { this._commonService.showWarningMessage('Select fromdate and todate'); }
+}
+
+ShowBrsReturn() {
+  this._searchText = ''; this.gridData = [];
+  this.amounttotal = 0;
+  const fromdate = this.brsReturnFromDateModel;
+  const todate = this.brsReturnToDateModel;
+  if (fromdate != null && todate != null) {
+    this.OnBrsDateChanges(fromdate, todate);
+    if (!this.validate) {
+      this.validatebrsdatereturn = false;
+      const fd = new Date(fromdate as Date); fd.setHours(0,0,0,0);
+      const td = new Date(todate as Date); td.setHours(23,59,59,999);
+
+      const bankFilter = (d: any) => this.bankid == 0 || d?.pdepositbankid == this.bankid;
+      const filtered = this.ChequesClearReturnData
+        .filter(bankFilter)
+        .filter((d: any) => d.pchequestatus === 'R')
+        .filter((d: any) => {
+          if (!d.pCleardate) return false;
+          const returnDate = new Date(this._commonService.getDateObjectFromDataBase(d.pCleardate) as Date);
+          returnDate.setHours(0,0,0,0);
+          return returnDate >= fd && returnDate <= td;
+        });
+
+      this.gridData = JSON.parse(JSON.stringify(filtered));
+      this.gridDatatemp = [...this.gridData];
+      this.returned = this.gridData.length;
+      this.amounttotal = this.gridData.reduce((s: number, c: any) => s + (c.ptotalreceivedamount || 0), 0);
+      this.page.totalElements = this.gridData.length;
+      this.page.totalPages = Math.ceil(this.gridData.length / (this.page.size || 10));
+      this.cdr.markForCheck();
+    } else { this.validatebrsdatereturn = true; }
+  } else { this._commonService.showWarningMessage('Select fromdate and todate'); }
+}
   showSearchText(_event: any) {
     const searchText = this.ChequesInBankForm.controls['searchtext'].value?.toString().trim() || '';
     this._searchText = searchText;
@@ -1152,7 +1221,10 @@ export class ChequesInbank implements OnInit {
       this._commonService.getBranchCode()
     ).subscribe({
       next: (res: any[]) => {
-        const charge = Array.isArray(res) && res.length > 0 ? res[0].chargeAmount : 250;
+         
+        const charge = Array.isArray(res) && res.length > 0 && res[0].chargeAmount > 0
+          ? res[0].chargeAmount
+          : 250;
         this.chequereturncharges = this.minimumReturnCharge = this.returnChargesInputValue = charge;
       },
       error: (error: any) => {
@@ -1231,6 +1303,168 @@ export class ChequesInbank implements OnInit {
   }
 
 
+  // Save() {
+  //   console.log('Save called, status:', this.status);
+  //   this.DataForSaving = [];
+
+  //   if (this.status === 'autobrs') {
+  //     this.DataForSaving = this.autoBrsData;
+  //     if (this.DataForSaving.length) {
+  //       if (confirm('Do you want to save ?')) {
+  //         this.gridLoading.set(true);
+  //         this._prepareSaveItems(this.DataForSaving, true);
+  //         this.ChequesInBankForm.controls['pchequesOnHandlist'].setValue(this.DataForSaving);
+  //         const payload = this._buildSavePayload();
+  //         this._accountingtransaction.SaveChequesInBank(payload).subscribe(
+  //           (res: any) => {
+  //             if (res[0] === true) {
+  //               this.gridLoading.set(false);
+  //               setTimeout(() => this._commonService.showSuccessMessage());
+  //               this.Clear(); this.autoBrsData = [];
+  //             }
+  //             this.disablesavebutton = false; this.buttonname = 'Save';
+  //           },
+  //           (error: any) => {
+  //             this.gridLoading.set(false);
+  //             setTimeout(() => this._commonService.showErrorMessage(error));
+  //             this.disablesavebutton = false; this.buttonname = 'Save';
+  //           }
+  //         );
+  //       } else { this.gridLoading.set(false); }
+  //     } else {
+  //       this.disablesavebutton = false; this.buttonname = 'Save';
+  //       setTimeout(() => this._commonService.showWarningMessage('Select atleast one record'));
+  //     }
+
+  //   } else {
+
+  //     // ── Check bank selected
+  //     if (!this.bankid || this.bankid == 0) {
+  //       this._commonService.showWarningMessage('Please Select Bank');
+  //       return;
+  //     }
+
+  //     // ── Check cheque clear date
+  //     const chequecleardate = this.chequeClearDateModel;
+  //     if (!chequecleardate) {
+  //       this._commonService.showWarningMessage('Please Select Cheque Clear Date');
+  //       return;
+  //     }
+
+  //     // ── Check selected records
+  //     const selectedRecords = this.gridData.filter(
+  //       el => el.pchequestatus === 'Y' || el.pchequestatus === 'R');
+  //     console.log('selectedRecords:', selectedRecords.length);
+
+  //     if (selectedRecords.length === 0) {
+  //       this._commonService.showWarningMessage('Please Select records');
+  //       return;
+  //     }
+
+  //     // ── Check empty reference text for cleared records
+  //     if (!this.showhidegridcolumns) {
+  //       const emptyRef = selectedRecords
+  //         .filter(el => el.pchequestatus === 'Y')
+  //         .some(item => !item.preferencetext || item.preferencetext.toString().trim() === '');
+  //       if (emptyRef) {
+  //         this._commonService.showWarningMessage('Please enter all input fields!');
+  //         return;
+  //       }
+
+
+  //       const dupeCount = this.validateDuplicates();
+  //       if (dupeCount > 0) {
+  //         this._commonService.showWarningMessage('Duplicates Found please enter unique values');
+  //         return;
+  //       }
+  //     }
+
+  //     // ── Transaction date vs cheque clear date
+  //     const transactiondate = new Date();
+  //     if (new Date(transactiondate).getTime() < new Date(chequecleardate).getTime()) {
+  //       this._commonService.showWarningMessage(
+  //         'Transaction Date Should be Greater than or Equal to Cheque Clear Date');
+  //       return;
+  //     }
+
+  //     // ── Confirm save
+  //     if (!confirm('Do You Want To Save ?')) return;
+
+  //     this.disablesavebutton = true;
+  //     this.buttonname = 'Processing';
+  //     this.DataForSaving = selectedRecords;
+
+  //     this._prepareSaveItems(this.DataForSaving, false);
+  //     this.ChequesInBankForm.get('pchequesOnHandlist')?.setValue(this.DataForSaving);
+  //     const payload = this._buildSavePayload();
+  //     console.log('payload:', payload);
+
+  //     this._accountingtransaction.SaveChequesInBank(payload).subscribe(
+  //       (data: any) => {
+  //         console.log('save response:', data);
+  //         if (data) {
+  //           const receipt = data.o_common_receipt_no;
+  //           if (receipt && receipt.split('$')[0] === 'R') {
+  //             const mo = data.o_return_receipts;
+  //             const encodedMo = encodeURIComponent(mo);
+  //             this._noticeservice.GetChequeReturnInvoice(
+  //               this._commonService.getschemaname(), this._commonService.getbranchname(),
+  //               this._commonService.getCompanyCode(), this._commonService.getBranchCode(),
+  //               encodedMo
+  //             ).subscribe((res: any) => {
+  //               if (res?.length > 0) {
+  //                 this.previewdetails = res;
+  //                 for (const p of this.previewdetails) {
+  //                   p.paddress = p.paddress.split(',');
+  //                   if (JSON.stringify(p.incidentalcharges) === '{}' ||
+  //                     isNullOrEmptyString(p.incidentalcharges)) p.incidentalcharges = 0;
+  //                 }
+  //                 this.pdfContentData();
+  //               }
+  //             });
+  //             this._noticeservice.GetChequeReturnVoucher(
+  //               this._commonService.getschemaname(), this._commonService.getbranchname(),
+  //               this._commonService.getCompanyCode(), this._commonService.getBranchCode(),
+  //               encodedMo
+  //             ).subscribe({
+  //               next: (res: any) => {
+  //                 if (res?.length > 0) {
+  //                   this.chequerwturnvoucherdetails = res;
+  //                   this.chequereturnvoucherpdf();
+  //                 }
+  //               },
+  //               error: (err: any) =>
+  //                 setTimeout(() => this._commonService.showErrorMessage(err))
+  //             });
+  //           }
+  //           setTimeout(() => this._commonService.showSuccessMessage());
+  //           const hasClear = this.DataForSaving.some(i => i.pchequestatus === 'Y');
+  //           const hasReturn = this.DataForSaving.some(i => i.pchequestatus === 'R');
+  //           this.Clear();
+  //           if (hasReturn) {
+  //             this.status = 'returned';
+  //             this.selectedTab = 'returned';
+  //             this.modeofreceipt = 'RETURN';
+  //             this.Returned();
+  //           } else if (hasClear) {
+  //             this.status = 'cleared';
+  //             this.selectedTab = 'cleared';
+  //             this.modeofreceipt = 'CLEAR';
+  //             this.Cleared();
+  //           }
+  //         }
+  //         this.disablesavebutton = false; this.buttonname = 'Save';
+  //         this.cdr.markForCheck();
+  //       },
+  //       (error: any) => {
+  //         console.log('save error:', error);
+  //         setTimeout(() => this._commonService.showErrorMessage(error));
+  //         this.disablesavebutton = false; this.buttonname = 'Save';
+  //       }
+  //     );
+  //   }
+  // }
+
   Save() {
     console.log('Save called, status:', this.status);
     this.DataForSaving = [];
@@ -1266,20 +1500,20 @@ export class ChequesInbank implements OnInit {
 
     } else {
 
-      // ── Check bank selected
+      // ── 1. Check bank selected
       if (!this.bankid || this.bankid == 0) {
         this._commonService.showWarningMessage('Please Select Bank');
         return;
       }
 
-      // ── Check cheque clear date
+      // ── 2. Check cheque clear date
       const chequecleardate = this.chequeClearDateModel;
       if (!chequecleardate) {
         this._commonService.showWarningMessage('Please Select Cheque Clear Date');
         return;
       }
 
-      // ── Check selected records
+      // ── 3. Check selected records
       const selectedRecords = this.gridData.filter(
         el => el.pchequestatus === 'Y' || el.pchequestatus === 'R');
       console.log('selectedRecords:', selectedRecords.length);
@@ -1289,7 +1523,7 @@ export class ChequesInbank implements OnInit {
         return;
       }
 
-      // ── Check empty reference text for cleared records
+      // ── 4. Check empty reference text for cleared records
       if (!this.showhidegridcolumns) {
         const emptyRef = selectedRecords
           .filter(el => el.pchequestatus === 'Y')
@@ -1299,7 +1533,6 @@ export class ChequesInbank implements OnInit {
           return;
         }
 
-
         const dupeCount = this.validateDuplicates();
         if (dupeCount > 0) {
           this._commonService.showWarningMessage('Duplicates Found please enter unique values');
@@ -1307,7 +1540,7 @@ export class ChequesInbank implements OnInit {
         }
       }
 
-      // ── Transaction date vs cheque clear date
+      // ── 5. Transaction date vs cheque clear date
       const transactiondate = new Date();
       if (new Date(transactiondate).getTime() < new Date(chequecleardate).getTime()) {
         this._commonService.showWarningMessage(
@@ -1315,7 +1548,7 @@ export class ChequesInbank implements OnInit {
         return;
       }
 
-      // ── Confirm save
+      // ── 6. Confirm save
       if (!confirm('Do You Want To Save ?')) return;
 
       this.disablesavebutton = true;
