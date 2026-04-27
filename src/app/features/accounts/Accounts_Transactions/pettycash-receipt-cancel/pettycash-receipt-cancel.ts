@@ -22,10 +22,10 @@ import { DatePickerModule } from 'primeng/datepicker';
 export class PettycashReceiptCancel implements OnInit {
 
 
-  // ─── Constants ────────────────────────────────────────────────────────────
+
   readonly currencysymbol = '₹';
 
-  // ─── Signals ──────────────────────────────────────────────────────────────
+
   creditto = signal<string>('');
   receivedfrom = signal<string>('');
   receiptdate = signal<any>('');
@@ -46,16 +46,16 @@ export class PettycashReceiptCancel implements OnInit {
   disabletransactiondate = signal<boolean>(false);
   pettycashValidation = signal<Record<string, string>>({});
   pageCriteria = signal<PageCriteria>(new PageCriteria());
+  showClicked = signal<boolean>(false);
 
-  // ─── Computed ─────────────────────────────────────────────────────────────
   hasReceiptData = computed(() => this.lstdetails().length > 0);
 
-  // ─── RxJS (non-signal — stays as Observable for ng-select typeahead) ──────
+
   authorizedbylist$ = of<any[]>([]);
   contactSearchevent = new Subject<string>();
   pDatepickerMaxDate = new Date();
 
-  // ─── Form ─────────────────────────────────────────────────────────────────
+
   PettyCashCancel!: FormGroup<{
     receiptnumber: FormControl<string | null>;
     receiptid: FormControl<number | null>;
@@ -74,7 +74,7 @@ export class PettycashReceiptCancel implements OnInit {
 
   pDobConfig: any = {};
 
-  // ─── Constructor ──────────────────────────────────────────────────────────
+
   constructor(
     private _commonService: CommonService,
     private _AccountingTransactionsService: AccountsTransactions,
@@ -82,7 +82,7 @@ export class PettycashReceiptCancel implements OnInit {
     private datePipe: DatePipe,
     private _paymentVouecherServices: AccountsReports,
     private fb: FormBuilder,
-    // private _SubscriberConfigurationService: SubscriberConfigurationService,
+
     private _generalreceiptcancelservice: AccountsTransactions
   ) {
     this.pDobConfig = {
@@ -99,7 +99,6 @@ export class PettycashReceiptCancel implements OnInit {
     }
   }
 
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.buildForm();
     this.setPageModel();
@@ -111,7 +110,6 @@ export class PettycashReceiptCancel implements OnInit {
 
 
 
-  // ─── Form Builder ─────────────────────────────────────────────────────────
   private buildForm(): void {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -134,7 +132,6 @@ export class PettycashReceiptCancel implements OnInit {
   }
 
 
-  // ─── Receipt Selection ────────────────────────────────────────────────────
   getreceiptdata(event: any): void {
     if (event == null) {
       this.clearReceiptFields();
@@ -215,8 +212,11 @@ export class PettycashReceiptCancel implements OnInit {
     this.pageCriteria.update(pc => ({ ...pc, totalrows: 0 }));
   }
 
-  // ─── Show Data ────────────────────────────────────────────────────────────
+
+
   showdata(): void {
+    this.showClicked.set(true);
+
     const receiptId = this.PettyCashCancel.value.receiptid;
     if (!receiptId) {
       this._commonService.showWarningMessage('Select receipt number');
@@ -246,7 +246,7 @@ export class PettycashReceiptCancel implements OnInit {
       });
   }
 
-  // ─── Save ─────────────────────────────────────────────────────────────────
+
   Save(): void {
     debugger;
     if (this.PettyCashCancel.invalid) {
@@ -353,7 +353,7 @@ export class PettycashReceiptCancel implements OnInit {
     });
   }
 
-  // ─── Contact Typeahead ────────────────────────────────────────────────────
+
   private contactSearch(): void {
     this.authorizedbylist$ = concat(
       of([]),
@@ -375,9 +375,13 @@ export class PettycashReceiptCancel implements OnInit {
     );
   }
 
-  // ─── Clear / Reset ────────────────────────────────────────────────────────
+
+
   clear(): void {
-    this.PettyCashCancel.reset({ ppaymentdate: new Date() });
+    const currentDate = this.PettyCashCancel.get('ppaymentdate')?.value;
+
+    this.showClicked.set(false);
+    this.PettyCashCancel.reset({ ppaymentdate: currentDate });
     this.clearReceiptFields();
     this.show.set(false);
     this.ButtonType.set('Save');
@@ -387,8 +391,6 @@ export class PettycashReceiptCancel implements OnInit {
   }
 
 
-
-  // ─── Data Fetchers ────────────────────────────────────────────────────────
   getReceiptNumber(): void {
     this._AccountingTransactionsService
       .getReceiptNumber(
@@ -418,7 +420,7 @@ export class PettycashReceiptCancel implements OnInit {
       });
   }
 
-  // ─── Pagination & Helpers ─────────────────────────────────────────────────
+
   setPageModel(): void {
     this.pageCriteria.update(pc => ({
       ...pc,

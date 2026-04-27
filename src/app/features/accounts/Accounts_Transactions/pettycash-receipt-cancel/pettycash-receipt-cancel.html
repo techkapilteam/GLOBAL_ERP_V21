@@ -10,9 +10,7 @@
         <p class="card-subtitle">Void or cancel petty cash receipt transactions and reverse entries</p>
       </div>
       <span class="erp-spacer"></span>
-      <!-- <a routerLink="/dashboard/accounts/accounts-transactions/petty-cash-view" class="erp-btn btn-white btn-sm">
-        <i class="pi pi-arrow-left"></i> Back
-      </a> -->
+
     </div>
 
     <!-- Card Body -->
@@ -35,7 +33,10 @@
                     (PettyCashCancel.get('receiptid')?.touched ||
                       PettyCashCancel.get('receiptid')?.dirty)
                   "></ng-select>
-                @if (PettyCashCancel.get('receiptid')?.errors?.['required']) {
+
+                @if (
+                PettyCashCancel.get('receiptid')?.errors?.['required'] && showClicked()
+                ) {
                 <span class="erp-field-error">Receipt No. is required</span>
                 }
               </div>
@@ -51,7 +52,8 @@
                       <i class="pi pi-calendar erp-input-icon"></i>
                       <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                         placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate" [disabled]="true"> </p-datepicker> 
+                        inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate" [disabled]="true">
+                      </p-datepicker>
                     </div>
                   </div>
                 </div>
@@ -155,19 +157,77 @@
           </p-table>
         </div>
 
+
+
+
         <!-- NOTES/REMARKS SECTION -->
         <div class="p-4">
-          <div class="erp-form-group">
-            <label class="erp-label" for="remarks">Cancel Remarks</label>
-            <!-- <textarea id="remarks" class="erp-textarea" placeholder="Enter reason for cancellation"
-              formControlName="remarks" rows="3"></textarea>   -->
+          <div class="row g-2">
 
-            <textarea id="cancellationreason" formControlName="cancellationreason" class="erp-textarea"
-              placeholder="Enter reason for cancellation" rows="3">
-</textarea>
+
+            <div class="col-12 col-md-6">
+              <div class="erp-form-group">
+                <label class="erp-label" for="cancellationreason">Cancel Remarks</label>
+                <textarea id="cancellationreason" formControlName="cancellationreason" class="erp-textarea"
+                  placeholder="Enter reason for cancellation" rows="3">
+        </textarea>
+                @if (
+                PettyCashCancel.get('cancellationreason')?.errors?.['required'] &&
+                PettyCashCancel.get('cancellationreason')?.touched
+                ) {
+                <span class="erp-field-error">Cancellation Reason is required</span>
+                }
+              </div>
+            </div>
+
+            <!-- Authorised By -->
+            <div class="col-12 col-md-6">
+              <div class="erp-form-group">
+                <label class="erp-label" for="autorizedcontactid">
+                  Authorised By <span class="required">*</span>
+                </label>
+                <ng-select [items]="(authorizedbylist$ | async) ?? []" bindLabel="subintroducedname"
+                  bindValue="subintroducedid" formControlName="autorizedcontactid" [typeahead]="contactSearchevent"
+                  [multiple]="false" [searchable]="true" [clearable]="true"
+                  (change)="subIntroducedGridRowSelect($event)" placeholder="Select" [class.ng-invalid]="
+            PettyCashCancel.get('autorizedcontactid')?.invalid &&
+            PettyCashCancel.get('autorizedcontactid')?.touched
+          ">
+
+                  <ng-template ng-header-tmp>
+                    <div class="row">
+                      <span class="col-3 erp-label">Code</span>
+                      <span class="col-3 erp-label">Contact Name</span>
+                      <span class="col-3 text-center erp-label">Mobile No.</span>
+                      <span class="col-3 erp-label">Email Id</span>
+                    </div>
+                  </ng-template>
+
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="row">
+                      <span class="col-3">{{ item.subintroducedcode }}</span>
+                      <span class="col-3">{{ item.subintroducedname }}</span>
+                      <span class="col-3 text-center">{{ item.subintroducedmobilenumber }}</span>
+                      <span class="col-3">{{ item.subintroducedemailid }}</span>
+                    </div>
+                  </ng-template>
+
+                </ng-select>
+                @if (
+                PettyCashCancel.get('autorizedcontactid')?.errors?.['required'] &&
+                PettyCashCancel.get('autorizedcontactid')?.touched
+                ) {
+                <span class="erp-field-error">Authorised By is required</span>
+                }
+              </div>
+            </div>
+
+
+
 
           </div>
         </div>
+
         }
 
       </form>
