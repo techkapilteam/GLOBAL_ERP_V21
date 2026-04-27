@@ -2,8 +2,17 @@
 <div class="module-page">
 
   <!-- Breadcrumb Section -->
-  <div class="d-flex justify-between align-center gap-4 mb-2 p-4">
-    <div>
+  <div class="page-header">
+    <div class="page-header__meta">
+      <nav class="erp-breadcrumb">
+        <button class="bc-item"><i class="pi pi-home"></i> Home</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Accounts</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-item">Transactions</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item current">Cheques Issued</span>
+      </nav>
       <h1 class="page-title">
         <i class="pi pi-list"></i> Cheques Issued
       </h1>
@@ -14,22 +23,24 @@
   <!-- Main Card -->
   <div class="erp-card">
 
-    <!-- Card Header with Search -->
+    <!-- Card Header -->
     <div class="card-header">
       <div class="card-title">
         <i class="pi pi-list"></i> Cheques Issued Transactions
       </div>
 
-      <!-- Search in header -->
+      <!-- Search -->
       <div class="header-search">
         <div class="erp-input-wrap">
           <i class="pi pi-search erp-input-icon"></i>
-          <input type="search" class="erp-input icon-pad" placeholder="Search cheques..."
+          <input type="search" class="erp-input icon-pad erp-input--sm" placeholder="Search cheques..."
             (input)="onSearch($any($event.target).value)" />
         </div>
       </div>
 
+      <!-- Export Actions -->
       <div class="card-actions">
+        @if (gridData().length > 0) {
         <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="PDF">
           <i class="pi pi-file-pdf"></i> PDF
         </button>
@@ -39,21 +50,23 @@
         <button class="erp-btn btn-white btn-sm" (click)="export()" title="Excel">
           <i class="pi pi-download"></i> Excel
         </button>
+        }
       </div>
     </div>
 
     <!-- Filter Bar -->
     <form [formGroup]="ChequesIssuedForm">
-      <div class="filter-bar stable-layout">
+      <div class="filter-bar">
+
         <div class="filter-group">
           <label class="filter-lbl">
             Date <span class="required">*</span>
           </label>
           <div class="erp-input-wrap erp-date-wrap">
             <i class="pi pi-calendar erp-input-icon"></i>
-            <p-datepicker formControlName="ptransactiondate" id="ptransactiondate" dateFormat="dd-M-yy"
-              placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-              inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
+            <input class="erp-input icon-pad" type="text" title="Date" id="ptransactiondate"
+              formControlName="ptransactiondate" readonly [bsConfig]="dpConfig" #dp="bsDatepicker" bsDatepicker
+              placement="bottom" (keydown)="$event.preventDefault()" />
           </div>
         </div>
 
@@ -61,23 +74,25 @@
           <label class="filter-lbl">
             Bank <span class="required">*</span>
           </label>
-          <ng-select appendTo="body" [items]="bankList()" bindLabel="pbankname" bindValue="pbankid"
-            formControlName="bankname" (change)="onBankChange($event)" placeholder="Select" [closeOnSelect]="true"
-            [clearable]="true" />
+          <ng-select [items]="bankList()" bindLabel="pbankname" bindValue="pbankid" formControlName="bankname"
+            (change)="onBankChange($event)" placeholder="Select" [closeOnSelect]="true" [clearable]="true" />
         </div>
 
-        <!-- Balance Info Card (Reserved space) -->
-        <div class="filter-info-card" [style.visibility]="banknameshowhide() ? 'visible' : 'hidden'">
+        <!-- Balance Info Card -->
+        <div class="filter-info-card">
+          @if (banknameshowhide() && bankname) {
           <div class="info-header">
-            <span class="info-bank-name">{{ bankname || 'Select a Bank' }}</span>
+            <span class="info-bank-name">{{ bankname || '' }}</span>
           </div>
+          }
           <div class="info-body">
             <h4 class="info-title">Bank Balance</h4>
             <div class="info-items">
               <span class="info-item">
                 <b>Balance:</b>
                 <span class="info-value">
-                  {{ (bankbalance() | currency: currencySymbol()) || '0.00' }} <small>{{ bankbalancetype() }}</small>
+                  {{ bankbalance() | currency: currencySymbol() }}
+                  <small>{{ bankbalancetype() }}</small>
                 </span>
               </span>
               <span class="info-item">
@@ -87,13 +102,15 @@
             </div>
           </div>
         </div>
+
       </div>
     </form>
 
-    <!-- Status Tabs (Horizontal) -->
+    <!-- Status Tabs -->
     <div class="tabs-section">
       <div class="tabs-nav">
         @if (tabsShowOrHideBasedOnfromFormName()) {
+
         <button class="tab-item" [class.active]="activeTab() === 'all'" (click)="All(); activeTab.set('all')">
           <span class="tab-label">All</span>
           <span class="erp-badge badge-warning">{{ all() }}</span>
@@ -102,7 +119,7 @@
         <button class="tab-item" [class.active]="activeTab() === 'chequesissued'"
           (click)="ChequesIssued(); activeTab.set('chequesissued')">
           <span class="tab-label">Cheques Issued</span>
-          <span class="erp-badge badge-neutral">{{ chequesissued() }}</span>
+          <span class="erp-badge badge-secondary">{{ chequesissued() }}</span>
         </button>
 
         <button class="tab-item" [class.active]="activeTab() === 'onlinepayment'"
@@ -139,6 +156,7 @@
           <span class="tab-label">Auto BRS</span>
         </button>
         }
+
         }
       </div>
     </div>
@@ -167,95 +185,158 @@
           [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           styleClass="gr-table p-datatable-sm p-datatable-gridlines">
 
-          <!-- Header -->
+          <!-- HEADER -->
           <ng-template pTemplate="header">
             <tr>
-              <th style="width: 150px;">Actions</th>
-              <th style="min-width: 180px;" class="th-center">
-                <div class="th-cell">
-                  Cheque/Reference No.
+
+              @if (!showhidegridcolumns()) {
+              <th class="th-center th-action-sm">
+                <div class="th-cell th-cell--center">Clear</div>
+              </th>
+              <th class="th-center th-action-sm">
+                <div class="th-cell th-cell--center">Return</div>
+              </th>
+              <th class="th-ref">
+                <div class="th-cell">Reference No</div>
+              </th>
+              @if (status() !== 'autobrs') {
+              <th class="th-center th-action-sm">
+                <div class="th-cell th-cell--center">Cancel</div>
+              </th>
+              }
+              }
+
+              <th>
+                <div class="th-cell th-cell--center">Cheque / Reference No.</div>
+              </th>
+              <th class="th-right">
+                <div class="th-cell th-cell--right">
+                  <i class="pi pi-indian-rupee"></i> Amount
                 </div>
               </th>
-              <th style="min-width: 200px;">
-                <div class="th-cell">Party</div>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-user"></i> Party
+                </div>
               </th>
-              <th style="min-width: 140px;">
-                <div class="th-cell">Payment Date</div>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-file"></i> Payment Id
+                </div>
               </th>
-              <th style="min-width: 120px;">
-                <div class="th-cell">Payment ID</div>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-calendar"></i> Payment Date
+                </div>
               </th>
-              <th style="min-width: 140px;" class="th-right">
-                <div class="th-cell">Amount</div>
+              <th>
+                <div class="th-cell">
+                  <i class="pi pi-credit-card"></i> Transaction Mode
+                </div>
               </th>
-              <th style="min-width: 120px;">
-                <div class="th-cell">Status</div>
-              </th>
-              <th style="min-width: 160px;">
-                <div class="th-cell">Transaction Mode</div>
-              </th>
+
             </tr>
           </ng-template>
 
-          <!-- Body -->
-          <ng-template pTemplate="body" let-row>
+          <!-- BODY -->
+          <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
             <tr>
-              <td class="td-actions">
-                <div class="action-group">
-                  @if (!showhidegridcolumns()) {
-                  <button class="erp-btn btn-outline btn-sm btn-icon" title="Clear">
-                    <i class="pi pi-check"></i>
-                  </button>
-                  @if (status() !== 'autobrs') {
-                  <button class="erp-btn btn-outline btn-sm btn-icon" title="Return">
-                    <i class="pi pi-arrow-left"></i>
-                  </button>
-                  <button class="erp-btn btn-outline btn-sm btn-icon" title="Cancel">
-                    <i class="pi pi-times"></i>
-                  </button>
-                  }
-                  }
+
+              @if (!showhidegridcolumns()) {
+
+              <td class="td-center td-action-sm">
+                <div class="td-checkbox-wrap">
+                  <input type="checkbox" class="erp-checkbox erp-checkbox--clear"
+                    [checked]="row.pdepositstatus === true && row.pchequestatus === 'P'"
+                    (change)="checkedClear($event, row)" />
                 </div>
               </td>
+
+              <td class="td-center td-action-sm">
+                <div class="td-checkbox-wrap">
+                  <input type="checkbox" class="erp-checkbox erp-checkbox--return"
+                    [checked]="row.preturnstatus === true" (change)="checkedReturn($event, row)" />
+                </div>
+              </td>
+
+              <td class="td-ref">
+                <input type="text" class="erp-input erp-input--ref" [value]="row.preferencetext || ''"
+                  placeholder="Ref No." (change)="checkDuplicateValueslatest($event, rowIndex, row)"
+                  (blur)="checkDuplicateValueslatest($event, rowIndex, row)" />
+              </td>
+
+              @if (status() !== 'autobrs') {
+              <td class="td-center td-action-sm">
+                <div class="td-checkbox-wrap">
+                  <input type="checkbox" class="erp-checkbox erp-checkbox--cancel"
+                    [checked]="row.pcancelstatus === true" (change)="checkedCancel($event, row)" />
+                </div>
+              </td>
+              }
+
+              }
+
               <td class="td-center">
-                <span class="receipt-no">{{ row.pChequenumber || row.preferencenumber || '--' }}</span>
+                <span class="cheque-ref">{{ row.pChequenumber || row.preferencenumber || '--' }}</span>
               </td>
-              <td>{{ row.ppartyname || row.partyname || row.pBankName || '--' }}</td>
-              <td>
-                <div class="td-date">
-                  <i class="pi pi-calendar text-muted"></i>
-                  {{ row.preceiptdate ? (row.preceiptdate | date: 'dd-MMM-yyyy') : '--' }}
-                </div>
-              </td>
-              <td>
-                <span class="receipt-no">#{{ row.preceiptid || '--' }}</span>
-              </td>
+
               <td class="td-right">
                 <div class="amount-cell">
                   <span class="amt-sym">{{ currencySymbol() }}</span>
-                  <span class="amt-num">{{ (row.ptotalreceivedamount || 0) | number:'1.2-2' }}</span>
+                  <span class="amt-num">{{ row.ptotalreceivedamount | number:'1.2-2' }}</span>
                 </div>
               </td>
+
+              <td>{{ row.ppartyname || row.partyname || row.pBankName || '--' }}</td>
+
+              <td>{{ row.preceiptid || '--' }}</td>
+
               <td>
-                <span class="erp-badge" [class.badge-success]="row.status === 'Cleared'"
-                  [class.badge-warning]="row.status === 'Returned'" [class.badge-danger]="row.status === 'Cancelled'"
-                  [class.badge-info]="row.status !== 'Cleared' && row.status !== 'Returned' && row.status !== 'Cancelled'">
-                  {{ row.pchequestatus || '--' }}
-                </span>
+                <div class="td-date">
+                  {{ row.preceiptdate ? (row.preceiptdate | date: 'dd-MMM-yyyy') : '--' }}
+                </div>
               </td>
-              <td>
-                <span class="erp-badge badge-neutral">{{ row.ptypeofpayment || '--' }}</span>
-              </td>
+
+              <td>{{ row.ptypeofpayment || '--' }}</td>
+
             </tr>
           </ng-template>
 
-          <!-- Empty Message -->
+          <!-- FOOTER -->
+          <ng-template pTemplate="footer">
+            @if (gridData().length > 0) {
+            <tr>
+              @if (!showhidegridcolumns()) {
+              <td></td>
+              <td></td>
+              <td></td>
+              @if (status() !== 'autobrs') {
+              <td></td>
+              }
+              }
+              <td class="td-center td-footer-label">Total</td>
+              <td class="td-right">
+                <div class="amount-cell amount-cell--total">
+                  <span class="amt-sym">{{ currencySymbol() }}</span>
+                  <span class="amt-num">{{ amounttotal() | number:'1.2-2' }}</span>
+                </div>
+              </td>
+              <td colspan="4"></td>
+            </tr>
+            }
+          </ng-template>
+          
+
+
+            
+
+          <!-- EMPTY -->
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="8" class="p-5">
-                <div class="text-center text-muted">
-                  <i class="pi pi-inbox fs-2 mb-2 d-block"></i>
-                  <p>No cheques found for the selected criteria</p>
+              <td colspan="11">
+                <div class="tbl-empty">
+                  <i class="pi pi-inbox tbl-empty__icon"></i>
+                  <p class="tbl-empty__text">No cheques found</p>
                 </div>
               </td>
             </tr>
@@ -267,18 +348,19 @@
     </div>
 
     <!-- Card Footer -->
-    <div class="card-footer d-flex justify-end gap-2">
-      <button (click)="Clear()" class="erp-btn btn-secondary">
-        <i class="pi pi-refresh"></i> Reset
-      </button>
-      <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton()">
-        @if (disablesavebutton()) {
-        <i class="pi pi-spin pi-spinner mr-2"></i>
-        } @else {
-        <i class="pi pi-save"></i>
-        }
-        {{ buttonname() }}
-      </button>
+    <div class="card-footer">
+      <div class="footer-actions">
+        <button (click)="Clear()" class="erp-btn btn-secondary">
+          <i class="pi pi-times"></i> Clear
+        </button>
+        <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton()">
+          @if (!disablesavebutton()) {
+          <i class="pi pi-check"></i>
+          }
+          <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': disablesavebutton() }"></i>
+          {{ buttonname() }}
+        </button>
+      </div>
     </div>
 
   </div>
