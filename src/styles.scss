@@ -5102,6 +5102,8 @@ input[readonly].erp-input {
   --p-datepicker-date-hover-color: var(--clr-p2, #0891b2);
   --p-datepicker-date-selected-background: var(--clr-p2, #0891b2);
   --p-datepicker-date-selected-color: #ffffff;
+  --p-datepicker-date-disabled-color: #94a3b8;
+  --p-datepicker-date-disabled-background: #f1f5f9;
 }
 
 body .p-datepicker,
@@ -5164,6 +5166,38 @@ body .p-datepicker-panel table td>span.p-highlight {
   color: var(--p-datepicker-date-selected-color) !important;
   font-weight: 600 !important;
   box-shadow: 0 4px 8px rgba(8, 145, 178, 0.2) !important;
+}
+
+body .p-datepicker table td.p-disabled>span,
+body .p-datepicker table td>span.p-disabled,
+body .p-datepicker table td>span[aria-disabled='true'],
+body .p-datepicker table td>button.p-disabled,
+body .p-datepicker table td>button[aria-disabled='true'],
+body .p-datepicker-panel table td.p-disabled>span,
+body .p-datepicker-panel table td>span.p-disabled,
+body .p-datepicker-panel table td>span[aria-disabled='true'],
+body .p-datepicker-panel table td>button.p-disabled,
+body .p-datepicker-panel table td>button[aria-disabled='true'] {
+  background: var(--p-datepicker-date-disabled-background) !important;
+  color: var(--p-datepicker-date-disabled-color) !important;
+  opacity: 0.48 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+body .p-datepicker table td.p-disabled>span:hover,
+body .p-datepicker table td>span.p-disabled:hover,
+body .p-datepicker table td>span[aria-disabled='true']:hover,
+body .p-datepicker table td>button.p-disabled:hover,
+body .p-datepicker table td>button[aria-disabled='true']:hover,
+body .p-datepicker-panel table td.p-disabled>span:hover,
+body .p-datepicker-panel table td>span.p-disabled:hover,
+body .p-datepicker-panel table td>span[aria-disabled='true']:hover,
+body .p-datepicker-panel table td>button.p-disabled:hover,
+body .p-datepicker-panel table td>button[aria-disabled='true']:hover {
+  background: var(--p-datepicker-date-disabled-background) !important;
+  color: var(--p-datepicker-date-disabled-color) !important;
 }
 
 body .p-datepicker .p-datepicker-header .p-datepicker-prev,

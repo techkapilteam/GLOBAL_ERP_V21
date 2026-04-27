@@ -203,6 +203,7 @@ export class ChequesIssued implements OnInit {
   brsfromConfig: any = {};
   brstoConfig: any = {};
   today = new Date();
+  pDatepickerMaxDate: Date = new Date();
   clearMinToDate = new Date(1900, 0, 1);
   returnMinToDate = new Date(1900, 0, 1);
   cancelMinToDate = new Date(1900, 0, 1);

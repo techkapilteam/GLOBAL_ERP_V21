@@ -1341,7 +1341,7 @@ input {
 :host ::ng-deep .content-area select:focus,
 :host ::ng-deep .content-area textarea:focus {
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent) !important;
+  // box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent) !important;
 }
 
 :host ::ng-deep .content-area .erp-breadcrumb,
