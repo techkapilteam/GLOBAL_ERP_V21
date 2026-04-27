@@ -14,7 +14,6 @@ import {
 } from './login.models';
 
 
-import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -23,12 +22,13 @@ import { MessageService } from 'primeng/api';
 import { environment } from '../../../envir/environment.prod';
 import { AuthService } from '../../core/services/auth.service';
 import { CompanyDetailsService } from '../../core/services/Common/company-details-service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule, SelectModule, ButtonModule,
+    FormsModule, NgSelectModule, ButtonModule,
     InputTextModule, PasswordModule, ToastModule,
   ],
   providers: [MessageService],

@@ -25,7 +25,8 @@
                   <i class="pi pi-calendar erp-input-icon"></i>
                   <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                     placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                    inputStyleClass="erp-input icon-pad w-100" [disabled]="!disabletransactiondate"></p-datepicker>
+                    inputStyleClass="erp-input icon-pad w-100" [disabled]="!disabletransactiondate"
+                    ></p-datepicker>
                 </div>
                 @if (formValidationMessages?.ppaymentdate) {
                 <app-validation-message [messgae]="formValidationMessages?.ppaymentdate"></app-validation-message>
@@ -191,7 +192,6 @@
               </div>
             </div>
           </div>
-
           <div class="d-flex gap-2 flex-wrap mt-3">
             <span class="erp-badge badge-success">
               Bank Book - {{ bankbookBalance }}
@@ -201,13 +201,11 @@
             </span>
           </div>
         </div>
-        @}
+        }
 
         <!-- ── PAYMENT DETAILS ── -->
-        <div class="py-4 border-bottom" formGroupName="ppaymentsslistcontrols">
-          <div class="px-4">
-            <h3 class="section-title mb-3">Payment Details</h3>
-          </div>
+        <div class="p-4 border-bottom" formGroupName="ppaymentsslistcontrols">
+          <h3 class="section-title mb-3">Payment Details</h3>
 
           <div class="px-4">
             <div class="row g-2 mb-3">
@@ -231,6 +229,7 @@
                   <div class="erp-field-error"><i class="pi pi-exclamation-circle"></i> Ledger is required</div>
                   }
                 </div>
+                <span class="erp-balance-chip">{{ ledgerBalance || '0 Dr' }}</span>
               </div>
 
               <!-- Sub Ledger -->
@@ -279,7 +278,10 @@
                   <div class="erp-field-error"><i class="pi pi-exclamation-circle"></i> Party is required</div>
                   }
                 </div>
-              </div>
+                @if (formValidationMessages?.psubledgername) {
+                  <app-validation-message [messgae]="formValidationMessages?.psubledgername"></app-validation-message>
+                }
+            </div>
 
               <div class="col-12 col-md-6">
                 <div class="erp-form-group">
@@ -291,6 +293,22 @@
                   <div class="erp-field-error"><i class="pi pi-exclamation-circle"></i> Enter Amount Paid</div>
                   }
                 </div>
+                <span class="erp-balance-chip">{{ partyBalance || '0 Dr' }}</span>
+              </div>
+              @if (paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.invalid && paymentVoucherForm.get('ppaymentsslistcontrols.ppartyid')?.touched) {
+                <div class="erp-field-error">Please Select Party</div>
+              }
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="erp-form-group">
+                <label class="erp-label" for="pactualpaidamount">Amount Paid <span class="required">*</span></label>
+                <input id="pactualpaidamount" class="erp-input text-end font-bold" type="text"
+                  placeholder="0.00" formControlName="pactualpaidamount" inputmode="numeric"
+                  (input)="onAmountInput($event)" (keydown)="blockInvalidAmountKeys($event)" (blur)="formatAmountOnBlur()" />
+                @if (formValidationMessages?.pactualpaidamount) {
+                  <app-validation-message [messgae]="'Enter Amount Paid'"></app-validation-message>
+                }
               </div>
             </div>
           </div>
@@ -421,9 +439,10 @@
             </div>
             }
           </div>
-          }
 
           <!-- ── TDS DETAILS ── -->
+          }
+
           @if (!showtds) {
           <div class="mt-4 mb-4 px-4">
             <div class="d-flex align-items-center gap-2 mb-3">
@@ -433,13 +452,13 @@
             <div class="row g-2">
               <!-- <div class="col-md-4">
                   <div class="erp-form-group">
-                    <label class="erp-label" for="pTdsSection">@ Section <span class="required">*</span></label>
+                    <label class="erp-label" for="pTdsSection">Section <span class="required">*</span></label>
                     <ng-select id="pTdsSection" [items]="tdssectionlist" bindLabel="pTdsSection" bindValue="pTdsSection"
                       placeholder="Select Section" formControlName="pTdsSection" (change)="tdsSection_Change($event)"
                       appendTo="body">
                     </ng-select>
                     @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsSection')?.value) {
-                      <app-validation-message [messgae]="'Select Section'"></app-validation-message>
+                      <div class="erp-field-error">Please Select Section</div>
                     }
                   </div>
                 </div> -->
@@ -463,7 +482,7 @@
                   }
                 </div>
               </div>
-              <!-- 
+              <!--
                 <div class="col-md-4">
                   <div class="erp-form-group">
                     <label class="erp-label" for="pTdsPercentage">Percentage <span class="required">*</span></label>
@@ -472,7 +491,7 @@
                       appendTo="body" bindValue="pTdsPercentage">
                     </ng-select>
                     @if (paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.touched && !paymentVoucherForm.get('ppaymentsslistcontrols.pTdsPercentage')?.value) {
-                      <app-validation-message [messgae]="'Select Percentage'"></app-validation-message>
+                      <div class="erp-field-error">Please Select Percentage</div>
                     }
                   </div>
                 </div> -->
@@ -578,7 +597,7 @@
             </table>
           </div>
         </div>
-        @}
+        }
 
         <!-- ── JOURNAL & NARRATION ── -->
         <div class="p-4 border-top">
@@ -615,7 +634,7 @@
                   </tfoot>
                 </table>
               </div>
-              @}
+              }
             </div>
 
             <div class="col-md-6">
@@ -657,6 +676,7 @@
           </div>
         </div>
       </div>
+
 
       <!-- Footer -->
       <div class="card-footer d-flex justify-end gap-2">

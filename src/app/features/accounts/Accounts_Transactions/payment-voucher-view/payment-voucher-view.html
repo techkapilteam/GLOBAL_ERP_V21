@@ -21,7 +21,7 @@
                 <i class="pi pi-calendar erp-input-icon"></i>
                 <p-datepicker formControlName="ppaymentdate" id="ppaymentdate" dateFormat="dd-M-yy"
                   placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100"
-                  inputStyleClass="erp-input icon-pad w-100"></p-datepicker>
+                  inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
               </div>
               <app-validation-message [messgae]="formValidationMessages['ppaymentdate']"></app-validation-message>
             </div>
@@ -654,13 +654,17 @@
             <div class="erp-form-group">
               <label class="erp-label" id="pDocStorePath" title="Upload Document">Upload Document</label>
               <div class="erp-file-upload">
-                <input type="text" class="erp-input erp-file-input" placeholder="No file chosen"
-                  [value]="imageResponse?.name ?? ''" readonly />
+                <input
+                  type="text"
+                  class="erp-input erp-file-input"
+                  formControlName="pDocStorePath"
+                  [value]="imageResponse?.name"
+                  readonly
+                  placeholder="No file selected">
                 <button type="button" class="erp-file-btn" (click)="fileInput.click()">
                   <i class="pi pi-upload"></i> Upload
                 </button>
-                <input style="display:none" type="file" (change)="uploadAndProgress($event, fileInput.files)"
-                  #fileInput />
+                <input type="file" hidden (change)="uploadAndProgress($event, fileInput.files)" #fileInput>
               </div>
             </div>
           </div>

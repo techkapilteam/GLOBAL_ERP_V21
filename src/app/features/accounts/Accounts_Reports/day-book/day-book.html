@@ -1,322 +1,292 @@
-﻿<div class="screen-container">
-  <div class="screen-card">
+<div class="module-page">
+  <div class="erp-card">
 
     <!-- Header -->
-    <div class="screen-header">
-      <h2 class="screen-title">Day Book</h2>
+    <div class="card-header">
+      <h2 class="card-title">
+        <i class="pi pi-book"></i> Day Book Details
+      </h2>
     </div>
 
-    <div class="screen-content">
-      <form [formGroup]="dayBookForm">
+    <div class="card-body p-0">
+      <form [formGroup]="dayBookForm" autocomplete="off">
+        <div class="p-4 border-bottom">
+          <div class="row g-2 align-items-end">
 
-        <div class="row filter-row">
-
-          <!-- Date Checkbox -->
-          <div class="col-xl-2 col-md-3 filter-col">
-            <div class="form-check filter-checkbox">
-              <input
-                class="form-check-input check-box"
-                type="checkbox"
-                id="asdate"
-                formControlName="date"
-                (change)="dte = !dte; onDateToggle()"
-              />
-              <label class="form-check-label ms-2 check-label" for="asdate">
-                Date :
-              </label>
-            </div>
-          </div>
-
-          <!-- Single Date (checkbox checked) -->
-          @if (dte) {
-            <div class="col-xl-2 col-md-3 filter-col">
-              <div class="erp-form-group">
-                <label class="erp-label">
-                  Date <span class="required-asterisk">*</span>
+            <!-- Date Mode Toggle -->
+            <div class="col-12 col-md-2">
+              <div class="erp-form-group pb-2">
+                <label class="erp-checkbox">
+                  <input type="checkbox" id="asdate" formControlName="date" (change)="dte = !dte; onDateToggle()" />
+                  <span>Range Mode</span>
                 </label>
-                <p-datepicker formControlName="dfromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
-                <div class="invalid-feedback" *ngIf="submitted && f['dfromdate'].errors?.['required']">
-                  Date is required
-                </div>
               </div>
             </div>
-          }
 
-          <!-- From Date (checkbox unchecked) -->
-          @if (!dte) {
-            <div class="col-xl-2 col-md-3 filter-col">
+            <!-- Single Date / From Date -->
+            <div class="col-12 col-md-3">
               <div class="erp-form-group">
-                <label class="erp-label">
-                  From Date <span class="required-asterisk">*</span>
+                <label class="erp-label required">
+                  {{ dte ? 'Date' : 'From Date' }} <span class="required">*</span>
                 </label>
-                <p-datepicker formControlName="dfromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
-                <div class="invalid-feedback" *ngIf="submitted && f['dfromdate'].errors?.['required']">
-                  From Date is required
+                <div class="erp-input-wrap erp-date-wrap">
+                  <i class="pi pi-calendar erp-input-icon"></i>
+                  <p-datepicker formControlName="dfromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
                 </div>
+                @if (submitted && f['dfromdate'].errors?.['required']) {
+                  <div class="erp-field-error">{{ dte ? 'Date' : 'From Date' }} is required</div>
+                }
               </div>
             </div>
 
             <!-- To Date -->
-            <div class="col-xl-2 col-md-3 filter-col">
+            @if (!dte) {
+              <div class="col-12 col-md-3">
+                <div class="erp-form-group">
+                  <label class="erp-label required">To Date <span class="required">*</span></label>
+                  <div class="erp-input-wrap erp-date-wrap">
+                    <i class="pi pi-calendar erp-input-icon"></i>
+                    <p-datepicker formControlName="dtodate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                  </div>
+                  @if (submitted && f['dtodate'].errors?.['required']) {
+                    <div class="erp-field-error">To Date is required</div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Generate Buttons -->
+            <div class="col-12 col-md-2">
               <div class="erp-form-group">
-                <label class="erp-label">
-                  To Date <span class="required-asterisk">*</span>
-                </label>
-                <p-datepicker formControlName="dtodate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
-                <div class="invalid-feedback" *ngIf="submitted && f['dtodate'].errors?.['required']">
-                  To Date is required
+                <button type="button" class="erp-btn btn-primary w-100 shadow-sm" (click)="getDayBookData()" [disabled]="loading()">
+                  <i class="pi" [ngClass]="loading() ? 'pi-spin pi-spinner' : 'pi-search'"></i>
+                  {{ loading() ? 'Generating' : 'Generate' }}
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-2">
+              <div class="erp-form-group">
+                <button type="button" class="erp-btn btn-white w-100 shadow-sm" (click)="GetChequeonHandDetails()">
+                  <i class="pi pi-ticket"></i> Cheques Info
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </form>
+
+      <!-- Report Results -->
+      @if (gridData().length || totalBalanceGrid().length) {
+        <div class="p-4">
+          
+          <!-- Export Toolbar -->
+          <div class="erp-table-toolbar mb-4 d-print-none">
+            <div class="tb-left"><h6 class="mb-0 font-bold text-primary">Daily Transaction Journal</h6></div>
+            <div class="tb-right">
+              <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="Export PDF">
+                <i class="pi pi-file-pdf"></i> PDF
+              </button>
+              <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Print')" title="Print">
+                <i class="pi pi-print"></i> Print
+              </button>
+            </div>
+          </div>
+
+          <div class="report-view-container">
+            
+            <div class="report-header-section mb-4">
+              <app-companydetails [printedDateShowhide]="printedDate" />
+              <div class="report-title-strip text-center bg-light py-2 border rounded mt-3">
+                <h5 class="mb-0 font-bold text-uppercase">Day Book Details</h5>
+                <div class="small text-muted mt-1">
+                  @if (dayBookForm.get('dtodate')?.value && !dte) {
+                    <strong>Between:</strong> {{ dayBookForm.get('dfromdate')?.value | date:'dd-MMM-yyyy' }} And {{ dayBookForm.get('dtodate')?.value | date:'dd-MMM-yyyy' }}
+                  } @else {
+                    <strong>As On:</strong> {{ dayBookForm.get('dfromdate')?.value | date:'dd-MMM-yyyy' }}
+                  }
                 </div>
               </div>
             </div>
-          }
 
-          <!-- Generate Report Button -->
-            <div class="col-12 col-md-6 filter-col btn-col">
-            <button
-              type="button"
-              class="btn btn-primary btn-action"
-              (click)="getDayBookData()"
-              [disabled]="loading()"
-            >
-              <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18" alt="generate" />
-              @if (loading()) {
-                <i class="pi pi-spin pi-spinner me-2"></i>
-              }
-              Generate Report
-            </button>
-          </div>
-
-          <!-- Cheques On Hand Button -->
-          <div class="col-xl-3 col-md-3 filter-col btn-col">
-            <button
-              type="button"
-              class="btn btn-primary btn-action"
-              (click)="GetChequeonHandDetails()"
-            >
-              <img src="assets/images/icon-check-white.svg" class="btn-icon" width="18" height="18" alt="cheques" />
-              Cheques On Hand
-            </button>
-          </div>
-
-        </div>
-
-      </form>
-    </div>
-
-    <!-- Report Section -->
-    <div class="report-wrapper">
-      <div class="card report-card">
-        <div class="card-body">
-
-          <!-- Export Icons -->
-          @if (gridData().length || totalBalanceGrid().length) {
-            <div class="export-toolbar">
-              <a (click)="pdfOrprint('Pdf')" class="export-icon" title="PDF">
-                <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
-              </a>
-              <a (click)="pdfOrprint('Print')" class="export-icon" title="Print">
-                <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
-              </a>
-            </div>
-          }
-
-          <!-- Company Details -->
-          <app-companydetails [printedDateShowhide]="printedDate" /> 
-          <hr class="report-divider" />
-
-          <!-- Report Title -->
-          <div class="report-title-wrap">
-            <h5 class="report-title">Day Book</h5>
-          </div>
-
-          <!-- Date Range Display -->
-          @if (dayBookForm.get('dfromdate')?.value) {
-            <div class="row date-range-row">
-              <div class="col-md-6">
-                @if (dayBookForm.get('dtodate')?.value) {
-                  <strong class="date-label">Between:</strong>
-                  <span class="date-value ms-2">
-                    {{ dayBookForm.get('dfromdate')?.value | date:'dd-MMM-yyyy' }}
-                    And
-                    {{ dayBookForm.get('dtodate')?.value | date:'dd-MMM-yyyy' }}
-                  </span>
-                } @else {
-                  <strong class="date-label date-label--lg">As On:</strong>
-                  <span class="date-value date-value--lg ms-2">
-                    {{ dayBookForm.get('dfromdate')?.value | date:'dd-MMM-yyyy' }}
-                  </span>
-                }
+            <!-- Receipts & Payments Sub-Header Indicator -->
+            <div class="row g-0 mb-0 border border-bottom-0 rounded-top overflow-hidden d-print-none">
+              <div class="col-md-6 bg-success-subtle text-success text-center py-2 font-bold border-end border-success">
+                <i class="pi pi-arrow-down-left me-2"></i> RECEIPTS
+              </div>
+              <div class="col-md-6 bg-danger-subtle text-danger text-center py-2 font-bold">
+                <i class="pi pi-arrow-up-right me-2"></i> PAYMENTS
               </div>
             </div>
-          }
 
-          <!-- Receipts & Payments Header -->
-          <div class="row receipts-payments-header">
-            <div class="col-md-7 text-center rp-label">Receipts</div>
-            <div class="col-md-5 text-center rp-label">Payments</div>
-          </div>
+            <div class="tbl-wrap">
+              <p-table
+                #myTable
+                [value]="gridData()"
+                sortField="prcpttransactiondate"
+                [sortOrder]="1"
+                [customSort]="true"
+                rowGroupMode="subheader"
+                groupRowsBy="prcpttransactiondate"
+                [scrollable]="true"
+                scrollHeight="500px"
+                styleClass="gr-table p-datatable-sm p-datatable-gridlines">
 
-          <!-- Main Data Table -->
-          <p-table
-            #myTable
-            [value]="gridData()"
-            sortField="prcpttransactiondate"
-            [sortOrder]="1"
-            [customSort]="true"
-            rowGroupMode="subheader"
-            groupRowsBy="prcpttransactiondate"
-            [scrollable]="true"
-            scrollHeight="450px"
-            styleClass="p-datatable-gridlines"
-          >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <!-- Receipts Side -->
+                    <th (click)="sortMain('prcpttransactionno')" style="cursor: pointer; width: 120px;" class="bg-success-subtle text-success">
+                      <div class="th-cell">Receipt No <span class="sort-icon" [innerHTML]="getSortIconMain('prcpttransactionno')"></span></div>
+                    </th>
+                    <th (click)="sortMain('prcptparticulars')" style="cursor: pointer;" class="bg-success-subtle text-success">
+                      <div class="th-cell">Particulars <span class="sort-icon" [innerHTML]="getSortIconMain('prcptparticulars')"></span></div>
+                    </th>
+                    <th (click)="sortMain('prcptaccountname')" style="cursor: pointer; width: 110px;" class="bg-success-subtle text-success">
+                      <div class="th-cell">Type <span class="sort-icon" [innerHTML]="getSortIconMain('prcptaccountname')"></span></div>
+                    </th>
+                    <th (click)="sortMain('prcptdebitamount')" style="cursor: pointer; width: 120px;" class="bg-success-subtle text-success">
+                      <div class="th-cell text-end">Amount <span class="sort-icon" [innerHTML]="getSortIconMain('prcptdebitamount')"></span></div>
+                    </th>
+                    <!-- Payments Side -->
+                    <th (click)="sortMain('ptransactionno')" style="cursor: pointer; width: 120px;" class="bg-danger-subtle text-danger">
+                      <div class="th-cell">Payment No <span class="sort-icon" [innerHTML]="getSortIconMain('ptransactionno')"></span></div>
+                    </th>
+                    <th (click)="sortMain('pparticulars')" style="cursor: pointer;" class="bg-danger-subtle text-danger">
+                      <div class="th-cell">Particulars <span class="sort-icon" [innerHTML]="getSortIconMain('pparticulars')"></span></div>
+                    </th>
+                    <th (click)="sortMain('paccountname')" style="cursor: pointer; width: 110px;" class="bg-danger-subtle text-danger">
+                      <div class="th-cell">Type <span class="sort-icon" [innerHTML]="getSortIconMain('paccountname')"></span></div>
+                    </th>
+                    <th (click)="sortMain('pcreditamount')" style="cursor: pointer; width: 120px;" class="bg-danger-subtle text-danger">
+                      <div class="th-cell text-end">Amount <span class="sort-icon" [innerHTML]="getSortIconMain('pcreditamount')"></span></div>
+                    </th>
+                  </tr>
+                </ng-template>
 
-            <ng-template pTemplate="header">
-              <tr class="table-header-row">
-                <th class="th-left th-sortable" (click)="sortMain('prcpttransactionno')">
-                  Transaction No. &nbsp;<span [innerHTML]="getSortIconMain('prcpttransactionno')"></span>
-                </th>
-                <th class="th-left th-sortable" (click)="sortMain('prcptparticulars')">
-                  Particulars &nbsp;<span [innerHTML]="getSortIconMain('prcptparticulars')"></span>
-                </th>
-                <th class="th-left th-sortable" (click)="sortMain('prcptaccountname')">
-                  Type &nbsp;<span [innerHTML]="getSortIconMain('prcptaccountname')"></span>
-                </th>
-                <th class="th-right th-sortable" (click)="sortMain('prcptdebitamount')">
-                  Amount &nbsp;<span [innerHTML]="getSortIconMain('prcptdebitamount')"></span>
-                </th>
-                <th class="th-left th-sortable" (click)="sortMain('ptransactionno')">
-                  Transaction No. &nbsp;<span [innerHTML]="getSortIconMain('ptransactionno')"></span>
-                </th>
-                <th class="th-left th-sortable" (click)="sortMain('pparticulars')">
-                  Particulars &nbsp;<span [innerHTML]="getSortIconMain('pparticulars')"></span>
-                </th>
-                <th class="th-left th-sortable" (click)="sortMain('paccountname')">
-                  Type &nbsp;<span [innerHTML]="getSortIconMain('paccountname')"></span>
-                </th>
-                <th class="th-right th-sortable" (click)="sortMain('pcreditamount')">
-                  Amount &nbsp;<span [innerHTML]="getSortIconMain('pcreditamount')"></span>
-                </th>
-              </tr>
-            </ng-template>
+                <ng-template pTemplate="groupheader" let-rowData>
+                  <tr>
+                    <td colspan="8" class="bg-light font-bold">
+                      <i class="pi pi-calendar me-2 text-primary small"></i>
+                      <span class="text-primary text-uppercase small letter-spacing-1">{{ rowData.prcpttransactiondate | date:'dd-MMM-yyyy' }}</span>
+                    </td>
+                  </tr>
+                </ng-template>
 
-            <ng-template pTemplate="groupheader" let-rowData>
-              <tr class="group-header-row">
-                <td colspan="8" class="group-header-cell">
-                  {{ rowData.prcpttransactiondate | date:'dd-MMM-yyyy' }}
-                </td>
-              </tr>
-            </ng-template>
+                <ng-template pTemplate="body" let-row>
+                  <tr>
+                    <!-- Receipt Columns -->
+                    <td class="small font-bold text-success">{{ row.prcpttransactionno }}</td>
+                    <td class="small">{{ row.prcptparticulars }}</td>
+                    <td><span class="badge bg-light text-dark smaller border w-100">{{ row.prcptaccountname }}</span></td>
+                    <td class="td-right font-bold text-success">
+                      @if (row.prcptdebitamount) {
+                        {{ currencysymbol }} {{ row.prcptdebitamount | number:'1.2-2' }}
+                      } @else { <span class="text-muted smaller">--</span> }
+                    </td>
+                    <!-- Payment Columns -->
+                    <td class="small font-bold text-danger">{{ row.ptransactionno }}</td>
+                    <td class="small">{{ row.pparticulars }}</td>
+                    <td><span class="badge bg-light text-dark smaller border w-100">{{ row.paccountname }}</span></td>
+                    <td class="td-right font-bold text-danger">
+                      @if (row.pcreditamount) {
+                        {{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}
+                      } @else { <span class="text-muted smaller">--</span> }
+                    </td>
+                  </tr>
+                </ng-template>
 
-            <ng-template pTemplate="body" let-row>
-              <tr class="data-row">
-                <td class="td-left td-text">{{ row.prcpttransactionno }}</td>
-                <td class="td-left td-text">{{ row.prcptparticulars }}</td>
-                <td class="td-left td-muted">{{ row.prcptaccountname }}</td>
-                <td class="td-right">
-                  @if (row.prcptdebitamount) {
-                    <span class="amt-receipt">{{ currencysymbol }} {{ row.prcptdebitamount | number:'1.2-2' }}</span>
-                  } @else {
-                    <span class="td-empty">Ã¢â‚¬â€</span>
-                  }
-                </td>
-                <td class="td-left td-text">{{ row.ptransactionno }}</td>
-                <td class="td-left td-text">{{ row.pparticulars }}</td>
-                <td class="td-left td-muted">{{ row.paccountname }}</td>
-                <td class="td-right">
-                  @if (row.pcreditamount) {
-                    <span class="amt-payment">{{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}</span>
-                  } @else {
-                    <span class="td-empty">Ã¢â‚¬â€</span>
-                  }
-                </td>
-              </tr>
-            </ng-template>
-
-            <ng-template pTemplate="emptymessage">
-              <tr>
-                <td colspan="8" class="empty-message">No data to display</td>
-              </tr>
-            </ng-template>
-
-          </p-table>
-
-          <!-- Totals Row -->
-          <div class="row totals-row">
-            <div class="col-md-6 text-end total-receipt">
-              Received Amount: {{ currencysymbol }} {{ receiptsAmount() | number:'1.2-2' }}
+                <ng-template pTemplate="emptymessage">
+                  <tr><td colspan="8" class="p-4 text-center text-muted italic">No day book entries found for the selected period</td></tr>
+                </ng-template>
+              </p-table>
             </div>
-            <div class="col-md-6 text-end total-payment">
-              Paid Amount: {{ currencysymbol }} {{ paymentsAmount() | number:'1.2-2' }}
+
+            <!-- Split Totals Banner -->
+            <div class="row g-0 border border-top-0 rounded-bottom overflow-hidden mb-5 d-print-none shadow-sm">
+              <div class="col-md-6 p-3 text-end border-end bg-success-subtle">
+                <span class="text-success small text-uppercase font-bold me-2">Total Received:</span>
+                <span class="h5 mb-0 text-success font-black">{{ currencysymbol }} {{ receiptsAmount() | number:'1.2-2' }}</span>
+              </div>
+              <div class="col-md-6 p-3 text-end bg-danger-subtle">
+                <span class="text-danger small text-uppercase font-bold me-2">Total Paid:</span>
+                <span class="h5 mb-0 text-danger font-black">{{ currencysymbol }} {{ paymentsAmount() | number:'1.2-2' }}</span>
+              </div>
             </div>
+
+            <!-- Bank Balance Summary Section -->
+            @if (totalBalanceGrid().length > 0) {
+              <div class="balance-summary-section mt-5">
+                <div class="section-title d-flex align-items-center mb-4">
+                  <span class="bg-primary text-white p-2 rounded-circle me-3"><i class="pi pi-building small"></i></span>
+                  <h6 class="mb-0 font-bold text-primary text-uppercase letter-spacing-1">Bank Balance Summary</h6>
+                  <div class="flex-grow-1 ms-3 border-top"></div>
+                </div>
+
+                <div class="tbl-wrap">
+                  <p-table
+                    [value]="totalBalanceGrid()"
+                    [scrollable]="true"
+                    scrollHeight="300px"
+                    styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th (click)="sortBalance('paccountname')" style="cursor: pointer;">
+                          <div class="th-cell">Bank / Account Name <span class="sort-icon" [innerHTML]="getSortIconBalance('paccountname')"></span></div>
+                        </th>
+                        <th (click)="sortBalance('popeningbal')" style="cursor: pointer; width: 160px;">
+                          <div class="th-cell text-end">Opening Balance <span class="sort-icon" [innerHTML]="getSortIconBalance('popeningbal')"></span></div>
+                        </th>
+                        <th (click)="sortBalance('pdebitamount')" style="cursor: pointer; width: 140px;">
+                          <div class="th-cell text-end">Receipts <span class="sort-icon" [innerHTML]="getSortIconBalance('pdebitamount')"></span></div>
+                        </th>
+                        <th (click)="sortBalance('pcreditamount')" style="cursor: pointer; width: 140px;">
+                          <div class="th-cell text-end">Payments <span class="sort-icon" [innerHTML]="getSortIconBalance('pcreditamount')"></span></div>
+                        </th>
+                        <th (click)="sortBalance('pclosingbal')" style="cursor: pointer; width: 160px;">
+                          <div class="th-cell text-end">Closing Balance <span class="sort-icon" [innerHTML]="getSortIconBalance('pclosingbal')"></span></div>
+                        </th>
+                      </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-row>
+                      <tr>
+                        <td class="font-bold small">{{ row.paccountname }}</td>
+                        <td class="td-right text-muted">
+                          @if (row.popeningbal) { {{ currencysymbol }} {{ row.popeningbal }} }
+                          @else { <span class="smaller">--</span> }
+                        </td>
+                        <td class="td-right text-success font-bold">
+                          @if (row.pdebitamount) { {{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }} }
+                          @else { <span class="smaller">--</span> }
+                        </td>
+                        <td class="td-right text-danger font-bold">
+                          @if (row.pcreditamount) { {{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }} }
+                          @else { <span class="smaller">--</span> }
+                        </td>
+                        <td class="td-right font-black text-primary">
+                          @if (row.pclosingbal) { {{ currencysymbol }} {{ row.pclosingbal }} }
+                          @else { <span class="smaller">--</span> }
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            }
           </div>
-
-          <!-- Balance Summary Table -->
-          <p-table
-            [value]="totalBalanceGrid()"
-            [scrollable]="true"
-            scrollHeight="300px"
-            styleClass="p-datatable-gridlines mt-4"
-          >
-
-            <ng-template pTemplate="header">
-              <tr class="table-header-row">
-                <th class="th-left th-sortable" (click)="sortBalance('paccountname')">
-                  Bank Name &nbsp;<span [innerHTML]="getSortIconBalance('paccountname')"></span>
-                </th>
-                <th class="th-right th-sortable" (click)="sortBalance('popeningbal')">
-                  Opening Balance &nbsp;<span [innerHTML]="getSortIconBalance('popeningbal')"></span>
-                </th>
-                <th class="th-right th-sortable" (click)="sortBalance('pdebitamount')">
-                  Receipts &nbsp;<span [innerHTML]="getSortIconBalance('pdebitamount')"></span>
-                </th>
-                <th class="th-right th-sortable" (click)="sortBalance('pcreditamount')">
-                  Payments &nbsp;<span [innerHTML]="getSortIconBalance('pcreditamount')"></span>
-                </th>
-                <th class="th-right th-sortable" (click)="sortBalance('pclosingbal')">
-                  Closing Balance &nbsp;<span [innerHTML]="getSortIconBalance('pclosingbal')"></span>
-                </th>
-              </tr>
-            </ng-template>
-
-            <ng-template pTemplate="body" let-row>
-              <tr class="data-row">
-                <td class="td-left td-text">{{ row.paccountname }}</td>
-                <td class="td-right td-neutral">
-                  @if (row.popeningbal) { {{ currencysymbol }} {{ row.popeningbal }} }
-                  @else { <span class="td-empty">Ã¢â‚¬â€</span> }
-                </td>
-                <td class="td-right">
-                  @if (row.pdebitamount) {
-                    <span class="amt-receipt">{{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }}</span>
-                  } @else {
-                    <span class="td-empty">Ã¢â‚¬â€</span>
-                  }
-                </td>
-                <td class="td-right">
-                  @if (row.pcreditamount) {
-                    <span class="amt-payment">{{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}</span>
-                  } @else {
-                    <span class="td-empty">Ã¢â‚¬â€</span>
-                  }
-                </td>
-                <td class="td-right td-closing">
-                  @if (row.pclosingbal) { {{ currencysymbol }} {{ row.pclosingbal }} }
-                  @else { <span class="td-empty">Ã¢â‚¬â€</span> }
-                </td>
-              </tr>
-            </ng-template>
-
-            <ng-template pTemplate="emptymessage">
-              <tr>
-                <td colspan="5" class="empty-message">No data to display</td>
-              </tr>
-            </ng-template>
-
-          </p-table>
-
         </div>
-      </div>
+      }
     </div>
-
   </div>
 </div>
+
+<style>
+  .letter-spacing-1 { letter-spacing: 0.5px; }
+  .font-black { font-weight: 900; }
+  .smaller { font-size: 0.75rem; }
+  @media print {
+    .report-view-container { padding: 0 !important; }
+    .gr-table { border: 1px solid #000 !important; }
+  }
+</style>

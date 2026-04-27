@@ -1,244 +1,221 @@
-<div class="shadow-bg-view">
+<div class="module-page no-padding-print">
+  <div class="erp-card report-print-card">
 
-    <!-- ── Main wrapper ─────────────────────────────────────────────────── -->
-    <div class="report-wrapper">
+    <!-- Header / Toolbar (Hidden on Print) -->
+    @if (!cancelled()) {
+      <div class="card-header d-print-none">
+        <h2 class="card-title"><i class="pi pi-file"></i> Receipt Voucher</h2>
+        <div class="ms-auto d-flex gap-2">
+          <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="Export PDF">
+            <i class="pi pi-file-pdf"></i> PDF
+          </button>
+          <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Print')" title="Print">
+            <i class="pi pi-print"></i> Print
+          </button>
+        </div>
+      </div>
+    }
 
-        <div id="template">
+    <div class="card-body p-0">
+      <div id="template" class="p-4 p-print-0">
+        <div id="temp-box">
+          @for (receiptdata of receiptData(); track receiptdata.receiptid; let i = $index) {
+            
+            <div class="receipt-voucher-wrap mb-5" [class.page-break-after]="!$last">
+              
+              <!-- Voucher Header -->
+              <div class="voucher-header d-flex align-items-start border-bottom pb-3 mb-4">
+                <div class="company-logo me-4">
+                  <img src="assets/images/kapillogo.png" height="70" alt="Logo" />
+                </div>
+                <div class="company-info flex-grow-1">
+                  <h4 class="mb-1 font-bold text-primary" style="font-size: 22px;">{{ companyName() }}</h4>
+                  <p class="mb-1 text-muted small" style="max-width: 500px; line-height: 1.4;">{{ registrationAddress() }}</p>
+                  <p class="mb-0 small"><strong>CIN:</strong> {{ cinNumber() }}</p>
+                </div>
+                <div class="branch-meta text-end">
+                  <p class="mb-1 small"><strong>Branch:</strong> {{ branchName() | titlecase }}</p>
+                  <p class="mb-0 small text-muted"><strong>Printed:</strong> {{ printedon() | date:'dd-MMM-yyyy h:mm a' }}</p>
+                </div>
+              </div>
 
-            <!-- Export Actions (hidden when cancelled) -->
-            @if (!cancelled()) {
-            <div class="export-actions">
-                <ul class="export-list">
+              <!-- Title Banner -->
+              <div class="voucher-title-banner text-center py-2 mb-4 bg-light border rounded position-relative">
+                <h5 class="mb-0 font-bold text-uppercase" style="letter-spacing: 1px;">
+                  {{ receiptName() }}
+                  @if (receiptdata.gstno) {
+                    <span class="ms-2 small text-muted" style="font-size: 12px;">(GST No: {{ receiptdata.gstno }})</span>
+                  }
+                  @if (duplicate() === 'Reprint') {
+                    <span class="ms-2 text-danger small" style="font-size: 12px;">(DUPLICATE)</span>
+                  }
+                </h5>
+                @if (cancelled()) {
+                  <div class="cancelled-watermark">CANCELLED</div>
+                }
+              </div>
 
-                    <li class="export-item">
-                        <a (click)="pdfOrprint('Pdf')" class="export-icon-link" title="PDF">
-                            <img src="assets/images/pdf-icon-blue.svg" width="18" alt="PDF" />
-                        </a>
-                    </li>
+              <!-- Meta Data (No / Date) -->
+              <div class="row g-0 mb-4 border-bottom pb-3">
+                <div class="col-6">
+                  <span class="text-muted small text-uppercase">Receipt No:</span>
+                  <div class="h6 mb-0 font-bold">{{ receiptdata.receiptid }}</div>
+                </div>
+                <div class="col-6 text-end">
+                  <span class="text-muted small text-uppercase">Date:</span>
+                  <div class="h6 mb-0 font-bold">{{ receiptdata.receipt_date | date:'dd-MMM-yyyy' }}</div>
+                </div>
+              </div>
 
-                    <li class="export-item">
-                        <a (click)="pdfOrprint('Print')" class="export-icon-link" title="Print">
-                            <img src="assets/images/print-icon-blue.svg" width="18" alt="Print" />
-                        </a>
-                    </li>
+              <!-- Main Content -->
+              <div class="voucher-content mb-4">
+                <p class="mb-3">
+                  Received with thanks from <span class="font-bold border-bottom px-2 text-primary">{{ receiptdata.account_name }}</span>
+                </p>
+                
+                <p class="text-muted small mb-2">Towards:</p>
 
-                </ul>
-            </div>
-            }
-
-            <!-- Receipt Loop -->
-            <div class="report-container" id="temp-box">
-
-                @for (receiptdata of receiptData(); track receiptdata.receiptid; let i = $index) {
-
-                <div class="receipt-row">
-                    <div class="receipt-col">
-
-                        <div class="receipt-wrapper">
-
-                            <!-- Company Logo -->
-                            <div class="company-logo-wrap">
-                                <img class="logo-img" src="assets/images/kapillogo.png" alt="Company Logo" />
-                            </div>
-
-                            <!-- Company Header -->
-                            <div class="company-header">
-                                <h4 class="company-name">{{ companyName() }}</h4>
-                                <p class="company-address">{{ registrationAddress() }}</p>
-                                <p class="company-cin">CIN : {{ cinNumber() }}</p>
-                            </div>
-
-                            <!-- Print Meta -->
-                            <div class="print-meta-row">
-                                <div class="meta-left">
-                                    <strong>Printed On :</strong>
-                                    {{ printedon() | date:'dd-MMM-yyyy h:mm:ss a' }}
-                                </div>
-                                <div class="meta-right">
-                                    <strong>Branch :</strong>
-                                    {{ branchName() | titlecase }}
-                                </div>
-                            </div>
-
-                            <!-- Receipt Title Banner -->
-                            <div class="receipt-banner">
-                                <h5 class="receipt-title">
-                                    {{ receiptName() }}
-
-                                    @if (receiptdata.gstno) {
-                                    <span class="gst-label">(GST No. : {{ receiptdata.gstno }})</span>
-                                    }
-
-                                    @if (duplicate() === 'Reprint') {
-                                    <span class="duplicate-label">(Duplicate)</span>
-                                    }
-                                </h5>
-                            </div>
-
-                            <!-- Cancelled Watermark -->
-                            @if (cancelled()) {
-                            <div class="cancel-watermark">Cancelled</div>
-                            }
-
-                            <!-- Voucher Body -->
-                            <div class="voucher-body">
-
-                                <!-- Receipt No / Date row -->
-                                <div class="voucher-meta-row">
-                                    <div class="meta-left">
-                                        <strong>Receipt No :</strong>
-                                        {{ receiptdata.receiptid }}
-                                    </div>
-                                    <div class="meta-right">
-                                        <strong>Date :</strong>
-                                        {{ receiptdata.receipt_date | date:'dd-MMM-yyyy' }}
-                                    </div>
-                                </div>
-
-                                <!-- Received from -->
-                                <p class="voucher-field fw-bold">
-                                    Received With Thanks From
-                                    {{ receiptdata.account_name }}
-                                </p>
-
-                                <p class="voucher-towards">Towards</p>
-
-                                <!-- Particulars Table -->
-                                <div class="table-wrapper">
-                                    <table class="receipt-table">
-
-                                        <thead>
-                                            <tr>
-                                                <th class="col-sno">S.No.</th>
-                                                <th class="col-particulars">Particulars</th>
-                                                <th class="col-amount">Amount</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @for (grData of receiptdata.pGeneralReceiptSubDetailsList; track grData; let
-                                            x = $index) {
-                                            <tr>
-                                                <td class="td-center">{{ x + 1 }}</td>
-                                                <td>{{ grData.pAccountname }}</td>
-                                                <td class="td-right">
-                                                    {{ currencySymbol }}
-                                                    {{ grData.pLedgeramount | number:'1.2-2' }}
-                                                </td>
-                                            </tr>
-                                            }
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr class="tfoot-row">
-                                                <td></td>
-                                                <td class="td-right">
-                                                    <strong>Total</strong>
-                                                </td>
-                                                <td class="td-right">
-                                                    <strong>
-                                                        {{ currencySymbol }}
-                                                        {{ getTotalAmount(receiptdata.pGeneralReceiptSubDetailsList) |
-                                                        number:'1.2-2' }}
-                                                    </strong>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-
-                                    </table>
-                                </div>
-
-                                <!-- Amount in Words -->
-                                <p class="amount-words">
-                                    <strong>Amount In Words :</strong>
-                                    Rupees
-                                    {{ getTotalAmount(receiptdata.pGeneralReceiptSubDetailsList) | numberToWords |
-                                    titlecase }}
-                                    Only.
-                                </p>
-
-                                <!-- Narration -->
-                                <p class="narration-block">
-                                    <strong>Narration :</strong>
-                                    {{ getNarration(receiptdata.narration) }}
-                                </p>
-
-                                <!-- Mode of Payment -->
-                                <p class="voucher-field">
-                                    <strong>Mode of Payment :</strong>
-
-                                    @if (isCash(receiptdata.modeof_receipt)) {
-                                    <span>CASH</span>
-                                    } @else {
-                                    <span>{{ getPaymentModeLabel(receiptdata.typeofpayment) }}</span>
-                                    }
-
-                                    @if (hasStringRef(receiptdata.reference_number)) {
-                                    @if (isCheque(receiptdata.typeofpayment)) {
-                                    <span>
-                                        (Chq Reference : {{ receiptdata.reference_number }},
-                                        Bank : {{ getBankName(receiptdata.cheque_bank) }})
-                                    </span>
-                                    } @else {
-                                    <span>
-                                        (Ref No : {{ receiptdata.reference_number }},
-                                        Bank : {{ getBankName(receiptdata.cheque_bank) }})
-                                    </span>
-                                    }
-                                    }
-                                </p>
-
-                                <!-- GST -->
-                                @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount) {
-                                <p class="voucher-field">
-                                    <strong>GST (Include) :</strong>
-                                    {{ currencySymbol }}
-                                    {{ receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount | number:'1.2-2' }}
-                                </p>
-                                }
-
-                                <!-- TDS -->
-                                @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount) {
-                                <p class="voucher-field">
-                                    <strong>TDS (Exclude) :</strong>
-                                    {{ currencySymbol }}
-                                    {{ receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount | number:'1.2-2' }}
-                                </p>
-                                }
-
-                                <!-- Signature Row -->
-                                <div class="signature-row">
-
-                                    <div class="signature-col">
-                                        <p class="signature-name">{{ receiptdata.approved_by }}</p>
-                                        <p class="signature-label">(Approved By)</p>
-                                    </div>
-
-                                    <div class="signature-col">
-                                        <p class="signature-name">{{ receiptdata.verified_by }}</p>
-                                        <p class="signature-label">(Verified By)</p>
-                                    </div>
-
-                                    <div class="signature-col">
-                                        <p class="signature-name">{{ username }}</p>
-                                        <p class="signature-label">(Posted By)</p>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                <!-- Particulars Table -->
+                <div class="table-responsive">
+                  <table class="table table-bordered gr-table-print mb-4">
+                    <thead class="bg-light">
+                      <tr>
+                        <th style="width: 60px;" class="text-center">S.No</th>
+                        <th>Particulars</th>
+                        <th style="width: 180px;" class="text-end">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (grData of receiptdata.pGeneralReceiptSubDetailsList; track grData; let x = $index) {
+                        <tr>
+                          <td class="text-center">{{ x + 1 }}</td>
+                          <td>{{ grData.pAccountname }}</td>
+                          <td class="text-end font-bold">
+                            {{ currencySymbol }} {{ grData.pLedgeramount | number:'1.2-2' }}
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                    <tfoot class="bg-light font-bold">
+                      <tr>
+                        <td colspan="2" class="text-end">TOTAL</td>
+                        <td class="text-end text-primary">
+                          {{ currencySymbol }} {{ getTotalAmount(receiptdata.pGeneralReceiptSubDetailsList) | number:'1.2-2' }}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
 
-                }
+                <!-- Footer Details -->
+                <div class="row g-4">
+                  <div class="col-12">
+                    <div class="p-3 bg-light rounded border border-dashed">
+                      <p class="mb-2"><strong>Amount in Words:</strong> <span class="text-capitalize border-bottom border-secondary ms-1">Rupees {{ getTotalAmount(receiptdata.pGeneralReceiptSubDetailsList) | numberToWords }} Only.</span></p>
+                      <p class="mb-2"><strong>Narration:</strong> <span class="ms-1">{{ getNarration(receiptdata.narration) }}</span></p>
+                      <p class="mb-0">
+                        <strong>Payment Mode:</strong>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-1 px-2">
+                          @if (isCash(receiptdata.modeof_receipt)) { CASH } 
+                          @else { {{ getPaymentModeLabel(receiptdata.typeofpayment) }} }
+                        </span>
+                        
+                        @if (hasStringRef(receiptdata.reference_number)) {
+                          <span class="ms-2 text-muted small">
+                            (Ref: {{ receiptdata.reference_number }}, Bank: {{ getBankName(receiptdata.cheque_bank) }})
+                          </span>
+                        }
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Tax Details -->
+                  @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount || receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount) {
+                    <div class="col-12">
+                      <div class="row">
+                        @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount) {
+                          <div class="col-md-4">
+                            <p class="mb-0 small"><strong>GST (Included):</strong> {{ currencySymbol }} {{ receiptdata.pGeneralReceiptSubDetailsList[0]?.pcgstamount | number:'1.2-2' }}</p>
+                          </div>
+                        }
+                        @if (receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount) {
+                          <div class="col-md-4">
+                            <p class="mb-0 small"><strong>TDS (Excluded):</strong> {{ currencySymbol }} {{ receiptdata.pGeneralReceiptSubDetailsList[0]?.ptdsamount | number:'1.2-2' }}</p>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Signatures -->
+              <div class="voucher-signatures mt-5 pt-4">
+                <div class="row text-center">
+                  <div class="col-4">
+                    <div class="signature-line mx-auto mb-2 border-top" style="width: 150px;"></div>
+                    <div class="font-bold small">{{ receiptdata.approved_by || '--' }}</div>
+                    <div class="text-muted x-small">(Approved By)</div>
+                  </div>
+                  <div class="col-4">
+                    <div class="signature-line mx-auto mb-2 border-top" style="width: 150px;"></div>
+                    <div class="font-bold small">{{ receiptdata.verified_by || '--' }}</div>
+                    <div class="text-muted x-small">(Verified By)</div>
+                  </div>
+                  <div class="col-4">
+                    <div class="signature-line mx-auto mb-2 border-top" style="width: 150px;"></div>
+                    <div class="font-bold small">{{ username }}</div>
+                    <div class="text-muted x-small">(Posted By)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Print Disclaimer -->
+              <div class="mt-4 pt-3 border-top d-none d-print-block">
+                <p class="x-small text-muted text-center italic mb-0">This is a computer generated document and does not require a physical signature.</p>
+              </div>
 
             </div>
-
+          }
         </div>
-
+      </div>
     </div>
-
+  </div>
 </div>
+
+<style>
+  .cancelled-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 60px;
+    font-weight: 900;
+    color: rgba(220, 53, 69, 0.15);
+    pointer-events: none;
+    z-index: 10;
+    width: 100%;
+    text-align: center;
+  }
+  .gr-table-print {
+    border-color: #dee2e6 !important;
+  }
+  .gr-table-print th {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #475569;
+    padding: 10px;
+  }
+  .gr-table-print td {
+    padding: 10px;
+    font-size: 14px;
+    color: #1e293b;
+  }
+  .x-small { font-size: 10px; }
+  @media print {
+    .no-padding-print { padding: 0 !important; }
+    .report-print-card { border: none !important; box-shadow: none !important; }
+    .page-break-after { page-break-after: always; }
+  }
+</style>

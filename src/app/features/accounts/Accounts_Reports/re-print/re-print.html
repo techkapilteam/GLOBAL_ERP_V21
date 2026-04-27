@@ -1,201 +1,191 @@
-﻿<div class="screen-container">
-  <div class="screen-card">
+<div class="module-page">
+  <div class="erp-card">
 
-    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Header Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
-    <div class="screen-header">
-      <h2 class="screen-title">Re Print</h2>
+    <!-- Header -->
+    <div class="card-header">
+      <h2 class="card-title">
+        <i class="pi pi-print"></i> Re-Print Documents
+      </h2>
     </div>
 
-    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Filter Form Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
-    <div class="section-content filter-section">
+    <div class="card-body p-0">
       <form [formGroup]="ReprintRepotForm" autocomplete="off">
-        <div class="row">
+        <div class="p-4 border-bottom">
+          <div class="row g-2 align-items-end">
 
-          <!-- Transaction Type -->
-          <div class="col-md-3 mb-3">
-            <div class="erp-form-group">
-              <label class="erp-label">
-                Transaction Type<span class="required">*</span>
-              </label>
-              <ng-select
-                [items]="lstreporttype"
-                formControlName="TransType"
-                bindLabel="reporttype"
-                bindValue="reporttypeid"
-                [multiple]="false"
-                placeholder="Select"
-                [searchable]="true"
-                [clearable]="false"
-                (change)="reportchange_Change($event)"
-                appendTo="body">
-              </ng-select>
-              @if ((f['TransType'].touched || submitted) && f['TransType'].errors?.['required']) {
-                <div class="text-danger mt-1">Transaction Type is required</div>
-              }
-            </div>
-          </div>
-
-          <!-- Transaction No. -->
-          @if (userbranchtxtboxshowhide()) {
-            <div class="col-md-3 mb-3">
+            <!-- Transaction Type -->
+            <div class="col-12 col-md-3">
               <div class="erp-form-group">
-                <label class="erp-label">
-                  Transaction No.<span class="required">*</span>
-                </label>
-                <input type="text" class="erp-input" formControlName="Transno" />
+                <label class="erp-label required">Transaction Type <span class="required">*</span></label>
+                <ng-select
+                  [items]="lstreporttype"
+                  formControlName="TransType"
+                  bindLabel="reporttype"
+                  bindValue="reporttypeid"
+                  [multiple]="false"
+                  placeholder="Select Type"
+                  [searchable]="true"
+                  [clearable]="false"
+                  (change)="reportchange_Change($event)"
+                  appendTo="body"
+                  class="erp-ng-select"
+                  [class.is-invalid]="(f['TransType'].touched || submitted) && f['TransType'].errors?.['required']">
+                </ng-select>
+                @if ((f['TransType'].touched || submitted) && f['TransType'].errors?.['required']) {
+                  <div class="erp-field-error">Transaction Type is required</div>
+                }
               </div>
-              @if ((f['Transno'].touched || submitted) && f['Transno'].errors?.['required']) {
-                <div class="text-danger mt-1">Transaction No. is required</div>
-              }
             </div>
-          }
 
-          <!-- PAN No. -->
-          @if (form15UID()) {
-            <div class="col-md-3 mb-3">
+            <!-- Transaction No. -->
+            @if (userbranchtxtboxshowhide()) {
+              <div class="col-12 col-md-3">
+                <div class="erp-form-group">
+                  <label class="erp-label required">Transaction No. <span class="required">*</span></label>
+                  <input type="text" class="erp-input" formControlName="Transno" placeholder="Enter Number" [class.is-invalid]="(f['Transno'].touched || submitted) && f['Transno'].errors?.['required']" />
+                  @if ((f['Transno'].touched || submitted) && f['Transno'].errors?.['required']) {
+                    <div class="erp-field-error">Transaction No. is required</div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- PAN No. -->
+            @if (form15UID()) {
+              <div class="col-12 col-md-3">
+                <div class="erp-form-group">
+                  <label class="erp-label">PAN No.</label>
+                  <input type="text" class="erp-input" formControlName="panno" placeholder="ABCDE1234F" [class.is-invalid]="f['panno'].errors?.['pattern']" />
+                  @if (f['panno'].errors?.['pattern']) {
+                    <div class="erp-field-error">Invalid PAN format</div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Generate Button -->
+            <div class="col-12 col-md-3">
               <div class="erp-form-group">
-                <label class="erp-label">PAN No.</label>
-                <input type="text" class="erp-input" formControlName="panno" />
+                <button type="button" class="erp-btn btn-primary w-100" (click)="getduplicateReport()">
+                  <i class="pi pi-search"></i> Generate Report
+                </button>
               </div>
-              @if (f['panno'].errors?.['pattern']) {
-                <div class="text-danger mt-1">Invalid PAN format (ABCDE1234F)</div>
-              }
             </div>
-          }
 
-          <!-- Generate Report Button -->
-          <div class="col-12 col-md-6">
-            <div class="btn-generate-wrap">
-              <button
-                type="button"
-                class="btn btn-primary btn-generate"
-                (click)="getduplicateReport()">
-                <img
-                  src="assets/images/icon-check-white.svg"
-                  class="btn-icon"
-                  width="18"
-                  height="18"
-                  alt="check" />
-                &nbsp;Generate Report
-              </button>
-            </div>
           </div>
-
         </div>
       </form>
-    </div>
 
-    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Receipt Grid Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
-    @if (showhide()) {
-      <div class="section-content grid-section">
-        <div class="row">
-
-          <!-- Search -->
-          <div class="col-12 col-md-6 mb-3">
-            <input
-              type="text"
-              class="erp-input"
-              placeholder="Search"
-              (keyup)="ReprintdataFilter($any($event.target).value)" />
+      <!-- Receipt Grid -->
+      @if (showhide()) {
+        <div class="p-4">
+          <div class="erp-table-toolbar mb-3">
+            <div class="tb-left"><h6 class="mb-0 font-bold text-primary">Receipt Documents</h6></div>
+            <div class="tb-right">
+              <div class="erp-input-wrap" style="width: 250px;">
+                <i class="pi pi-search erp-input-icon"></i>
+                <input type="text" class="erp-input icon-pad" placeholder="Search receipts..." (keyup)="ReprintdataFilter($any($event.target).value)" />
+              </div>
+            </div>
           </div>
 
-          <!-- Table -->
-          <div class="col-md-12">
+          <div class="tbl-wrap">
             <p-table
               [value]="griddata()"
               [paginator]="true"
               [rows]="pageCriteria.pageSize"
               [rowsPerPageOptions]="[10, 20, 50]"
-              responsiveLayout="scroll">
-
+              responsiveLayout="scroll"
+              styleClass="gr-table p-datatable-sm p-datatable-gridlines">
               <ng-template pTemplate="header">
-                <tr class="tds-table-header-row">
-                  <th class="th-cell th-left">T/R Receipt No.</th>
-                  <th class="th-cell th-left">Receipt Date</th>
-                  <th class="th-cell th-left">Receipt No.</th>
-                  <th class="th-cell th-left">Chit No.</th>
-                  <th class="th-cell th-right">Receipt Amount</th>
+                <tr>
+                  <th>T/R Receipt No.</th>
+                  <th style="width: 150px;">Receipt Date</th>
+                  <th>Receipt No.</th>
+                  <th>Chit No.</th>
+                  <th class="text-end" style="width: 180px;">Receipt Amount</th>
                 </tr>
               </ng-template>
-
               <ng-template pTemplate="body" let-row>
-                <tr class="tds-table-body-row">
-
-                  <td class="td-cell">
+                <tr>
+                  <td class="font-bold">
                     @if (ReceiptColunmForLegal) {
-                      <a class="bc-2 link-cell" (click)="clickForLegalReceipt(row)">
-                        {{ row.general_receipt_number }}
+                      <a class="text-primary text-decoration-none" style="cursor: pointer;" (click)="clickForLegalReceipt(row)">
+                        <i class="pi pi-file-o me-2 small"></i>{{ row.general_receipt_number }}
                       </a>
                     } @else {
                       {{ row.general_receipt_number }}
                     }
                   </td>
-
-                  <td class="td-cell">{{ row.receipt_date | date:'dd-MMM-yyyy' }}</td>
-
-                  <td class="td-cell">
+                  <td class="text-center">{{ row.receipt_date | date:'dd-MMM-yyyy' }}</td>
+                  <td>
                     @if (row.receipt_number) {
-                      <a class="bc-2 link-cell" (click)="click(row)">
-                        {{ row.receipt_number }}
+                      <a class="text-primary text-decoration-none" style="cursor: pointer;" (click)="click(row)">
+                        <i class="pi pi-external-link me-2 small"></i>{{ row.receipt_number }}
                       </a>
-                    }
+                    } @else { -- }
                   </td>
-
-                  <td class="td-cell">{{ row.chit_no }}</td>
-
-                  <td class="td-cell td-right">
+                  <td><span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ row.chit_no }}</span></td>
+                  <td class="td-right font-bold text-success">
                     {{ currencysymbol }} {{ row.total_received_amount | number:'1.2-2' }}
                   </td>
-
                 </tr>
               </ng-template>
-
+              <ng-template pTemplate="emptymessage">
+                <tr><td colspan="5" class="p-4 text-center text-muted">No receipts found</td></tr>
+              </ng-template>
             </p-table>
           </div>
-
         </div>
-      </div>
-    }
+      }
 
-    <!-- Ã¢â€â‚¬Ã¢â€â‚¬ Form 15H Grid Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
-    @if (showForm15HGrid()) {
-      <div class="section-content grid-section">
-        <p-table
-          [value]="form15HGridData()"
-          [paginator]="true"
-          [rows]="pageCriteria.pageSize"
-          [rowsPerPageOptions]="[10, 20, 50]"
-          responsiveLayout="scroll">
+      <!-- Form 15H Grid -->
+      @if (showForm15HGrid()) {
+        <div class="p-4">
+          <div class="erp-table-toolbar mb-3">
+            <div class="tb-left"><h6 class="mb-0 font-bold text-primary">Form 15H Records</h6></div>
+          </div>
 
-          <ng-template pTemplate="header">
-            <tr class="tds-table-header-row">
-              <th class="th-cell th-left">Contact Name</th>
-              <th class="th-cell th-left">Pan No</th>
-              <th class="th-cell th-left">UID No.</th>
-              <th class="th-cell th-left">Tan No</th>
-              <th class="th-cell th-left">Company Name</th>
-              <th class="th-cell th-left">Assessment Year</th>
-            </tr>
-          </ng-template>
+          <div class="tbl-wrap">
+            <p-table
+              [value]="form15HGridData()"
+              [paginator]="true"
+              [rows]="pageCriteria.pageSize"
+              [rowsPerPageOptions]="[10, 20, 50]"
+              responsiveLayout="scroll"
+              styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Contact Name</th>
+                  <th>Pan No</th>
+                  <th>UID No.</th>
+                  <th>Tan No</th>
+                  <th>Company Name</th>
+                  <th>Assessment Year</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td class="font-bold">{{ row.contactname }}</td>
+                  <td><code>{{ row.subscriberpanno }}</code></td>
+                  <td>
+                    <a class="text-primary text-decoration-none font-bold" style="cursor: pointer;" (click)="onUIDClick(row.uid)">
+                      {{ row.uid }}
+                    </a>
+                  </td>
+                  <td>{{ row.tanno }}</td>
+                  <td>{{ row.companyname }}</td>
+                  <td class="text-center"><span class="badge bg-info-subtle text-info border border-info-subtle">{{ row.assessmentyear }}</span></td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr><td colspan="6" class="p-4 text-center text-muted">No Form 15H records found</td></tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      }
 
-          <ng-template pTemplate="body" let-row>
-            <tr class="tds-table-body-row">
-              <td class="td-cell">{{ row.contactname }}</td>
-              <td class="td-cell">{{ row.subscriberpanno }}</td>
-              <td class="td-cell">
-                <a class="bc-2 link-cell" (click)="onUIDClick(row.uid)">
-                  {{ row.uid }}
-                </a>
-              </td>
-              <td class="td-cell">{{ row.tanno }}</td>
-              <td class="td-cell">{{ row.companyname }}</td>
-              <td class="td-cell">{{ row.assessmentyear }}</td>
-            </tr>
-          </ng-template>
-
-        </p-table>
-      </div>
-    }
-
+    </div>
   </div>
 </div>
