@@ -373,6 +373,7 @@ export class TdsJv implements OnInit {
   //   this.disablesavebutton1 = true;
 
   gettdsjvdetails(): void {
+    debugger
     this.selected1 = [];
     this.selectedValues = [];
     this.totaldebitamount = 0;
@@ -385,6 +386,7 @@ export class TdsJv implements OnInit {
     const debitledger = this.tdsJvDetailsForm.controls['DebitLedger'].value || '';
     const selectedYear = this.tdsJvDetailsForm.controls['pPeriodType'].value;
     const selectedMonth = this.tdsJvDetailsForm.controls['pCalendarMonth'].value;
+
     const monthYear = (this.MonthName || '').toString().toUpperCase();
 
     if (!debitledger) {
