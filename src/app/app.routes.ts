@@ -23,6 +23,14 @@ export const routes: Routes = [
         component: DashboardComponent
       },
       {
+        path: 'contacts',
+        loadComponent: () => import('./shared/contacts/contacts-list/contacts-list.component').then(m => m.ContactsListComponent)
+      },
+      {
+        path: 'sos-dashboard',
+        loadComponent: () => import('./shared/sos-dashboard/sos-dashboard.component').then(m => m.SosDashboardComponent)
+      },
+      {
         path: 'accounts',
         loadChildren: () => import('./features/accounts/accounts_routs').then(m => m.accountsRoutes)
       }
@@ -32,15 +40,36 @@ export const routes: Routes = [
   // reports
   {
     path: 'general-receipt/:id',
-    component: GeneralReceipt
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        component: GeneralReceipt
+      }
+    ]
   },
   {
     path: 'payment-voucher/:id',
-    component: PaymentVoucher
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        component: PaymentVoucher
+      }
+    ]
   },
   {
     path: 'journal-voucher/:id',
-    component: JournalVoucher
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        component: JournalVoucher
+      }
+    ]
   },
   {
     path: '',

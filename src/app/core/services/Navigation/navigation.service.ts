@@ -9,6 +9,7 @@ export interface Screen {
   name: string;
   route: string;
   icon?: string;
+  relatedRoutes?: string[];
 }
 
 export interface SubModule {
@@ -23,6 +24,12 @@ export interface Module {
   name: string;
   icon?: string;
   subModules: SubModule[];
+}
+
+export interface NavigationPath {
+  module: Module;
+  subModule: SubModule;
+  screen: Screen;
 }
 @Injectable({
     providedIn: 'root'
@@ -54,9 +61,19 @@ export class NavigationService {
               name: 'Accounts Config',
               icon: '👥',
               screens: [
-                { id: 'bank-config', name: 'Bank Configuration', route: '/dashboard/accounts/accounts-config/bank-config-view' },
+                {
+                  id: 'bank-config',
+                  name: 'Bank Configuration',
+                  route: '/dashboard/accounts/accounts-config/bank-config-view',
+                  relatedRoutes: ['/dashboard/accounts/accounts-config/bank-config']
+                },
     
-                { id: 'cheque-management', name: 'Cheque Management', route: '/dashboard/accounts/accounts-config/cheque-management' }
+                {
+                  id: 'cheque-management',
+                  name: 'Cheque Management',
+                  route: '/dashboard/accounts/accounts-config/cheque-management',
+                  relatedRoutes: ['/dashboard/accounts/accounts-config/cheque-managementnew']
+                }
     
               ]
             },
@@ -65,10 +82,34 @@ export class NavigationService {
               name: 'Accounts Transactions',
               icon: '🏦',
               screens: [
-                { id: 'general-receipt', name: 'General Receipt', route: '/dashboard/accounts/accounts-transactions/general-receipt' },
-                { id: 'payment-voucher', name: 'Payment Voucher', route: '/dashboard/accounts/accounts-transactions/payment-voucher' },
+                {
+                  id: 'general-receipt',
+                  name: 'General Receipt',
+                  route: '/dashboard/accounts/accounts-transactions/general-receipt',
+                  relatedRoutes: [
+                    '/dashboard/accounts/accounts-transactions/general-receipt-new',
+                    '/general-receipt'
+                  ]
+                },
+                {
+                  id: 'payment-voucher',
+                  name: 'Payment Voucher',
+                  route: '/dashboard/accounts/accounts-transactions/payment-voucher',
+                  relatedRoutes: [
+                    '/dashboard/accounts/accounts-transactions/payment-voucher-view',
+                    '/payment-voucher'
+                  ]
+                },
     
-                { id: 'journal-voucher-view', name: 'Journal Voucher  ', route: '/dashboard/accounts/accounts-transactions/journal-voucher-view' },
+                {
+                  id: 'journal-voucher-view',
+                  name: 'Journal Voucher  ',
+                  route: '/dashboard/accounts/accounts-transactions/journal-voucher-view',
+                  relatedRoutes: [
+                    '/dashboard/accounts/accounts-transactions/journal-voucher',
+                    '/journal-voucher'
+                  ]
+                },
     
                 //  { id: 'payment-voucher-view', name: 'Payment Voucher view', route: '/dashboard/accounts/accounts-transactions/payment-voucher-view' },
                 //{ id: 'general-receipt-new', name: 'General receipt New', route: '/dashboard/accounts/accounts-transactions/general-receipt-new' },
@@ -77,7 +118,12 @@ export class NavigationService {
                 { id: 'cheques-onhand', name: 'Cheques On Hand', route: '/dashboard/accounts/accounts-transactions/cheques-onhand' },
                 { id: 'cheques-inbank', name: 'Cheques In Bank', route: '/dashboard/accounts/accounts-transactions/cheques-inbank' },
                 { id: 'cheques-issued', name: 'Cheques Issued', route: '/dashboard/accounts/accounts-transactions/cheques-issued' },
-                { id: 'petty-cash-view', name: 'Petty Cash ', route: '/dashboard/accounts/accounts-transactions/petty-cash-view' },
+                {
+                  id: 'petty-cash-view',
+                  name: 'Petty Cash ',
+                  route: '/dashboard/accounts/accounts-transactions/petty-cash-view',
+                  relatedRoutes: ['/dashboard/accounts/accounts-transactions/petty-cash']
+                },
     
                 { id: 'general-receipt-cancel', name: 'General Receipt Cancel', route: '/dashboard/accounts/accounts-transactions/general-receipt-cancel' },
                 { id: 'pettycash-receipt-cancel', name: 'Petty Cash Receipt Cancel', route: '/dashboard/accounts/accounts-transactions/pettycash-receipt-cancel' },
@@ -295,16 +341,35 @@ export class NavigationService {
       getModules(): Module[] {
         return this.modulesData;
       }
+
+      findPathByRoute(route: string): NavigationPath | null {
+        const currentRoute = this.normalizeRoute(route);
+
+        for (const module of this.modulesData) {
+          for (const subModule of module.subModules) {
+            for (const screen of subModule.screens) {
+              const screenRoutes = [screen.route, ...(screen.relatedRoutes ?? [])];
+              const isMatch = screenRoutes.some(screenRoute =>
+                this.routeMatches(currentRoute, screenRoute)
+              );
+
+              if (isMatch) {
+                return { module, subModule, screen };
+              }
+            }
+          }
+        }
+
+        return null;
+      }
     
       selectModule(module: Module): void {
         this.selectedModuleSubject.next(module);
         this.selectedSubModuleSubject.next(null);
-        this.selectedScreenSubject.next(null);
       }
     
       selectSubModule(subModule: SubModule): void {
         this.selectedSubModuleSubject.next(subModule);
-        this.selectedScreenSubject.next(null);
       }
     
       selectScreen(screen: Screen): void {
@@ -321,6 +386,18 @@ export class NavigationService {
     
       getSelectedScreen(): Screen | null {
         return this.selectedScreenSubject.value;
+      }
+
+      private routeMatches(currentRoute: string, screenRoute: string): boolean {
+        const normalizedScreenRoute = this.normalizeRoute(screenRoute);
+        return currentRoute === normalizedScreenRoute ||
+          currentRoute.startsWith(`${normalizedScreenRoute}/`);
+      }
+
+      private normalizeRoute(route: string): string {
+        const pathOnly = (route || '/').split(/[?#]/)[0] || '/';
+        const withLeadingSlash = pathOnly.startsWith('/') ? pathOnly : `/${pathOnly}`;
+        return withLeadingSlash.replace(/\/+$/, '') || '/';
       }
     
 }

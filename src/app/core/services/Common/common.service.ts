@@ -799,7 +799,6 @@ export class CommonService {
 
 
   private loadApiHostUrl() {
-    debugger;
     let api = sessionStorage.getItem("apiURL") || '';
     // this.apiHostUrl = environment.apiUrl
     if (api) {
@@ -886,7 +885,6 @@ export class CommonService {
   //   );
   // }
   postAPI(apiPath: any, data: any) {
-    debugger;
     let urldata = environment.apiUrl;
     let httpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
