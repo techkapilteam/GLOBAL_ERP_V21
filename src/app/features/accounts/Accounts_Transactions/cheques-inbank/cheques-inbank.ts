@@ -397,7 +397,7 @@ export class ChequesInbank implements OnInit {
 
   SelectBank(event: any) {
     if (!event) {
-      // ── User cleared the bank selection (× clicked) ──
+     
       this.bankid = 0;
       this.bankname = '';
       this.banknameshowhide = false;

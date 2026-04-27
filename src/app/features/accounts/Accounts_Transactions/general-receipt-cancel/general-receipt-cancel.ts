@@ -56,7 +56,7 @@ export class GeneralReceiptCancel implements OnInit {
   disablesavebutton = signal(false);
   buttonType = signal<'Save' | 'Processing'>('Save');
   pageCriteria = signal<PageCriteria>(new PageCriteria());
-  testDate: Date = new Date();
+  testDate: any = new Date();
   showValidation = signal(false); 
   
 
