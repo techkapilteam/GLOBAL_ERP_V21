@@ -1,53 +1,61 @@
-<div class="screen-container">
-  <div class="screen-card">
+<div class="module-page">
+  <div class="erp-card">
 
     <!-- Header -->
-    <div class="screen-header">
-      <h2 class="screen-title">Schedule TB</h2>
+    <div class="card-header">
+      <h2 class="card-title">
+        <i class="pi pi-table"></i> Schedule Trial Balance
+      </h2>
     </div>
 
-    <!-- Content -->
-    <div class="section-content">
-      <form name="ScheduleTB" novalidate #scheduleTBForm="ngForm"
-        (ngSubmit)="print(scheduleTBForm)">
-
-        <div class="filter-panel">
+    <div class="card-body p-4">
+      <form name="ScheduleTB" novalidate #scheduleTBForm="ngForm" (ngSubmit)="print(scheduleTBForm)" autocomplete="off">
+        <div class="row g-2 align-items-end justify-content-center">
 
           <!-- Date Field -->
-          <div class="filter-field">
-            <label class="field-label" for="asOnDate">
-              As On Date <span class="required">*</span>
-            </label>
-            <div class="field-row">
-              <p-datepicker name="asOnDate" required #asOnDateRef="ngModel" [(ngModel)]="asOnDate" id="asOnDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="form-control date-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+          <div class="col-12 col-md-4">
+            <div class="erp-form-group">
+              <label class="erp-label required">As On Date <span class="required">*</span></label>
+              <div class="erp-input-wrap erp-date-wrap">
+                <i class="pi pi-calendar erp-input-icon"></i>
+                <p-datepicker name="asOnDate" required #asOnDateRef="ngModel" [(ngModel)]="asOnDate" id="asOnDate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+              </div>
+              @if ((asOnDateRef.dirty || submitted()) && asOnDateRef.errors?.['required']) {
+                <div class="erp-field-error">As on date is required</div>
+              }
+            </div>
+          </div>
 
-              <!-- Submit Button -->
-              <button
-                type="submit"
-                class="btn btn-primary submit-btn"
-                [disabled]="loading()"
-              >
-                <i class="fa fa-print"></i>
-                {{ btnPrint() }}
+          <!-- Print Button -->
+          <div class="col-12 col-md-3">
+            <div class="erp-form-group">
+              <button type="submit" class="erp-btn btn-primary w-100 shadow-sm" [disabled]="loading()">
+                <i class="pi" [ngClass]="loading() ? 'pi-spin pi-spinner' : 'pi-print'"></i>
+                {{ loading() ? 'Generating' : btnPrint() }}
               </button>
             </div>
-
-            @if ((asOnDateRef.dirty || submitted()) && asOnDateRef.errors?.['required']) {
-              <div class="erp-field-error">As On Date is required.</div>
-            }
           </div>
 
         </div>
 
         <!-- Error Alert -->
         @if (errorMsg()) {
-          <div class="alert alert-danger error-alert">
-            {{ errorMsg() }}
+          <div class="mt-4 alert alert-danger erp-alert shadow-sm border-0 d-flex align-items-center">
+            <i class="pi pi-exclamation-triangle me-2"></i>
+            <div>{{ errorMsg() }}</div>
           </div>
         }
 
       </form>
-    </div>
 
+      <!-- Info Alert -->
+      <div class="mt-5 p-3 bg-light-subtle rounded border border-dashed text-center">
+        <p class="mb-0 text-muted small italic">
+          <i class="pi pi-info-circle me-2"></i>
+          The Schedule Trial Balance report will be generated for all active accounts as of the selected date.
+        </p>
+      </div>
+
+    </div>
   </div>
 </div>

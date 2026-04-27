@@ -1,189 +1,181 @@
-﻿<div class="screen-container">
-  <div class="screen-card">
+<div class="module-page">
+  <div class="erp-card">
 
     <!-- Header -->
-    <div class="screen-header">
-      <h2 class="screen-title">Trial Balance</h2>
+    <div class="card-header">
+      <h2 class="card-title">
+        <i class="pi pi-balance-scale"></i> Trial Balance Report
+      </h2>
     </div>
 
-    <div class="screen-content">
-      <form [formGroup]="TrialBalanceForm">
-        <div class="filter-row">
+    <div class="card-body p-0">
+      <form [formGroup]="TrialBalanceForm" autocomplete="off">
+        <div class="p-4 border-bottom">
+          <div class="row g-2 align-items-end">
 
-          <!-- As On Checkbox -->
-          <div class="filter-col filter-col--auto">
-            <div class="form-check-wrapper">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="asdate"
-                (change)="checkboxChecked($event)"
-              />
-              <label class="form-check-label" for="asdate">As On</label>
-            </div>
-          </div>
-
-          <!-- From Date / Date Field -->
-          <div class="filter-col filter-col--md">
-            <div class="erp-form-group">
-              <label class="erp-label">
-                {{ groupType === 'ASON' ? 'Date' : 'From Date' }}
-              </label>
-              <p-datepicker formControlName="fromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
-            </div>
-          </div>
-
-          <!-- To Date Field -->
-          @if (showhideason) {
-            <div class="filter-col filter-col--md">
-              <div class="erp-form-group">
-                <label class="erp-label">To Date</label>
-                <p-datepicker formControlName="todate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+            <!-- As On Mode Toggle -->
+            <div class="col-12 col-md-2">
+              <div class="erp-form-group pb-2">
+                <label class="erp-checkbox">
+                  <input type="checkbox" id="asdate" (change)="checkboxChecked($event)" />
+                  <span class="font-bold">As On Date</span>
+                </label>
               </div>
             </div>
-          }
 
-          <!-- With Grouping Checkbox -->
-          <div class="filter-col filter-col--auto">
-            <div class="form-check-wrapper">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="grouping"
-                (change)="withGrouping($event)"
-              />
-              <label class="form-check-label" for="grouping">With Grouping</label>
+            <!-- Date Field (Single or From) -->
+            <div class="col-12 col-md-3">
+              <div class="erp-form-group">
+                <label class="erp-label required">{{ groupType === 'ASON' ? 'Reference Date' : 'From Date' }} <span class="required">*</span></label>
+                <div class="erp-input-wrap erp-date-wrap">
+                  <i class="pi pi-calendar erp-input-icon"></i>
+                  <p-datepicker formControlName="fromdate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                </div>
+              </div>
             </div>
+
+            <!-- To Date -->
+            @if (showhideason) {
+              <div class="col-12 col-md-3">
+                <div class="erp-form-group">
+                  <label class="erp-label required">To Date <span class="required">*</span></label>
+                  <div class="erp-input-wrap erp-date-wrap">
+                    <i class="pi pi-calendar erp-input-icon"></i>
+                    <p-datepicker formControlName="todate" dateFormat="dd-M-yy" placeholder="DD-MMM-YYYY" [readonlyInput]="true" appendTo="body" styleClass="w-100" inputStyleClass="erp-input icon-pad w-100" [maxDate]="pDatepickerMaxDate"></p-datepicker>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Grouping Toggle -->
+            <div class="col-12 col-md-2">
+              <div class="erp-form-group pb-2">
+                <label class="erp-checkbox">
+                  <input type="checkbox" id="grouping" (change)="withGrouping($event)" />
+                  <span class="font-bold">Show Grouping</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="col-12 col-md-2">
+              <div class="erp-form-group">
+                <button type="button" class="erp-btn btn-primary w-100 shadow-sm" (click)="generateReport()" [disabled]="savebutton() === 'Processing...'">
+                  <i class="pi" [ngClass]="savebutton() === 'Processing...' ? 'pi-spin pi-spinner' : 'pi-search'"></i>
+                  {{ savebutton() === 'Processing...' ? 'Generating' : 'Generate' }}
+                </button>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Generate Button -->
-          <div class="filter-col filter-col--auto">
-            <button
-              type="button"
-              class="btn btn-primary btn-generate"
-              (click)="generateReport()"
-              [disabled]="savebutton() === 'Processing...'"
-            >
-              <img
-                src="assets/images/icon-check-white.svg"
-                class="btn-icon"
-                width="18"
-                height="18"
-                alt=""
-              />
-              {{ savebutton() }}
-            </button>
-          </div>
-
+          @if (dataisempty()) {
+            <div class="alert alert-info mt-3 mb-0 py-2 text-center border-0 bg-info-subtle text-info shadow-sm">
+              <i class="pi pi-info-circle me-2"></i>No ledger entries found for the selected period
+            </div>
+          }
         </div>
       </form>
 
-      <!-- No Records Message -->
-      @if (dataisempty()) {
-        <div class="empty-message">No Records to Display</div>
-      }
-
-      <!-- Report Section -->
+      <!-- Report View -->
       @if (showhidetable()) {
-
-        <!-- Export Icons -->
-        @if (trialBalanceList().length) {
-          <div class="export-icons">
-            <img src="assets/images/pdf-icon-blue.svg"   class="export-icon" alt="PDF"   (click)="pdfOrprint('Pdf')"   />
-            <img src="assets/images/print-icon-blue.svg" class="export-icon" alt="Print" (click)="pdfOrprint('Print')" />
-            <img src="assets/images/icon-excel.svg"      class="export-icon" alt="Excel" (click)="export()"            />
+        <div class="p-4">
+          
+          <!-- Export Toolbar -->
+          <div class="erp-table-toolbar mb-4 d-print-none">
+            <div class="tb-left"><h6 class="mb-0 font-bold text-primary">Trial Balance Ledger Overview</h6></div>
+            <div class="tb-right">
+              <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Pdf')" title="Export PDF">
+                <i class="pi pi-file-pdf"></i> PDF
+              </button>
+              <button class="erp-btn btn-white btn-sm" (click)="pdfOrprint('Print')" title="Print">
+                <i class="pi pi-print"></i> Print
+              </button>
+              <button class="erp-btn btn-white btn-sm" (click)="export()" title="Export Excel">
+                <i class="pi pi-download"></i> Excel
+              </button>
+            </div>
           </div>
-        }
 
-        <div class="report-card">
-          <div class="report-card-body">
-
-            <!-- Company Details -->
-            <app-companydetails [printedDateShowhide]="printedDate" />
-            <hr class="section-divider">
-
-            <!-- Report Title -->
-            <div class="report-title-box">
-              <h5 class="report-title">Trial Balance</h5>
+          <div class="report-view-container">
+            
+            <div class="report-header-section mb-4">
+              <app-companydetails [printedDateShowhide]="printedDate" />
+              <div class="report-title-strip text-center bg-light-subtle py-3 border rounded mt-4 shadow-sm">
+                <h5 class="mb-0 font-bold text-uppercase letter-spacing-1">Statement of Trial Balance</h5>
+                <div class="small text-muted mt-2">
+                  <span class="badge bg-white text-dark border px-3">
+                    <strong>{{ betweendates }}:</strong> {{ betweenfrom }}
+                    @if (betweendates === 'Between') { <span class="mx-1">And</span> {{ betweento }} }
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <!-- Date Range Display -->
-            <div class="date-range-display">
-              <span class="date-range-label">{{ betweendates }} :</span>
-              <span class="date-range-value">
-                {{ betweenfrom }}
-                @if (betweendates === 'Between') {
-                  And {{ betweento }}
-                }
-              </span>
+            <div class="tbl-wrap">
+              <p-table
+                #dt
+                [value]="trialBalanceList()"
+                [paginator]="true"
+                [rows]="15"
+                [rowsPerPageOptions]="[15, 30, 50, 100]"
+                responsiveLayout="scroll"
+                [scrollable]="true"
+                scrollHeight="500px"
+                styleClass="gr-table p-datatable-sm p-datatable-gridlines">
+                
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th (click)="sortBy('pparentname')" class="cursor-pointer" style="width: 250px;">
+                      <div class="th-cell">Account Group <span class="sort-icon" [innerHTML]="getSortIcon('pparentname')"></span></div>
+                    </th>
+                    <th (click)="sortBy('paccountname')" class="cursor-pointer">
+                      <div class="th-cell">Particulars / Ledger Name <span class="sort-icon" [innerHTML]="getSortIcon('paccountname')"></span></div>
+                    </th>
+                    <th (click)="sortBy('pdebitamount')" class="cursor-pointer text-end" style="width: 180px;">
+                      <div class="th-cell justify-content-end">Debit Balance <span class="sort-icon" [innerHTML]="getSortIcon('pdebitamount')"></span></div>
+                    </th>
+                    <th (click)="sortBy('pcreditamount')" class="cursor-pointer text-end" style="width: 180px;">
+                      <div class="th-cell justify-content-end">Credit Balance <span class="sort-icon" [innerHTML]="getSortIcon('pcreditamount')"></span></div>
+                    </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-row>
+                  <tr>
+                    <td><span class="badge bg-light text-dark border border-secondary-subtle small w-100 text-start">{{ row.pparentname }}</span></td>
+                    <td class="font-bold small text-dark">{{ row.paccountname }}</td>
+                    <td class="td-right">
+                      @if (row.pdebitamount !== 0) {
+                        <span class="text-primary font-black">{{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }}</span>
+                      } @else { <span class="smaller text-muted">--</span> }
+                    </td>
+                    <td class="td-right">
+                      @if (row.pcreditamount !== 0) {
+                        <span class="text-success font-black">{{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}</span>
+                      } @else { <span class="smaller text-muted">--</span> }
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                  <tr class="bg-primary-subtle font-bold">
+                    <td colspan="2" class="text-end text-uppercase letter-spacing-1 text-primary">Consolidated Totals</td>
+                    <td class="text-end text-primary border-top-double font-black h6 mb-0">
+                      {{ currencysymbol }} {{ totalDebit() | number:'1.2-2' }}
+                    </td>
+                    <td class="text-end text-success border-top-double font-black h6 mb-0">
+                      {{ currencysymbol }} {{ totalCredit() | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                  <tr><td colspan="4" class="p-5 text-center text-muted italic">No trial balance records found for the specified period</td></tr>
+                </ng-template>
+
+              </p-table>
             </div>
-
-            <!-- Data Table -->
-            <p-table
-              #dt
-              [value]="trialBalanceList()"
-              [paginator]="true"
-              [rows]="10"
-              responsiveLayout="scroll"
-            >
-
-              <ng-template pTemplate="header">
-                <tr class="table-header-row">
-                  <th class="th-left th-sortable" (click)="sortBy('pparentname')">
-                    Type <span [innerHTML]="getSortIcon('pparentname')"></span>
-                  </th>
-                  <th class="th-left th-sortable" (click)="sortBy('paccountname')">
-                    Particulars <span [innerHTML]="getSortIcon('paccountname')"></span>
-                  </th>
-                  <th class="th-right th-sortable" (click)="sortBy('pdebitamount')">
-                    Debit <span [innerHTML]="getSortIcon('pdebitamount')"></span>
-                  </th>
-                  <th class="th-right th-sortable" (click)="sortBy('pcreditamount')">
-                    Credit <span [innerHTML]="getSortIcon('pcreditamount')"></span>
-                  </th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-row>
-                <tr class="table-body-row">
-                  <td class="td-left">{{ row.pparentname }}</td>
-                  <td class="td-left">{{ row.paccountname }}</td>
-                  <td class="td-right td-debit">
-                    @if (row.pdebitamount !== 0) {
-                      {{ currencysymbol }} {{ row.pdebitamount | number:'1.2-2' }}
-                    } @else {
-                      <span class="td-zero">Ã¢â‚¬â€</span>
-                    }
-                  </td>
-                  <td class="td-right td-credit">
-                    @if (row.pcreditamount !== 0) {
-                      {{ currencysymbol }} {{ row.pcreditamount | number:'1.2-2' }}
-                    } @else {
-                      <span class="td-zero">Ã¢â‚¬â€</span>
-                    }
-                  </td>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="footer">
-                <tr class="table-footer-row">
-                  <td colspan="2" class="td-total-label">Total</td>
-                  <td class="td-right td-total-debit">
-                    {{ currencysymbol }} {{ totalDebit() | number:'1.2-2' }}
-                  </td>
-                  <td class="td-right td-total-credit">
-                    {{ currencysymbol }} {{ totalCredit() | number:'1.2-2' }}
-                  </td>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="4" class="td-empty">No data to display</td>
-                </tr>
-              </ng-template>
-
-            </p-table>
 
           </div>
         </div>
@@ -192,3 +184,15 @@
     </div>
   </div>
 </div>
+
+<style>
+  .letter-spacing-1 { letter-spacing: 0.5px; }
+  .font-black { font-weight: 900; }
+  .smaller { font-size: 0.75rem; }
+  .border-top-double { border-top: 3px double var(--clr-p1, #0c4a6e) !important; }
+  @media print {
+    .report-view-container { padding: 0 !important; }
+    .gr-table { border: 1px solid #000 !important; }
+    .bg-primary-subtle { background-color: #f0f7ff !important; }
+  }
+</style>

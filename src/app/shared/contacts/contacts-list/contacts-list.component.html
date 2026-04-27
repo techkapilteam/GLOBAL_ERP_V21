@@ -1,0 +1,283 @@
+<div class="module-page contacts-page">
+  <section class="contacts-shell">
+    <header class="contacts-header">
+      <div class="contacts-heading">
+        <span class="contacts-heading-icon">
+          <i class="pi pi-users"></i>
+        </span>
+
+        <div>
+          <h2>Contacts</h2>
+          <p>Manage contacts, employees, referrals, suppliers, advocates and freelancers.</p>
+        </div>
+      </div>
+
+      <div class="contacts-header-actions">
+        <button
+          type="button"
+          class="icon-action"
+          [class.active]="showFilters()"
+          (click)="toggleFilters()"
+          title="Grid filters">
+          <i class="pi pi-filter"></i>
+          @if (activeFilterCount() > 0) {
+            <span class="filter-count">{{ activeFilterCount() }}</span>
+          }
+        </button>
+
+        <button type="button" class="icon-action" title="Export PDF" (click)="printList()">
+          <i class="pi pi-file-pdf"></i>
+        </button>
+
+        <button type="button" class="icon-action" title="Print" (click)="printList()">
+          <i class="pi pi-print"></i>
+        </button>
+
+        <button type="button" class="erp-btn btn-primary btn-sm" (click)="openAddForm()">
+          <i class="pi pi-plus"></i>
+          New
+        </button>
+      </div>
+    </header>
+
+    <div class="tabs-section contacts-tabs">
+      <ul class="tabs-nav">
+        @for (tab of tabs; track tab) {
+          <li
+            class="tab-item"
+            [class.active]="activeTab() === tab"
+            (click)="switchTab(tab)">
+            <i class="pi" [ngClass]="{
+              'pi-users':       tab === 'Contacts',
+              'pi-id-card':     tab === 'Employees',
+              'pi-share-alt':   tab === 'Referrals',
+              'pi-truck':       tab === 'Suppliers',
+              'pi-briefcase':   tab === 'Advocates',
+              'pi-star':        tab === 'Freelancer'
+            }"></i>
+            <span class="tab-label">{{ tab }}</span>
+            <span class="tab-count">{{ getTabCount(tab) }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="contacts-grid-toolbar">
+      <div class="contacts-search">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          class="erp-input"
+          placeholder="Search name, contact no, UID, relation or address"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event); onSearch()" />
+      </div>
+
+      <div class="toolbar-summary">
+        <span>{{ activeTab() }}</span>
+        <strong>{{ totalItems() }}</strong>
+      </div>
+
+      <button type="button" class="erp-btn btn-outline btn-sm" (click)="toggleFilters()">
+        <i class="pi pi-sliders-h"></i>
+        {{ showFilters() ? 'Hide Filters' : 'Show Filters' }}
+      </button>
+    </div>
+
+    @if (showFilters()) {
+      <section class="contacts-filter-panel">
+        <div class="filter-panel-header">
+          <div>
+            <span class="filter-title">
+              <i class="pi pi-filter"></i>
+              Grid Filters
+            </span>
+            <span class="filter-subtitle">Refine the current {{ activeTab() }} grid.</span>
+          </div>
+
+          <button type="button" class="erp-btn btn-ghost btn-sm" (click)="clearFilters()" [disabled]="activeFilterCount() === 0">
+            <i class="pi pi-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+        <div class="filter-grid">
+          <div class="filter-field">
+            <label>Name / Keyword</label>
+            <input
+              type="text"
+              class="erp-input"
+              placeholder="Search all fields"
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event); onSearch()" />
+          </div>
+
+          <div class="filter-field">
+            <label>UID / CNT No</label>
+            <input
+              type="text"
+              class="erp-input"
+              placeholder="Enter UID"
+              [ngModel]="uidFilter()"
+              (ngModelChange)="uidFilter.set($event); onSearch()" />
+          </div>
+
+          <div class="filter-field">
+            <label>Contact No</label>
+            <input
+              type="text"
+              class="erp-input"
+              placeholder="Enter contact no"
+              [ngModel]="phoneFilter()"
+              (ngModelChange)="phoneFilter.set($event); onSearch()" />
+          </div>
+
+          <div class="filter-field">
+            <label>Status</label>
+            <ng-select
+              appendTo="body"
+              [items]="statusOptions"
+              [ngModel]="statusFilter()"
+              (ngModelChange)="statusFilter.set($event); onSearch()"
+              placeholder="Select Status"
+              [searchable]="true"
+              [clearable]="true">
+            </ng-select>
+          </div>
+
+          <div class="filter-field">
+            <label>Relation</label>
+            <input
+              type="text"
+              class="erp-input"
+              placeholder="Father/spouse relation"
+              [ngModel]="relationFilter()"
+              (ngModelChange)="relationFilter.set($event); onSearch()" />
+          </div>
+
+          <div class="filter-field">
+            <label>Address</label>
+            <input
+              type="text"
+              class="erp-input"
+              placeholder="City, area or district"
+              [ngModel]="addressFilter()"
+              (ngModelChange)="addressFilter.set($event); onSearch()" />
+          </div>
+
+          <div class="filter-field">
+            <label>Rows Per Page</label>
+            <ng-select
+              appendTo="body"
+              [items]="pageSizeOptions"
+              [ngModel]="pageSize()"
+              (ngModelChange)="setPageSize($event)"
+              placeholder="Select Rows Per Page"
+              [searchable]="true"
+              [clearable]="false">
+            </ng-select>
+          </div>
+        </div>
+      </section>
+    }
+
+    <main class="contacts-grid-area">
+      @if (pagedContacts().length === 0) {
+        <div class="contacts-empty">
+          <i class="pi pi-inbox"></i>
+          <span>No contacts found for "{{ activeTab() }}"</span>
+        </div>
+      }
+
+      <div class="contacts-grid">
+        @for (contact of pagedContacts(); track contact.id) {
+          <article class="contact-card">
+            <div class="contact-avatar">
+              @if (contact.photo) {
+                <img [src]="contact.photo" alt="avatar" />
+              } @else {
+                <span>{{ getContactInitials(contact) }}</span>
+              }
+            </div>
+
+            <div class="contact-card-body">
+              <div class="contact-title-row">
+                <div class="contact-title">
+                  <span class="contact-name">{{ contact.name }}</span>
+                  <span class="contact-uid">{{ contact.uid }}</span>
+                </div>
+
+                <span class="contact-status" [class.inactive]="contact.status === 'Inactive'">
+                  {{ contact.status }}
+                </span>
+              </div>
+
+              @if (contact.relation) {
+                <div class="contact-line muted">
+                  <i class="pi pi-user"></i>
+                  <span>{{ contact.relation }}</span>
+                </div>
+              }
+
+              <div class="contact-line">
+                <i class="pi pi-phone"></i>
+                <span>{{ contact.phone }}</span>
+              </div>
+
+              <div class="contact-line address">
+                <i class="pi pi-map-marker"></i>
+                <span>{{ contact.address || 'Address not available' }}</span>
+              </div>
+            </div>
+
+            <div class="contact-card-actions">
+              <button type="button" class="erp-btn btn-outline btn-sm" (click)="openEditForm(contact)">
+                <i class="pi pi-pencil"></i>
+                Edit
+              </button>
+
+              <button type="button" class="icon-action subtle" title="Open contact">
+                <i class="pi pi-arrow-right"></i>
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </main>
+
+    <footer class="contacts-footer">
+      <div class="footer-meta">
+        <span>Showing <strong>{{ rangeStart() }}-{{ rangeEnd() }}</strong> of <strong>{{ totalItems() }}</strong></span>
+        <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+      </div>
+
+      <div class="footer-pager">
+        <button type="button" class="pg-btn" (click)="prevPage()" [disabled]="currentPage() === 1">
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+        @for (page of pageNumbers(); track page) {
+          <button
+            type="button"
+            class="pg-btn"
+            [class.active]="currentPage() === page"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+
+        <button type="button" class="pg-btn" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+          <i class="pi pi-chevron-right"></i>
+        </button>
+      </div>
+    </footer>
+  </section>
+</div>
+
+@if (showAddForm()) {
+  <app-contact-add
+    [contact]="editingContact()"
+    (onClose)="onFormClose()"
+    (onSave)="onFormSave($event)"
+  ></app-contact-add>
+}

@@ -64,6 +64,7 @@ export class ChequesInbank implements OnInit {
   private _safeMarkCheck(): void {
     setTimeout(() => this.cdr.markForCheck());
   }
+  
 
 
   @Input() fromFormName: any;

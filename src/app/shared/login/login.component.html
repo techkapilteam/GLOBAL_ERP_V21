@@ -203,27 +203,35 @@
 
           <div class="erp-form-group">
             <label>Company</label>
-            <p-select
-              [options]="companyOptions()"
+            <ng-select
+              class="erp-ng-select login-combo"
+              [items]="companyOptions()"
+              bindLabel="label"
+              bindValue="value"
               [ngModel]="selectedCompanyId()"
               (ngModelChange)="selectedCompanyId.set($event); onCompanyChange()"
-              optionLabel="label" optionValue="value"
-              placeholder="— Select Company —"
+              [placeholder]="'Select Company'"
               appendTo="body"
-              [style]="{'width':'100%'}"/>
+              [searchable]="true"
+              [clearable]="true">
+            </ng-select>
           </div>
 
           <div class="erp-form-group">
             <label>Branch</label>
-            <p-select
-              [options]="branchOptions()"
+            <ng-select
+              class="erp-ng-select login-combo"
+              [items]="branchOptions()"
+              bindLabel="label"
+              bindValue="value"
               [ngModel]="selectedBranchCode()"
               (ngModelChange)="selectedBranchCode.set($event)"
-              optionLabel="label" optionValue="value"
-              placeholder="— Select Branch —"
+              [placeholder]="'Select Branch'"
               [disabled]="!branchOptions().length"
               appendTo="body"
-              [style]="{'width':'100%'}"/>
+              [searchable]="true"
+              [clearable]="true">
+            </ng-select>
             @if (noBranches()) {
               <small class="erp-field-hint">No branches found for this company.</small>
             }
