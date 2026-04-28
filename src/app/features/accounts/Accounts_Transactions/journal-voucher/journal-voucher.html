@@ -67,7 +67,7 @@
                 <div class="erp-flex-1">
                   <ng-select appendTo="body" id="pledgername" title="Ledger" [items]="ledgeraccountslist"
                     formControlName="pledgerid" groupBy="pAccounttype" bindLabel="pledgername" bindValue="pledgerid"
-                    placeholder="Select" [searchable]="true" [clearable]="false" (change)="ledgerName_Change($event)"
+                    placeholder="Select" [searchable]="true" [clearable]="true" (change)="ledgerName_Change($event)"
                     [ngClass]="{'ng-invalid ng-dirty': paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.invalid && (paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.touched || paymentVoucherForm.get('ppaymentsslistcontrols.pledgerid')?.dirty)}">
                     <ng-template ng-optgroup-tmp let-item="item">
                       {{ item.pAccounttype }}
