@@ -481,7 +481,7 @@
           </button>
           <button (click)="Save()" class="erp-btn btn-primary" [disabled]="disablesavebutton">
             <i class="pi pi-check"></i>
-            {{ buttonname ?? 'Save' }}
+            {{ buttonname }}
           </button>
         </div>
       </div>
@@ -522,7 +522,7 @@
 
           @if (returnChargesError) {
           <div class="erp-field-error">
-            &#9888; Minimum amount should be &#8377;{{ minimumReturnCharge ?? 250 }}
+            &#9888; Minimum amount should be &#8377;{{ minimumReturnCharge }}
           </div>
           }
 
