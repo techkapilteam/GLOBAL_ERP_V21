@@ -2326,7 +2326,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     CurrencyPipe,
     NgSelectModule,
     TableModule,
-    ValidationMessageComponent,
+    // ValidationMessageComponent,
     ButtonModule,
     RouterModule,
   ],

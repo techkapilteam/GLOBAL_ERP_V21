@@ -1435,7 +1435,7 @@ import { ValidationMessageComponent } from '../../../common/validation-message/v
     InputTextModule,
     NgSelectModule,
     PaginatorModule,
-    ValidationMessageComponent,
+    // ValidationMessageComponent,
   ],
   templateUrl: './petty-cash.html',
   providers: [DatePipe],
