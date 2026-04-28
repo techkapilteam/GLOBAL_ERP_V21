@@ -2246,8 +2246,8 @@ export class PettyCash implements OnInit {
   // }
 
 
-  tdsSection_Change(event: Event): void {
-    const section = (event.target as HTMLSelectElement).value;
+  tdsSection_Change(event: any): void {
+    const section = event.pTdsSection
     this.tdspercentagelist = [];
     this.pc.get('pTdsPercentage')?.setValue('');
     if (section) this.getTdsPercentage(section);
