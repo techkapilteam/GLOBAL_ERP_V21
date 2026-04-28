@@ -49,7 +49,7 @@ export class BankEntries implements OnInit {
   pageCriteria: PageCriteria = new PageCriteria();
   currencysymbol: any;
 
-  today = new Date();
+   today = new Date(new Date().setHours(0, 0, 0, 0));
   startDate: any = new Date();
   endDate: any = new Date();
 
