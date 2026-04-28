@@ -74,12 +74,13 @@ toDateMinDate: Date | null = null;
   private rawData: any[] = [];
 
   pageCriteria = new PageCriteria();
+  today = new Date(new Date().setHours(0, 0, 0, 0));
 
   // ── Form ────────────────────────────────────────────────────────────────────
   bankBookForm = this.fb.nonNullable.group(
     {
-      fromDate: [new Date(), Validators.required],
-      toDate:   [new Date(), Validators.required],
+      fromDate: [this.today, Validators.required],
+      toDate:   [this.today, Validators.required],
       pbankname: ['',        Validators.required]
     },
     { validators: this.dateRangeValidator() }
